@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-
+  constructor(private router: Router) {}
+  onSubmit(){
+    console.log("login submitted");
+    this.router.navigate(['/application-detail']);
+  }
 }
