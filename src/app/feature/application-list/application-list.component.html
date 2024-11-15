@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="header">
+    <h2>Application List View - MVS Supervisor Level</h2>
+    <div class="profile-icon">
+      <img src="assets/images/profile-image.png" alt="Profile Icon" />
+    </div>
+  </div>
+
+  <div class="application-list">
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th *ngFor="let field of fields">{{ field }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data" (click)="onRowClick(row)">
+          <td *ngFor="let field of fields">{{ row[field] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
