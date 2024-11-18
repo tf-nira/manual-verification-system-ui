@@ -1,5 +1,6 @@
 export const ROLE_FIELDS_MAP: { [key: string]: string[] } = {
-  o1: ['Application ID', 'Service', 'Service Type', 'Created Date'],
-  o2: ['Application ID', 'Service', 'Service Type', 'Created Date', 'Escalation Reason From MVS Officer'],
-  o3: ['Application ID', 'Service', 'Service Type', 'Created Date', 'Escalation Reason From MVS Officer', 'Escalation Reason From MVS Supervisor']
+  MVS_OFFICER: ['Application ID', 'Service', 'Service Type', 'Created Date'],
+  MVS_SUPERVISOR: ['Application ID', 'Service', 'Service Type', 'Created Date', 'Escalation Reason From MVS Officer'],
+  MVS_DISTRICT_OFFICER: ['Application ID', 'Service', 'Service Type', 'Created Date', 'Escalation Reason From MVS Officer', 'Escalation Reason From MVS Supervisor'],
+  MVS_LEGAL_OFFICER: ['Application ID', 'Service', 'Service Type', 'Created Date']
 };

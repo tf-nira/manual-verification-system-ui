@@ -11,12 +11,22 @@ import { ROLE_DATA_MAP } from '../../shared/application-data';
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  constructor(private router: Router) {}
-  onSubmit(){
-    console.log("login submitted");
+  username: string = '' ;
+  password: string = '' ;
 
-    // on successful login
-    const role = 'o3';
+  constructor(private router: Router) {}
+  
+  onSubmit(){
+    console.log("login submitted for user:", this.username);
+  
+    // login api
+    // on successful login fetch application list for the user
+    
+    // const role = 'MVS_OFFICER';
+    // const role = 'MVS_SUPERVISOR';
+    const role = 'MVS_DISTRICT_OFFICER';
+    // const role = 'MVS_LEGAL_OFFICER';
+
     const data = ROLE_DATA_MAP[role];
     this.router.navigate(['/application-list'], { state: { role, data } });
   }

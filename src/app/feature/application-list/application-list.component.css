@@ -8,28 +8,6 @@
   background-color: #f8f9fa;
 }
 
-/* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #6c757d;
-  color: #fff;
-  padding: 10px 20px;
-  border-radius: 4px;
-}
-
-.header h2 {
-  margin: 0;
-  font-size: 1.5em;
-}
-
-.profile-icon img {
-  height: 40px;
-  width: 40px;
-  border-radius: 50%;
-}
-
 /* Style for the table container */
 .application-list {
   padding: 20px;
@@ -68,13 +46,8 @@
 }
 
 .styled-table tbody tr:hover {
-  background-color: #f1f1f1;
+  background-color: #bdbdbd;
   cursor: pointer;
-}
-
-/* Alternate row colors */
-.styled-table tbody tr:nth-of-type(even) {
-  background-color: #f9f9f9;
 }
 
 /* Responsive design */

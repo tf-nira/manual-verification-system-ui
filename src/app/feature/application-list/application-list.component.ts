@@ -2,11 +2,12 @@ import { CommonModule, NgFor } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ROLE_FIELDS_MAP } from '../../shared/role-fields';
+import { HeaderComponent } from "../../shared/components/header/header.component";
 
 @Component({
   selector: 'app-application-list',
   standalone: true,
-  imports: [NgFor],
+  imports: [NgFor, HeaderComponent],
   templateUrl: './application-list.component.html',
   styleUrl: './application-list.component.css'
 })
@@ -26,6 +27,7 @@ export class ApplicationListComponent implements OnInit {
   }
 
   onRowClick(rowData: any) {
+    // get application details api
     this.router.navigate(['/application-detail'], { state: { data: rowData }});
   }
 }

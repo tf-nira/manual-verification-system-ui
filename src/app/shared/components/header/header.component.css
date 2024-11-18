@@ -1,0 +1,21 @@
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #6c757d;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+}
+
+.header h2 {
+  margin: 0;
+  font-size: 1.5em;
+}
+
+.profile-icon img {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
