@@ -1,0 +1,58 @@
+/* Container */
+.container {
+  font-family: Arial, sans-serif;
+  color: #333;
+  padding: 20px;
+  margin: auto;
+  background-color: #f8f9fa;
+}
+
+/* Style for the table container */
+.application-list {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+/* Style for the table */
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+  font-size: 16px;
+  text-align: left;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table headers */
+.styled-table thead tr {
+  background-color: #007bff;
+  color: #ffffff;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* Table header and body cells */
+.styled-table th, .styled-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+/* Table rows hover effect */
+.styled-table tbody tr {
+  transition: background-color 0.3s;
+}
+
+.styled-table tbody tr:hover {
+  background-color: #bdbdbd;
+  cursor: pointer;
+}
+
+/* Responsive design */
+@media screen and (max-width: 768px) {
+  .styled-table th, .styled-table td {
+    font-size: 14px;
+    padding: 10px;
+  }
+}

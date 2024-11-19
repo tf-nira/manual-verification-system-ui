@@ -1,0 +1,20 @@
+<div class="container">
+  
+  <app-header [role]=role></app-header>
+
+  <div class="application-list">
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th *ngFor="let field of fields">{{ field }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let row of data" (click)="onRowClick(row)">
+          <td *ngFor="let field of fields">{{ row[field] }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

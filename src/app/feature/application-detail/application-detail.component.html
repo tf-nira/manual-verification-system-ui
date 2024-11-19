@@ -1,11 +1,6 @@
 <div class="container">
   <!-- Header Section -->
-  <div class="header">
-    <h2>Application Detailed View - MVS Supervisor Level</h2>
-    <div class="profile-icon">
-      <img src="assets/images/profile-image.png" alt="Profile Icon" />
-    </div>
-  </div>
+  <app-header [role]=role></app-header>
 
   <!-- Application Information Section -->
   <div class="application-info">
@@ -25,8 +20,12 @@
       <label>Service Type</label>
       <input type="text" placeholder="Enter Service Type" />
     </div>
-    <div class="info-group">
+    <div class="info-group" *ngIf="role === 'MVS_SUPERVISOR' || role === 'MVS_DISTRICT_OFFICER'">
       <label>Escalation Reason from MVS Officer</label>
+      <input type="text" placeholder="Enter Reason" />
+    </div>
+    <div class="info-group" *ngIf="role === 'MVS_DISTRICT_OFFICER'">
+      <label>Escalation Reason from MVS Supervisor</label>
       <input type="text" placeholder="Enter Reason" />
     </div>
   </div>
