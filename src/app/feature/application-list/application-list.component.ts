@@ -28,6 +28,6 @@ export class ApplicationListComponent implements OnInit {
 
   onRowClick(rowData: any) {
     // get application details api
-    this.router.navigate(['/application-detail'], { state: { data: rowData }});
+    this.router.navigate(['/application-detail'], { state: { role: this.role, data: rowData }});
   }
 }
