@@ -2,6 +2,16 @@
   
   <app-header [role]=role></app-header>
 
+  <!-- Search Bar -->
+  <div class="search-bar">
+    <input 
+      type="text" 
+      [(ngModel)]="searchText" 
+      placeholder="Search by Application ID" 
+      class="search-input"
+    />
+  </div>
+
   <div class="application-list">
     <table class="styled-table">
       <thead>
@@ -10,7 +20,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of data" (click)="onRowClick(row)">
+        <tr *ngFor="let row of filteredRows" (click)="onRowClick(row)">
           <td *ngFor="let field of fields">{{ row[field] }}</td>
         </tr>
       </tbody>
