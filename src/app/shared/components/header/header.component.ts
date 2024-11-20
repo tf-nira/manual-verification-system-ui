@@ -9,6 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class HeaderComponent {
   @Input() role: string = '';
+  @Input() view: string = '';
 
   get formattedRole(): string {
     if (!this.role) return '';
