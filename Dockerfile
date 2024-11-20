@@ -66,11 +66,6 @@ RUN chown -R ${container_user}:${container_user} ${base_path}/assets/i18n
 RUN chown -R ${container_user}:${container_user} ${base_path}/assets/entity-spec
 RUN mkdir -p ${master_template_path} && chown -R ${container_user}:${container_user} ${master_template_path}
 
-
-ADD configure_start.sh configure_start.sh
-
-RUN chmod +x configure_start.sh
-
 RUN chown -R ${container_user}:${container_user} /home/${container_user}
 
 # select container user for all tasks
