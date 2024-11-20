@@ -59,10 +59,15 @@ ADD dist ${base_path}
 # install the needed packages including wget and a unzip library 
 #RUN apt-get update -y && apt-get install -y wget && apt-get install -y unzip
 
-# change permissions of file inside working dir
-RUN chown -R ${container_user}:${container_user} ${base_path}/assets/i18n
-RUN chown -R ${container_user}:${container_user} ${base_path}/assets/entity-spec
-RUN mkdir -p ${master_template_path} && chown -R ${container_user}:${container_user} ${master_template_path}
+# Ensure directories exist before changing ownership
+RUN mkdir -p ${base_path}/assets/i18n \
+    && mkdir -p ${base_path}/assets/entity-spec \
+    && chown -R ${container_user}:${container_user} ${base_path}/assets/i18n \
+    && chown -R ${container_user}:${container_user} ${base_path}/assets/entity-spec
+
+# Ensure master_template_path exists and set permissions
+RUN mkdir -p ${master_template_path} \
+    && chown -R ${container_user}:${container_user} ${master_template_path}
 
 RUN chown -R ${container_user}:${container_user} /home/${container_user}
 
