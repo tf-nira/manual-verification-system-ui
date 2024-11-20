@@ -7,9 +7,39 @@
   background-color: #f8f9fa;
 }
 
+/* Search Bar */
+.search-bar {
+  margin-top: 15px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 8px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  background-color: #ffffff;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.search-input:hover {
+  border-color: #0056b3;
+}
+
+/* Focus effect for the search input */
+.search-input:focus {
+  border-color: #0056b3;
+  box-shadow: 0 0 5px rgba(0, 91, 187, 0.3);
+}
+
 /* Style for the table container */
 .application-list {
-  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   overflow-x: auto;
