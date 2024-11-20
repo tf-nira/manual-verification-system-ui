@@ -52,8 +52,6 @@ ADD ./nginx.conf /etc/nginx/nginx.conf
 
 ADD ./default.conf /etc/nginx/conf.d/
 
-ADD ./download.conf /etc/nginx/include/download.conf
-
 RUN cd /home/${container_user}
 
 ADD dist ${base_path}
