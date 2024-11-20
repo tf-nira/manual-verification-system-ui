@@ -19,7 +19,7 @@ on:
 
 jobs:
   build-manual-verification-system-ui:
-    uses: mosip/kattu/.github/workflows/npm-build.yml@develop
+    uses: mosip/kattu/.github/workflows/npm-build.yml@master
     with:
       SERVICE_LOCATION: .
       BUILD_ARTIFACT: manual-verification-system-ui
