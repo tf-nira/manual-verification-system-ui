@@ -76,8 +76,6 @@ USER ${container_user_uid}:${container_user_gid}
 
 EXPOSE 8080
 
-ENTRYPOINT [ "./configure_start.sh" ]
-
 #get the admin i18n bundle zip from artifactory
 CMD echo "starting nginx" ; \
 #    wget -q --show-progress "${artifactory_url_env}"/artifactory/libs-release-local/i18n/admin-i18n-bundle.zip -O "${i18n_path}"/admin-i18n-bundle.zip ; \
