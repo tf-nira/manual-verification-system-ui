@@ -54,7 +54,7 @@ ADD ./default.conf /etc/nginx/conf.d/
 
 RUN cd /home/${container_user}
 
-ADD dist ${base_path}
+COPY dist /usr/share/nginx/html
 
 # install the needed packages including wget and a unzip library 
 #RUN apt-get update -y && apt-get install -y wget && apt-get install -y unzip
@@ -74,7 +74,7 @@ RUN chown -R ${container_user}:${container_user} /home/${container_user}
 # select container user for all tasks
 USER ${container_user_uid}:${container_user_gid}
 
-EXPOSE 8080
+EXPOSE 80
 
 #get the admin i18n bundle zip from artifactory
 CMD echo "starting nginx" ; \
