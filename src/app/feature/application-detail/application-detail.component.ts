@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms'; // Import FormsModule
 import { DemographicDetailsComponent } from '../demographic-details/demographic-details.component';
 import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uploaded.component';
 import { HeaderComponent } from "../../shared/components/header/header.component";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-application-detail',
@@ -25,9 +26,18 @@ export class ApplicationDetailComponent implements OnInit {
   showApprovalModal: boolean = false;
   showEscalateModal: boolean = false;
   showRejectModal: boolean = false;
+  rowData: any = {};
+  serviceType = ''; // Default value
 
   ngOnInit() {
-    this.role = history.state.role;
+     // Access the state object
+     const state = history.state;
+
+     // Retrieve role and row data
+     this.role = state.role || '';
+     this.rowData = state.data || {};
+     // Retrieve serviceType from rowData
+    this.serviceType = this.rowData['Service Type'] || '';
   }
 
   openApprovalModal() {

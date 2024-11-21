@@ -1,6 +1,6 @@
 export const ROLE_DATA_MAP: { [key: string]: any[] } = {
   MVS_OFFICER: [
-    { 'Application ID': 1, Service: 'Service 1', 'Service Type': 'Type A', 'Created Date': '2024-10-01' },
+    { 'Application ID': 1, Service: 'Service 1', 'Service Type': 'By Birth', 'Created Date': '2024-10-01' },
     { 'Application ID': 2, Service: 'Service 2', 'Service Type': 'Type B', 'Created Date': '2024-10-02' },
     { 'Application ID': 3, Service: 'Service 3', 'Service Type': 'Type C', 'Created Date': '2024-10-03' },
   ],
