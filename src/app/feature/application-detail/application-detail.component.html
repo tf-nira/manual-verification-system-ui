@@ -1,6 +1,6 @@
 <div class="container">
   <!-- Header Section -->
-  <app-header [role]=role></app-header>
+  <app-header [role]="role"></app-header>
 
   <!-- Application Information Section -->
   <div class="application-info">
@@ -18,7 +18,7 @@
     </div>
     <div class="info-group">
       <label>Service Type</label>
-      <input type="text" placeholder="Enter Service Type" />
+      <input type="text" placeholder="Enter Service Type" [(ngModel)]="serviceType" />
     </div>
     <div class="info-group" *ngIf="role === 'MVS_SUPERVISOR' || role === 'MVS_DISTRICT_OFFICER'">
       <label>Escalation Reason from MVS Officer</label>
@@ -30,8 +30,8 @@
     </div>
   </div>
 
-  <!-- Main Content Section with Left and Right Panels -->
-  <div class="content-section">
+  <!-- Main Content Section -->
+  <div class="content-section" [class.no-right-section]="serviceType !== 'By Birth'">
     <!-- Left Section -->
     <div class="left-section">
       <div class="tab-container full-width">
@@ -42,93 +42,93 @@
           Documents Uploaded
         </button>
       </div>
-
+  
       <!-- Show Demographic Details Component if demographic tab is selected -->
       <app-demographic-details *ngIf="selectedTab === 'demographic'"></app-demographic-details>
-
+  
       <!-- Show Documents Uploaded Component if documents tab is selected -->
       <app-documents-uploaded *ngIf="selectedTab === 'documents'"></app-documents-uploaded>
-
     </div>
-
+  
     <!-- Right Section -->
-    <div class="right-section">
+    <div class="right-section" *ngIf="serviceType === 'By Birth'">
       <div class="tab-container full-width">
-        <button class="tab active center-text" >Retrieve NIN Details</button>
+        <button class="tab active center-text">Retrieve NIN Details</button>
       </div>
-
       <div class="nin-section">
         <input type="text" placeholder="Enter the NIN" class="nin-input" />
         <button class="submit-btn">Submit</button>
       </div>
-
-      <div class="action-buttons">
-        <button class="approve" (click)="openApprovalModal()">Approve</button>
-        <button class="escalate" (click)="openEscalateModal()">Escalate</button>
-        <button class="reject" (click)="openRejectModal()">Reject</button>
-      </div>
-      <!-- Approval Modal -->
-      <div class="modal-backdrop" *ngIf="showApprovalModal">
-        <div class="modal">
-          <div class="modal-header">
-            <h3>Confirm Application Approval</h3>
-          </div>
-          <div class="modal-body">
-            <p>Are you sure you want to approve this application?</p>
-            <textarea placeholder="Comments"></textarea>
-          </div>
-          <div class="modal-footer">
-            <button class="btn back" (click)="closeApprovalModal()">Back to Review</button>
-            <button class="btn approve" (click)="approveApplication()">Approve</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Escalate Modal -->
-    <div class="modal-backdrop" *ngIf="showEscalateModal">
-      <div class="modal">
-          <div class="modal-header">
-              <h3>Confirm Application Escalation</h3>
-          </div>
-          <div class="modal-body">
-              <p>Are you sure you want to escalate this application to the supervisor?</p>
-              <div class="checkbox-container">
-                  <input type="checkbox" id="escalate-checkbox" [(ngModel)]="escalateOption" />
-                  <label for="escalate-checkbox">
-                      Escalate to District Officer (Insufficient Documentation)
-                  </label>
-              </div>
-              <textarea placeholder="Comments*" required></textarea>
-          </div>
-          <div class="modal-footer">
-              <button class="btn back" (click)="closeEscalateModal()">Back to Review</button>
-              <button class="btn escalate" (click)="escalateApplication()">Escalate</button>
-          </div>
-      </div>
-    </div>
-
-      <!-- Reject Modal -->
-    <div class="modal-backdrop" *ngIf="showRejectModal">
-      <div class="modal">
-          <div class="modal-header">
-              <h3>Confirm Application Rejection</h3>
-          </div>
-          <div class="modal-body">
-              <p>Are you sure you want to reject this application?</p>
-              <select class="reject-category" required>
-                  <option value="" disabled selected>Select Rejection Category*</option>
-                  <option value="incomplete-documents">Incomplete Documents</option>
-                  <option value="invalid-information">Invalid Information</option>
-                  <option value="other">Other</option>
-              </select>
-              <textarea placeholder="Comments*" required></textarea>
-          </div>
-          <div class="modal-footer">
-              <button class="btn back" (click)="closeRejectModal()">Back to Review</button>
-              <button class="btn reject" (click)="rejectApplication()">Reject</button>
-          </div>
-      </div>
-  </div>
-
     </div>
   </div>
+  
+
+  <!-- Action Buttons -->
+  <div class="action-buttons">
+    <button class="approve" (click)="openApprovalModal()">Approve</button>
+    <button class="escalate" (click)="openEscalateModal()">Escalate</button>
+    <button class="reject" (click)="openRejectModal()">Reject</button>
+  </div>
+  <!-- Approval Modal -->
+  <div class="modal-backdrop" *ngIf="showApprovalModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Confirm Application Approval</h3>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to approve this application?</p>
+        <textarea placeholder="Comments"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button class="btn back" (click)="closeApprovalModal()">Back to Review</button>
+        <button class="btn approve" (click)="approveApplication()">Approve</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Escalate Modal -->
+<div class="modal-backdrop" *ngIf="showEscalateModal">
+  <div class="modal">
+      <div class="modal-header">
+          <h3>Confirm Application Escalation</h3>
+      </div>
+      <div class="modal-body">
+          <p>Are you sure you want to escalate this application to the supervisor?</p>
+          <div class="checkbox-container">
+              <input type="checkbox" id="escalate-checkbox" [(ngModel)]="escalateOption" />
+              <label for="escalate-checkbox">
+                  Escalate to District Officer (Insufficient Documentation)
+              </label>
+          </div>
+          <textarea placeholder="Comments*" required></textarea>
+      </div>
+      <div class="modal-footer">
+          <button class="btn back" (click)="closeEscalateModal()">Back to Review</button>
+          <button class="btn escalate" (click)="escalateApplication()">Escalate</button>
+      </div>
+  </div>
+</div>
+
+  <!-- Reject Modal -->
+<div class="modal-backdrop" *ngIf="showRejectModal">
+  <div class="modal">
+      <div class="modal-header">
+          <h3>Confirm Application Rejection</h3>
+      </div>
+      <div class="modal-body">
+          <p>Are you sure you want to reject this application?</p>
+          <select class="reject-category" required>
+              <option value="" disabled selected>Select Rejection Category*</option>
+              <option value="incomplete-documents">Incomplete Documents</option>
+              <option value="invalid-information">Invalid Information</option>
+              <option value="other">Other</option>
+          </select>
+          <textarea placeholder="Comments*" required></textarea>
+      </div>
+      <div class="modal-footer">
+          <button class="btn back" (click)="closeRejectModal()">Back to Review</button>
+          <button class="btn reject" (click)="rejectApplication()">Reject</button>
+      </div>
+  </div>
+</div>
+</div>
