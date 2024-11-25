@@ -74,7 +74,7 @@ RUN chown -R ${container_user}:${container_user} /home/${container_user}
 # select container user for all tasks
 USER ${container_user_uid}:${container_user_gid}
 
-EXPOSE 80
+EXPOSE 8080
 
 #get the admin i18n bundle zip from artifactory
 CMD echo "starting nginx" ; \
