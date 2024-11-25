@@ -54,7 +54,7 @@ ADD ./default.conf /etc/nginx/conf.d/
 
 RUN cd /home/${container_user}
 
-COPY dist/manual-verification-ui/browser/* /usr/share/nginx/html/
+ADD dist/browser/* /usr/share/nginx/html/
 
 # install the needed packages including wget and a unzip library 
 #RUN apt-get update -y && apt-get install -y wget && apt-get install -y unzip
