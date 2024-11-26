@@ -1,63 +1,110 @@
 <div class="container">
   
+  <!-- Header Component (view, role) -->
   <app-header [view]="'List'" [role]="role"></app-header>
 
-  <!-- Search Bar -->
-  <div class="search-and-filters">
-    <input 
-      type="text" 
-      [(ngModel)]="searchText" 
-      placeholder="Search by Application ID" 
-      class="search-input"
-    />
-    <select [(ngModel)]="selectedService" class="filter-dropdown">
-      <option value="">All Services</option>
-      <option *ngFor="let service of uniqueServices" [value]="service">{{ service }}</option>
-    </select>
-    <select [(ngModel)]="selectedServiceType" class="filter-dropdown">
-      <option value="">All Service Types</option>
-      <option *ngFor="let serviceType of uniqueServiceTypes" [value]="serviceType">{{ serviceType }}</option>
-    </select>
-    <select 
-      *ngIf="role === 'MVS_DISTRICT_OFFICER'" 
-      [(ngModel)]="selectedApplicationStatus" 
-      class="filter-dropdown"
-    >
-      <option value="">All Application Statuses</option>
-      <option *ngFor="let status of uniqueApplicationStatuses" [value]="status">{{ status }}</option>
-    </select>
-
-    <!-- Date Range Filter -->
-    <div class="date-filter">
-      <label for="fromDate">From Date:</label>
+  <!-- Search & Filters Component (role) -->
+  <div class="search-container">
+    <div class="search-and-filters">
       <input 
-        type="date" 
-        [(ngModel)]="fromDate" 
-        class="date-filter-input"
-        id="fromDate"
+        type="text" 
+        [(ngModel)]="searchText" 
+        placeholder="Search by Application ID" 
+        class="search-input"
       />
-      <label for="toDate">To Date:</label>
-      <input 
-        type="date" 
-        [(ngModel)]="toDate" 
-        class="date-filter-input"
-        id="toDate"
-      />
+      <select [(ngModel)]="selectedService" class="filter-dropdown">
+        <option value="">All Services</option>
+        <option *ngFor="let service of uniqueServices" [value]="service">{{ service }}</option>
+      </select>
+      <select [(ngModel)]="selectedServiceType" class="filter-dropdown">
+        <option value="">All Service Types</option>
+        <option *ngFor="let serviceType of uniqueServiceTypes" [value]="serviceType">{{ serviceType }}</option>
+      </select>
+      <select 
+        *ngIf="role === 'MVS_DISTRICT_OFFICER'" 
+        [(ngModel)]="selectedApplicationStatus" 
+        class="filter-dropdown"
+      >
+        <option value="">All Application Statuses</option>
+        <option *ngFor="let status of uniqueApplicationStatuses" [value]="status">{{ status }}</option>
+      </select>
     </div>
+
+    <div class="search-and-filters">
+      <!-- Date Range Filter -->
+      <div class="date-filter">
+        <label for="fromDate">From Date:</label>
+        <input 
+          type="date" 
+          [(ngModel)]="fromDate" 
+          class="date-filter-input"
+          id="fromDate"
+        />
+        <label for="toDate">To Date:</label>
+        <input 
+          type="date" 
+          [(ngModel)]="toDate" 
+          class="date-filter-input"
+          id="toDate"
+        />
+      </div>
+      
+      <div class="clear-button-container">
+        <button (click)="clearFilters()" class="clear-filters-btn">Clear Filters</button>
+      </div>
+    </div>
+
   </div>
 
-
-
+  <!-- Table Component (fields, filteredRows)-->
   <div class="application-list">
     <table class="styled-table">
       <thead>
-        <tr>
-          <th *ngFor="let field of fields">{{ field }}</th>
+        <tr [ngClass]="'header-row-1'">
+          <th rowspan="2">Application ID</th> 
+          <th rowspan="2">Service</th>
+          <th rowspan="2">Service Type</th>
+          <th rowspan="2">Created Date</th>
+          <!-- Conditional Section: Escalation from MVS Officer -->
+          <th *ngIf="fields.includes('Escalation Category from MVS Officer') || fields.includes('Escalation Category')" colspan="3">Escalation from MVS Officer</th>
+          <!-- Conditional Section: Escalation from MVS Supervisor -->
+          <th *ngIf="fields.includes('Escalation Category From MVS Supervisor')" colspan="3">Escalation from MVS Supervisor</th>
+          <th *ngIf="fields.includes('Application Status')" rowspan="2">Application Status</th>
+        </tr>
+        <tr [ngClass]="'header-row-2'">
+          <!-- Escalation from MVS Officer Columns -->
+          <ng-container *ngIf="fields.includes('Escalation Category from MVS Officer') || fields.includes('Escalation Category')">
+            <th>Category</th>
+            <th>Comment</th>
+            <th>Escalated Date</th>
+          </ng-container>
+          <!-- Escalation from MVS Supervisor Columns -->
+          <ng-container *ngIf="fields.includes('Escalation Category From MVS Supervisor')">
+            <th>Category</th>
+            <th>Comment</th>
+            <th>Escalated Date</th>
+          </ng-container>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let row of filteredRows" (click)="onRowClick(row)">
-          <td *ngFor="let field of fields">{{ row[field] }}</td>
+          <td>{{ row['Application ID'] }}</td>
+          <td>{{ row['Service'] }}</td>
+          <td>{{ row['Service Type'] }}</td>
+          <td>{{ row['Created Date'] }}</td>
+          <!-- Conditional Section: Escalation from MVS Officer -->
+          <ng-container *ngIf="fields.includes('Escalation Category from MVS Officer') || fields.includes('Escalation Category')">
+            <td>{{ row['Escalation Category from MVS Officer'] || row['Escalation Category'] }}</td>
+            <td>{{ row['Escalation Comment From MVS Officer'] || row['Escalation Comment'] }}</td>
+            <td>{{ row['MVS Officer Escalated Date'] || row['Escalated Date']}}</td>
+          </ng-container>
+          <!-- Conditional Section: Escalation from MVS Supervisor -->
+          <ng-container *ngIf="fields.includes('Escalation Category From MVS Supervisor')">
+            <td>{{ row['Escalation Category From MVS Supervisor'] }}</td>
+            <td>{{ row['Escalation Comment From MVS Supervisor'] }}</td>
+            <td>{{ row['MVS Supervisor Escalated Date'] }}</td>
+          </ng-container>
+          <td *ngIf="fields.includes('Application Status')">{{ row['Application Status'] }}</td>
         </tr>
       </tbody>
     </table>

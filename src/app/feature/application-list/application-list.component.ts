@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-application-list',
   standalone: true,
-  imports: [NgFor, NgIf, HeaderComponent, FormsModule],
+  imports: [NgFor, NgIf, HeaderComponent, FormsModule, CommonModule],
   templateUrl: './application-list.component.html',
   styleUrl: './application-list.component.css'
 })
@@ -78,6 +78,15 @@ export class ApplicationListComponent implements OnInit {
     }
 
     return filtered;
+  }
+
+  clearFilters() {
+    this.searchText = '';
+    this.selectedService = '';
+    this.selectedServiceType = '';
+    this.selectedApplicationStatus = '';
+    this.fromDate = '';
+    this.toDate = '';
   }
 
   onRowClick(rowData: any) {
