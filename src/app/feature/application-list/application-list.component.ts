@@ -4,6 +4,13 @@ import { Router } from '@angular/router';
 import { ROLE_FIELDS_MAP } from '../../shared/role-fields';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { DataStorageService } from '../../core/services/data-storage.service';
+
+interface NavigationState {
+  role?: string;
+  data?: any[];
+}
 
 @Component({
   selector: 'app-application-list',
@@ -19,11 +26,18 @@ export class ApplicationListComponent implements OnInit {
   data: any[] = [];
   searchText: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+              private http: HttpClient,
+              private dataService: DataStorageService
+            ) { }
 
   ngOnInit() {
-    this.role = history.state.role;
-    this.data = history.state.data;
+    // this.role = history.state.role;
+    // this.data = history.state.data;
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state || {} as NavigationState;
+    this.role = state.role || '';
+    this.data = state.data || []
 
     this.fields = ROLE_FIELDS_MAP[this.role];
   }
@@ -39,6 +53,18 @@ export class ApplicationListComponent implements OnInit {
 
   onRowClick(rowData: any) {
     // get application details api
-    this.router.navigate(['/application-detail'], { state: { role: this.role, data: rowData }});
+    const applicationId = rowData['Application ID'];
+    this.dataService
+      .getApplicationDetails(applicationId)
+      .subscribe(
+        (response: any) => {
+        // Navigate to the details page with fetched data
+        this.router.navigate(['/application-detail'], { state: { role: this.role, data: response.response } });
+      },
+      (error) => {
+        console.error('Error fetching application details:', error);
+        alert('Failed to fetch application details.');
+      });
+    this.router.navigate(['/application-detail'], { state: { role: this.role, data: rowData } });
   }
 }

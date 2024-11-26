@@ -5,6 +5,7 @@ import { DemographicDetailsComponent } from '../demographic-details/demographic-
 import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uploaded.component';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
+import { DataStorageService } from '../../core/services/data-storage.service';
 
 @Component({
   selector: 'app-application-detail',
@@ -28,6 +29,13 @@ export class ApplicationDetailComponent implements OnInit {
   showRejectModal: boolean = false;
   rowData: any = {};
   serviceType = ''; // Default value
+  approvalComment: string = '';
+  escalationComment: string = '';
+  rejectionCategory: string = '';
+  rejectionComment: string = '';
+  
+  constructor(private router: Router,private dataService: DataStorageService
+  ) { }
 
   ngOnInit() {
      // Access the state object
@@ -38,6 +46,25 @@ export class ApplicationDetailComponent implements OnInit {
      this.rowData = state.data || {};
      // Retrieve serviceType from rowData
     this.serviceType = this.rowData['Service Type'] || '';
+  }
+  changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = ''){
+    const applicationId = this.rowData.applicationId;
+    this.dataService
+      .changeStatus(applicationId,status,comment,rejectionCategory)
+      .subscribe(
+        (response) => {
+        console.log('Status updated successfully:', response);
+        alert(`Application ${status.toLowerCase()}d successfully.`);
+        this.router.navigate(['/application-detail']); 
+      },
+      (error) => {
+        console.error('Error updating status:', error);
+        alert('Failed to update status. Please try again.');
+      });
+  }
+
+  objectKeys(obj: any): string[] {
+    return Object.keys(obj || {});
   }
 
   openApprovalModal() {
@@ -63,16 +90,26 @@ export class ApplicationDetailComponent implements OnInit {
   }
   approveApplication() {
     // Approval logic
-    this.showApprovalModal = false; 
+    this.showApprovalModal = false;
+    const comment = this.approvalComment.trim();
+    this.changeApplicationStatus('APPROVE', comment);
+    this.closeEscalateModal(); 
   }
   escalateApplication() {
     // Escalate logic 
     this.showEscalateModal = false;
+    const comment = this.escalationComment.trim();
+    this.changeApplicationStatus('ESCALATE', comment);
+    this.closeEscalateModal();
   }
 
   rejectApplication() {
     // Reject logic 
     this.showRejectModal = false;
+    const rejectionCategory = this.rejectionCategory; 
+    const comment = this.rejectionComment.trim();
+    this.changeApplicationStatus('REJECT', comment, rejectionCategory);
+    this.closeRejectModal();
   }
   // Method to change tabs
   selectTab(tabName: string) {
