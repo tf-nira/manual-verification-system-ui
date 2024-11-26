@@ -22,6 +22,8 @@ export class ApplicationListComponent implements OnInit {
   selectedService: string = '';
   selectedServiceType: string = '';
   selectedApplicationStatus: string = '';
+  fromDate: string = '';
+  toDate: string = '';
 
   uniqueServices: string[] = [];
   uniqueServiceTypes: string[] = [];
@@ -65,6 +67,14 @@ export class ApplicationListComponent implements OnInit {
 
     if (this.role === 'MVS_DISTRICT_OFFICER' && this.selectedApplicationStatus) {
       filtered = filtered.filter(row => row['Application Status'] === this.selectedApplicationStatus);
+    }
+
+    if (this.fromDate) {
+      filtered = filtered.filter(row => new Date(row['Created Date']) >= new Date(this.fromDate));
+    }
+
+    if (this.toDate) {
+      filtered = filtered.filter(row => new Date(row['Created Date']) <= new Date(this.toDate));
     }
 
     return filtered;
