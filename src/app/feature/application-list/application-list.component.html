@@ -3,14 +3,32 @@
   <app-header [view]="'List'" [role]="role"></app-header>
 
   <!-- Search Bar -->
-  <div class="search-bar">
+  <div class="search-and-filters">
     <input 
       type="text" 
       [(ngModel)]="searchText" 
       placeholder="Search by Application ID" 
       class="search-input"
     />
+    <select [(ngModel)]="selectedService" class="filter-dropdown">
+      <option value="">All Services</option>
+      <option *ngFor="let service of uniqueServices" [value]="service">{{ service }}</option>
+    </select>
+    <select [(ngModel)]="selectedServiceType" class="filter-dropdown">
+      <option value="">All Service Types</option>
+      <option *ngFor="let serviceType of uniqueServiceTypes" [value]="serviceType">{{ serviceType }}</option>
+    </select>
+    <select 
+      *ngIf="role === 'MVS_DISTRICT_OFFICER'" 
+      [(ngModel)]="selectedApplicationStatus" 
+      class="filter-dropdown"
+    >
+      <option value="">All Application Statuses</option>
+      <option *ngFor="let status of uniqueApplicationStatuses" [value]="status">{{ status }}</option>
+    </select>
   </div>
+
+
 
   <div class="application-list">
     <table class="styled-table">

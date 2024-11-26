@@ -1,4 +1,4 @@
-import { CommonModule, NgFor } from '@angular/common';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ROLE_FIELDS_MAP } from '../../shared/role-fields';
@@ -8,7 +8,7 @@ import { FormsModule } from '@angular/forms';
 @Component({
   selector: 'app-application-list',
   standalone: true,
-  imports: [NgFor, HeaderComponent, FormsModule],
+  imports: [NgFor, NgIf, HeaderComponent, FormsModule],
   templateUrl: './application-list.component.html',
   styleUrl: './application-list.component.css'
 })
@@ -19,6 +19,14 @@ export class ApplicationListComponent implements OnInit {
   data: any[] = [];
   searchText: string = '';
 
+  selectedService: string = '';
+  selectedServiceType: string = '';
+  selectedApplicationStatus: string = '';
+
+  uniqueServices: string[] = [];
+  uniqueServiceTypes: string[] = [];
+  uniqueApplicationStatuses: string[] = [];
+
   constructor(private router: Router) {}
 
   ngOnInit() {
@@ -26,15 +34,40 @@ export class ApplicationListComponent implements OnInit {
     this.data = history.state.data;
 
     this.fields = ROLE_FIELDS_MAP[this.role];
+    this.populateDropdownValues();
+  }
+
+  populateDropdownValues() {
+    this.uniqueServices = Array.from(new Set(this.data.map(row => row['Service'] || ''))).filter(Boolean);
+    this.uniqueServiceTypes = Array.from(new Set(this.data.map(row => row['Service Type'] || ''))).filter(Boolean);
+
+    if (this.role === 'MVS_DISTRICT_OFFICER') {
+      this.uniqueApplicationStatuses = Array.from(new Set(this.data.map(row => row['Application Status'] || ''))).filter(Boolean);
+    }
   }
 
   get filteredRows() {
-    if (!this.searchText.trim()) {
-      return this.data; // Show full list if searchText is empty
+    let filtered = this.data;
+
+    if (this.searchText.trim()) {
+      filtered = filtered.filter(row =>
+        row['Application ID']?.toString().toLowerCase().includes(this.searchText.toLowerCase())
+      );
     }
-    return this.data.filter(row =>
-      row['Application ID']?.toString().toLowerCase().includes(this.searchText.toLowerCase())
-    );
+
+    if (this.selectedService) {
+      filtered = filtered.filter(row => row['Service'] === this.selectedService);
+    }
+
+    if (this.selectedServiceType) {
+      filtered = filtered.filter(row => row['Service Type'] === this.selectedServiceType);
+    }
+
+    if (this.role === 'MVS_DISTRICT_OFFICER' && this.selectedApplicationStatus) {
+      filtered = filtered.filter(row => row['Application Status'] === this.selectedApplicationStatus);
+    }
+
+    return filtered;
   }
 
   onRowClick(rowData: any) {
