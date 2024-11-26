@@ -165,9 +165,21 @@
   color: #000; /* Black text for contrast */
 }
 
+.action-buttons .schedule-interview {
+  background-color: #8717b3; 
+}
+
+.action-buttons .document-upload {
+  background-color: #4220c0; 
+}
+
 /* Reject Button */
 .action-buttons .reject {
   background-color: #dc3545; /* Red */
+}
+
+.hidden {
+  display: none;
 }
 
 /* Modal Backdrop */
@@ -189,7 +201,7 @@
   background-color: #d3dbe3;
   padding: 20px;
   border-radius: 8px;
-  width: 400px;
+  width: 600px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
@@ -244,4 +256,105 @@
 .modal-footer .approve {
   background-color: #28a745;
   color: #fff;
+}
+
+.modal-footer .send-invite {
+  background-color: #4220c0;
+  color: #fff;
+}
+
+.modal-footer .add {
+  background-color: #da261f;
+  color: #fff;
+}
+
+.btn.upload {
+  background-color: #f87171;
+  color: white;
+}
+
+/* Labels */
+.form-group label {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  display: inline-block;
+  color: #333;
+}
+
+.modal-body .form-group {
+  margin-bottom: 20px;
+}
+
+/* Textbox and Textarea */
+.form-group input[type="text"],
+.form-group textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db; /* Light gray border */
+  border-radius: 6px;
+  font-size: 14px;
+  color: #111827; /* Darker text color */
+  background-color: #f9fafb; /* Light background */
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #5b8def; /* Focus blue border */
+  box-shadow: 0 0 4px rgba(91, 141, 239, 0.4); /* Subtle glow */
+  background-color: #ffffff; /* Ensure white background on focus */
+}
+
+textarea {
+  resize: none;
+  height: 80px;
+}
+
+/* Dropdown (select) */
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #6b7280; /* Muted gray for placeholder */
+  background-color: #f9fafb;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  appearance: none; /* Hide the default arrow for consistent styling */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%236b7280' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+}
+
+.form-group select:focus {
+  outline: none;
+  border-color: #5b8def;
+  box-shadow: 0 0 4px rgba(91, 141, 239, 0.4);
+  background-color: #ffffff;
+}
+
+.document-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.dropdown {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  width: 150px;
+  font-size: 14px;
+}
+
+/* File name display */
+.file-name {
+  margin-left: 10px;
+  font-size: 14px;
+  color: #555;
 }

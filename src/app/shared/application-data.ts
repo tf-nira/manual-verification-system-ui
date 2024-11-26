@@ -8,7 +8,7 @@ export const ROLE_DATA_MAP: { [key: string]: any[] } = {
     { 
       'Application ID': 1, 
       'Service': 'Service 1', 
-      'Service Type': 'Type A', 
+      'Service Type': 'By Birth', 
       'Created Date': '2024-10-01', 
       'Escalation Category': 'Reason 1', 
       'Escalation Comment': 'Reason 1', 
@@ -37,14 +37,15 @@ export const ROLE_DATA_MAP: { [key: string]: any[] } = {
     { 
       'Application ID': 1, 
       'Service': 'Service 1', 
-      'Service Type': 'Type A', 
+      'Service Type': 'By Birth', 
       'Created Date': '2024-10-01', 
       'Escalation Category from MVS Officer': 'Catergory 1', 
       'Escalation Comment From MVS Officer': 'Reason 1', 
       'MVS Officer Escalated Date': '2024-10-02', 
       'Escalation Category From MVS Supervisor': 'Supervisor Category 1',
       'Escalation Comment From MVS Supervisor': 'Supervisor Reason 1', 
-      'MVS Supervisor Escalated Date': '2024-10-02'
+      'MVS Supervisor Escalated Date': '2024-10-02',
+      'Application Status': 'Pending'
     },
     { 
       'Application ID': 2, 
@@ -56,7 +57,8 @@ export const ROLE_DATA_MAP: { [key: string]: any[] } = {
       'MVS Officer Escalated Date': '2024-10-02', 
       'Escalation Category From MVS Supervisor': 'Supervisor Category 2',
       'Escalation Comment From MVS Supervisor': 'Supervisor Reason 2', 
-      'MVS Supervisor Escalated Date': '2024-10-02'
+      'MVS Supervisor Escalated Date': '2024-10-02',
+      'Application Status': 'Scheduled For Interview'
     },
     {
       'Application ID': 3, 
@@ -68,11 +70,12 @@ export const ROLE_DATA_MAP: { [key: string]: any[] } = {
       'MVS Officer Escalated Date': '2024-10-02', 
       'Escalation Category From MVS Supervisor': 'Supervisor Category 3',
       'Escalation Comment From MVS Supervisor': 'Supervisor Reason 3', 
-      'MVS Supervisor Escalated Date': '2024-10-02'
+      'MVS Supervisor Escalated Date': '2024-10-02',
+      'Application Status': 'Pending'
     },
   ],
   MVS_LEGAL_OFFICER: [
-    { 'Application ID': 100, Service: 'Service 11', 'Service Type': 'Type Ab', 'Created Date': '2024-10-01' },
+    { 'Application ID': 100, Service: 'Service 11', 'Service Type': 'By Birth', 'Created Date': '2024-10-01' },
     { 'Application ID': 101, Service: 'Service 12', 'Service Type': 'Type Bc', 'Created Date': '2024-10-02' },
     { 'Application ID': 102, Service: 'Service 13', 'Service Type': 'Type Cd', 'Created Date': '2024-10-03' },
   ]
