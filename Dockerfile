@@ -55,6 +55,8 @@ ADD ./default.conf /etc/nginx/conf.d/
 RUN cd /home/${container_user}
 
 ADD dist/browser/* /usr/share/nginx/html/
+ADD dist/browser/assets /usr/share/nginx/html/assets
+
 
 # install the needed packages including wget and a unzip library 
 #RUN apt-get update -y && apt-get install -y wget && apt-get install -y unzip
