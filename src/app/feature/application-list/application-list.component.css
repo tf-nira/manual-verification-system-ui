@@ -7,7 +7,32 @@
   background-color: #f8f9fa;
 }
 
+.search-container {
+  background-color: #e9f4fc; /* Light blue background */
+  border: 1px solid #ccc; /* Border color */
+  border-radius: 8px; /* Rounded corners */
+  padding: 1rem; /* Padding inside the container */
+  margin-bottom: 1.5rem; /* Space below the container */
+  margin-top: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for better visuals */
+}
+
 /* Search Bar */
+.search-and-filters {
+  display: flex;
+  align-items: center; /* Vertically align items */
+  gap: 0.7rem; /* Add space between elements */
+  margin-bottom: 1rem;
+  /* margin-top: 2rem; */ 
+}
+
+.search-input {
+  flex: 2; /* Make the search bar take more space */
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .search-bar {
   margin-top: 15px;
   margin-bottom: 10px;
@@ -17,6 +42,7 @@
 
 .search-input {
   width: 100%;
+  height: 1.5rem;
   padding: 8px;
   margin-right: 8px;
   border: 1px solid #ccc;
@@ -38,6 +64,82 @@
   box-shadow: 0 0 5px rgba(0, 91, 187, 0.3);
 }
 
+.date-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+
+.date-filter label {
+  font-weight: bold;
+}
+
+.date-filter input {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 150px;
+}
+
+.date-filter input:focus {
+  outline: none;
+  border-color: #007BFF;
+}
+
+/* Search Button */
+.search-button-container {
+  text-align: center;
+  margin-left: 1rem;
+}
+
+.search-filters-btn {
+  padding: 10px 20px;
+  background-color: #38ad21;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.search-filters-btn:hover {
+  background-color: #3fc923;
+}
+
+.search-filters-btn:active {
+  background-color: #2d881b;
+}
+
+/* Clear Button */
+.clear-button-container {
+  text-align: center;
+  margin-left: 1rem;
+}
+
+.clear-filters-btn {
+  padding: 10px 20px;
+  background-color: #ff6666;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.clear-filters-btn:hover {
+  background-color: #ff4c4c;
+}
+
+.clear-filters-btn:active {
+  background-color: #e60000;
+}
+
 /* Style for the table container */
 .application-list {
   background-color: #f9f9f9;
@@ -50,27 +152,49 @@
   width: 100%;
   border-collapse: collapse;
   margin: 0 auto;
-  font-size: 16px;
+  /* font-size: 14px; */
   text-align: left;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Table headers */
 .styled-table thead tr {
-  background-color: #007bff;
   color: #ffffff;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   font-weight: bold;
+  font-size: 17px;
+}
+
+.styled-table thead .header-row-1 { 
+  th:nth-child(odd) {
+    background-color: #567899;
+  }
+  
+  th:nth-child(even) {
+    background-color: #6188af;
+  }
+}
+
+.styled-table thead .header-row-2 { 
+  th:nth-child(odd) {
+    background-color: #567899;
+  }
+  
+  th:nth-child(even) {
+    background-color: #6188af;
+  }
 }
 
 /* Table header and body cells */
 .styled-table th, .styled-table td {
   padding: 12px 15px;
   border: 1px solid #ddd;
+  text-align: center;
 }
 
 /* Table rows hover effect */
 .styled-table tbody tr {
+  font-size: 14px;
   transition: background-color 0.3s;
 }
 
