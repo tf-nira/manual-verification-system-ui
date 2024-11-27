@@ -35,7 +35,7 @@ export class ApplicationDetailComponent implements OnInit {
     content: '',
     districtOffice: ''
   };
-
+  constructor(private router: Router) {}
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
   documents = [
@@ -61,6 +61,11 @@ export class ApplicationDetailComponent implements OnInit {
 
   }
 
+  goBack() {
+    this.router.navigate(['/application-list'],{
+      state: { role: this.role, data: history.state.data }
+    });
+  }
   openApprovalModal() {
     this.showApprovalModal = true;
   }

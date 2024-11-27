@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ROLE_DATA_MAP } from '../../shared/application-data';
+import { MatFormFieldModule } from '@angular/material/form-field';
+
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule,MatFormFieldModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

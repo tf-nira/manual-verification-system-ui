@@ -1,16 +1,20 @@
 import { Component, Input } from '@angular/core';
-
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './header.component.html',
-  styleUrl: './header.component.css'
+  styleUrls: ['./header.component.css']
 })
+
 export class HeaderComponent {
   @Input() role: string = '';
   @Input() view: string = '';
+  isDropdownOpen: boolean = false;
 
+  constructor(private router: Router) {}
   get formattedRole(): string {
     if (!this.role) return '';
 
@@ -23,5 +27,16 @@ export class HeaderComponent {
         return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
       })
       .join(' ');
+  }
+
+  toggleDropdown(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  logout(): void {// Perform any logout-specific actions here, like clearing session storage
+    sessionStorage.clear(); // Example: clear session data
+
+    // Redirect to the login page
+    this.router.navigate(['/login']);
   }
 }
