@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { LOGOUT, NAME, ROLE } from '../../constants';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -13,6 +15,12 @@ export class HeaderComponent {
   @Input() role: string = '';
   @Input() view: string = '';
   isDropdownOpen: boolean = false;
+
+  constants = {
+    NAME,
+    ROLE,
+    LOGOUT
+  }
 
   constructor(private router: Router) {}
   get formattedRole(): string {

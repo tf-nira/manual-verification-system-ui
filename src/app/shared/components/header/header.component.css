@@ -4,8 +4,11 @@
   justify-content: space-between; /* Space between title and profile */
   align-items: center; /* Vertically align items */
   padding: 10px 20px;
-  background-color: #f9f9f9;
-  border-bottom: 1px solid #ccc; /* Optional border for styling */
+  background-color: #6c757d;
+  color: #fff;
+  border-radius: 4px;
+  /* background-color: #f9f9f9;
+  border-bottom: 1px solid #ccc; */
 }
 
 /* Profile section */
@@ -18,8 +21,8 @@
 
 /* Profile picture */
 .profile-pic {
-  width: 30px; /* Smaller size */
-  height: 30px; /* Match width */
+  width: 40px; /* Smaller size */
+  height: 40px; /* Match width */
   border-radius: 50%; /* Circular profile picture */
   object-fit: cover; /* Prevent image distortion */
   margin-right: 10px; /* Space between image and text */
@@ -27,6 +30,7 @@
 
 /* Dropdown menu */
 .dropdown-menu {
+  width: max-content;
   position: absolute;
   top: 40px; /* Adjust dropdown position */
   right: 0;
@@ -37,7 +41,7 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 1000; /* Ensure dropdown is above other elements */
   font-size: 14px; /* Smaller text size for dropdown */
-  line-height: 1.5; /* Adjust line height for readability */
+  line-height: 2; /* Adjust line height for readability */
 }
 
 /* Text inside the dropdown */

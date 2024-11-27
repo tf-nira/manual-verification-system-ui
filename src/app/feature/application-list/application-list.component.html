@@ -1,27 +1,116 @@
 <div class="container">
   
+  <!-- Header Component (view, role) -->
   <app-header [view]="'List'" [role]="role"></app-header>
 
-  <!-- Search Bar -->
-  <div class="search-bar">
-    <input 
-      type="text" 
-      [(ngModel)]="searchText" 
-      placeholder="Search by Application ID" 
-      class="search-input"
-    />
+  <!-- Search & Filters Component (role) -->
+  <div class="search-container">
+    <div class="search-and-filters">
+      <input 
+        type="text" 
+        [(ngModel)]="searchText" 
+        placeholder="Search by Application ID" 
+        class="search-input"
+      />
+      <input 
+        type="text" 
+        [(ngModel)]="selectedService" 
+        placeholder="Search by Service" 
+        class="search-input"
+      />
+      <input 
+        type="text" 
+        [(ngModel)]="selectedServiceType" 
+        placeholder="Search by Service Type" 
+        class="search-input"
+      />
+      <input 
+        *ngIf="role === constants.MVS_DISTRICT_OFFICER" 
+        type="text" 
+        [(ngModel)]="selectedApplicationStatus"  
+        placeholder="Search by Service Type" 
+        class="search-input"
+      />
+    </div>
+
+    <div class="search-and-filters">
+      <!-- Date Range Filter -->
+      <div class="date-filter">
+        <label for="fromDate">{{ constants.FROM_DATE }}</label>
+        <input 
+          type="date" 
+          [(ngModel)]="fromDate" 
+          class="date-filter-input"
+          id="fromDate"
+        />
+        <label for="toDate">{{ constants.TO_DATE }}</label>
+        <input 
+          type="date" 
+          [(ngModel)]="toDate" 
+          class="date-filter-input"
+          id="toDate"
+        />
+      </div>
+
+      <div class="search-button-container">
+        <button (click)="search()" class="search-filters-btn">{{ constants.SEARCH }}</button>
+      </div>
+
+      <div class="clear-button-container">
+        <button (click)="clearFilters()" class="clear-filters-btn">{{ constants.CLEAR_FILTERS }}</button>
+      </div>
+    </div>
   </div>
 
+  <!-- Table Component (fields, filteredRows)-->
   <div class="application-list">
     <table class="styled-table">
       <thead>
-        <tr>
-          <th *ngFor="let field of fields">{{ field }}</th>
+        <tr [ngClass]="'header-row-1'">
+          <th rowspan="2">{{ constants.APPLICATION_ID }}</th> 
+          <th rowspan="2">{{ constants.SERVICE }}</th>
+          <th rowspan="2">{{ constants.SERVICE_TYPE }}</th>
+          <th rowspan="2">{{ constants.CREATED_DATE }}</th>
+          <!-- Conditional Section: Escalation from MVS Officer -->
+          <th *ngIf="fields.includes('Escalation Category from MVS Officer') || fields.includes('Escalation Category')" colspan="3">Escalation from MVS Officer</th>
+          <!-- Conditional Section: Escalation from MVS Supervisor -->
+          <th *ngIf="fields.includes('Escalation Category From MVS Supervisor')" colspan="3">Escalation from MVS Supervisor</th>
+          <th *ngIf="fields.includes('Application Status')" rowspan="2">{{ constants.APPLICATION_STATUS }}</th>
+        </tr>
+        <tr [ngClass]="'header-row-2'">
+          <!-- Escalation from MVS Officer Columns -->
+          <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER) || fields.includes(constants.ESCALATION_CATEGORY)">
+            <th>{{ constants.CATEGORY }}</th>
+            <th>{{ constants.COMMENT }}</th>
+            <th>{{ constants.ESCALATION_DATE }}</th>
+          </ng-container>
+          <!-- Escalation from MVS Supervisor Columns -->
+          <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR)">
+            <th>{{ constants.CATEGORY }}</th>
+            <th>{{ constants.COMMENT }}</th>
+            <th>{{ constants.ESCALATION_DATE }}</th>
+          </ng-container>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let row of filteredRows" (click)="onRowClick(row)">
-          <td *ngFor="let field of fields">{{ row[field] }}</td>
+        <tr *ngFor="let row of data" (click)="onRowClick(row)">
+          <td>{{ row[constants.APPLICATION_ID] }}</td>
+          <td>{{ row[constants.SERVICE] }}</td>
+          <td>{{ row[constants.SERVICE_TYPE] }}</td>
+          <td>{{ row[constants.CREATED_DATE] }}</td>
+          <!-- Conditional Section: Escalation from MVS Officer -->
+          <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER) || fields.includes(constants.ESCALATION_CATEGORY)">
+            <td>{{ row[constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER] || row[constants.ESCALATION_CATEGORY] }}</td>
+            <td>{{ row[constants.ESCALATION_COMMENT_FROM_MVS_OFFICER] || row[constants.ESCALATION_COMMENT] }}</td>
+            <td>{{ row[constants.MVS_OFFICER_ESCALATED_DATE] || row[constants.ESCALATED_DATE]}}</td>
+          </ng-container>
+          <!-- Conditional Section: Escalation from MVS Supervisor -->
+          <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR)">
+            <td>{{ row[constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR] }}</td>
+            <td>{{ row[constants.ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] }}</td>
+            <td>{{ row[constants.MVS_SUPERVISOR_ESCALATED_DATE] }}</td>
+          </ng-container>
+          <td *ngIf="fields.includes(constants.APPLICATION_STATUS)">{{ row[constants.APPLICATION_STATUS] }}</td>
         </tr>
       </tbody>
     </table>
