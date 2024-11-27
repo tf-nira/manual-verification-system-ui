@@ -4,9 +4,9 @@
     <img src="assets/images/profile-image.png" alt="Profile Icon" class="profile-pic" />
     <!-- Dropdown menu -->
     <div *ngIf="isDropdownOpen" class="dropdown-menu">
-      <p><strong>Name:</strong> Robin Mathew</p>
-      <p><strong>Role:</strong> Supervisor</p>
-      <button (click)="logout()" class="logout-btn">Logout</button>
+      <p><strong>{{ constants.NAME }}: </strong> Robin Mathew</p>
+      <p><strong>{{ constants.ROLE }}: </strong> Supervisor</p>
+      <button (click)="logout()" class="logout-btn">{{ constants.LOGOUT }}</button>
     </div>
   </div>
 </div>

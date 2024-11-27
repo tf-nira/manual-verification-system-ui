@@ -1,4 +1,7 @@
 // ui-labels
+export const NAME: string = 'Name';
+export const ROLE: string = 'Role';
+export const LOGOUT: string = 'Logout';
 export const SEARCH: string = 'Search';
 export const FROM_DATE: string = 'From Date:';
 export const TO_DATE: string = 'To Date:';
