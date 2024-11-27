@@ -11,33 +11,35 @@
       </div>
       
       <!-- Username Input -->
-      <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Username</mat-label>
+      <div class="form-field">
+        <label for="username">User Id</label>
         <input
-          matInput
+          id="username"
           type="text"
-          placeholder="Enter your Email Address or Phone Number"
+          placeholder="Enter User Id"
           name="username"
           [(ngModel)]="username"
           required
+          class="form-control"
         />
-      </mat-form-field>
+      </div>
       
       <!-- Password Input -->
-      <mat-form-field appearance="fill" class="form-field">
-        <mat-label>Password</mat-label>
+      <div class="form-field">
+        <label for="password">Password</label>
         <input
-          matInput
+          id="password"
           type="password"
-          placeholder="Password"
+          placeholder="Enter Password"
           name="password"
           [(ngModel)]="password"
           required
+          class="form-control"
         />
-      </mat-form-field>
+      </div>
       
       <!-- Submit Button -->
-      <button mat-raised-button class="submit-btn" type="submit">Login</button>
+      <button class="submit-btn" type="submit">Login</button>
     </form>
   </div>
 </div>
