@@ -263,7 +263,7 @@
   color: #fff;
 }
 
-.modal-footer .add {
+.modal-footer .reject {
   background-color: #da261f;
   color: #fff;
 }
@@ -377,4 +377,49 @@ textarea {
 
 .back-button:hover {
   background-color: #0056b3;
+}/* Tab Container */
+.tab-container {
+  display: flex;
+  width: 100%;
+}
+
+.tab {
+  background-color: #b89c8a; /* Adjusted to match the desired color */
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 5px 5px 0 0;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  flex: 1;
+}
+
+.tab.active {
+  background-color: #816453; /* Updated for the active tab color */
+}
+
+/* NIN Details Section */
+.nin-details-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px;
+  background-color: #e8a295; /* Updated background color to match desired layout */
+  border: 1px solid #b97b70;
+  border-radius: 5px;
+}
+
+.nin-detail {
+  border: 1px solid #b97b70; /* Updated border color */
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f5e4e1; /* Adjusted background color for the details section */
+  font-weight: bold; /* Ensures text stands out */
+}
+
+.nin-info {
+  margin-top: 5px;
+  font-size: 0.9em;
+  color: #191818; /* Updated font color for better contrast */
 }

@@ -52,15 +52,30 @@
     </div>
   
     <!-- Right Section -->
-    <div class="right-section" *ngIf="serviceType === 'By Birth'">
-      <div class="tab-container full-width">
-        <button class="tab active center-text">Retrieve NIN Details</button>
-      </div>
-      <div class="nin-section">
-        <input type="text" placeholder="Enter the NIN" class="nin-input" />
-        <button class="submit-btn">Submit</button>
+    <!-- Right Section -->
+<div class="right-section" *ngIf="serviceType === 'By Birth'">
+  <div class="tab-container full-width">
+    <button class="tab active center-text">Auto-Retrieve NIN Details</button>
+  </div>
+  <div class="nin-details-container">
+    <div class="nin-detail">
+      <label>Father's NIN:</label>
+      <span>XXXXXXXXXXXX</span>
+      <div class="nin-info">
+        <p>Personal Info</p>
+        <p>Place of Origin</p>
       </div>
     </div>
+    <div class="nin-detail">
+      <label>Mother's NIN:</label>
+      <span>XXXXXXXXXXXX</span>
+      <div class="nin-info">
+        <p>Personal Info</p>
+      </div>
+    </div>
+  </div>
+</div>
+
   </div>
   
   <div class="footer">

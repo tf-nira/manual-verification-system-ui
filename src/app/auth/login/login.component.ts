@@ -1,34 +1,30 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { ROLE_DATA_MAP } from '../../shared/application-data';
-import { MatFormFieldModule } from '@angular/material/form-field';
-
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule,MatFormFieldModule],
+  imports: [
+    CommonModule,
+    FormsModule
+  ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  username: string = '' ;
-  password: string = '' ;
+  username: string = '';
+  password: string = '';
 
   constructor(private router: Router) {}
-  
-  onSubmit(){
-    console.log("login submitted for user:", this.username);
-  
-    // login api
-    // on successful login fetch application list for the user
-    
-    // const role = 'MVS_OFFICER';
-    // const role = 'MVS_SUPERVISOR';
-    const role = 'MVS_DISTRICT_OFFICER';
-    // const role = 'MVS_LEGAL_OFFICER';
 
+  onSubmit() {
+    console.log("Login submitted for user:", this.username);
+
+    // Simulated login logic
+    const role = 'MVS_DISTRICT_OFFICER';
     const data = ROLE_DATA_MAP[role];
     this.router.navigate(['/application-list'], { state: { role, data } });
   }
