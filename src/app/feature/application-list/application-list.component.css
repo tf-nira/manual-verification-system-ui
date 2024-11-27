@@ -33,14 +33,6 @@
   border-radius: 4px;
 }
 
-.filter-dropdown {
-  flex: 1; /* Ensure filters are smaller than the search bar */
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  height: 2.5rem
-}
-
 .search-bar {
   margin-top: 15px;
   margin-bottom: 10px;
@@ -94,6 +86,32 @@
 .date-filter input:focus {
   outline: none;
   border-color: #007BFF;
+}
+
+/* Search Button */
+.search-button-container {
+  text-align: center;
+  margin-left: 1rem;
+}
+
+.search-filters-btn {
+  padding: 10px 20px;
+  background-color: #38ad21;
+  border: none;
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+.search-filters-btn:hover {
+  background-color: #3fc923;
+}
+
+.search-filters-btn:active {
+  background-color: #2d881b;
 }
 
 /* Clear Button */

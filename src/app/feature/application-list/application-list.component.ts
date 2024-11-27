@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ROLE_FIELDS_MAP } from '../../shared/role-fields';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { FormsModule } from '@angular/forms';
+import { APPLICATION_ID, APPLICATION_STATUS, CATEGORY, CLEAR_FILTERS, COMMENT, CREATED_DATE, ESCALATED_DATE, ESCALATION_CATEGORY, ESCALATION_CATEGORY_FROM_MVS_OFFICER, ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR, ESCALATION_COMMENT, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_DATE, FROM_DATE, MVS_DISTRICT_OFFICER, MVS_OFFICER_ESCALATED_DATE, MVS_SUPERVISOR_ESCALATED_DATE, SERVICE, SERVICE_TYPE, TO_DATE, SEARCH } from '../../shared/constants';
 
 @Component({
   selector: 'app-application-list',
@@ -29,6 +30,31 @@ export class ApplicationListComponent implements OnInit {
   uniqueServiceTypes: string[] = [];
   uniqueApplicationStatuses: string[] = [];
 
+  constants = {
+    SEARCH,
+    FROM_DATE,
+    TO_DATE,
+    CLEAR_FILTERS,
+    CATEGORY,
+    COMMENT,
+    ESCALATION_DATE,
+    APPLICATION_ID,
+    SERVICE,
+    SERVICE_TYPE,
+    CREATED_DATE,
+    ESCALATION_CATEGORY,
+    ESCALATION_COMMENT,
+    ESCALATED_DATE,
+    ESCALATION_CATEGORY_FROM_MVS_OFFICER,
+    ESCALATION_COMMENT_FROM_MVS_OFFICER,
+    MVS_OFFICER_ESCALATED_DATE,
+    ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR,
+    ESCALATION_COMMENT_FROM_MVS_SUPERVISOR,
+    MVS_SUPERVISOR_ESCALATED_DATE,
+    APPLICATION_STATUS,
+    MVS_DISTRICT_OFFICER
+  };
+
   constructor(private router: Router) {}
 
   ngOnInit() {
@@ -36,48 +62,10 @@ export class ApplicationListComponent implements OnInit {
     this.data = history.state.data;
 
     this.fields = ROLE_FIELDS_MAP[this.role];
-    this.populateDropdownValues();
   }
 
-  populateDropdownValues() {
-    this.uniqueServices = Array.from(new Set(this.data.map(row => row['Service'] || ''))).filter(Boolean);
-    this.uniqueServiceTypes = Array.from(new Set(this.data.map(row => row['Service Type'] || ''))).filter(Boolean);
-
-    if (this.role === 'MVS_DISTRICT_OFFICER') {
-      this.uniqueApplicationStatuses = Array.from(new Set(this.data.map(row => row['Application Status'] || ''))).filter(Boolean);
-    }
-  }
-
-  get filteredRows() {
-    let filtered = this.data;
-
-    if (this.searchText.trim()) {
-      filtered = filtered.filter(row =>
-        row['Application ID']?.toString().toLowerCase().includes(this.searchText.toLowerCase())
-      );
-    }
-
-    if (this.selectedService) {
-      filtered = filtered.filter(row => row['Service'] === this.selectedService);
-    }
-
-    if (this.selectedServiceType) {
-      filtered = filtered.filter(row => row['Service Type'] === this.selectedServiceType);
-    }
-
-    if (this.role === 'MVS_DISTRICT_OFFICER' && this.selectedApplicationStatus) {
-      filtered = filtered.filter(row => row['Application Status'] === this.selectedApplicationStatus);
-    }
-
-    if (this.fromDate) {
-      filtered = filtered.filter(row => new Date(row['Created Date']) >= new Date(this.fromDate));
-    }
-
-    if (this.toDate) {
-      filtered = filtered.filter(row => new Date(row['Created Date']) <= new Date(this.toDate));
-    }
-
-    return filtered;
+  search() {
+    // call search api with searchText, selectedService, selectedServiceType, selectedApplicationStatus, fromDate, toDate
   }
 
   clearFilters() {
@@ -94,3 +82,5 @@ export class ApplicationListComponent implements OnInit {
     this.router.navigate(['/application-detail'], { state: { role: this.role, data: rowData }});
   }
 }
+
+
