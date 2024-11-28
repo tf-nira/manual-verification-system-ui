@@ -6,6 +6,7 @@ import { HeaderComponent } from "../../shared/components/header/header.component
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
+import { ROLE_DATA_MAP } from '../../shared/application-data';
 
 interface NavigationState {
   role?: string;
@@ -37,10 +38,34 @@ export class ApplicationListComponent implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state || {} as NavigationState;
     this.role = state.role || '';
-    this.data = state.data || []
-
+    this.data = state.data || [];
+    this.fetchApplicationList(localStorage.getItem("userId") || '');
     this.fields = ROLE_FIELDS_MAP[this.role];
   }
+
+  fetchApplicationList(userId: string){
+    this.dataService
+              .fetchApplicationList(userId)
+              .subscribe(
+                (appResponse: any) => {
+                  console.log("Application List Response:", appResponse);
+                  if (appResponse && appResponse.response) {
+                    // const role = 'MVS_OFFICER';
+                    // const role = 'MVS_SUPERVISOR';
+                    const role = 'MVS_DISTRICT_OFFICER';
+                    // const role = 'MVS_LEGAL_OFFICER';
+                    //role also should come from api
+                    const data = ROLE_DATA_MAP[role];
+                    
+                  }
+                } ,
+                (appError) => {
+                  console.error("Error fetching application list:", appError);
+                }
+              );
+
+  }
+
 
   get filteredRows() {
     if (!this.searchText.trim()) {
@@ -65,6 +90,5 @@ export class ApplicationListComponent implements OnInit {
         console.error('Error fetching application details:', error);
         alert('Failed to fetch application details.');
       });
-    this.router.navigate(['/application-detail'], { state: { role: this.role, data: rowData } });
-  }
+      }
 }
