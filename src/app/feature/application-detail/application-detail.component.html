@@ -7,27 +7,27 @@
   <div class="application-info">
     <div class="info-group">
       <label>Application ID</label>
-      <input type="text" placeholder="Enter ID" />
+      <input type="text" placeholder="Enter ID" [(ngModel)]="applicationId" [disabled]="!isEditable"/>
     </div>
     <div class="info-group">
       <label>Applicant Name</label>
-      <input type="text" placeholder="Enter Name" />
+      <input type="text" placeholder="Enter Name" [(ngModel)]="applicantName" [disabled]="!isEditable"/>
     </div>
     <div class="info-group">
       <label>Service</label>
-      <input type="text" placeholder="Enter Service" />
+      <input type="text" placeholder="Enter Service" [(ngModel)]="service" [disabled]="!isEditable"/>
     </div>
     <div class="info-group">
       <label>Service Type</label>
-      <input type="text" placeholder="Enter Service Type" [(ngModel)]="serviceType" />
+      <input type="text" placeholder="Enter Service Type" [(ngModel)]="serviceType" [disabled]="!isEditable"/>
     </div>
     <div class="info-group" *ngIf="role === 'MVS_SUPERVISOR' || role === 'MVS_DISTRICT_OFFICER'">
       <label>Escalation Reason from MVS Officer</label>
-      <input type="text" placeholder="Enter Reason" />
+      <input type="text" placeholder="Enter Reason" [(ngModel)]="commentMVSOfficer" [disabled]="!isEditable"/>
     </div>
     <div class="info-group" *ngIf="role === 'MVS_DISTRICT_OFFICER'">
       <label>Escalation Reason from MVS Supervisor</label>
-      <input type="text" placeholder="Enter Reason" />
+      <input type="text" placeholder="Enter Reason" [(ngModel)]="commentMVSSupervisor" [disabled]="!isEditable"/>
     </div>
   </div>
 
