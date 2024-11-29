@@ -249,7 +249,7 @@
 }
 
 .modal-footer .back {
-  background-color: #ffaf40;
+  background-color: #007bff;
   color: #fff;
 }
 
@@ -268,8 +268,13 @@
   color: #fff;
 }
 
-.btn.upload {
+.btn.add {
   background-color: #f87171;
+  color: white;
+}
+
+.btn.escalate {
+  background-color: #ffaf40;
   color: white;
 }
 
@@ -350,6 +355,16 @@ textarea {
   background-color: #f9fafb;
   width: 150px;
   font-size: 14px;
+}
+
+.reject-category {
+  padding: 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #f9fafb;
+  width: max-content;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
 /* File name display */

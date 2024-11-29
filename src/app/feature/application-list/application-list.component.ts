@@ -5,6 +5,7 @@ import { ROLE_FIELDS_MAP } from '../../shared/role-fields';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { FormsModule } from '@angular/forms';
 import { APPLICATION_ID, APPLICATION_STATUS, CATEGORY, CLEAR_FILTERS, COMMENT, CREATED_DATE, ESCALATED_DATE, ESCALATION_CATEGORY, ESCALATION_CATEGORY_FROM_MVS_OFFICER, ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR, ESCALATION_COMMENT, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_DATE, FROM_DATE, MVS_DISTRICT_OFFICER, MVS_OFFICER_ESCALATED_DATE, MVS_SUPERVISOR_ESCALATED_DATE, SERVICE, SERVICE_TYPE, TO_DATE, SEARCH } from '../../shared/constants';
+import { ROLE_DATA_MAP } from '../../shared/application-data';
 
 @Component({
   selector: 'app-application-list',
@@ -59,7 +60,7 @@ export class ApplicationListComponent implements OnInit {
 
   ngOnInit() {
     this.role = history.state.role;
-    this.data = history.state.data;
+    this.data = ROLE_DATA_MAP[this.role];
 
     this.fields = ROLE_FIELDS_MAP[this.role];
   }
