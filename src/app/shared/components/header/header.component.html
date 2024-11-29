@@ -5,7 +5,7 @@
     <!-- Dropdown menu -->
     <div *ngIf="isDropdownOpen" class="dropdown-menu">
       <p><strong>{{ constants.NAME }}: </strong> Robin Mathew</p>
-      <p><strong>{{ constants.ROLE }}: </strong> Supervisor</p>
+      <p><strong>{{ constants.ROLE }}: </strong> {{ formattedRole }} </p>
       <button (click)="logout()" class="logout-btn">{{ constants.LOGOUT }}</button>
     </div>
   </div>
