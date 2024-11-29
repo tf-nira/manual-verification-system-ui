@@ -111,8 +111,8 @@
     <!-- Document Upload Btn -->
     <button 
       [ngClass]="{
-        'document-upload': role === 'MVS_DISTRICT_OFFICER' && applicationStatus === 'Scheduled For Interview',
-        'hidden': role === 'MVS_LEGAL_OFFICER' || applicationStatus !== 'Scheduled For Interview'
+        'document-upload': role === 'MVS_DISTRICT_OFFICER',
+        'hidden': role !== 'MVS_DISTRICT_OFFICER'
       }" 
       (click)="openDocumentUploadwModal()">
       {{ constants.UPLOAD_DCOUMENTS }}
