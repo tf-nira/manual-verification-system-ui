@@ -56,7 +56,7 @@ export class ApplicationDetailComponent implements OnInit {
 
     this.role = state.role || '';
     this.rowData = state.data || {};
-    if (this.role === 'MVS_DISTRICT_OFFICER') {
+    if (this.role === 'MVS_DISTRICT_OFFICER' || this.role === 'MVS_LEGAL_OFFICER') {
       this.applicationStatus = this.rowData['Application Status'];
     }
 

@@ -88,8 +88,8 @@
 
     <button 
       [ngClass]="{
-        'escalate': role !== 'MVS_DISTRICT_OFFICER',
-        'hidden': role === 'MVS_DISTRICT_OFFICER'
+        'escalate': role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR',
+        'hidden': role === 'MVS_DISTRICT_OFFICER' || role ==='MVS_LEGAL_OFFICER'
       }" 
       (click)="openEscalateModal()">
       Escalate
@@ -97,8 +97,8 @@
 
     <button 
       [ngClass]="{
-        'schedule-interview': role === 'MVS_DISTRICT_OFFICER' && applicationStatus === 'Pending',
-        'hidden': applicationStatus !== 'Pending'
+        'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') && applicationStatus === 'Pending',
+        'hidden': applicationStatus !== 'Pending' 
       }" 
       (click)="openScheduleInterviewModal()">
       Schedule Interview
@@ -108,7 +108,7 @@
     <button 
       [ngClass]="{
         'document-upload': role === 'MVS_DISTRICT_OFFICER' && applicationStatus === 'Scheduled For Interview',
-        'hidden': applicationStatus !== 'Scheduled For Interview'
+        'hidden': role === 'MVS_LEGAL_OFFICER' || applicationStatus !== 'Scheduled For Interview'
       }" 
       (click)="openDocumentUploadwModal()">
       Upload Documents
