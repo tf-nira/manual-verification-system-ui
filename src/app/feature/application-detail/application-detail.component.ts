@@ -5,6 +5,7 @@ import { DemographicDetailsComponent } from '../demographic-details/demographic-
 import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uploaded.component';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
+import { APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
 
 @Component({
   selector: 'app-application-detail',
@@ -19,6 +20,7 @@ import { Router } from '@angular/router';
   templateUrl: './application-detail.component.html',
   styleUrl: './application-detail.component.css'
 })
+
 export class ApplicationDetailComponent implements OnInit {
   role: string = '';
   selectedTab: string = 'demographic'; // Default to 'demographic'
@@ -35,6 +37,27 @@ export class ApplicationDetailComponent implements OnInit {
     content: '',
     districtOffice: ''
   };
+
+  constants = {
+    MVS_DISTRICT_OFFICER,
+    APPLICATION_ID,
+    SERVICE,
+    SERVICE_TYPE,
+    ESCALATION_REASON_FROM_MVS_OFFICER,
+    ESCALATION_REASON_FROM_MVS_SUPERVISOR,
+    APPLICATION_STATUS,
+    DEMOGRAPHIC_DETAILS,
+    DOCUMENTS_UPLOADED,
+    AUTO_RETRIEVE_NIN_DETAILS,
+    BACK,
+    APPROVE,
+    REJECT,
+    ESCALATE,
+    SCHEDULE_INTERVIEW,
+    UPLOAD_DCOUMENTS,
+    APPLICANT_NAME
+  }
+
   constructor(private router: Router) {}
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];

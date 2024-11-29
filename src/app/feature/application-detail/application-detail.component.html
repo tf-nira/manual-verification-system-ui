@@ -6,27 +6,27 @@
   <!-- Application Information Section -->
   <div class="application-info">
     <div class="info-group">
-      <label>Application ID</label>
+      <label>{{ constants.APPLICATION_ID }}</label>
       <input type="text" placeholder="Enter ID" />
     </div>
     <div class="info-group">
-      <label>Applicant Name</label>
+      <label>{{ constants.APPLICANT_NAME }}</label>
       <input type="text" placeholder="Enter Name" />
     </div>
     <div class="info-group">
-      <label>Service</label>
+      <label>{{ constants.SERVICE }}</label>
       <input type="text" placeholder="Enter Service" />
     </div>
     <div class="info-group">
-      <label>Service Type</label>
+      <label>{{ constants.SERVICE_TYPE }}</label>
       <input type="text" placeholder="Enter Service Type" [(ngModel)]="serviceType" />
     </div>
     <div class="info-group" *ngIf="role === 'MVS_SUPERVISOR' || role === 'MVS_DISTRICT_OFFICER'">
-      <label>Escalation Reason from MVS Officer</label>
+      <label>{{ constants.ESCALATION_REASON_FROM_MVS_OFFICER }}</label>
       <input type="text" placeholder="Enter Reason" />
     </div>
     <div class="info-group" *ngIf="role === 'MVS_DISTRICT_OFFICER'">
-      <label>Escalation Reason from MVS Supervisor</label>
+      <label>{{ constants.ESCALATION_REASON_FROM_MVS_SUPERVISOR }}</label>
       <input type="text" placeholder="Enter Reason" />
     </div>
   </div>
@@ -37,10 +37,10 @@
     <div class="left-section">
       <div class="tab-container full-width">
         <button class="tab" [class.active]="selectedTab === 'demographic'" (click)="selectTab('demographic')">
-          Demographic Details
+          {{ constants.DEMOGRAPHIC_DETAILS }}
         </button>
         <button class="tab" [class.active]="selectedTab === 'documents'" (click)="selectTab('documents')">
-          Documents Uploaded
+          {{ constants.DOCUMENTS_UPLOADED }}
         </button>
       </div>
   
@@ -55,7 +55,7 @@
     <!-- Right Section -->
 <div class="right-section" *ngIf="serviceType === 'By Birth'">
   <div class="tab-container full-width">
-    <button class="tab active center-text">Auto-Retrieve NIN Details</button>
+    <button class="tab active center-text">{{ constants.AUTO_RETRIEVE_NIN_DETAILS }}</button>
   </div>
   <div class="nin-details-container">
     <div class="nin-detail">
@@ -79,42 +79,47 @@
   </div>
   
   <div class="footer">
-    <button (click)="goBack()" class="back-button">Back</button>
+    <button (click)="goBack()" class="back-button">{{ constants.BACK }}</button>
   </div>
 
   <!-- Action Buttons -->
   <div class="action-buttons">
-    <button class="approve" (click)="openApprovalModal()">Approve</button>
 
+    <!-- Approve Btn -->
+    <button class="approve" (click)="openApprovalModal()">{{ constants.APPROVE }}</button>
+
+    <!-- Escalate Btn -->
     <button 
       [ngClass]="{
-        'escalate': role !== 'MVS_DISTRICT_OFFICER',
-        'hidden': role === 'MVS_DISTRICT_OFFICER'
+        'escalate': role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR',
+        'hidden': role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_LEGAL_OFFICER'
       }" 
       (click)="openEscalateModal()">
-      Escalate
+      {{ constants.ESCALATE }}
     </button>
 
+    <!-- Schedule Interview Btn -->
     <button 
       [ngClass]="{
         'schedule-interview': role === 'MVS_DISTRICT_OFFICER' && applicationStatus === 'Pending',
         'hidden': applicationStatus !== 'Pending'
       }" 
       (click)="openScheduleInterviewModal()">
-      Schedule Interview
+      {{ constants.SCHEDULE_INTERVIEW }}
     </button>
 
-    <!-- Document Upload Button -->
+    <!-- Document Upload Btn -->
     <button 
       [ngClass]="{
-        'document-upload': role === 'MVS_DISTRICT_OFFICER' && applicationStatus === 'Scheduled For Interview',
-        'hidden': applicationStatus !== 'Scheduled For Interview'
+        'document-upload': role === 'MVS_DISTRICT_OFFICER',
+        'hidden': role !== 'MVS_DISTRICT_OFFICER'
       }" 
       (click)="openDocumentUploadwModal()">
-      Upload Documents
+      {{ constants.UPLOAD_DCOUMENTS }}
     </button>
     
-    <button class="reject" (click)="openRejectModal()">Reject</button>
+    <!-- Reject Btn -->
+    <button class="reject" (click)="openRejectModal()">{{ constants.REJECT }}</button>
   </div>
   
   <!-- Approval Modal -->
@@ -129,7 +134,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn back" (click)="closeApprovalModal()">Back to Review</button>
-        <button class="btn approve" (click)="approveApplication()">Approve</button>
+        <button class="btn approve" (click)="approveApplication()">{{ constants.APPROVE }}</button>
       </div>
     </div>
   </div>
@@ -141,8 +146,8 @@
           <h3>Confirm Application Escalation</h3>
       </div>
       <div class="modal-body">
-          <p>Are you sure you want to escalate this application to the supervisor?</p>
-          <div class="checkbox-container">
+          <p>Are you sure you want to escalate this application?</p>
+          <div class="checkbox-container" *ngIf="role === 'MVS_OFFICER'">
               <input type="checkbox" id="escalate-checkbox" [(ngModel)]="escalateOption" />
               <label for="escalate-checkbox">
                   Escalate to District Officer (Insufficient Documentation)
@@ -152,7 +157,7 @@
       </div>
       <div class="modal-footer">
           <button class="btn back" (click)="closeEscalateModal()">Back to Review</button>
-          <button class="btn escalate" (click)="escalateApplication()">Escalate</button>
+          <button class="btn escalate" (click)="escalateApplication()">{{ constants.ESCALATE }}</button>
       </div>
   </div>
 </div>
@@ -164,7 +169,6 @@
       <h3>Schedule a Meeting</h3>
     </div>
     <div class="modal-body">
-      <!-- Subject Field -->
       <div class="form-group">
         <label for="subject">Subject*</label>
         <input
@@ -176,7 +180,6 @@
         />
       </div>
 
-      <!-- Content Field -->
       <div class="form-group">
         <label for="content">Content*</label>
         <textarea
@@ -187,7 +190,6 @@
         ></textarea>
       </div>
 
-      <!-- District Office Dropdown -->
       <div class="form-group">
         <label for="districtOffice">District Office*</label>
         <select
@@ -218,7 +220,6 @@
     </div>
     <div class="modal-body">
       <div *ngFor="let document of documents; let i = index" class="document-row">
-        <!-- Doc Category -->
         <select
           class="dropdown"
           [(ngModel)]="document.category"
@@ -230,7 +231,6 @@
           </option>
         </select>
 
-        <!-- Doc Title -->
         <select
           class="dropdown"
           [(ngModel)]="document.title"
@@ -242,7 +242,6 @@
           </option>
         </select>
 
-        <!-- File Input -->
         <input
           type="file"
           (change)="uploadFile($event, i)"
