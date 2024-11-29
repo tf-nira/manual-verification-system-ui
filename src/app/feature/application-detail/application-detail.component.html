@@ -7,27 +7,27 @@
   <div class="application-info">
     <div class="info-group">
       <label>{{ constants.APPLICATION_ID }}</label>
-      <input type="text" placeholder="Enter ID" />
+      <input type="text" placeholder="Enter ID" [(ngModel)]="applicationId" [disabled]="!isEditable"/>
     </div>
     <div class="info-group">
       <label>{{ constants.APPLICANT_NAME }}</label>
-      <input type="text" placeholder="Enter Name" />
+      <input type="text" placeholder="Enter Name" [(ngModel)]="applicantName" [disabled]="!isEditable"/>
     </div>
     <div class="info-group">
       <label>{{ constants.SERVICE }}</label>
-      <input type="text" placeholder="Enter Service" />
+      <input type="text" placeholder="Enter Service" [(ngModel)]="service" [disabled]="!isEditable"/>
     </div>
     <div class="info-group">
       <label>{{ constants.SERVICE_TYPE }}</label>
-      <input type="text" placeholder="Enter Service Type" [(ngModel)]="serviceType" />
+      <input type="text" placeholder="Enter Service Type" [(ngModel)]="serviceType" [disabled]="!isEditable" />
     </div>
     <div class="info-group" *ngIf="role === 'MVS_SUPERVISOR' || role === 'MVS_DISTRICT_OFFICER'">
       <label>{{ constants.ESCALATION_REASON_FROM_MVS_OFFICER }}</label>
-      <input type="text" placeholder="Enter Reason" />
+      <input type="text" placeholder="Enter Reason" [(ngModel)]="commentMVSOfficer" [disabled]="!isEditable"/>
     </div>
     <div class="info-group" *ngIf="role === 'MVS_DISTRICT_OFFICER'">
       <label>{{ constants.ESCALATION_REASON_FROM_MVS_SUPERVISOR }}</label>
-      <input type="text" placeholder="Enter Reason" />
+      <input type="text" placeholder="Enter Reason" [(ngModel)]="commentMVSSupervisor" [disabled]="!isEditable"/>
     </div>
   </div>
 
@@ -101,8 +101,8 @@
     <!-- Schedule Interview Btn -->
     <button 
       [ngClass]="{
-        'schedule-interview': role === 'MVS_DISTRICT_OFFICER' && applicationStatus === 'Pending',
-        'hidden': applicationStatus !== 'Pending'
+        'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') && applicationStatus === 'Pending',
+        'hidden': applicationStatus !== 'Pending' 
       }" 
       (click)="openScheduleInterviewModal()">
       {{ constants.SCHEDULE_INTERVIEW }}
@@ -111,8 +111,8 @@
     <!-- Document Upload Btn -->
     <button 
       [ngClass]="{
-        'document-upload': role === 'MVS_DISTRICT_OFFICER',
-        'hidden': role !== 'MVS_DISTRICT_OFFICER'
+        'document-upload': role === 'MVS_DISTRICT_OFFICER' && applicationStatus === 'Scheduled For Interview',
+        'hidden': role === 'MVS_LEGAL_OFFICER' || applicationStatus !== 'Scheduled For Interview'
       }" 
       (click)="openDocumentUploadwModal()">
       {{ constants.UPLOAD_DCOUMENTS }}

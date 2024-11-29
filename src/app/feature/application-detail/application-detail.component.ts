@@ -67,20 +67,28 @@ export class ApplicationDetailComponent implements OnInit {
 
   docCategories = ['Category 1', 'Category 2', 'Category 3']; // Example categories
   docTitles = ['Title 1', 'Title 2', 'Title 3']; // Example titles
-
+  isEditable: boolean = false;
   serviceType = ''; // Default value
-
+  applicationId='';
+  service='';
+  commentMVSOfficer='';
+  commentMVSSupervisor=''
+  applicantName='Steve Smith' //field value will come from the /applications/{appId} api response
   ngOnInit() {
     const state = history.state;
 
     this.role = state.role || '';
     this.rowData = state.data || {};
-    if (this.role === 'MVS_DISTRICT_OFFICER') {
+    if (this.role === 'MVS_DISTRICT_OFFICER' || this.role === 'MVS_LEGAL_OFFICER') {
       this.applicationStatus = this.rowData['Application Status'];
     }
 
-
     this.serviceType = this.rowData['Service Type'] || '';
+    this.applicationId = this.rowData['Application ID'] || '';
+    this.service = this.rowData['Service'] || '';
+    this.commentMVSOfficer = this.rowData["Escalation Comment From MVS Officer"] || '';
+    this.commentMVSSupervisor = this.rowData["Escalation Comment From MVS Supervisor"] || '';
+
 
   }
 

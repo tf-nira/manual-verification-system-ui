@@ -31,6 +31,7 @@ export const ROLE_FIELDS_MAP: { [key: string]: string[] } = {
     'Application ID', 
     'Service', 
     'Service Type', 
-    'Created Date'
+    'Created Date',
+    'Application Status'
   ]
 };
