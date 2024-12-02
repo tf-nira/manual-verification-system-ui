@@ -135,5 +135,9 @@ export class ApplicationListComponent implements OnInit {
     }
       
   }
+
+  search() {
+  
+  }
 }
 
