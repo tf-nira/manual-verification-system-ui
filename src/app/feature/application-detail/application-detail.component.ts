@@ -6,6 +6,7 @@ import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uplo
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
 import { APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
+import { DataStorageService } from '../../core/services/data-storage.service';
 
 @Component({
   selector: 'app-application-detail',
@@ -38,6 +39,19 @@ export class ApplicationDetailComponent implements OnInit {
     districtOffice: ''
   };
 
+  service: string = '';
+  serviceType: string  = ''; // Default value
+  approvalComment: string = '';
+  applicationId: string = '';
+  commentMVSOfficer: string = '';
+  commentMVSSupervisor: string = ''
+  escalationComment: string = '';
+  rejectionCategory: string = '';
+  rejectionComment: string = '';
+  
+  isEditable: boolean = false;
+  
+
   constants = {
     MVS_DISTRICT_OFFICER,
     APPLICATION_ID,
@@ -58,7 +72,6 @@ export class ApplicationDetailComponent implements OnInit {
     APPLICANT_NAME
   }
 
-  constructor(private router: Router) {}
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
   documents = [
@@ -67,13 +80,10 @@ export class ApplicationDetailComponent implements OnInit {
 
   docCategories = ['Category 1', 'Category 2', 'Category 3']; // Example categories
   docTitles = ['Title 1', 'Title 2', 'Title 3']; // Example titles
-  isEditable: boolean = false;
-  serviceType = ''; // Default value
-  applicationId='';
-  service='';
-  commentMVSOfficer='';
-  commentMVSSupervisor=''
   applicantName='Steve Smith' //field value will come from the /applications/{appId} api response
+  
+  constructor(private router: Router,private dataService: DataStorageService) { }
+
   ngOnInit() {
     const state = history.state;
 
@@ -90,6 +100,26 @@ export class ApplicationDetailComponent implements OnInit {
     this.commentMVSSupervisor = this.rowData["Escalation Comment From MVS Supervisor"] || '';
 
 
+  }
+
+  changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = ''){
+    const applicationId = this.rowData.applicationId;
+    this.dataService
+      .changeStatus(applicationId,status,comment,rejectionCategory)
+      .subscribe(
+        (response) => {
+        console.log('Status updated successfully:', response);
+        alert(`Application ${status.toLowerCase()}d successfully.`);
+        this.router.navigate(['/application-detail']); 
+      },
+      (error) => {
+        console.error('Error updating status:', error);
+        alert('Failed to update status. Please try again.');
+      });
+  }
+
+  objectKeys(obj: any): string[] {
+    return Object.keys(obj || {});
   }
 
   goBack() {
@@ -134,16 +164,26 @@ export class ApplicationDetailComponent implements OnInit {
   }
   approveApplication() {
     // Approval logic
-    this.showApprovalModal = false; 
+    this.showApprovalModal = false;
+    const comment = this.approvalComment.trim();
+    this.changeApplicationStatus('APPROVE', comment);
+    this.closeEscalateModal(); 
   }
   escalateApplication() {
     // Escalate logic 
     this.showEscalateModal = false;
+    const comment = this.escalationComment.trim();
+    this.changeApplicationStatus('ESCALATE', comment);
+    this.closeEscalateModal();
   }
 
   rejectApplication() {
     // Reject logic 
     this.showRejectModal = false;
+    const rejectionCategory = this.rejectionCategory; 
+    const comment = this.rejectionComment.trim();
+    this.changeApplicationStatus('REJECT', comment, rejectionCategory);
+    this.closeRejectModal();
   }
   // Method to change tabs
   selectTab(tabName: string) {

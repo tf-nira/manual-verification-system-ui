@@ -6,6 +6,13 @@ import { HeaderComponent } from "../../shared/components/header/header.component
 import { FormsModule } from '@angular/forms';
 import { APPLICATION_ID, APPLICATION_STATUS, CATEGORY, CLEAR_FILTERS, COMMENT, CREATED_DATE, ESCALATED_DATE, ESCALATION_CATEGORY, ESCALATION_CATEGORY_FROM_MVS_OFFICER, ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR, ESCALATION_COMMENT, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_DATE, FROM_DATE, MVS_DISTRICT_OFFICER, MVS_OFFICER_ESCALATED_DATE, MVS_SUPERVISOR_ESCALATED_DATE, SERVICE, SERVICE_TYPE, TO_DATE, SEARCH } from '../../shared/constants';
 import { ROLE_DATA_MAP } from '../../shared/application-data';
+import { HttpClient } from '@angular/common/http';
+import { DataStorageService } from '../../core/services/data-storage.service';
+
+interface NavigationState {
+  role?: string;
+  data?: any[];
+}
 
 @Component({
   selector: 'app-application-list',
@@ -16,10 +23,13 @@ import { ROLE_DATA_MAP } from '../../shared/application-data';
 })
 export class ApplicationListComponent implements OnInit {
 
+  flag: boolean = true;
+
   role: string = '';
   fields: string[] = [];
   data: any[] = [];
   searchText: string = '';
+
 
   selectedService: string = '';
   selectedServiceType: string = '';
@@ -56,17 +66,42 @@ export class ApplicationListComponent implements OnInit {
     MVS_DISTRICT_OFFICER
   };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+              private http: HttpClient,
+              private dataService: DataStorageService
+          ) { }
 
   ngOnInit() {
-    this.role = history.state.role;
-    this.data = ROLE_DATA_MAP[this.role];
-
+    // this.role = history.state.role;
+    // this.data = history.state.data;
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state || {} as NavigationState;
+    this.role = state.role || '';
     this.fields = ROLE_FIELDS_MAP[this.role];
+
+    if (this.flag) {
+      this.data = ROLE_DATA_MAP[this.role];
+    }
+    else {
+      this.fetchApplicationList(localStorage.getItem("userId") || '');
+    }
   }
 
-  search() {
-    // call search api with searchText, selectedService, selectedServiceType, selectedApplicationStatus, fromDate, toDate
+  fetchApplicationList(userId: string){
+    this.dataService
+              .fetchApplicationList(userId)
+              .subscribe(
+                (appResponse: any) => {
+                  console.log("Application List Response:", appResponse);
+                  if (appResponse && appResponse.response) {
+                    this.data = appResponse.response;
+                  }
+                } ,
+                (appError) => {
+                  console.error("Error fetching application list:", appError);
+                }
+              );
+
   }
 
   clearFilters() {
@@ -79,9 +114,26 @@ export class ApplicationListComponent implements OnInit {
   }
 
   onRowClick(rowData: any) {
-    // get application details api
-    this.router.navigate(['/application-detail'], { state: { role: this.role, data: rowData }});
+
+    if (this.flag) {
+      this.router.navigate(['/application-detail'], { state: { role: this.role, data: rowData } });
+    }
+    else {
+      // get application details api
+    const applicationId = rowData['Application ID'];
+    this.dataService
+      .getApplicationDetails(applicationId)
+      .subscribe(
+        (response: any) => {
+        // Navigate to the details page with fetched data
+        this.router.navigate(['/application-detail'], { state: { role: this.role, data: response.response } });
+      },
+      (error) => {
+        console.error('Error fetching application details:', error);
+        alert('Failed to fetch application details.');
+      });
+    }
+      
   }
 }
-
 

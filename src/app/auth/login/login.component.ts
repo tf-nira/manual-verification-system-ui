@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ROLE_DATA_MAP } from '../../shared/application-data';
+import { DataStorageService } from '../../core/services/data-storage.service';
+
 
 @Component({
   selector: 'app-login',
@@ -15,6 +17,8 @@ import { ROLE_DATA_MAP } from '../../shared/application-data';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
+  flag: boolean = true;
+
   username: string = '';
   password: string = '';
 
@@ -26,18 +30,49 @@ export class LoginComponent {
     'mvslegalofficer': { password: 'test', role: 'MVS_LEGAL_OFFICER' }
   };
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private dataService: DataStorageService) { }
 
   onSubmit() {
-    console.log("Login submitted for user:", this.username);
+    console.log("login submitted for user:", this.username);
 
-    const user = this.dummyUsers[this.username];
-    if (user && user.password === this.password) {
-      // Successful login, navigate with the user's role
-      this.router.navigate(['/application-list'], { state: { role: user.role } });
-    } else {
-      // Invalid username or password
-      alert('Invalid username or password');
+    if (this.flag) {
+      const user = this.dummyUsers[this.username];
+      if (user && user.password === this.password) {
+        this.router.navigate(['/application-list'], { state: { role: user.role } });
+      } else {
+        alert('Invalid username or password');
+      }
     }
+    else {
+      this.dataService
+      .userLogin(
+        this.username,
+        this.password
+      )
+      .subscribe(
+        (response: any) => {
+          console.log("Login Response:", response);
+
+          // Check if login was successful
+          if (response && response.response && response.response.status === "success") {
+            localStorage.setItem("authToken", response.response.token);
+            localStorage.setItem("refreshToken", response.response.refreshToken);
+            localStorage.setItem("userId", response.response.userId || "");
+            const userId = response.response.userId;
+            
+            // decode auth token to fetch role
+            const role = '';
+            this.router.navigate(['/application-list'], { state: { role } }
+            );
+          }
+
+        },
+        (error) => {
+          console.error("Login error:", error);
+        }
+      );
+    }
+    
+
   }
 }
