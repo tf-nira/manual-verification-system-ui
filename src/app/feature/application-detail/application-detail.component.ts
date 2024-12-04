@@ -6,6 +6,7 @@ import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uplo
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
 import { APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
+import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
 
 @Component({
@@ -16,8 +17,9 @@ import { DataStorageService } from '../../core/services/data-storage.service';
     DemographicDetailsComponent,
     FormsModule,
     DocumentsUploadedComponent,
-    HeaderComponent
-],
+    HeaderComponent,
+    HttpClientModule
+  ],
   templateUrl: './application-detail.component.html',
   styleUrl: './application-detail.component.css'
 })
@@ -40,7 +42,7 @@ export class ApplicationDetailComponent implements OnInit {
   };
 
   service: string = '';
-  serviceType: string  = ''; // Default value
+  serviceType: string = ''; // Default value
   approvalComment: string = '';
   applicationId: string = '';
   commentMVSOfficer: string = '';
@@ -48,9 +50,11 @@ export class ApplicationDetailComponent implements OnInit {
   escalationComment: string = '';
   rejectionCategory: string = '';
   rejectionComment: string = '';
-  
+
   isEditable: boolean = false;
-  
+  documents = [
+    { category: '', title: '', fileName: '', uploaded: false, file: null } // Added `file` to store file reference
+  ];
 
   constants = {
     MVS_DISTRICT_OFFICER,
@@ -68,21 +72,21 @@ export class ApplicationDetailComponent implements OnInit {
     REJECT,
     ESCALATE,
     SCHEDULE_INTERVIEW,
-    UPLOAD_DCOUMENTS,
+    UPLOAD_DCOUMENTS: 'Upload Documents',
     APPLICANT_NAME
   }
 
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
-  documents = [
-    { category: '', title: '', fileName: '', uploaded: false }, // Initial document row
-  ];
+  // documents = [
+  //   { category: '', title: '', fileName: '', uploaded: false }, // Initial document row
+  // ];
 
   docCategories = ['Category 1', 'Category 2', 'Category 3']; // Example categories
   docTitles = ['Title 1', 'Title 2', 'Title 3']; // Example titles
-  applicantName='Steve Smith' //field value will come from the /applications/{appId} api response
-  
-  constructor(private router: Router,private dataService: DataStorageService) { }
+  applicantName = 'Steve Smith' //field value will come from the /applications/{appId} api response
+
+  constructor(private router: Router, private dataService: DataStorageService) { }
 
   ngOnInit() {
     const state = history.state;
@@ -102,20 +106,20 @@ export class ApplicationDetailComponent implements OnInit {
 
   }
 
-  changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = ''){
+  changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = '') {
     const applicationId = this.rowData.applicationId;
     this.dataService
-      .changeStatus(applicationId,status,comment,rejectionCategory)
+      .changeStatus(applicationId, status, comment, rejectionCategory)
       .subscribe(
         (response) => {
-        console.log('Status updated successfully:', response);
-        alert(`Application ${status.toLowerCase()}d successfully.`);
-        this.router.navigate(['/application-detail']); 
-      },
-      (error) => {
-        console.error('Error updating status:', error);
-        alert('Failed to update status. Please try again.');
-      });
+          console.log('Status updated successfully:', response);
+          alert(`Application ${status.toLowerCase()}d successfully.`);
+          this.router.navigate(['/application-detail']);
+        },
+        (error) => {
+          console.error('Error updating status:', error);
+          alert('Failed to update status. Please try again.');
+        });
   }
 
   objectKeys(obj: any): string[] {
@@ -123,7 +127,7 @@ export class ApplicationDetailComponent implements OnInit {
   }
 
   goBack() {
-    this.router.navigate(['/application-list'],{
+    this.router.navigate(['/application-list'], {
       state: { role: this.role, data: history.state.data }
     });
   }
@@ -167,7 +171,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.showApprovalModal = false;
     const comment = this.approvalComment.trim();
     this.changeApplicationStatus('APPROVE', comment);
-    this.closeEscalateModal(); 
+    this.closeEscalateModal();
   }
   escalateApplication() {
     // Escalate logic 
@@ -180,7 +184,7 @@ export class ApplicationDetailComponent implements OnInit {
   rejectApplication() {
     // Reject logic 
     this.showRejectModal = false;
-    const rejectionCategory = this.rejectionCategory; 
+    const rejectionCategory = this.rejectionCategory;
     const comment = this.rejectionComment.trim();
     this.changeApplicationStatus('REJECT', comment, rejectionCategory);
     this.closeRejectModal();
@@ -200,7 +204,25 @@ export class ApplicationDetailComponent implements OnInit {
   sendInvite() {
     if (this.isFormValid()) {
       console.log('Sending Invite:', this.interviewDetails);
-      this.closeScheduleInterviewModal();
+      const applicationId = this.rowData.applicationId;
+      this.dataService.scheduleInterview(applicationId, this.interviewDetails)
+        .subscribe(
+          (response: any) => {
+            if (response?.response?.status === "Success") {
+              alert('Interview scheduled successfully.');
+              this.closeScheduleInterviewModal();
+              this.router.navigate(['/application-list'], {
+                state: { role: this.role, data: history.state.data }
+              });
+            } else {
+              alert('Failed to schedule the interview. Please try again.');
+            }
+          },
+          (error) => {
+            console.error('Error scheduling interview:', error);
+            alert('An error occurred while scheduling the interview. Please try again later.');
+
+          });
     } else {
       alert('Please fill all the required fields.');
     }
@@ -209,8 +231,54 @@ export class ApplicationDetailComponent implements OnInit {
   uploadFile(event: any, index: number) {
     const file = event.target.files[0];
     if (file) {
-      this.documents[index].uploaded = true; 
+      const fileName = file.name;
+      this.documents[index].fileName = fileName;
+      this.documents[index].file = file;
+      this.documents[index].uploaded = true;
+      this.uploadDocument(file, index);
     }
+  }
+  // Method to upload a single document
+  uploadDocument(file: File, index: number) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const fileBytes = new Uint8Array(reader.result as ArrayBuffer); // Convert file to byte array
+
+      const payload = {
+        id: 'id',
+        version: 'v1',
+        requesttime: new Date().toISOString(),
+        metadata: null,
+        request: {
+          documents: {
+            proofOfAddress: {
+              document: Array.from(fileBytes), 
+              value: 'proofOfAddress', 
+              type: 'DOC004', 
+              format: file.name.split('.').pop() // Extract file extension
+            }
+          }
+        }
+      };
+
+      // Make API call via DataStorageService
+      this.dataService.uploadDocuments(this.applicationId, payload).subscribe(
+        (response) => {
+          if (response?.response?.status === 'Success') {
+            alert('Document uploaded successfully.');
+            this.documents[index].uploaded = true; // Update upload status
+          } else {
+            alert('Failed to upload document. Please try again.');
+          }
+        },
+        (error) => {
+          console.error('Error uploading document:', error);
+          alert('An error occurred while uploading the document.');
+        }
+      );
+    };
+
+    reader.readAsArrayBuffer(file); // Read file as an ArrayBuffer
   }
 
   // Handle upload action
@@ -222,7 +290,7 @@ export class ApplicationDetailComponent implements OnInit {
 
   // Add a new document row
   addDocumentRow() {
-    this.documents.push({ category: '', title: '', fileName: '', uploaded: false });
+    this.documents.push({ category: '', title: '', fileName: '', uploaded: false, file: null });
   }
 
   // Confirm and approve action

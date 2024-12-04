@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { APPLICATION_ID, APPLICATION_STATUS, CATEGORY, CLEAR_FILTERS, COMMENT, CREATED_DATE, ESCALATED_DATE, ESCALATION_CATEGORY, ESCALATION_CATEGORY_FROM_MVS_OFFICER, ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR, ESCALATION_COMMENT, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_DATE, FROM_DATE, MVS_DISTRICT_OFFICER, MVS_OFFICER_ESCALATED_DATE, MVS_SUPERVISOR_ESCALATED_DATE, SERVICE, SERVICE_TYPE, TO_DATE, SEARCH } from '../../shared/constants';
 import { ROLE_DATA_MAP } from '../../shared/application-data';
 import { HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
 
@@ -86,21 +87,48 @@ export class ApplicationListComponent implements OnInit {
     }
   }
 
-  fetchApplicationList(userId: string){
+  fetchApplicationList(userId: string) {
+    //filters, sort should come from ui
+    const filters = [
+      {
+        columnName: "userId",
+        value: userId,
+        type: "EQUALS"
+      }
+    ];
+    const sort = [
+      {
+        sortField: "crDTimes",
+        sortType: "DESC"
+      }
+    ];
+    const pagination = {
+      pageStart: 0,
+      pageFetch: 10
+    };
     this.dataService
-              .fetchApplicationList(userId)
-              .subscribe(
-                (appResponse: any) => {
-                  console.log("Application List Response:", appResponse);
-                  if (appResponse && appResponse.response) {
-                    this.data = appResponse.response;
-                  }
-                } ,
-                (appError) => {
-                  console.error("Error fetching application list:", appError);
-                }
-              );
+      .fetchApplicationList(userId, filters, sort, pagination)
+      .subscribe(
+        (appResponse: any) => {
+          console.log("Application List Response:", appResponse);
+          if (appResponse && appResponse.response && appResponse.response.data) {
+            const applicationData = appResponse.response.data;
 
+            // Process the response data and show in the ui table
+            applicationData.forEach((application: any) => {
+              console.log("Application ID:", application.applicationId);
+              console.log("Service:", application.service);
+              console.log("Status:", application.status);
+            });
+
+          } else if (appResponse.errors && appResponse.errors.length) {
+            console.error("API Errors:", appResponse.errors);
+          }
+        },
+        (appError) => {
+          console.error("Error fetching application list:", appError);
+        }
+      );
   }
 
   clearFilters() {
