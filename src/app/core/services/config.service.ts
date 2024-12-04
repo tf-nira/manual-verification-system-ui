@@ -1,25 +1,36 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ConfigService {
-  configs = {};
+  // private config = {};
+  private config: { [key: string]: any } = {};
 
-  public setConfig(configJson: any) {
-    localStorage.setItem('config', JSON.stringify(configJson.response));
+  constructor(private http: HttpClient) {}
+
+  async loadConfig(): Promise<void> {
+    try {
+      const data = await this.http
+        .get<{ [key: string]: any; }>('/assets/config.json')
+        .toPromise();
+      if (data) {
+        this.config = data;
+      } else {
+        console.error('No configuration found in config.json');
+      }
+      console.log(this.config);
+    } catch (error) {
+      console.error('Failed to load config:', error);
+      throw error;
+    }
   }
 
-  public getConfigByKey(key: string) {
-    const config = localStorage.getItem('config');
-    // Use a default empty object if `config` is null
-    const parsedConfig = config ? JSON.parse(config) : {};
-    return parsedConfig[key];
+  getConfig(): { [key: string]: any } {
+    // console.log(this.config);
+    return this.config;
   }
-
-  public getConfig() {
-    const config = localStorage.getItem('config');
-    // Use a default empty object if `config` is null
-    return config ? JSON.parse(config) : {};
-  }
+  
 }

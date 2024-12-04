@@ -8,6 +8,7 @@ import { APPLICATION_ID, APPLICATION_STATUS, CATEGORY, CLEAR_FILTERS, COMMENT, C
 import { ROLE_DATA_MAP } from '../../shared/application-data';
 import { HttpClient } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
+import { ConfigService } from '../../core/services/config.service';
 
 interface NavigationState {
   role?: string;
@@ -17,6 +18,7 @@ interface NavigationState {
 @Component({
   selector: 'app-application-list',
   standalone: true,
+  providers: [DataStorageService, ConfigService],
   imports: [NgFor, NgIf, HeaderComponent, FormsModule, CommonModule],
   templateUrl: './application-list.component.html',
   styleUrl: './application-list.component.css'
@@ -66,17 +68,14 @@ export class ApplicationListComponent implements OnInit {
     MVS_DISTRICT_OFFICER
   };
 
-  constructor(private router: Router,
-              private http: HttpClient,
-              private dataService: DataStorageService
-          ) { }
+  constructor(private router: Router, private dataService: DataStorageService) { }
 
   ngOnInit() {
-    // this.role = history.state.role;
+    this.role = history.state.role;
     // this.data = history.state.data;
-    const navigation = this.router.getCurrentNavigation();
-    const state = navigation?.extras.state || {} as NavigationState;
-    this.role = state.role || '';
+    // const navigation = this.router.getCurrentNavigation();
+    // const state = navigation?.extras.state || {} as NavigationState;
+    // this.role = state.role || '';
     this.fields = ROLE_FIELDS_MAP[this.role];
 
     if (this.flag) {
