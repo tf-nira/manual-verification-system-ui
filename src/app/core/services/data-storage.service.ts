@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient} from "@angular/common/http";
+import { HttpClient, HttpHeaders} from "@angular/common/http";
 import { RequestModel } from "../../shared/models/request-model/RequestModel";
 import { ConfigService } from "./config.service";
 import { AppConfigService } from "../../app-config.service";
@@ -42,12 +42,17 @@ export class DataStorageService {
     return this.httpClient.post(url, obj);
   }
   
-  fetchApplicationList(userId: string, filters: any = [], sort: any = [], pagination: any = { pageStart: 0, pageFetch: 10 }) {
+  fetchApplicationList(userId: string, filters: any = [], sort: any = [], pagination: any = { pageStart: 0, pageFetch: 3 }) {
     const url =
       this.BASE_URL +
       appConstants.APPEND_URL.applications +
       appConstants.APPEND_URL.search;
-
+      const token = localStorage.getItem('authToken');
+      console.log(token)
+      document.cookie = `Authorization=${token}; path=/`;
+      const headers = new HttpHeaders({
+        'Content-Type': 'application/json',
+      });
     const params: any = {
       userId,
       pageStart: pagination.pageStart,
@@ -68,12 +73,16 @@ export class DataStorageService {
   // Prepare the request payload
   const requestPayload = {
     filters: [
-        ...filterArray,
-        {
-            columnName: "userId", // Adding userId as a filter
-            value: userId,
-            type: "EQUALS"
-        }
+      {
+        "value": "mvs_disoff1",
+        "columnName": "assignedOfficerId",
+        "type": "equals"
+    },
+    {
+        "value": "F1234",
+        "columnName": "regId",
+        "type": "contains"
+    }
     ],
     sort: sortArray,
     pagination
@@ -81,10 +90,10 @@ export class DataStorageService {
 
   const requestModel = new RequestModel(requestPayload);
 
-    return this.httpClient.post(url, requestModel);
-      appConstants.APPEND_URL.application_list+
-      userId;
-      return this.httpClient.get(url);
+    return this.httpClient.post(url, requestModel,{headers, withCredentials: true });
+      // appConstants.APPEND_URL.application_list+
+      // userId;
+      // return this.httpClient.get(url);
   }
 
 

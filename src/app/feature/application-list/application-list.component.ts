@@ -26,7 +26,7 @@ interface NavigationState {
 })
 export class ApplicationListComponent implements OnInit {
 
-  flag: boolean = true;
+  flag: boolean = false;
 
   role: string = '';
   fields: string[] = [];
@@ -83,6 +83,7 @@ export class ApplicationListComponent implements OnInit {
       this.data = ROLE_DATA_MAP[this.role];
     }
     else {
+      console.log(localStorage.getItem("userId"))
       this.fetchApplicationList(localStorage.getItem("userId") || '');
     }
   }
