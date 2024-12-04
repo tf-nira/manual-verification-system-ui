@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ROLE_DATA_MAP } from '../../shared/application-data';
 import { DataStorageService } from '../../core/services/data-storage.service';
-import * as jwt from 'jsonwebtoken';
+// import * as jwt from 'jsonwebtoken';
+import { jwtDecode } from 'jwt-decode';
 
 import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
 import { AppConfigService } from '../../app-config.service';
@@ -41,6 +42,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private dataService: DataStorageService) {
     console.log("login");
   }
+
   ngOnInit(): void {
     
   }
@@ -48,7 +50,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     console.log("login submitted for user:", this.username);
 
-    //this.dataService.temp();
+    // this.dataService.temp();
 
     if (this.flag) {
       const user = this.dummyUsers[this.username];
@@ -71,14 +73,13 @@ export class LoginComponent implements OnInit {
             // Check if login was successful
             if (response && response.response && response.response.status === "success") {
               localStorage.setItem("authToken", response.response.token);
-              localStorage.setItem("refreshToken", response.response.refreshToken);
               localStorage.setItem("userId", response.response.userId || "");
               const userId = response.response.userId;
 
               // decode auth token to fetch role
 
               const decoded = this.decodeJwt(response.response.token);
-              const role = decoded.role || '';
+              const role = this.fetchRole(decoded);
               this.router.navigate(['/application-list'], { state: { role } }
               );
             }
@@ -89,10 +90,18 @@ export class LoginComponent implements OnInit {
           }
         );
     }
-
-
   }
+
   decodeJwt(token: string): any {
-    return jwt.decode(token);
+    return jwtDecode(token);
+  }
+
+  fetchRole(decodedToken: any): string | null {
+    if (decodedToken && decodedToken.realm_access && Array.isArray(decodedToken.realm_access.roles)) {
+      const roles = decodedToken.realm_access.roles;
+      const mvsRole = roles.find((role: string) => role.startsWith('MVS'));
+      return mvsRole || null; 
+    }
+    return null; 
   }
 }
