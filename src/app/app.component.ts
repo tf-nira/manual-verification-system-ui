@@ -1,14 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterModule } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
-import { APP_INITIALIZER } from '@angular/core';
+import { ConfigService } from './core/services/config.service';
+
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule,HttpClientModule],
+  imports: [RouterOutlet, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'MANUAL-VERIFICATION-UI';
+  // constructor(private configService: ConfigService) {}
+
+  // ngOnInit(): void {
+  //   this.configService.getConfig().subscribe((config: any) => {
+  //     console.log('Loaded Config:', config);
+  //   });
+  // }
 }

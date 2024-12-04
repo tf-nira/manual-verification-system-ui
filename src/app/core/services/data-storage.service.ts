@@ -19,15 +19,20 @@ import { Observable } from 'rxjs';
      */
     
     serverDtFormat = "YYYY/MM/DD";
-    BASE_URL: string;
-    MVS_URL: string;
-    constructor(
-      private httpClient: HttpClient,
-      private appConfigService: AppConfigService,
-      private configService: ConfigService
-    ) {
-        this.BASE_URL = this.appConfigService.getConfig()["BASE_URL"];
-        this.MVS_URL = this.appConfigService.getConfig()["MVS_URL"];
+    private BASE_URL: string = 'https://';
+    
+    constructor(private httpClient: HttpClient, private configService: ConfigService) {}
+
+    // get BASE_URL(): string {
+    //   return this.configService.getConfig()['BASE_URL'];
+    // }
+    
+    // get PRE_REG_URL(): string {
+    //   return this.configService.getConfig()['PRE_REG_URL'];
+    // }
+
+    temp() {
+      console.log(this.BASE_URL);
     }
     
     userLogin(userName: string, password: string) {
@@ -38,7 +43,6 @@ import { Observable } from 'rxjs';
         const obj = new RequestModel(appConstants.IDS.login, req);
         const url =
           this.BASE_URL +
-          this.MVS_URL +
           appConstants.APPEND_URL.auth +
           "login";
         return this.httpClient.post(url, obj);
@@ -47,7 +51,6 @@ import { Observable } from 'rxjs';
       fetchApplicationList(userId: string, filters: any = [], sort: any = [], pagination: any = { pageStart: 0, pageFetch: 10 }) {
         const url =
           this.BASE_URL +
-          this.MVS_URL +
           appConstants.APPEND_URL.applications +
           appConstants.APPEND_URL.search;
     
@@ -84,13 +87,15 @@ import { Observable } from 'rxjs';
     const requestModel = new RequestModel(appConstants.IDS.applicationList, requestPayload);
     
         return this.httpClient.post(url, requestModel);
+          appConstants.APPEND_URL.application_list+
+          userId;
+          return this.httpClient.get(url);
       }
     
 
       getApplicationDetails(applicationId :string){
         const url =
           this.BASE_URL +
-          this.MVS_URL +
           appConstants.APPEND_URL.applications+
           applicationId;
           return this.httpClient.get(url);
@@ -107,7 +112,6 @@ import { Observable } from 'rxjs';
         const obj = new RequestModel(appConstants.IDS.login, request);
         const url =
           this.BASE_URL +
-          this.MVS_URL +
           appConstants.APPEND_URL.applications +
           applicationId+
           appConstants.APPEND_URL.status;
@@ -117,7 +121,6 @@ import { Observable } from 'rxjs';
       scheduleInterview(applicationId :string,interviewDetails: { subject: string; content: string; districtOffice: string }){
         const url =
           this.BASE_URL +
-          this.MVS_URL +
           appConstants.APPEND_URL.applications +
           applicationId+
           appConstants.APPEND_URL.schedule_interview;
@@ -143,7 +146,6 @@ import { Observable } from 'rxjs';
   uploadDocuments(applicationId: string, payload: any): Observable<any> {
     const url =
           this.BASE_URL +
-          this.MVS_URL +
           appConstants.APPEND_URL.applications +
           applicationId+
           appConstants.APPEND_URL.upload_document;

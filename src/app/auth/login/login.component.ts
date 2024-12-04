@@ -1,17 +1,20 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ROLE_DATA_MAP } from '../../shared/application-data';
-import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import * as jwt from 'jsonwebtoken';
 
+import { HttpClient, HttpClientModule, HttpHandler } from '@angular/common/http';
+import { AppConfigService } from '../../app-config.service';
+import { ConfigService } from '../../core/services/config.service';
 
 
 @Component({
   selector: 'app-login',
   standalone: true,
+  providers: [DataStorageService, ConfigService],
   imports: [
     CommonModule,
     FormsModule,
@@ -20,7 +23,7 @@ import * as jwt from 'jsonwebtoken';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   flag: boolean = true;
 
   username: string = '';
@@ -34,10 +37,18 @@ export class LoginComponent {
     'mvslegalofficer': { password: 'test', role: 'MVS_LEGAL_OFFICER' }
   };
 
-  constructor(private router: Router, private dataService: DataStorageService) { }
+  // private dataService = inject(DataStorageService);
+  constructor(private router: Router, private dataService: DataStorageService) {
+    console.log("login");
+  }
+  ngOnInit(): void {
+    
+  }
 
   onSubmit() {
     console.log("login submitted for user:", this.username);
+
+    //this.dataService.temp();
 
     if (this.flag) {
       const user = this.dummyUsers[this.username];
