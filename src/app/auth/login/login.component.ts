@@ -22,7 +22,7 @@ import { ConfigService } from '../../core/services/config.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  flag: boolean = true;
+  flag: boolean = false;
 
   username: string = '';
   password: string = '';
@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
   constructor(private router: Router, private dataService: DataStorageService) {
     console.log("login");
   }
+
   ngOnInit(): void {
     
   }
@@ -46,7 +47,7 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     console.log("login submitted for user:", this.username);
 
-    this.dataService.temp();
+    // this.dataService.temp();
 
     if (this.flag) {
       const user = this.dummyUsers[this.username];
@@ -69,7 +70,6 @@ export class LoginComponent implements OnInit {
           // Check if login was successful
           if (response && response.response && response.response.status === "success") {
             localStorage.setItem("authToken", response.response.token);
-            localStorage.setItem("refreshToken", response.response.refreshToken);
             localStorage.setItem("userId", response.response.userId || "");
             const userId = response.response.userId;
             
