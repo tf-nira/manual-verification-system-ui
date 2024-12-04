@@ -6,7 +6,7 @@ export const IDS = {
 
 };
 export const APPEND_URL = {
-    auth: '/auth/',
+    auth: '/auth/login',
     application_list: '/applications/user/',
     applications: '/applications/',
     status: '/status',
