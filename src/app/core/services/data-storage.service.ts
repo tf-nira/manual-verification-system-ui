@@ -19,7 +19,7 @@ import { Observable } from 'rxjs';
      */
     
     serverDtFormat = "YYYY/MM/DD";
-    private BASE_URL: string = 'https://';
+    private BASE_URL: string = 'http://localhost:9002/v1/manual-verification-service';
     
     constructor(private httpClient: HttpClient, private configService: ConfigService) {}
 

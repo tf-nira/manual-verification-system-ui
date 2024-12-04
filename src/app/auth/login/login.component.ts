@@ -24,7 +24,7 @@ import { ConfigService } from '../../core/services/config.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
-  flag: boolean = true;
+  flag: boolean = false;
 
   username: string = '';
   password: string = '';
