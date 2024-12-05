@@ -1,9 +1,9 @@
 export const ROLE_FIELDS_MAP: { [key: string]: string[] } = {
   MVS_OFFICER: [
-    'Application ID', 
-    'Service', 
-    'Service Type', 
-    'Created Date'
+    'applicationId', 
+    'service', 
+    'serviceType', 
+    'crDTimes'
   ],
   MVS_SUPERVISOR: [
     'Application ID', 

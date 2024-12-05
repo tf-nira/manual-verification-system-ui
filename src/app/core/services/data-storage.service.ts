@@ -72,18 +72,7 @@ export class DataStorageService {
   }));
   // Prepare the request payload
   const requestPayload = {
-    filters: [
-      {
-        "value": "mvs_disoff1",
-        "columnName": "assignedOfficerId",
-        "type": "equals"
-    },
-    {
-        "value": "F1234",
-        "columnName": "regId",
-        "type": "contains"
-    }
-    ],
+    filters:filterArray,
     sort: sortArray,
     pagination
   };
@@ -143,7 +132,7 @@ export class DataStorageService {
       
     const obj = new RequestModel(request);
     
-    return this.httpClient.put(url, obj);
+    return this.httpClient.post(url, obj);
   }
 
        // Method to upload documents

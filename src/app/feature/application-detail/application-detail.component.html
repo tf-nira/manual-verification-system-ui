@@ -101,8 +101,7 @@
     <!-- Schedule Interview Btn -->
     <button 
       [ngClass]="{
-        'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') && applicationStatus === 'Pending',
-        'hidden': applicationStatus !== 'Pending' 
+        'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') 
       }" 
       (click)="openScheduleInterviewModal()">
       {{ constants.SCHEDULE_INTERVIEW }}
@@ -130,7 +129,7 @@
       </div>
       <div class="modal-body">
         <p>Are you sure you want to approve this application?</p>
-        <textarea placeholder="Comments"></textarea>
+        <textarea placeholder="Comments" [(ngModel)]="approvalComment"></textarea>
       </div>
       <div class="modal-footer">
         <button class="btn back" (click)="closeApprovalModal()">Back to Review</button>
@@ -153,7 +152,7 @@
                   Escalate to District Officer (Insufficient Documentation)
               </label>
           </div>
-          <textarea placeholder="Comments*" required></textarea>
+          <textarea placeholder="Comments*" [(ngModel)]="escalationComment" required></textarea>
       </div>
       <div class="modal-footer">
           <button class="btn back" (click)="closeEscalateModal()">Back to Review</button>
@@ -276,13 +275,13 @@
       </div>
       <div class="modal-body">
           <p>Are you sure you want to reject this application?</p>
-          <select class="reject-category" required>
+          <select class="reject-category" [(ngModel)]="rejectionCategory" required>
               <option value="" disabled selected>Select Rejection Category*</option>
               <option value="incomplete-documents">Incomplete Documents</option>
               <option value="invalid-information">Invalid Information</option>
               <option value="other">Other</option>
           </select>
-          <textarea placeholder="Comments*" required></textarea>
+          <textarea placeholder="Comments*" [(ngModel)]="rejectionComment" required></textarea>
       </div>
       <div class="modal-footer">
           <button class="btn back" (click)="closeRejectModal()">Back to Review</button>
