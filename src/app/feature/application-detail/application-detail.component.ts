@@ -93,13 +93,14 @@ export class ApplicationDetailComponent implements OnInit {
 
     this.role = state.role || '';
     this.rowData = state.data || {};
+    console.log(this.rowData)
     if (this.role === 'MVS_DISTRICT_OFFICER' || this.role === 'MVS_LEGAL_OFFICER') {
       this.applicationStatus = this.rowData['Application Status'];
     }
 
-    this.serviceType = this.rowData['Service Type'] || '';
-    this.applicationId = this.rowData['Application ID'] || '';
-    this.service = this.rowData['Service'] || '';
+    this.serviceType = this.rowData.serviceType || '';
+    this.applicationId = this.rowData.applicationId || '';
+    this.service = this.rowData.service || '';
     this.commentMVSOfficer = this.rowData["Escalation Comment From MVS Officer"] || '';
     this.commentMVSSupervisor = this.rowData["Escalation Comment From MVS Supervisor"] || '';
 
@@ -177,6 +178,7 @@ export class ApplicationDetailComponent implements OnInit {
     // Escalate logic 
     this.showEscalateModal = false;
     const comment = this.escalationComment.trim();
+    console.log(comment)
     this.changeApplicationStatus('ESCALATE', comment);
     this.closeEscalateModal();
   }
@@ -230,6 +232,7 @@ export class ApplicationDetailComponent implements OnInit {
 
   uploadFile(event: any, index: number) {
     const file = event.target.files[0];
+    console.log("upload file")
     if (file) {
       const fileName = file.name;
       this.documents[index].fileName = fileName;
@@ -240,6 +243,7 @@ export class ApplicationDetailComponent implements OnInit {
   }
   // Method to upload a single document
   uploadDocument(file: File, index: number) {
+    console.log("upload document")
     const reader = new FileReader();
     reader.onload = () => {
       const fileBytes = new Uint8Array(reader.result as ArrayBuffer); // Convert file to byte array
@@ -290,12 +294,14 @@ export class ApplicationDetailComponent implements OnInit {
 
   // Add a new document row
   addDocumentRow() {
+    console.log("add doc row")
     this.documents.push({ category: '', title: '', fileName: '', uploaded: false, file: null });
   }
 
   // Confirm and approve action
   confirmAndApprove() {
     console.log('Uploaded Documents:', this.documents);
+    //uploadDocument();
     // Implement further actions, e.g., API call to save documents
   }
 }

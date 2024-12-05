@@ -94,10 +94,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let row of data" (click)="onRowClick(row)">
-          <td>{{ row[constants.APPLICATION_ID] }}</td>
-          <td>{{ row[constants.SERVICE] }}</td>
-          <td>{{ row[constants.SERVICE_TYPE] }}</td>
-          <td>{{ row[constants.CREATED_DATE] }}</td>
+          <td>{{ row[constants.RESPONSE_APPLICATION_ID] }}</td>
+          <td>{{ row[constants.RESPONSE_SERVICE] }}</td>
+          <td>{{ row[constants.RESPONSE_SERVICE_TYPE] }}</td>
+          <td>{{ row[constants.RESPONSE_CREATED_DATE] }}</td>
           <!-- Conditional Section: Escalation from MVS Officer -->
           <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER) || fields.includes(constants.ESCALATION_CATEGORY)">
             <td>{{ row[constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER] || row[constants.ESCALATION_CATEGORY] }}</td>

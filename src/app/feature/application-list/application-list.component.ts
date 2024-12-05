@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ROLE_FIELDS_MAP } from '../../shared/role-fields';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { FormsModule } from '@angular/forms';
-import { APPLICATION_ID, APPLICATION_STATUS, CATEGORY, CLEAR_FILTERS, COMMENT, CREATED_DATE, ESCALATED_DATE, ESCALATION_CATEGORY, ESCALATION_CATEGORY_FROM_MVS_OFFICER, ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR, ESCALATION_COMMENT, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_DATE, FROM_DATE, MVS_DISTRICT_OFFICER, MVS_OFFICER_ESCALATED_DATE, MVS_SUPERVISOR_ESCALATED_DATE, SERVICE, SERVICE_TYPE, TO_DATE, SEARCH } from '../../shared/constants';
+import { APPLICATION_ID, APPLICATION_STATUS, CATEGORY, CLEAR_FILTERS, COMMENT, CREATED_DATE, ESCALATED_DATE, ESCALATION_CATEGORY, ESCALATION_CATEGORY_FROM_MVS_OFFICER, ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR, ESCALATION_COMMENT, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_DATE, FROM_DATE, MVS_DISTRICT_OFFICER, MVS_OFFICER_ESCALATED_DATE, MVS_SUPERVISOR_ESCALATED_DATE, SERVICE, SERVICE_TYPE, TO_DATE, SEARCH, RESPONSE_APPLICATION_ID, RESPONSE_SERVICE, RESPONSE_SERVICE_TYPE, RESPONSE_CREATED_DATE } from '../../shared/constants';
 import { ROLE_DATA_MAP } from '../../shared/application-data';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
@@ -32,7 +32,6 @@ export class ApplicationListComponent implements OnInit {
   fields: string[] = [];
   data: any[] = [];
   searchText: string = '';
-
 
   selectedService: string = '';
   selectedServiceType: string = '';
@@ -66,13 +65,18 @@ export class ApplicationListComponent implements OnInit {
     ESCALATION_COMMENT_FROM_MVS_SUPERVISOR,
     MVS_SUPERVISOR_ESCALATED_DATE,
     APPLICATION_STATUS,
-    MVS_DISTRICT_OFFICER
+    MVS_DISTRICT_OFFICER,
+    RESPONSE_APPLICATION_ID,
+    RESPONSE_SERVICE,
+    RESPONSE_SERVICE_TYPE,
+    RESPONSE_CREATED_DATE
   };
 
   constructor(private router: Router, private dataService: DataStorageService) { }
-
+   
   ngOnInit() {
     this.role = history.state.role;
+    
     // this.data = history.state.data;
     // const navigation = this.router.getCurrentNavigation();
     // const state = navigation?.extras.state || {} as NavigationState;
@@ -92,10 +96,10 @@ export class ApplicationListComponent implements OnInit {
     //filters, sort should come from ui
     const filters = [
       {
-        columnName: "userId",
-        value: userId,
-        type: "EQUALS"
-      }
+        "value": userId,
+        "columnName": "assignedOfficerId",
+        "type": "equals"
+    }
     ];
     const sort = [
       {
@@ -113,10 +117,10 @@ export class ApplicationListComponent implements OnInit {
         (appResponse: any) => {
           console.log("Application List Response:", appResponse);
           if (appResponse && appResponse.response && appResponse.response.data) {
-            const applicationData = appResponse.response.data;
-
+            this.data = appResponse.response.data;
+            //console.log(applicationData)
             // Process the response data and show in the ui table
-            applicationData.forEach((application: any) => {
+            this.data.forEach((application: any) => {
               console.log("Application ID:", application.applicationId);
               console.log("Service:", application.service);
               console.log("Status:", application.status);
@@ -131,7 +135,7 @@ export class ApplicationListComponent implements OnInit {
         }
       );
   }
-
+  
   clearFilters() {
     this.searchText = '';
     this.selectedService = '';
@@ -148,7 +152,7 @@ export class ApplicationListComponent implements OnInit {
     }
     else {
       // get application details api
-    const applicationId = rowData['Application ID'];
+    const applicationId = rowData[this.constants.RESPONSE_APPLICATION_ID];
     this.dataService
       .getApplicationDetails(applicationId)
       .subscribe(
@@ -165,6 +169,66 @@ export class ApplicationListComponent implements OnInit {
   }
 
   search() {
+    const userId = localStorage.getItem("userId") || '';
+    let filters: { value: string; columnName: string; type: string }[] = [
+      {
+        value: userId,
+        columnName: "assignedOfficerId",
+        type: "equals"
+      }
+    ];
+  
+    // Helper function to add filters safely
+    const addFilter = (value: string | undefined, columnName: string, type: string) => {
+      if (value?.trim()) {
+        filters = filters.concat({ value: value.trim(), columnName, type });
+      }
+    };
+  
+    // Add filters for optional parameters
+    addFilter(this.searchText, "regId", "contains");
+    addFilter(this.selectedService, "service", "equals");
+    addFilter(this.selectedServiceType, "serviceType", "equals");
+    addFilter(this.selectedApplicationStatus, "status", "equals");
+    addFilter(this.fromDate, "fromDate", "equals");
+    addFilter(this.toDate, "toDate", "equals");
+  
+    console.log(filters); // Debugging
+      const sort = [
+        {
+          sortField: "crDTimes",
+          sortType: "DESC"
+        }
+      ];
+      const pagination = {
+        pageStart: 0,
+        pageFetch: 10
+      };
+      this.dataService
+        .fetchApplicationList(userId, filters, sort, pagination)
+        .subscribe(
+          (appResponse: any) => {
+            console.log("Application List Response:", appResponse);
+            if (appResponse && appResponse.response && appResponse.response.data) {
+              console.log("1");
+              this.data = appResponse.response.data;
+              //console.log(applicationData)
+              // Process the response data and show in the ui table
+              this.data.forEach((application: any) => {
+                console.log("Application ID:", application.applicationId);
+                console.log("Service:", application.service);
+                console.log("Status:", application.status);
+              });
+  
+            } else  {
+              this.data = []
+            }
+          },
+          (appError) => {
+            console.error("Error fetching application list:", appError);
+          }
+        );
+    
   
   }
 }

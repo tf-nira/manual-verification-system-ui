@@ -43,3 +43,9 @@ export const ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR: string = 'Escalation Categ
 export const ESCALATION_COMMENT_FROM_MVS_SUPERVISOR: string = 'Escalation Comment From MVS Supervisor';
 export const MVS_SUPERVISOR_ESCALATED_DATE: string = 'MVS Supervisor Escalated Date';
 export const APPLICATION_STATUS: string = 'Application Status';
+
+//ui table data field
+export const RESPONSE_APPLICATION_ID: string = 'applicationId';
+export const RESPONSE_SERVICE: string = 'service';
+export const RESPONSE_SERVICE_TYPE: string = 'serviceType';
+export const RESPONSE_CREATED_DATE: string = 'crDTimes';
