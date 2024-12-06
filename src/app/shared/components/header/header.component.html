@@ -1,11 +1,11 @@
 <div class="header-container">
-  <h2>Application {{ view }} View - {{ formattedRole }} Level</h2>
+  <h2>Application {{ view }} View - {{ fetchRole }} Level</h2>
   <div class="profile-icon" (click)="toggleDropdown()">
     <img src="assets/images/profile-image.png" alt="Profile Icon" class="profile-pic" />
     <!-- Dropdown menu -->
     <div *ngIf="isDropdownOpen" class="dropdown-menu">
-      <p><strong>{{ constants.NAME }}: </strong> Robin Mathew</p>
-      <p><strong>{{ constants.ROLE }}: </strong> {{ formattedRole }} </p>
+      <p><strong>{{ constants.NAME }}: </strong> {{ fetchName }}</p>
+      <p><strong>{{ constants.ROLE }}: </strong> {{ fetchRole }} </p>
       <button (click)="logout()" class="logout-btn">{{ constants.LOGOUT }}</button>
     </div>
   </div>

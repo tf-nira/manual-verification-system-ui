@@ -25,6 +25,9 @@ interface NavigationState {
   styleUrl: './application-list.component.css'
 })
 export class ApplicationListComponent implements OnInit {
+  // Sorting state
+  sortColumn: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
 
   flag: boolean = false;
 
@@ -121,6 +124,7 @@ export class ApplicationListComponent implements OnInit {
             //console.log(applicationData)
             // Process the response data and show in the ui table
             this.data.forEach((application: any) => {
+              console.log(application)
               console.log("Application ID:", application.applicationId);
               console.log("Service:", application.service);
               console.log("Status:", application.status);
@@ -134,6 +138,37 @@ export class ApplicationListComponent implements OnInit {
           console.error("Error fetching application list:", appError);
         }
       );
+  }
+  // Sorting logic
+  sortData(column: string) {
+    if (this.sortColumn === column) {
+      // Toggle direction if the same column is clicked
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      // Set new column and default direction
+      this.sortColumn = column;
+      this.sortDirection = 'asc';
+    }
+
+    // Sort the data array
+    this.data.sort((a: any, b: any) => {
+      const valueA = a[column] || '';
+      const valueB = b[column] || '';
+
+      if (valueA < valueB) {
+        return this.sortDirection === 'asc' ? -1 : 1;
+      }
+      if (valueA > valueB) {
+        return this.sortDirection === 'asc' ? 1 : -1;
+      }
+      return 0;
+    });
+  }
+  getSortClass(column: string): string {
+    if (this.sortColumn === column) {
+      return this.sortDirection === 'asc' ? 'sort-icon-asc' : 'sort-icon-desc';
+    }
+    return 'sort-icon-default';
   }
   
   clearFilters() {

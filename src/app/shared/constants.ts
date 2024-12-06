@@ -49,3 +49,7 @@ export const RESPONSE_APPLICATION_ID: string = 'applicationId';
 export const RESPONSE_SERVICE: string = 'service';
 export const RESPONSE_SERVICE_TYPE: string = 'serviceType';
 export const RESPONSE_CREATED_DATE: string = 'crDTimes';
+//MVS_OFFICER_ESCALATION_DATA && MVS_SUPERVISOR_ESCALATION_DATA 
+export const RESPONSE_CATEGORY = 'category';
+export const RESPONSE_COMMENT = 'comment';
+export const RESPONSE_ESCALATION_DATE = 'escDTimes';

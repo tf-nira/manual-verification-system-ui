@@ -78,11 +78,14 @@ export class LoginComponent implements OnInit {
              
              const decoded = this.decodeJwt(response.response.token);
              const userId = this.fetchPreferredUsername(decoded);
+             const name = this.fetchName(decoded);
              localStorage.setItem('authToken', response.response.token);
              localStorage.setItem("userId", userId|| "");
+             localStorage.setItem("name" , name || ""); 
               // decode auth token to fetch role
 
               const role = this.fetchRole(decoded);
+              localStorage.setItem("role", role || '');
               this.router.navigate(['/application-list'], { state: { role } }
               );
             }
@@ -113,5 +116,10 @@ export class LoginComponent implements OnInit {
     }
     return null;
   }
-  
+  fetchName(decodedToken: any): string | null {
+    if (decodedToken && typeof decodedToken.preferred_username === 'string') {
+      return decodedToken.name;
+    }
+    return null;
+  }
 }

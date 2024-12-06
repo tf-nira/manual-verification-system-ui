@@ -67,15 +67,26 @@
     <table class="styled-table">
       <thead>
         <tr [ngClass]="'header-row-1'">
-          <th rowspan="2">{{ constants.APPLICATION_ID }}</th> 
-          <th rowspan="2">{{ constants.SERVICE }}</th>
-          <th rowspan="2">{{ constants.SERVICE_TYPE }}</th>
-          <th rowspan="2">{{ constants.CREATED_DATE }}</th>
+          <th rowspan="2" (click)="sortData(constants.RESPONSE_APPLICATION_ID)">{{ constants.APPLICATION_ID }}
+
+      <span [class]="getSortClass(constants.RESPONSE_APPLICATION_ID)"></span>
+          </th> 
+          <th rowspan="2" (click)="sortData(constants.RESPONSE_SERVICE)">{{ constants.SERVICE }}
+            <span [class]="getSortClass(constants.RESPONSE_SERVICE)"></span>
+          </th>
+          <th rowspan="2" (click)="sortData(constants.RESPONSE_SERVICE_TYPE)">{{ constants.SERVICE_TYPE }}
+            <span [class]="getSortClass(constants.RESPONSE_SERVICE_TYPE)"></span>
+          </th>
+          <th rowspan="2" (click)="sortData(constants.RESPONSE_CREATED_DATE)">{{ constants.CREATED_DATE }}
+            <span [class]="getSortClass(constants.RESPONSE_CREATED_DATE)"></span>
+          </th>
           <!-- Conditional Section: Escalation from MVS Officer -->
           <th *ngIf="fields.includes('Escalation Category from MVS Officer') || fields.includes('Escalation Category')" colspan="3">Escalation from MVS Officer</th>
           <!-- Conditional Section: Escalation from MVS Supervisor -->
           <th *ngIf="fields.includes('Escalation Category From MVS Supervisor')" colspan="3">Escalation from MVS Supervisor</th>
-          <th *ngIf="fields.includes('Application Status')" rowspan="2">{{ constants.APPLICATION_STATUS }}</th>
+          <th *ngIf="fields.includes('Application Status')" rowspan="2" (click)="sortData(constants.APPLICATION_STATUS)">{{ constants.APPLICATION_STATUS }}
+            
+          </th>
         </tr>
         <tr [ngClass]="'header-row-2'">
           <!-- Escalation from MVS Officer Columns -->
@@ -100,15 +111,15 @@
           <td>{{ row[constants.RESPONSE_CREATED_DATE] }}</td>
           <!-- Conditional Section: Escalation from MVS Officer -->
           <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER) || fields.includes(constants.ESCALATION_CATEGORY)">
-            <td>{{ row[constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER] || row[constants.ESCALATION_CATEGORY] }}</td>
-            <td>{{ row[constants.ESCALATION_COMMENT_FROM_MVS_OFFICER] || row[constants.ESCALATION_COMMENT] }}</td>
-            <td>{{ row[constants.MVS_OFFICER_ESCALATED_DATE] || row[constants.ESCALATED_DATE]}}</td>
+            <td>{{ row.officerEscDetails?.category || '' }}</td>
+            <td>{{ row.officerEscDetails?.comment || ''  }}</td>
+            <td>{{ row.officerEscDetails?.escDTimes || ''}}</td>
           </ng-container>
           <!-- Conditional Section: Escalation from MVS Supervisor -->
           <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR)">
-            <td>{{ row[constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR] }}</td>
-            <td>{{ row[constants.ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] }}</td>
-            <td>{{ row[constants.MVS_SUPERVISOR_ESCALATED_DATE] }}</td>
+            <td>{{ row.supervisorEscDetails?.category || '' }}</td>
+            <td>{{ row.supervisorEscDetails?.comment || '' }}</td>
+            <td>{{ row.supervisorEscDetails?.escDTimes || '' }}</td>
           </ng-container>
           <td *ngIf="fields.includes(constants.APPLICATION_STATUS)">{{ row[constants.APPLICATION_STATUS] }}</td>
         </tr>
