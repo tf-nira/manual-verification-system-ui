@@ -14,8 +14,8 @@ import { LOGOUT, NAME, ROLE } from '../../constants';
 export class HeaderComponent {
   @Input() role: string = '';
   @Input() view: string = '';
+  name: string = '';
   isDropdownOpen: boolean = false;
-
   constants = {
     NAME,
     ROLE,
@@ -23,20 +23,14 @@ export class HeaderComponent {
   }
 
   constructor(private router: Router) {}
-  get formattedRole(): string {
-    if (!this.role) return '';
-
+  get fetchRole(): string {
+    this.role = localStorage.getItem("role") || '';
     return this.role
-      .split('_')
-      .map((word, index) => {
-        if (index === 0 && word.toUpperCase() === 'MVS') {
-          return 'MVS';
-        }
-        return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      })
-      .join(' ');
   }
-
+  get fetchName(): string{
+    this.name = localStorage.getItem("name") || '';
+    return this.name
+  }
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;
   }

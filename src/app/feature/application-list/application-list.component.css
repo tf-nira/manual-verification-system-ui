@@ -210,3 +210,29 @@
     padding: 10px;
   }
 }
+/* Default sort icon */
+.sort-icon-default::before {
+  content: '⇅'; /* Unicode character for unsorted */
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+/* Ascending sort icon */
+.sort-icon-asc::before {
+  content: '↑'; /* Unicode character for ascending */
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+/* Descending sort icon */
+.sort-icon-desc::before {
+  content: '↓'; /* Unicode character for descending */
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+/* Make the headers look clickable */
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
