@@ -25,6 +25,12 @@ interface NavigationState {
   styleUrl: './application-list.component.css'
 })
 export class ApplicationListComponent implements OnInit {
+  //pagination
+  currentPage: number = 0;
+  pageSize: number = 10;
+  totalRecords: number = 0;
+  temp: number = 1;
+
   // Sorting state
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
@@ -76,10 +82,10 @@ export class ApplicationListComponent implements OnInit {
   };
 
   constructor(private router: Router, private dataService: DataStorageService) { }
-   
+
   ngOnInit() {
     this.role = history.state.role;
-    
+
     // this.data = history.state.data;
     // const navigation = this.router.getCurrentNavigation();
     // const state = navigation?.extras.state || {} as NavigationState;
@@ -90,7 +96,6 @@ export class ApplicationListComponent implements OnInit {
       this.data = ROLE_DATA_MAP[this.role];
     }
     else {
-      console.log(localStorage.getItem("userId"))
       this.fetchApplicationList(localStorage.getItem("userId") || '');
     }
   }
@@ -102,7 +107,7 @@ export class ApplicationListComponent implements OnInit {
         "value": userId,
         "columnName": "assignedOfficerId",
         "type": "equals"
-    }
+      }
     ];
     const sort = [
       {
@@ -112,22 +117,20 @@ export class ApplicationListComponent implements OnInit {
     ];
     const pagination = {
       pageStart: 0,
-      pageFetch: 10
+      pageFetch: this.pageSize
     };
     this.dataService
       .fetchApplicationList(userId, filters, sort, pagination)
       .subscribe(
         (appResponse: any) => {
-          console.log("Application List Response:", appResponse);
           if (appResponse && appResponse.response && appResponse.response.data) {
             this.data = appResponse.response.data;
+            this.totalRecords = appResponse.response.totalRecord || 0;
+            console.log(this.totalRecords)
             //console.log(applicationData)
             // Process the response data and show in the ui table
             this.data.forEach((application: any) => {
-              console.log(application)
-              console.log("Application ID:", application.applicationId);
-              console.log("Service:", application.service);
-              console.log("Status:", application.status);
+              
             });
 
           } else if (appResponse.errors && appResponse.errors.length) {
@@ -139,6 +142,17 @@ export class ApplicationListComponent implements OnInit {
         }
       );
   }
+  get totalPages(): number {
+    return Math.ceil(this.totalRecords / this.pageSize) || 0;
+  }
+  changePage(newPage: number) {
+    if (newPage >= 0 && newPage < this.totalPages) {
+        this.currentPage = newPage; // Correctly set the current page
+        this.search(); // Fetch data for the new page
+    }
+}
+
+
   // Sorting logic
   sortData(column: string) {
     if (this.sortColumn === column) {
@@ -149,20 +163,7 @@ export class ApplicationListComponent implements OnInit {
       this.sortColumn = column;
       this.sortDirection = 'asc';
     }
-
-    // Sort the data array
-    this.data.sort((a: any, b: any) => {
-      const valueA = a[column] || '';
-      const valueB = b[column] || '';
-
-      if (valueA < valueB) {
-        return this.sortDirection === 'asc' ? -1 : 1;
-      }
-      if (valueA > valueB) {
-        return this.sortDirection === 'asc' ? 1 : -1;
-      }
-      return 0;
-    });
+    this.search();
   }
   getSortClass(column: string): string {
     if (this.sortColumn === column) {
@@ -170,7 +171,7 @@ export class ApplicationListComponent implements OnInit {
     }
     return 'sort-icon-default';
   }
-  
+
   clearFilters() {
     this.searchText = '';
     this.selectedService = '';
@@ -187,20 +188,20 @@ export class ApplicationListComponent implements OnInit {
     }
     else {
       // get application details api
-    const applicationId = rowData[this.constants.RESPONSE_APPLICATION_ID];
-    this.dataService
-      .getApplicationDetails(applicationId)
-      .subscribe(
-        (response: any) => {
-        // Navigate to the details page with fetched data
-        this.router.navigate(['/application-detail'], { state: { role: this.role, data: response.response } });
-      },
-      (error) => {
-        console.error('Error fetching application details:', error);
-        alert('Failed to fetch application details.');
-      });
+      const applicationId = rowData[this.constants.RESPONSE_APPLICATION_ID];
+      this.dataService
+        .getApplicationDetails(applicationId)
+        .subscribe(
+          (response: any) => {
+            // Navigate to the details page with fetched data
+            this.router.navigate(['/application-detail'], { state: { role: this.role, data: response.response } });
+          },
+          (error) => {
+            console.error('Error fetching application details:', error);
+            alert('Failed to fetch application details.');
+          });
     }
-      
+
   }
 
   search() {
@@ -212,14 +213,14 @@ export class ApplicationListComponent implements OnInit {
         type: "equals"
       }
     ];
-  
+
     // Helper function to add filters safely
     const addFilter = (value: string | undefined, columnName: string, type: string) => {
       if (value?.trim()) {
         filters = filters.concat({ value: value.trim(), columnName, type });
       }
     };
-  
+
     // Add filters for optional parameters
     addFilter(this.searchText, "regId", "contains");
     addFilter(this.selectedService, "service", "equals");
@@ -227,44 +228,47 @@ export class ApplicationListComponent implements OnInit {
     addFilter(this.selectedApplicationStatus, "status", "equals");
     addFilter(this.fromDate, "fromDate", "equals");
     addFilter(this.toDate, "toDate", "equals");
-  
+
     console.log(filters); // Debugging
-      const sort = [
-        {
-          sortField: "crDTimes",
-          sortType: "DESC"
-        }
-      ];
-      const pagination = {
-        pageStart: 0,
-        pageFetch: 10
-      };
-      this.dataService
-        .fetchApplicationList(userId, filters, sort, pagination)
-        .subscribe(
-          (appResponse: any) => {
-            console.log("Application List Response:", appResponse);
-            if (appResponse && appResponse.response && appResponse.response.data) {
-              console.log("1");
-              this.data = appResponse.response.data;
-              //console.log(applicationData)
-              // Process the response data and show in the ui table
-              this.data.forEach((application: any) => {
-                console.log("Application ID:", application.applicationId);
-                console.log("Service:", application.service);
-                console.log("Status:", application.status);
-              });
-  
-            } else  {
-              this.data = []
-            }
-          },
-          (appError) => {
-            console.error("Error fetching application list:", appError);
+    const sort = [
+      {
+        sortField: this.sortColumn || "crDTimes", // Default to a column if no sort column is selected
+        sortType: this.sortDirection || "DESC"   // Default direction if no sorting is applied
+      }
+    ];
+    console.log("current page"+this.currentPage)
+    console.log("temp"+this.temp)
+    const pagination = {
+      pageStart: this.currentPage,
+      pageFetch: this.pageSize
+    };
+    console.log(pagination)
+    this.dataService
+      .fetchApplicationList(userId, filters, sort, pagination)
+      .subscribe(
+        (appResponse: any) => {
+          console.log("Application List Response:", appResponse);
+          if (appResponse && appResponse.response && appResponse.response.data) {
+            console.log("1");
+            this.data = appResponse.response.data;
+            //console.log(applicationData)
+            // Process the response data and show in the ui table
+            this.data.forEach((application: any) => {
+              // console.log("Application ID:", application.applicationId);
+              // console.log("Service:", application.service);
+              // console.log("Status:", application.status);
+            });
+
+          } else {
+            this.data = []
           }
-        );
-    
-  
+        },
+        (appError) => {
+          console.error("Error fetching application list:", appError);
+        }
+      );
+
+
   }
 }
 

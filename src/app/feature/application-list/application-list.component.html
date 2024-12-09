@@ -126,5 +126,10 @@
       </tbody>
     </table>
   </div>
-
+  <div *ngIf="totalPages > 0" class="pagination-controls">
+    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 0">Previous</button>
+    <span>Page {{ currentPage+1 }} of {{ totalPages }}</span>
+    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages - 1">Next</button>
+   </div>
+  
 </div>
