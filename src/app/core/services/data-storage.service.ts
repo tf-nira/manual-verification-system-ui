@@ -142,6 +142,6 @@ export class DataStorageService {
           appConstants.APPEND_URL.applications +
           applicationId+
           appConstants.APPEND_URL.upload_document;
-    return this.httpClient.put(url, payload);
+    return this.httpClient.post(url, payload);
   }
 }
