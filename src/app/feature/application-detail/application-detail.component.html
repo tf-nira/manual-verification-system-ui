@@ -101,7 +101,8 @@
     <!-- Schedule Interview Btn -->
     <button 
       [ngClass]="{
-        'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') 
+        'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') ,
+        'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR')
       }" 
       (click)="openScheduleInterviewModal()">
       {{ constants.SCHEDULE_INTERVIEW }}
@@ -243,19 +244,11 @@
 
         <input
           type="file"
-          (change)="uploadFile($event, i)"
+          (change)="onFileSelect($event, i)"
           required
         />
-        <span *ngIf="document.uploaded" class="file-name">{{ document.fileName }}</span>
+        <span class="file-name">{{ document.fileName }}</span>
 
-        <!-- Upload Button -->
-        <!-- <button
-          class="btn upload"
-          (click)="handleUpload(i)"
-          [disabled]="!document.uploaded || !document.category || !document.title"
-        >
-          Upload
-        </button> -->
       </div>
     </div>
 

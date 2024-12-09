@@ -9,6 +9,15 @@ import { APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRI
 import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
 
+type DocumentPayload = {
+  [key: string]: {
+    document: number[]; // Array of file bytes
+    value: string; // Title
+    type: string; // Document type
+    format: string; // File format
+  };
+};
+
 @Component({
   selector: 'app-application-detail',
   standalone: true,
@@ -52,8 +61,8 @@ export class ApplicationDetailComponent implements OnInit {
   rejectionComment: string = '';
 
   isEditable: boolean = false;
-  documents = [
-    { category: '', title: '', fileName: '', uploaded: false, file: null } // Added `file` to store file reference
+  documents: { category: string; title: string; fileName: string; file: File | null }[] = [
+    { category: '', title: '', fileName: '', file: null }
   ];
 
   constants = {
@@ -115,7 +124,9 @@ export class ApplicationDetailComponent implements OnInit {
         (response) => {
           console.log('Status updated successfully:', response);
           alert(`Application ${status.toLowerCase()}d successfully.`);
-          this.router.navigate(['/application-detail']);
+          this.router.navigate(['/application-list'], {
+            state: { role: this.role }
+          });
         },
         (error) => {
           console.error('Error updating status:', error);
@@ -230,78 +241,79 @@ export class ApplicationDetailComponent implements OnInit {
     }
   }
 
-  uploadFile(event: any, index: number) {
+  // Handle file selection
+  onFileSelect(event: any, index: number) {
     const file = event.target.files[0];
-    console.log("upload file")
     if (file) {
-      const fileName = file.name;
-      this.documents[index].fileName = fileName;
+      this.documents[index].fileName = file.name;
       this.documents[index].file = file;
-      this.documents[index].uploaded = true;
-      this.uploadDocument(file, index);
     }
   }
-  // Method to upload a single document
-  uploadDocument(file: File, index: number) {
-    console.log("upload document")
-    const reader = new FileReader();
-    reader.onload = () => {
-      const fileBytes = new Uint8Array(reader.result as ArrayBuffer); // Convert file to byte array
-
-      const payload = {
-        id: 'id',
-        version: 'v1',
-        requesttime: new Date().toISOString(),
-        metadata: null,
-        request: {
-          documents: {
-            proofOfAddress: {
-              document: Array.from(fileBytes), 
-              value: 'proofOfAddress', 
-              type: 'DOC004', 
-              format: file.name.split('.').pop() // Extract file extension
-            }
-          }
-        }
-      };
-
-      // Make API call via DataStorageService
-      this.dataService.uploadDocuments(this.applicationId, payload).subscribe(
-        (response) => {
-          if (response?.response?.status === 'Success') {
-            alert('Document uploaded successfully.');
-            this.documents[index].uploaded = true; // Update upload status
-          } else {
-            alert('Failed to upload document. Please try again.');
-          }
-        },
-        (error) => {
-          console.error('Error uploading document:', error);
-          alert('An error occurred while uploading the document.');
-        }
-      );
-    };
-
-    reader.readAsArrayBuffer(file); // Read file as an ArrayBuffer
-  }
-
-  // Handle upload action
-  // handleUpload(index: number) {
-  //   if (this.documents[index].fileName) {
-  //     this.documents[index].uploaded = true; 
-  //   }
-  // }
 
   // Add a new document row
   addDocumentRow() {
     console.log("add doc row")
-    this.documents.push({ category: '', title: '', fileName: '', uploaded: false, file: null });
+    this.documents.push({ category: '', title: '', fileName: '', file: null });
   }
 
   // Confirm and approve action
   confirmAndApprove() {
-    console.log('Uploaded Documents:', this.documents);
-    //uploadDocument();
-    // Implement further actions, e.g., API call to save documents
+    const payload: {
+      id: string;
+      version: string;
+      requesttime: string;
+      metadata: null;
+      request: {
+        documents: DocumentPayload;
+      };
+    } = {
+      id: 'id',
+      version: 'v1',
+      requesttime: new Date().toISOString(),
+      metadata: null,
+      request: {
+        documents: {}
+      }
+    };
+  
+    this.documents.forEach((doc) => {
+      if (doc.category && doc.file) { // Ensure doc.file is not null
+        const reader = new FileReader();
+        reader.onload = () => {
+          if (reader.result) {
+            const fileBytes = new Uint8Array(reader.result as ArrayBuffer);
+            payload.request.documents[doc.category] = {
+              document: Array.from(fileBytes),
+              value: doc.title,
+              type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(), // Example type generation
+              format: doc.fileName.split('.').pop() || '' // Safely access doc.file.name
+            };
+  
+            if (Object.keys(payload.request.documents).length === this.documents.length) {
+              this.uploadDocuments(payload); // Call API only after all documents are processed
+            }
+          }
+        };
+        reader.readAsArrayBuffer(doc.file);
+      }
+    });
   }
+
+  uploadDocuments(payload: any) {
+    this.dataService.uploadDocuments(this.applicationId, payload).subscribe(
+      (response) => {
+        if (response?.response?.status === 'Success') {
+          alert('All documents uploaded successfully.');
+          
+        } else {
+          alert('Failed to upload documents. Please try again.');
+        }
+      },
+      (error) => {
+        console.error('Error uploading documents:', error);
+        alert('An error occurred while uploading the documents.');
+      }
+    );
+  }
+
 }
