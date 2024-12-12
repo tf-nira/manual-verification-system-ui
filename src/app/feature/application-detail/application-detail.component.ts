@@ -5,16 +5,16 @@ import { DemographicDetailsComponent } from '../demographic-details/demographic-
 import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uploaded.component';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
-import { APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
+import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
 import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
 
 type DocumentPayload = {
   [key: string]: {
-    document: number[]; // Array of file bytes
-    value: string; // Title
-    type: string; // Document type
-    format: string; // File format
+    document: number[];
+    value: string;
+    type: string;
+    format: string;
   };
 };
 
@@ -51,7 +51,7 @@ export class ApplicationDetailComponent implements OnInit {
   };
 
   service: string = '';
-  serviceType: string = ''; // Default value
+  serviceType: string = ''; 
   approvalComment: string = '';
   applicationId: string = '';
   commentMVSOfficer: string = '';
@@ -87,13 +87,9 @@ export class ApplicationDetailComponent implements OnInit {
 
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
-  // documents = [
-  //   { category: '', title: '', fileName: '', uploaded: false }, // Initial document row
-  // ];
-
-  docCategories = ['Category 1', 'Category 2', 'Category 3']; // Example categories
-  docTitles = ['Title 1', 'Title 2', 'Title 3']; // Example titles
-  applicantName = 'Steve Smith' //field value will come from the /applications/{appId} api response
+  docCategories = ['Category 1', 'Category 2', 'Category 3']; 
+  docTitles = ['Title 1', 'Title 2', 'Title 3']; 
+  applicantName = 'Steve Smith'
 
   constructor(private router: Router, private dataService: DataStorageService) { }
 
@@ -102,18 +98,16 @@ export class ApplicationDetailComponent implements OnInit {
 
     this.role = state.role || '';
     this.rowData = state.data || {};
-    console.log(this.rowData)
-    if (this.role === 'MVS_DISTRICT_OFFICER' || this.role === 'MVS_LEGAL_OFFICER') {
-      this.applicationStatus = this.rowData['Application Status'];
+    
+    if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER) {
+      this.applicationStatus = this.rowData[APPLICANT_NAME];
     }
 
     this.serviceType = this.rowData.serviceType || '';
     this.applicationId = this.rowData.applicationId || '';
     this.service = this.rowData.service || '';
-    this.commentMVSOfficer = this.rowData["Escalation Comment From MVS Officer"] || '';
-    this.commentMVSSupervisor = this.rowData["Escalation Comment From MVS Supervisor"] || '';
-
-
+    this.commentMVSOfficer = this.rowData[ESCALATION_COMMENT_FROM_MVS_OFFICER] || '';
+    this.commentMVSSupervisor = this.rowData[ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] || '';
   }
 
   changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = '') {
@@ -122,7 +116,6 @@ export class ApplicationDetailComponent implements OnInit {
       .changeStatus(applicationId, status, comment, rejectionCategory)
       .subscribe(
         (response) => {
-          console.log('Status updated successfully:', response);
           alert(`Application ${status.toLowerCase()}d successfully.`);
           this.router.navigate(['/application-list'], {
             state: { role: this.role }
@@ -182,7 +175,7 @@ export class ApplicationDetailComponent implements OnInit {
     // Approval logic
     this.showApprovalModal = false;
     const comment = this.approvalComment.trim();
-    this.changeApplicationStatus('APPROVE', comment);
+    this.changeApplicationStatus(API_CONST_APPROVE, comment);
     this.closeEscalateModal();
   }
   escalateApplication() {
@@ -190,7 +183,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.showEscalateModal = false;
     const comment = this.escalationComment.trim();
     console.log(comment)
-    this.changeApplicationStatus('ESCALATE', comment);
+    this.changeApplicationStatus(API_CONST_ESCALATE, comment);
     this.closeEscalateModal();
   }
 
@@ -199,7 +192,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.showRejectModal = false;
     const rejectionCategory = this.rejectionCategory;
     const comment = this.rejectionComment.trim();
-    this.changeApplicationStatus('REJECT', comment, rejectionCategory);
+    this.changeApplicationStatus(API_CONST_REJECT, comment, rejectionCategory);
     this.closeRejectModal();
   }
   // Method to change tabs
@@ -252,45 +245,28 @@ export class ApplicationDetailComponent implements OnInit {
 
   // Add a new document row
   addDocumentRow() {
-    console.log("add doc row")
     this.documents.push({ category: '', title: '', fileName: '', file: null });
   }
 
   // Confirm and approve action
   confirmAndApprove() {
-    const payload: {
-      id: string;
-      version: string;
-      requesttime: string;
-      metadata: null;
-      request: {
-        documents: DocumentPayload;
-      };
-    } = {
-      id: 'id',
-      version: 'v1',
-      requesttime: new Date().toISOString(),
-      metadata: null,
-      request: {
-        documents: {}
-      }
-    };
+    const docPayload : DocumentPayload = {} ;
   
     this.documents.forEach((doc) => {
-      if (doc.category && doc.file) { // Ensure doc.file is not null
+      if (doc.category && doc.file) { 
         const reader = new FileReader();
         reader.onload = () => {
           if (reader.result) {
             const fileBytes = new Uint8Array(reader.result as ArrayBuffer);
-            payload.request.documents[doc.category] = {
+            docPayload[doc.category] = {
               document: Array.from(fileBytes),
               value: doc.title,
-              type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(), // Example type generation
-              format: doc.fileName.split('.').pop() || '' // Safely access doc.file.name
+              type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(), 
+              format: doc.fileName.split('.').pop() || '' 
             };
   
-            if (Object.keys(payload.request.documents).length === this.documents.length) {
-              this.uploadDocuments(payload); // Call API only after all documents are processed
+            if (Object.keys(docPayload).length === this.documents.length) {
+              this.uploadDocuments(docPayload);
             }
           }
         };
