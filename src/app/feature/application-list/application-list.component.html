@@ -67,18 +67,18 @@
     <table class="styled-table">
       <thead>
         <tr [ngClass]="'header-row-1'">
-          <th rowspan="2" (click)="sortData(constants.RESPONSE_APPLICATION_ID)">{{ constants.APPLICATION_ID }}
+          <th rowspan="2" (click)="sortData(constants.API_CONST_APPLICATION_ID)">{{ constants.APPLICATION_ID }}
 
-      <span [class]="getSortClass(constants.RESPONSE_APPLICATION_ID)"></span>
+      <span [class]="getSortClass(constants.API_CONST_APPLICATION_ID)"></span>
           </th> 
-          <th rowspan="2" (click)="sortData(constants.RESPONSE_SERVICE)">{{ constants.SERVICE }}
-            <span [class]="getSortClass(constants.RESPONSE_SERVICE)"></span>
+          <th rowspan="2" (click)="sortData(constants.API_CONST_SERVICE)">{{ constants.SERVICE }}
+            <span [class]="getSortClass(constants.API_CONST_SERVICE)"></span>
           </th>
-          <th rowspan="2" (click)="sortData(constants.RESPONSE_SERVICE_TYPE)">{{ constants.SERVICE_TYPE }}
-            <span [class]="getSortClass(constants.RESPONSE_SERVICE_TYPE)"></span>
+          <th rowspan="2" (click)="sortData(constants.API_CONST_SERVICE_TYPE)">{{ constants.SERVICE_TYPE }}
+            <span [class]="getSortClass(constants.API_CONST_SERVICE_TYPE)"></span>
           </th>
-          <th rowspan="2" (click)="sortData(constants.RESPONSE_CREATED_DATE)">{{ constants.CREATED_DATE }}
-            <span [class]="getSortClass(constants.RESPONSE_CREATED_DATE)"></span>
+          <th rowspan="2" (click)="sortData(constants.API_CONST_CREATED_DATE)">{{ constants.CREATED_DATE }}
+            <span [class]="getSortClass(constants.API_CONST_CREATED_DATE)"></span>
           </th>
           <!-- Conditional Section: Escalation from MVS Officer -->
           <th *ngIf="fields.includes('Escalation Category from MVS Officer') || fields.includes('Escalation Category')" colspan="3">Escalation from MVS Officer</th>
@@ -105,10 +105,10 @@
       </thead>
       <tbody>
         <tr *ngFor="let row of data" (click)="onRowClick(row)">
-          <td>{{ row[constants.RESPONSE_APPLICATION_ID] }}</td>
-          <td>{{ row[constants.RESPONSE_SERVICE] }}</td>
-          <td>{{ row[constants.RESPONSE_SERVICE_TYPE] }}</td>
-          <td>{{ row[constants.RESPONSE_CREATED_DATE] }}</td>
+          <td>{{ row[constants.API_CONST_APPLICATION_ID] }}</td>
+          <td>{{ row[constants.API_CONST_SERVICE] }}</td>
+          <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
+          <td>{{ row[constants.API_CONST_CREATED_DATE] }}</td>
           <!-- Conditional Section: Escalation from MVS Officer -->
           <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER) || fields.includes(constants.ESCALATION_CATEGORY)">
             <td>{{ row.officerEscDetails?.category || '' }}</td>

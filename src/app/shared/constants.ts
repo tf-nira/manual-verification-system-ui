@@ -44,12 +44,25 @@ export const ESCALATION_COMMENT_FROM_MVS_SUPERVISOR: string = 'Escalation Commen
 export const MVS_SUPERVISOR_ESCALATED_DATE: string = 'MVS Supervisor Escalated Date';
 export const APPLICATION_STATUS: string = 'Application Status';
 
-//ui table data field
-export const RESPONSE_APPLICATION_ID: string = 'applicationId';
-export const RESPONSE_SERVICE: string = 'service';
-export const RESPONSE_SERVICE_TYPE: string = 'serviceType';
-export const RESPONSE_CREATED_DATE: string = 'crDTimes';
-//MVS_OFFICER_ESCALATION_DATA && MVS_SUPERVISOR_ESCALATION_DATA 
-export const RESPONSE_CATEGORY = 'category';
-export const RESPONSE_COMMENT = 'comment';
-export const RESPONSE_ESCALATION_DATE = 'escDTimes';
+//api-utils
+export const API_CONST_APPLICATION_ID: string = 'applicationId';
+export const API_CONST_REG_ID = 'regId';
+export const API_CONST_SERVICE: string = 'service';
+export const API_CONST_SERVICE_TYPE: string = 'serviceType';
+export const API_CONST_CREATED_DATE: string = 'crDTimes';
+export const API_CONST_CATEGORY = 'category';
+export const API_CONST_COMMENT = 'comment';
+export const API_CONST_ESCALATION_DATE = 'escDTimes';
+export const API_CONST_ASSIGNED_OFFICER_ID = 'assignedOfficerId';
+export const API_CONST_USER_ID = 'userId';
+export const API_CONST_EQUALS = 'equals';
+export const API_CONST_CONTAINS = 'contains';
+export const API_CONST_STATUS = 'status';
+export const API_CONST_FROM_DATE = 'fromDate';
+export const API_CONST_TO_DATE = 'toDate';
+export const API_CONST_DESC = 'desc';
+export const API_CONST_ASC = 'asc';
+export const API_CONST_SUCCESS = 'success';
+export const API_CONST_APPROVE = 'APPROVE';
+export const API_CONST_ESCALATE = 'ESCALATE';
+export const API_CONST_REJECT = 'REJECT';
