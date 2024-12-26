@@ -1,34 +1,33 @@
 <div class="container">
-  
   <!-- Header Component (view, role) -->
   <app-header [view]="'List'" [role]="role"></app-header>
 
   <!-- Search & Filters Component (role) -->
   <div class="search-container">
     <div class="search-and-filters">
-      <input 
-        type="text" 
-        [(ngModel)]="searchText" 
-        placeholder="Search by Application ID" 
+      <input
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Search by Application ID"
         class="search-input"
       />
-      <input 
-        type="text" 
-        [(ngModel)]="selectedService" 
-        placeholder="Search by Service" 
+      <input
+        type="text"
+        [(ngModel)]="selectedService"
+        placeholder="Search by Service"
         class="search-input"
       />
-      <input 
-        type="text" 
-        [(ngModel)]="selectedServiceType" 
-        placeholder="Search by Service Type" 
+      <input
+        type="text"
+        [(ngModel)]="selectedServiceType"
+        placeholder="Search by Service Type"
         class="search-input"
       />
-      <input 
-        *ngIf="role === constants.MVS_DISTRICT_OFFICER" 
-        type="text" 
-        [(ngModel)]="selectedApplicationStatus"  
-        placeholder="Search by Application Status" 
+      <input
+        *ngIf="role === constants.MVS_DISTRICT_OFFICER"
+        type="text"
+        [(ngModel)]="selectedApplicationStatus"
+        placeholder="Search by Application Status"
         class="search-input"
       />
     </div>
@@ -37,99 +36,211 @@
       <!-- Date Range Filter -->
       <div class="date-filter">
         <label for="fromDate">{{ constants.FROM_DATE }}</label>
-        <input 
-          type="date" 
-          [(ngModel)]="fromDate" 
+        <input
+          type="date"
+          [(ngModel)]="fromDate"
           class="date-filter-input"
           id="fromDate"
         />
         <label for="toDate">{{ constants.TO_DATE }}</label>
-        <input 
-          type="date" 
-          [(ngModel)]="toDate" 
+        <input
+          type="date"
+          [(ngModel)]="toDate"
           class="date-filter-input"
           id="toDate"
         />
       </div>
 
       <div class="search-button-container">
-        <button (click)="search()" class="search-filters-btn">{{ constants.SEARCH }}</button>
+        <button (click)="search()" class="search-filters-btn">
+          {{ constants.SEARCH }}
+        </button>
       </div>
 
       <div class="clear-button-container">
-        <button (click)="clearFilters()" class="clear-filters-btn">{{ constants.CLEAR_FILTERS }}</button>
+        <button (click)="clearFilters()" class="clear-filters-btn">
+          {{ constants.CLEAR_FILTERS }}
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Table Component (fields, filteredRows)-->
-  <div class="application-list">
-    <table class="styled-table">
-      <thead>
-        <tr [ngClass]="'header-row-1'">
-          <th rowspan="2" (click)="sortData(constants.API_CONST_APPLICATION_ID)">{{ constants.APPLICATION_ID }}
+  <!-- Left Section (Application List) -->
+  <div class="left-section">
+    <!-- Table Component (fields, filteredRows)-->
+    <div class="application-list">
+      <table class="styled-table">
+        <thead>
+          <tr [ngClass]="'header-row-1'">
+            <th
+              rowspan="2"
+              (click)="sortData(constants.API_CONST_APPLICATION_ID)"
+            >
+              {{ constants.APPLICATION_ID }}
 
-      <span [class]="getSortClass(constants.API_CONST_APPLICATION_ID)"></span>
-          </th> 
-          <th rowspan="2" (click)="sortData(constants.API_CONST_SERVICE)">{{ constants.SERVICE }}
-            <span [class]="getSortClass(constants.API_CONST_SERVICE)"></span>
-          </th>
-          <th rowspan="2" (click)="sortData(constants.API_CONST_SERVICE_TYPE)">{{ constants.SERVICE_TYPE }}
-            <span [class]="getSortClass(constants.API_CONST_SERVICE_TYPE)"></span>
-          </th>
-          <th rowspan="2" (click)="sortData(constants.API_CONST_CREATED_DATE)">{{ constants.CREATED_DATE }}
-            <span [class]="getSortClass(constants.API_CONST_CREATED_DATE)"></span>
-          </th>
-          <!-- Conditional Section: Escalation from MVS Officer -->
-          <th *ngIf="fields.includes('Escalation Category from MVS Officer') || fields.includes('Escalation Category')" colspan="3">Escalation from MVS Officer</th>
-          <!-- Conditional Section: Escalation from MVS Supervisor -->
-          <th *ngIf="fields.includes('Escalation Category From MVS Supervisor')" colspan="3">Escalation from MVS Supervisor</th>
-          <th *ngIf="fields.includes('Application Status')" rowspan="2" (click)="sortData(constants.APPLICATION_STATUS)">{{ constants.APPLICATION_STATUS }}
-            
-          </th>
-        </tr>
-        <tr [ngClass]="'header-row-2'">
-          <!-- Escalation from MVS Officer Columns -->
-          <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER) || fields.includes(constants.ESCALATION_CATEGORY)">
-            <th>{{ constants.CATEGORY }}</th>
-            <th>{{ constants.COMMENT }}</th>
-            <th>{{ constants.ESCALATION_DATE }}</th>
-          </ng-container>
-          <!-- Escalation from MVS Supervisor Columns -->
-          <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR)">
-            <th>{{ constants.CATEGORY }}</th>
-            <th>{{ constants.COMMENT }}</th>
-            <th>{{ constants.ESCALATION_DATE }}</th>
-          </ng-container>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let row of data" (click)="onRowClick(row)">
-          <td>{{ row[constants.API_CONST_APPLICATION_ID] }}</td>
-          <td>{{ row[constants.API_CONST_SERVICE] }}</td>
-          <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
-          <td>{{ row[constants.API_CONST_CREATED_DATE] }}</td>
-          <!-- Conditional Section: Escalation from MVS Officer -->
-          <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER) || fields.includes(constants.ESCALATION_CATEGORY)">
-            <td>{{ row.officerEscDetails?.category || '' }}</td>
-            <td>{{ row.officerEscDetails?.comment || ''  }}</td>
-            <td>{{ row.officerEscDetails?.escDTimes || ''}}</td>
-          </ng-container>
-          <!-- Conditional Section: Escalation from MVS Supervisor -->
-          <ng-container *ngIf="fields.includes(constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR)">
-            <td>{{ row.supervisorEscDetails?.category || '' }}</td>
-            <td>{{ row.supervisorEscDetails?.comment || '' }}</td>
-            <td>{{ row.supervisorEscDetails?.escDTimes || '' }}</td>
-          </ng-container>
-          <td *ngIf="fields.includes(constants.APPLICATION_STATUS)">{{ row[constants.APPLICATION_STATUS] }}</td>
-        </tr>
-      </tbody>
-    </table>
+              <span
+                [class]="getSortClass(constants.API_CONST_APPLICATION_ID)"
+              ></span>
+            </th>
+            <th rowspan="2" (click)="sortData(constants.API_CONST_SERVICE)">
+              {{ constants.SERVICE }}
+              <span [class]="getSortClass(constants.API_CONST_SERVICE)"></span>
+            </th>
+            <th
+              rowspan="2"
+              (click)="sortData(constants.API_CONST_SERVICE_TYPE)"
+            >
+              {{ constants.SERVICE_TYPE }}
+              <span
+                [class]="getSortClass(constants.API_CONST_SERVICE_TYPE)"
+              ></span>
+            </th>
+            <th
+              rowspan="2"
+              (click)="sortData(constants.API_CONST_CREATED_DATE)"
+            >
+              {{ constants.CREATED_DATE }}
+              <span
+                [class]="getSortClass(constants.API_CONST_CREATED_DATE)"
+              ></span>
+            </th>
+            <!-- Conditional Section: Escalation from MVS Officer -->
+            <th
+              *ngIf="
+                fields.includes('Escalation Category from MVS Officer') ||
+                fields.includes('Escalation Category')
+              "
+              colspan="3"
+            >
+              Escalation from MVS Officer
+            </th>
+            <!-- Conditional Section: Escalation from MVS Supervisor -->
+            <th
+              *ngIf="fields.includes('Escalation Category From MVS Supervisor')"
+              colspan="3"
+            >
+              Escalation from MVS Supervisor
+            </th>
+            <th
+              *ngIf="fields.includes('Application Status')"
+              rowspan="2"
+              (click)="sortData(constants.APPLICATION_STATUS)"
+            >
+              {{ constants.APPLICATION_STATUS }}
+            </th>
+          </tr>
+          <tr [ngClass]="'header-row-2'">
+            <!-- Escalation from MVS Officer Columns -->
+            <ng-container
+              *ngIf="
+                fields.includes(
+                  constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER
+                ) || fields.includes(constants.ESCALATION_CATEGORY)
+              "
+            >
+              <th>{{ constants.CATEGORY }}</th>
+              <th>{{ constants.COMMENT }}</th>
+              <th>{{ constants.ESCALATION_DATE }}</th>
+            </ng-container>
+            <!-- Escalation from MVS Supervisor Columns -->
+            <ng-container
+              *ngIf="
+                fields.includes(
+                  constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR
+                )
+              "
+            >
+              <th>{{ constants.CATEGORY }}</th>
+              <th>{{ constants.COMMENT }}</th>
+              <th>{{ constants.ESCALATION_DATE }}</th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of data" (click)="onRowClick(row)">
+            <td>{{ row[constants.API_CONST_APPLICATION_ID] }}</td>
+            <td>{{ row[constants.API_CONST_SERVICE] }}</td>
+            <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
+            <td>{{ row[constants.API_CONST_CREATED_DATE] }}</td>
+            <!-- Conditional Section: Escalation from MVS Officer -->
+            <ng-container
+              *ngIf="
+                fields.includes(
+                  constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER
+                ) || fields.includes(constants.ESCALATION_CATEGORY)
+              "
+            >
+              <td>{{ row.officerEscDetails?.category || "" }}</td>
+              <td>{{ row.officerEscDetails?.comment || "" }}</td>
+              <td>{{ row.officerEscDetails?.escDTimes || "" }}</td>
+            </ng-container>
+            <!-- Conditional Section: Escalation from MVS Supervisor -->
+            <ng-container
+              *ngIf="
+                fields.includes(
+                  constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR
+                )
+              "
+            >
+              <td>{{ row.supervisorEscDetails?.category || "" }}</td>
+              <td>{{ row.supervisorEscDetails?.comment || "" }}</td>
+              <td>{{ row.supervisorEscDetails?.escDTimes || "" }}</td>
+            </ng-container>
+            <td *ngIf="fields.includes(constants.APPLICATION_STATUS)">
+              {{ row[constants.APPLICATION_STATUS] }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
+
   <div *ngIf="totalPages > 0" class="pagination-controls">
-    <button (click)="changePage(currentPage - 1)" [disabled]="currentPage === 0">Previous</button>
-    <span>Page {{ currentPage+1 }} of {{ totalPages }}</span>
-    <button (click)="changePage(currentPage + 1)" [disabled]="currentPage === totalPages - 1">Next</button>
-   </div>
-  
+    <button
+      (click)="changePage(0)"
+      [disabled]="currentPage === 0"
+      class="pagination-btn"
+    >
+      &#x23EE;
+      <!-- First Page -->
+    </button>
+
+    <button
+      (click)="changePage(currentPage - 1)"
+      [disabled]="currentPage === 0"
+      class="pagination-btn"
+    >
+      &#x2039;
+      <!-- Previous Page -->
+    </button>
+
+    <span class="pagination-text">
+      Page
+      <input
+        type="number"
+        [(ngModel)]="temp"
+        (change)="jumpToPage(temp)"
+        class="pagination-input"
+      />
+      of {{ totalPages }}
+    </span>
+
+    <button
+      (click)="changePage(currentPage + 1)"
+      [disabled]="currentPage === totalPages - 1"
+      class="pagination-btn"
+    >
+      &#x203A;
+      <!-- Next Page -->
+    </button>
+
+    <button
+      (click)="changePage(totalPages - 1)"
+      [disabled]="currentPage === totalPages - 1"
+      class="pagination-btn"
+    >
+      &#x23ED;
+      <!-- Last Page -->
+    </button>
+  </div>
 </div>
