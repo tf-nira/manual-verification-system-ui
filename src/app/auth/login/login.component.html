@@ -1,45 +1,53 @@
 <div class="wrapper">
-  <div class="header">
-    <h1>Uganda National ID Application</h1>
-    <h2 class="subHeading">Manual Verification System</h2>
-  </div>
-  <div class="form_wrapper">
-    <h2 class="login-title">Officer Login</h2>
-    <form (ngSubmit)="onSubmit()">
-      <div class="loginlogo">
+  <div class="login-container">
+    <!-- Left Section -->
+    <div class="left-section">
+      <div class="logo">
         <img src="assets/images/logo.png" alt="Logo" />
       </div>
-      
-      <!-- Username Input -->
-      <div class="form-field">
-        <label for="username">User Id</label>
-        <input
-          id="username"
-          type="text"
-          placeholder="Enter User Id"
-          name="username"
-          [(ngModel)]="username"
-          required
-          class="form-control"
-        />
-      </div>
-      
-      <!-- Password Input -->
-      <div class="form-field">
-        <label for="password">Password</label>
-        <input
-          id="password"
-          type="password"
-          placeholder="Enter Password"
-          name="password"
-          [(ngModel)]="password"
-          required
-          class="form-control"
-        />
-      </div>
-      
-      <!-- Submit Button -->
-      <button class="submit-btn" type="submit">Login</button>
-    </form>
+    </div>
+
+    <!-- Right Section -->
+    <div class="right-section">
+      <h1 class="sign-in-title">Sign in</h1>
+      <form (ngSubmit)="onSubmit()" class="form_wrapper">
+        <!-- Username -->
+        <div class="form-field">
+          <label for="username">User ID <span>*</span></label>
+          <input
+            id="username"
+            type="text"
+            placeholder="abc@pqr"
+            name="username"
+            [(ngModel)]="username"
+            required
+            class="form-control"
+          />
+        </div>
+
+        <!-- Password -->
+        <div class="form-field">
+          <label for="password">Password <span>*</span></label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Enter Password"
+            name="password"
+            [(ngModel)]="password"
+            required
+            class="form-control"
+          />
+          <!-- Error message-->
+          <span *ngIf="showErrorMessage" class="error-message">
+            ⚠ Invalid username/password
+          </span>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-group">
+          <button type="submit" class="confirm-btn">Login</button>
+        </div>
+      </form>
+    </div>
   </div>
 </div>

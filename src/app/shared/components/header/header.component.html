@@ -1,12 +1,45 @@
 <div class="header-container">
-  <h2>Application {{ view }} View - {{ fetchRole }} Level</h2>
-  <div class="profile-icon" (click)="toggleDropdown()">
-    <img src="assets/images/profile-image.png" alt="Profile Icon" class="profile-pic" />
-    <!-- Dropdown menu -->
-    <div *ngIf="isDropdownOpen" class="dropdown-menu">
-      <p><strong>{{ constants.NAME }}: </strong> {{ fetchName }}</p>
-      <p><strong>{{ constants.ROLE }}: </strong> {{ fetchRole }} </p>
+  <!-- Left Section -->
+  <div class="left-section">
+    <div class="logo-section">
+      <img src="assets/images/logo.png" alt="NIRA Logo" class="nira-logo" />
+      <!-- <span class="material-icons grid-icon">grid_on</span>-->
+      <span class="app-title">Applications List View</span>
+    </div>
+  </div>
+  <div class="right-section">
+    <!-- Right Section -->
+    <div class="profile-container">
+      <img
+        src="assets/images/profile-image.png"
+        alt="Profile Icon"
+        class="profile-pic"
+      />
+      <div class="profile-role">{{ fetchRole }}</div>
+      <div class="profile-pic" (click)="toggleDropdown()">
+        <span class="profile-initials">{{ fetchName }}</span>
+      </div>
+      <!-- Dropdown Menu -->
+      <!-- <div *ngIf="isDropdownOpen" class="dropdown-menu">
+      <p><strong>{{ constants.NAME }}:</strong> {{ fetchName }}</p>
+      <p><strong>{{ constants.ROLE }}:</strong> {{ fetchRole }}</p>
       <button (click)="logout()" class="logout-btn">{{ constants.LOGOUT }}</button>
+    </div> -->
+    </div>
+
+    <!-- Icons Section -->
+    <div class="icons-container">
+      <img
+        src="assets/images/help-icon.png"
+        alt="Help Icon"
+        class="help-icon"
+      />
+      <img
+        src="assets/images/logout-icon.png"
+        alt="Logout Icon"
+        class="logout-icon"
+        (click)="logout()"
+      />
     </div>
   </div>
 </div>

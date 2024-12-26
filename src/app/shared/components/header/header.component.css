@@ -1,68 +1,169 @@
-/* Header container layout */
+/* Header Container */
 .header-container {
   display: flex;
-  justify-content: space-between; /* Space between title and profile */
-  align-items: center; /* Vertically align items */
-  padding: 10px 20px;
-  background-color: #6c757d;
-  color: #fff;
-  border-radius: 4px;
-  /* background-color: #f9f9f9;
-  border-bottom: 1px solid #ccc; */
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 8px 12px; /* Compact header padding */
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0;
 }
 
-/* Profile section */
-.profile-icon {
+/* Left Section */
+.left-section {
   display: flex;
-  align-items: center; /* Aligns the profile picture with text vertically */
-  cursor: pointer; /* Adds a pointer cursor on hover */
-  position: relative; /* For dropdown positioning */
+  align-items: center;
 }
 
-/* Profile picture */
+/* Logo Section */
+.logo-section {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.nira-logo {
+  width: 50px;
+  height: 50px;
+  margin-right: 8px; /* Small gap between logo and title */
+}
+.grid-icon {
+  font-size: 15px; /* Reduce size */
+  color: #555; /* Dark gray color */
+  border-radius: 4px; /* Rounded edges */
+  padding: 2px; /* Add spacing around the icon */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0; /* Light background */
+}
+
+.app-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+/* Right Section */
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 20px; /* Space between profile and icons */
+}
+
+/* Profile Section (Profile Container + Icons) */
+.profile-section {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Minimal gap between profile and icons */
+  margin: 0;
+}
+
+/* Profile Container */
+.profile-container {
+  display: flex;
+  align-items: center;
+  background-color: #f8f9fa; /* Light gray background */
+  border: 1px solid #e0e0e0;
+  border-radius: 25px; /* Oval shape */
+  padding: 3px 8px; /* Compact padding */
+  gap: 5px; /* Small space between items */
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+  margin: 0;
+}
+
+/* Profile Picture */
 .profile-pic {
-  width: 40px; /* Smaller size */
-  height: 40px; /* Match width */
+  width: 30px;
+  height: 30px;
   border-radius: 50%; /* Circular profile picture */
-  object-fit: cover; /* Prevent image distortion */
-  margin-right: 10px; /* Space between image and text */
+  object-fit: cover;
+  margin: 0;
 }
 
-/* Dropdown menu */
-.dropdown-menu {
-  width: max-content;
-  position: absolute;
-  top: 40px; /* Adjust dropdown position */
-  right: 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  padding: 8px 12px; /* Smaller padding for compactness */
-  border-radius: 4px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Ensure dropdown is above other elements */
-  font-size: 14px; /* Smaller text size for dropdown */
-  line-height: 2; /* Adjust line height for readability */
+/* Profile Role */
+.profile-role {
+  font-size: 12px;
+  font-weight: 500;
+  color: #333;
+  margin: 0;
 }
 
-/* Text inside the dropdown */
-.dropdown-menu p {
-  margin: 4px 0; /* Reduced spacing between paragraphs */
-  font-size: 12px; /* Smaller font size for compactness */
-  color: #333; /* Neutral text color */
+/* Profile Initials */
+.profile-initials {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d1d1d1; /* Gray background */
+  color: #333; /* Text color */
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  margin: 0;
 }
 
-/* Logout button */
-.logout-btn {
-  margin-top: 8px; /* Slightly smaller margin */
-  padding: 4px 8px; /* Compact button size */
-  font-size: 12px; /* Smaller font size for the button */
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
+/* Icons Container */
+.icons-container {
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Minimal space between icons */
+  margin: 0;
+}
+
+/* Help and Logout Icons */
+.help-icon,
+.logout-icon {
+  width: 28px; /* Smaller icon size */
+  height: 28px;
+  border-radius: 50%;
+  background-color: #e0e0e0; /* Circular gray background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
   cursor: pointer;
 }
 
+.help-icon:hover,
+.logout-icon:hover {
+  background-color: #d6d6d6; /* Slightly darker on hover */
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  z-index: 1000;
+  font-size: 14px;
+  width: 200px;
+  padding: 10px;
+}
+
+.dropdown-menu p {
+  margin: 5px 0;
+}
+
+.logout-btn {
+  display: block;
+  margin: 10px auto 0;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
 .logout-btn:hover {
-  background-color: #0056b3; /* Darker hover color */
+  background-color: #c82333;
 }
