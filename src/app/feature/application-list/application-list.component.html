@@ -4,196 +4,169 @@
 
   <!-- Search & Filters Component (role) -->
   <div class="search-container">
-    <div class="search-and-filters">
-      <input
-        type="text"
-        [(ngModel)]="searchText"
-        placeholder="Search by Application ID"
-        class="search-input"
-      />
-      <input
-        type="text"
-        [(ngModel)]="selectedService"
-        placeholder="Search by Service"
-        class="search-input"
-      />
-      <input
-        type="text"
-        [(ngModel)]="selectedServiceType"
-        placeholder="Search by Service Type"
-        class="search-input"
-      />
-      <input
-        *ngIf="role === constants.MVS_DISTRICT_OFFICER"
-        type="text"
-        [(ngModel)]="selectedApplicationStatus"
-        placeholder="Search by Application Status"
-        class="search-input"
-      />
-    </div>
 
-    <div class="search-and-filters">
+    <div class="search-and-filters" *ngIf="!isFiltersCollapsed">
+      <!-- Application ID -->
+      <div class="input-group">
+        <label for="searchText">Application ID</label>
+        <input
+          type="text"
+          id="searchText"
+          [(ngModel)]="searchText"
+          placeholder="Search by Application ID"
+          class="search-input"
+        />
+      </div>
+  
+      <!-- Service -->
+      <div class="input-group">
+        <label for="selectedService">Service</label>
+        <select
+          id="selectedService"
+          [(ngModel)]="selectedService"
+          class="search-input"
+        >
+          <option value="" disabled selected>Select a Service</option>
+          <option *ngFor="let service of services" [value]="service">{{ service }}</option>
+        </select>
+      </div>
+
+      <!-- Service Type -->
+      <div class="input-group">
+        <label for="selectedServiceType">Service Type</label>
+        <select
+          id="selectedServiceType"
+          [(ngModel)]="selectedServiceType"
+          class="search-input"
+        >
+          <option value="" disabled selected>Select a Service Type</option>
+          <option *ngFor="let serviceType of serviceTypes" [value]="serviceType">{{ serviceType }}</option>
+        </select>
+      </div>
+
+      <!-- Application Status -->
+      <div class="input-group" *ngIf="role === constants.MVS_DISTRICT_OFFICER">
+        <label for="selectedApplicationStatus">Application Status</label>
+        <select
+          id="selectedApplicationStatus"
+          [(ngModel)]="selectedApplicationStatus"
+          class="search-input"
+        >
+          <option value="" disabled selected>Select a Status</option>
+          <option *ngFor="let status of applicationStatuses" [value]="status">{{ status }}</option>
+        </select>
+      </div>
+  
       <!-- Date Range Filter -->
       <div class="date-filter">
-        <label for="fromDate">{{ constants.FROM_DATE }}</label>
-        <input
-          type="date"
-          [(ngModel)]="fromDate"
-          class="date-filter-input"
-          id="fromDate"
-        />
-        <label for="toDate">{{ constants.TO_DATE }}</label>
-        <input
-          type="date"
-          [(ngModel)]="toDate"
-          class="date-filter-input"
-          id="toDate"
-        />
-      </div>
-
-      <div class="search-button-container">
-        <button (click)="search()" class="search-filters-btn">
-          {{ constants.SEARCH }}
-        </button>
-      </div>
-
-      <div class="clear-button-container">
-        <button (click)="clearFilters()" class="clear-filters-btn">
-          {{ constants.CLEAR_FILTERS }}
-        </button>
+        <div class="input-group">
+          <label for="fromDate">{{ constants.FROM_DATE }}</label>
+          <input
+            type="date"
+            id="fromDate"
+            [(ngModel)]="fromDate"
+            class="date-filter-input"
+            [readonly]="isFiltersCollapsed"
+          />
+        </div>
+        <div class="input-group">
+          <label for="toDate">{{ constants.TO_DATE }}</label>
+          <input
+            type="date"
+            id="toDate"
+            [(ngModel)]="toDate"
+            class="date-filter-input"
+            [readonly]="isFiltersCollapsed"
+          />
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Left Section (Application List) -->
-  <div class="left-section">
-    <!-- Table Component (fields, filteredRows)-->
-    <div class="application-list">
-      <table class="styled-table">
-        <thead>
-          <tr [ngClass]="'header-row-1'">
-            <th
-              rowspan="2"
-              (click)="sortData(constants.API_CONST_APPLICATION_ID)"
-            >
-              {{ constants.APPLICATION_ID }}
 
-              <span
-                [class]="getSortClass(constants.API_CONST_APPLICATION_ID)"
-              ></span>
-            </th>
-            <th rowspan="2" (click)="sortData(constants.API_CONST_SERVICE)">
-              {{ constants.SERVICE }}
-              <span [class]="getSortClass(constants.API_CONST_SERVICE)"></span>
-            </th>
-            <th
-              rowspan="2"
-              (click)="sortData(constants.API_CONST_SERVICE_TYPE)"
-            >
-              {{ constants.SERVICE_TYPE }}
-              <span
-                [class]="getSortClass(constants.API_CONST_SERVICE_TYPE)"
-              ></span>
-            </th>
-            <th
-              rowspan="2"
-              (click)="sortData(constants.API_CONST_CREATED_DATE)"
-            >
-              {{ constants.CREATED_DATE }}
-              <span
-                [class]="getSortClass(constants.API_CONST_CREATED_DATE)"
-              ></span>
-            </th>
-            <!-- Conditional Section: Escalation from MVS Officer -->
-            <th
-              *ngIf="
-                fields.includes('Escalation Category from MVS Officer') ||
-                fields.includes('Escalation Category')
-              "
-              colspan="3"
-            >
-              Escalation from MVS Officer
-            </th>
-            <!-- Conditional Section: Escalation from MVS Supervisor -->
-            <th
-              *ngIf="fields.includes('Escalation Category From MVS Supervisor')"
-              colspan="3"
-            >
-              Escalation from MVS Supervisor
-            </th>
-            <th
-              *ngIf="fields.includes('Application Status')"
-              rowspan="2"
-              (click)="sortData(constants.APPLICATION_STATUS)"
-            >
-              {{ constants.APPLICATION_STATUS }}
-            </th>
-          </tr>
-          <tr [ngClass]="'header-row-2'">
-            <!-- Escalation from MVS Officer Columns -->
-            <ng-container
-              *ngIf="
-                fields.includes(
-                  constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER
-                ) || fields.includes(constants.ESCALATION_CATEGORY)
-              "
-            >
-              <th>{{ constants.CATEGORY }}</th>
-              <th>{{ constants.COMMENT }}</th>
-              <th>{{ constants.ESCALATION_DATE }}</th>
-            </ng-container>
-            <!-- Escalation from MVS Supervisor Columns -->
-            <ng-container
-              *ngIf="
-                fields.includes(
-                  constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR
-                )
-              "
-            >
-              <th>{{ constants.CATEGORY }}</th>
-              <th>{{ constants.COMMENT }}</th>
-              <th>{{ constants.ESCALATION_DATE }}</th>
-            </ng-container>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let row of data" (click)="onRowClick(row)">
-            <td>{{ row[constants.API_CONST_APPLICATION_ID] }}</td>
-            <td>{{ row[constants.API_CONST_SERVICE] }}</td>
-            <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
-            <td>{{ row[constants.API_CONST_CREATED_DATE] }}</td>
-            <!-- Conditional Section: Escalation from MVS Officer -->
-            <ng-container
-              *ngIf="
-                fields.includes(
-                  constants.ESCALATION_CATEGORY_FROM_MVS_OFFICER
-                ) || fields.includes(constants.ESCALATION_CATEGORY)
-              "
-            >
-              <td>{{ row.officerEscDetails?.category || "" }}</td>
-              <td>{{ row.officerEscDetails?.comment || "" }}</td>
-              <td>{{ row.officerEscDetails?.escDTimes || "" }}</td>
-            </ng-container>
-            <!-- Conditional Section: Escalation from MVS Supervisor -->
-            <ng-container
-              *ngIf="
-                fields.includes(
-                  constants.ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR
-                )
-              "
-            >
-              <td>{{ row.supervisorEscDetails?.category || "" }}</td>
-              <td>{{ row.supervisorEscDetails?.comment || "" }}</td>
-              <td>{{ row.supervisorEscDetails?.escDTimes || "" }}</td>
-            </ng-container>
-            <td *ngIf="fields.includes(constants.APPLICATION_STATUS)">
-              {{ row[constants.APPLICATION_STATUS] }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="seach-and-filter-buttons">
+      
+      <hr>
+      
+      <button (click)="clearFilters()" class="clear-filters-btn">
+        {{ constants.CLEAR_FILTERS }}
+      </button>
+      <button (click)="search()" class="clear-filters-btn">
+        {{ constants.SEARCH }}
+      </button>
+      <button (click)="toggleFilters()" class="clear-filters-btn">
+        {{ isFiltersCollapsed ? 'Filters' : 'Hide Filters' }}
+      </button>
+    
     </div>
   </div>
+  
+    <!-- Main Content: Table and Right Panel -->
+    <div class="main-content">
+      <!-- Table Section -->
+      <div class="left-section">
+        <div class="application-list">
+          <table class="styled-table"> 
+            <thead>
+              <tr>
+                <th (click)="sortData(constants.API_CONST_APPLICATION_ID)">
+                  {{ constants.APPLICATION_ID }}
+                  <span [class]="getSortClass(constants.API_CONST_APPLICATION_ID)"></span>
+                </th>
+                <th (click)="sortData(constants.API_CONST_SERVICE)">
+                  {{ constants.SERVICE }}
+                  <span [class]="getSortClass(constants.API_CONST_SERVICE)"></span>
+                </th>
+                <th (click)="sortData(constants.API_CONST_SERVICE_TYPE)">
+                  {{ constants.SERVICE_TYPE }}
+                  <span [class]="getSortClass(constants.API_CONST_SERVICE_TYPE)"></span>
+                </th>
+                <th (click)="sortData(constants.API_CONST_CREATED_DATE)">
+                  {{ constants.CREATED_DATE }}
+                  <span [class]="getSortClass(constants.API_CONST_CREATED_DATE)"></span>
+                </th>
+                <th *ngIf="role === constants.MVS_DISTRICT_OFFICER" (click)="sortData(constants.APPLICATION_STATUS)">
+                  {{ constants.APPLICATION_STATUS }}
+                  <span [class]="getSortClass(constants.APPLICATION_STATUS)"></span>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let row of data" (click)="selectRow(row)">
+                <td>
+                  <span>{{ row[constants.API_CONST_APPLICATION_ID] }}</span>
+                  <button (click)="onRowClick($event, row)" class="navigate-btn">
+                    Open
+                  </button>
+                </td>
+                <td>{{ row[constants.API_CONST_SERVICE] }}</td>
+                <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
+                <td>{{ row[constants.API_CONST_CREATED_DATE] }}</td>
+                <td *ngIf="role === constants.MVS_DISTRICT_OFFICER">
+                  {{ row[constants.APPLICATION_STATUS] }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  
+      <!-- Right Panel -->
+      <div class="right-section" [class.collapsed]="!isPanelExpanded">
+        <button class="collapse-btn" (click)="togglePanel()">Collapse</button>
+        <div class="details-container">
+          <h3>Details for Application ID: {{ selectedRow?.[constants.API_CONST_APPLICATION_ID] }}</h3>
+          <div *ngIf="selectedRow">
+            <div *ngFor="let key of extraFields">
+              <strong>{{ key }}:</strong> {{ selectedRow[key] || 'N/A' }}
+            </div>
+          </div>
+          <div *ngIf="!selectedRow">
+            <p>No row selected. Click on a row to see details.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
 
   <div *ngIf="totalPages > 0" class="pagination-controls">
     <button
