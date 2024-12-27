@@ -58,6 +58,8 @@ export class ApplicationListComponent implements OnInit {
   totalRecords: number = 0;
   temp: number = 1;
 
+  isFiltersCollapsed: boolean = false;
+
   // Sorting state
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'asc';
@@ -73,9 +75,17 @@ export class ApplicationListComponent implements OnInit {
   fromDate: string = '';
   toDate: string = '';
 
+  isPanelExpanded = false;
+  selectedRow: any = null;
+  extraFields: string[] = [];
+
   uniqueServices: string[] = [];
   uniqueServiceTypes: string[] = [];
   uniqueApplicationStatuses: string[] = [];
+
+  services = ['Service A', 'Service B', 'Service C'];
+  serviceTypes = ['Type 1', 'Type 2', 'Type 3'];
+  applicationStatuses = ['Pending', 'Approved', 'Rejected'];
 
   constants = {
     SEARCH,
@@ -157,6 +167,11 @@ export class ApplicationListComponent implements OnInit {
     );
   }
 
+  togglePanel() {
+    this.isPanelExpanded = !this.isPanelExpanded;
+  }
+
+
   get totalPages(): number {
     return Math.ceil(this.totalRecords / this.pageSize) || 0;
   }
@@ -197,6 +212,10 @@ export class ApplicationListComponent implements OnInit {
     return 'sort-icon-default';
   }
 
+  toggleFilters() {
+    this.isFiltersCollapsed = !this.isFiltersCollapsed;
+  }
+
   clearFilters() {
     this.searchText = '';
     this.selectedService = '';
@@ -206,7 +225,24 @@ export class ApplicationListComponent implements OnInit {
     this.toDate = '';
   }
 
-  onRowClick(rowData: any) {
+  selectRow(row: any) {
+    this.selectedRow = row;
+    this.extraFields = Object.keys(row).filter(
+      (key) =>
+        ![
+          this.constants.API_CONST_APPLICATION_ID,
+          this.constants.API_CONST_SERVICE,
+          this.constants.API_CONST_SERVICE_TYPE,
+          this.constants.API_CONST_CREATED_DATE,
+          this.constants.APPLICATION_STATUS,
+        ].includes(key)
+    );
+    this.isPanelExpanded = true;
+  }
+
+  onRowClick(event: MouseEvent, rowData: any) {
+    event.stopPropagation();
+
     // get application details api
     const applicationId = rowData[this.constants.API_CONST_APPLICATION_ID];
     this.dataService.getApplicationDetails(applicationId).subscribe(

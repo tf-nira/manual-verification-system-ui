@@ -19,7 +19,7 @@ export class DataStorageService {
 
   serverDtFormat = 'YYYY/MM/DD';
   private BASE_URL: string =
-    'http://localhost:9090/v1/manual-verification-service';
+    'http://localhost:9002/v1/manual-verification-service';
 
   constructor(
     private httpClient: HttpClient,

@@ -26,11 +26,11 @@
   /* margin-top: 2rem; */
 }
 
-.search-input {
-  flex: 2; /* Make the search bar take more space */
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.seach-and-filter-buttons {
+  display: flex;
+  align-items: end;
+  gap: 0.7rem;
+  /* margin-bottom: 1rem; */
 }
 
 .search-bar {
@@ -40,9 +40,22 @@
   align-items: center;
 }
 
-.search-input {
+.input-group {
+  display: flex;
+  flex-direction: column; /* Stack label and input vertically */
+  gap: 4px; /* Space between label and input */
   width: 100%;
-  height: 1.5rem;
+}
+
+.input-group label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #333;
+}
+
+.search-input {
+  /* width: 100%; */
+  /* height: 1.5rem; */
   padding: 8px;
   margin-right: 8px;
   border: 1px solid #ccc;
@@ -66,9 +79,7 @@
 
 .date-filter {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
+  gap: 1rem; /* Space between from and to date inputs */
 }
 
 .date-filter label {
@@ -123,7 +134,7 @@
 .clear-filters-btn {
   padding: 10px 20px;
   background-color: white;
-  border: none;
+  border: 1px solid #ccc;
   color: rgb(54, 53, 53);
   border-radius: 4px;
   font-size: 14px;
@@ -139,6 +150,52 @@
 .clear-filters-btn:active {
   background-color: #c7c2c2;
 }
+
+.main-content {
+  display: flex;
+}
+
+/* Left Section: Table */
+.left-section {
+  flex: 3;
+  padding-right: 10px;
+}
+
+/* Right Section: Collapsible Panel */
+.right-section {
+  flex: 1;
+  background-color: #f9f9f9;
+  border-left: 1px solid #ddd;
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+}
+
+.right-section.collapsed {
+  flex: 0;
+  padding: 0;
+  border: none;
+}
+
+.details-container {
+  padding: 15px;
+}
+
+.collapse-btn {
+  width: 100%;
+  background-color: #c02533;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+.collapse-btn:hover {
+  background-color: #a01e2b;
+}
+
 
 /* Style for the table container */
 .application-list {
@@ -209,6 +266,30 @@
   text-align: center; /* Center the text */
 }
 
+td {
+  position: relative; /* Ensure relative positioning for better alignment */
+}
+
+td span {
+  display: inline-block; /* Ensures the Application ID remains inline with the button */
+}
+
+.navigate-btn {
+  margin-left: 8px; /* Space between the ID and the button */
+  padding: 4px 8px;
+  background-color: #ffffff;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.navigate-btn:hover {
+  background-color: #919ba5;
+} 
+
 .styled-table thead .header-row-1 {
   th:nth-child(odd) {
     background-color: #cccdce;
@@ -254,7 +335,7 @@
 }
 
 .styled-table tbody tr:hover {
-  background-color: #a01e2b;
+  background-color: #9e9e9e;
   color: #ffffff; /* White text */
   cursor: pointer;
 }
