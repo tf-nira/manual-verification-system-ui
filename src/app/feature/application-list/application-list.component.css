@@ -427,3 +427,47 @@ th.sortable {
   font-weight: bold;
   color: #555;
 }
+
+.details-container {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  margin-top: 10px;
+}
+
+.escalation-section {
+  margin-bottom: 15px;
+}
+
+.escalation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #007bff;
+  color: white;
+  padding: 6px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.escalation-content {
+  padding: 10px;
+  background-color: #eef3f7;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+
+.escalation-header span {
+  font-size: 1.2em;
+}
+
+.expanded::after {
+  content: '\25BC';
+}
+
+.collapsed::after {
+  content: '\25B6';
+}
