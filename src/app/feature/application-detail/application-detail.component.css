@@ -1,157 +1,203 @@
 /* Container styling */
 .container {
-  font-family: Arial, sans-serif;
-  color: #333;
-  padding: 20px;
-  margin: auto;
-  background-color: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
 }
 
-/* Application Info Section (Top Form) */
-.application-info {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  background-color: #d3dbe3;
-  padding: 15px;
+.layout {
+  display: flex;
+  flex-grow: 1;
+}
+
+/* Left Section */
+.left-section {
+  width: 250px;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  overflow-y: auto; /* Ensures scrolling for large content */
+  transition: width 0.3s ease; /* Smooth animation for collapse/expand */
+  position: relative; /* Ensure toggle button stays visible */
+}
+
+.left-section.collapsed {
+  width: 50px; /* Reduced width when collapsed */
+}
+
+/* Middle Section */
+.middle-section {
+  flex-grow: 1; /* Flexible width */
+  padding: 20px;
+  background-color: #fff;
+  overflow-y: auto; /* Ensures scrolling for content overflow */
+}
+
+.middle-section h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Personal Information Section */
+.personal-information {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Add spacing between form groups */
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; /* Space between label and input */
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+}
+
+.field-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px; /* Spacing between characters or fields */
+  padding: 10px;
+  border: 1px solid #ddd;
   border-radius: 5px;
-  margin-top: 20px;
+  background-color: #f9f9f9;
+  min-height: 40px; /* Ensures uniform height for fields */
+  font-size: 14px;
+  font-family: monospace;
+  align-items: center;
+}
+
+/* Section Header */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  color: #151515;
+  background-color: #f5f5f5; /* Ensure consistent background */
+  border-bottom: 1px solid #ddd; /* Add separation from navigation content */
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 16px; /* Standardized font size for heading */
+}
+
+.section-header h3.collapsed {
+  display: none; /* Hide heading when collapsed */
+}
+
+.toggle-btn {
+  background-color: transparent;
+  border: none;
+  color: #151515;
+  cursor: pointer;
+  font-size: 14px; /* Appropriate button size */
+  padding: 5px 10px; /* Adjust padding for a compact button */
+}
+
+.left-section.collapsed .section-header {
+  justify-content: center; /* Center the toggle button */
+}
+
+.left-section .navigation-content {
+  display: none; /* Hide navigation content when collapsed */
+}
+
+.left-section:not(.collapsed) .navigation-content {
+  display: block; /* Show navigation content when not collapsed */
+  padding: 15px; /* Add padding for content */
 }
 
 .info-group {
-  display: flex;
-  flex-direction: column;
+  margin-bottom: 15px;
 }
 
 .info-group label {
   font-weight: bold;
+  display: block;
   margin-bottom: 5px;
-  color: #333;
 }
 
 .info-group input {
+  width: 100%;
   padding: 10px;
-  border-radius: 5px;
   border: 1px solid #ced4da;
+  border-radius: 5px;
   background-color: #e9ecef;
 }
 
-/* Content Section */
-.content-section {
-  display: grid;
-  gap: 20px;
-  margin-top: 20px;
-  width: 100%;
-  grid-template-columns: 1fr 1fr; /* Default two-column layout */
-}
-/* Full-width layout when right-section is hidden */
-.content-section.no-right-section {
-  grid-template-columns: 1fr; /* Single column layout */
-}
-/* Left Section */
-.left-section {
-  background-color: #f9f9f9;
+/* References Content */
+.references-content {
   padding: 15px;
-  border-radius: 5px;
-  border: 1px solid #bdbdbd;
-  display: flex;
-  flex-direction: column;
+  overflow-y: auto; /* Enables scrolling if content overflows */
+  height: 100%; /* Ensures it occupies the full height of its parent */
+  box-sizing: border-box; /* Ensures padding is included in height calculations */
 }
 
-/* Right Section */
-.right-section {
-  background-color: #f9f9f9;
-  padding: 15px;
-  border-radius: 5px;
-  border: 1px solid #bdbdbd;
+.nin-details-container {
   display: flex;
   flex-direction: column;
-}
-/* Tab Container */
-.tab-container {
-  display: flex;
-  width: 100%;
+  gap: 15px;
 }
 
-.tab {
-  background-color: #8d7d6d;
-  color: #fff;
+.nin-detail {
+  border: 1px solid #ccc;
   padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+
+/* Footer Section (Back Button) */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-top: 1px solid #ddd;
+  width: 100%;
+}
+
+.back-button {
+  background-color: #007bff;
+  color: #fff;
   border: none;
-  border-radius: 5px 5px 0 0;
-  cursor: pointer;
-  font-weight: bold;
-  text-align: center;
-  flex: 1;
-}
-
-.tab.active {
-  background-color: #5e5040;
-}
-
-/* Details Section in Left Column */
-.details-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.detail-group {
-  background-color: #e6f0ff;
-  border: 1px solid #005cbf;
-  padding: 15px;
   border-radius: 5px;
-}
-
-.detail-group h3 {
-  color: #005cbf;
-  margin: 0 0 10px;
-}
-
-/* NIN Section */
-.nin-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-.nin-input {
-  border: 1px solid #dc3545;
-  padding: 10px;
-  border-radius: 5px 0 0 5px;
-  background-color: #f8d7da;
-  flex: 1;
-}
-
-.submit-btn {
-  background-color: #a94442;
-  color: #fff;
   padding: 10px 20px;
-  border: none;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
+  font-size: 14px;
   font-weight: bold;
+  cursor: pointer;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
 }
 
 /* Action Buttons */
 .action-buttons {
-  display: flex; /* Use flexbox for alignment */
-  justify-content: flex-end; /* Align buttons to the right */
-  gap: 10px; /* Space between buttons */
-  margin-top: 20px;
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
+  display: flex; /* Changed to horizontal layout */
+  flex-direction: row; /* Align buttons in a row */
+  gap: 15px; /* Space between buttons */
 }
 
+/* Individual Button Styles */
 .action-buttons button {
-  padding: 10px 15px; /* Smaller padding for compact buttons */
-  font-size: 14px; /* Smaller font size */
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  color: #fff;
-  cursor: pointer;
+  padding: 10px 20px; /* Adjust padding for button size */
+  font-size: 14px; /* Font size */
+  border: none; /* Remove default borders */
+  border-radius: 5px; /* Rounded corners */
+  font-weight: bold; /* Bold text */
+  color: #fff; /* White text color */
+  cursor: pointer; /* Pointer cursor on hover */
 }
 
 /* Approve Button */
@@ -165,276 +211,140 @@
   color: #000; /* Black text for contrast */
 }
 
-.action-buttons .schedule-interview {
-  background-color: #8717b3; 
-}
-
-.action-buttons .document-upload {
-  background-color: #4220c0; 
-}
-
 /* Reject Button */
 .action-buttons .reject {
   background-color: #dc3545; /* Red */
 }
 
-.hidden {
-  display: none;
-}
-
-/* Modal Backdrop */
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+/* Adjustments for toggle button and collapsed state */
+.left-section .section-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  justify-content: space-between; /* Keep heading and toggle aligned */
 }
 
-/* Modal Container */
-.modal {
-  background-color: #d3dbe3;
-  padding: 20px;
-  border-radius: 8px;
-  width: 600px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.left-section.collapsed .section-header {
+  justify-content: center; /* Center toggle button when collapsed */
 }
 
-/* Modal Header */
-.modal-header {
-  background-color: #6c757d;
-  color: #fff;
+.left-section.collapsed .section-header h3 {
+  display: none; /* Hide heading when collapsed */
+}
+
+/* Right Section */
+.right-section {
+  width: 300px; /* Adjust width if necessary */
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  overflow: hidden; /* Prevent content overflow */
+  height: 100%; /* Ensure the section takes full height */
+  position: relative;
+}
+
+.right-section.collapsed {
+  width: 50px; /* Reduced width when collapsed */
+}
+
+.right-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px;
-  border-radius: 5px 5px 0 0;
-  font-weight: bold;
+  color: #151515;
+  background-color: #f5f5f5; /* Ensure consistent background */
+  border-bottom: 1px solid #ddd; /* Add separation from content */
 }
 
-/* Modal Body */
-.modal-body {
+.right-section .section-header h3 {
+  margin: 0;
+  font-size: 16px; /* Standardized font size for heading */
+}
+
+.right-section.collapsed .section-header h3 {
+  display: none; /* Hide heading when collapsed */
+}
+
+.right-section .toggle-btn {
+  background-color: transparent;
+  border: none;
+  color: #151515;
+  cursor: pointer;
+  font-size: 14px; /* Appropriate button size */
+  padding: 5px 10px; /* Adjust padding for a compact button */
+}
+
+.right-section.collapsed .section-header {
+  justify-content: center; /* Center the toggle button */
+}
+
+.references-content {
   padding: 15px;
 }
 
-.modal-body p {
-  margin: 0 0 10px;
-  font-weight: bold;
+.right-section.collapsed .references-content {
+  display: none; /* Hide content when collapsed */
 }
 
-.modal-body textarea {
-  width: 100%;
-  height: 50px;
-  padding: 8px;
-  border: 1px solid #ced4da;
-  border-radius: 5px;
-  background-color: #e9ecef;
+.right-section:not(.collapsed) .references-content {
+  display: block; /* Show content when not collapsed */
 }
 
-/* Modal Footer */
-.modal-footer {
-  display: flex;
-  justify-content: space-between;
-  padding-top: 10px;
-}
-
-.modal-footer .btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 5px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.modal-footer .back {
-  background-color: #007bff;
-  color: #fff;
-}
-
-.modal-footer .approve {
-  background-color: #28a745;
-  color: #fff;
-}
-
-.modal-footer .send-invite {
-  background-color: #4220c0;
-  color: #fff;
-}
-
-.modal-footer .reject {
-  background-color: #da261f;
-  color: #fff;
-}
-
-.btn.add {
-  background-color: #f87171;
-  color: white;
-}
-
-.btn.escalate {
-  background-color: #ffaf40;
-  color: white;
-}
-
-/* Labels */
-.form-group label {
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 8px;
-  display: inline-block;
-  color: #333;
-}
-
-.modal-body .form-group {
-  margin-bottom: 20px;
-}
-
-/* Textbox and Textarea */
-.form-group input[type="text"],
-.form-group textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db; /* Light gray border */
-  border-radius: 6px;
-  font-size: 14px;
-  color: #111827; /* Darker text color */
-  background-color: #f9fafb; /* Light background */
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.form-group input[type="text"]:focus,
-.form-group textarea:focus {
-  outline: none;
-  border-color: #5b8def; /* Focus blue border */
-  box-shadow: 0 0 4px rgba(91, 141, 239, 0.4); /* Subtle glow */
-  background-color: #ffffff; /* Ensure white background on focus */
-}
-
-textarea {
-  resize: none;
-  height: 80px;
-}
-
-/* Dropdown (select) */
-.form-group select {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  font-size: 14px;
-  color: #6b7280; /* Muted gray for placeholder */
-  background-color: #f9fafb;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  appearance: none; /* Hide the default arrow for consistent styling */
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%236b7280' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 16px;
-}
-
-.form-group select:focus {
-  outline: none;
-  border-color: #5b8def;
-  box-shadow: 0 0 4px rgba(91, 141, 239, 0.4);
-  background-color: #ffffff;
-}
-
-.document-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.dropdown {
-  padding: 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background-color: #f9fafb;
-  width: 150px;
-  font-size: 14px;
-}
-
-.reject-category {
-  padding: 8px;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background-color: #f9fafb;
-  width: max-content;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
-/* File name display */
-.file-name {
-  margin-left: 10px;
-  font-size: 14px;
-  color: #555;
-}
-.footer {
-  position: fixed;
-  bottom: 10px; /* Adjust distance from bottom */
-  left: 10px; /* Adjust distance from left */
-  z-index: 1000; /* Ensure it appears above other elements */
-}
-
-.back-button {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-.back-button:hover {
-  background-color: #0056b3;
-}/* Tab Container */
-.tab-container {
-  display: flex;
-  width: 100%;
-}
-
-.tab {
-  background-color: #b89c8a; /* Adjusted to match the desired color */
-  color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 5px 5px 0 0;
-  cursor: pointer;
-  font-weight: bold;
-  text-align: center;
-  flex: 1;
-}
-
-.tab.active {
-  background-color: #816453; /* Updated for the active tab color */
-}
-
-/* NIN Details Section */
 .nin-details-container {
   display: flex;
   flex-direction: column;
   gap: 15px;
-  padding: 10px;
-  background-color: #e8a295; /* Updated background color to match desired layout */
-  border: 1px solid #b97b70;
-  border-radius: 5px;
 }
 
 .nin-detail {
-  border: 1px solid #b97b70; /* Updated border color */
-  border-radius: 5px;
+  border: 1px solid #ccc;
   padding: 10px;
-  background-color: #f5e4e1; /* Adjusted background color for the details section */
-  font-weight: bold; /* Ensures text stands out */
+  background-color: #f9f9f9;
+  border-radius: 5px;
+}
+/* Tabs Container */
+.tabs {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 15px;
 }
 
-.nin-info {
-  margin-top: 5px;
-  font-size: 0.9em;
-  color: #191818; /* Updated font color for better contrast */
+/* Tab Buttons */
+.tab-button {
+  flex: 1;
+  text-align: center;
+  padding: 10px 15px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #555;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.tab-button i {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+/* Active Tab */
+.tab-button.active {
+  color: #007bff;
+  border-bottom: 3px solid #007bff;
+  font-weight: bold;
+}
+
+/* Tab Content */
+.tab-content {
+  padding: 15px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  min-height: 100px; /* Ensure minimum height for content */
+  overflow-y: auto; /* Scroll content if it overflows */
+  box-sizing: border-box; /* Account for padding inside the border */
 }

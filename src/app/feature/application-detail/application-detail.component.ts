@@ -49,7 +49,7 @@ export class ApplicationDetailComponent implements OnInit {
     content: '',
     districtOffice: ''
   };
-
+  activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
   serviceType: string = ''; 
   approvalComment: string = '';
@@ -59,7 +59,9 @@ export class ApplicationDetailComponent implements OnInit {
   escalationComment: string = '';
   rejectionCategory: string = '';
   rejectionComment: string = '';
-
+  // Added: State variables for left and right section collapse
+  isLeftCollapsed: boolean = false;
+  isRightCollapsed: boolean = false;
   isEditable: boolean = false;
   documents: { category: string; title: string; fileName: string; file: File | null }[] = [
     { category: '', title: '', fileName: '', file: null }
@@ -109,7 +111,18 @@ export class ApplicationDetailComponent implements OnInit {
     this.commentMVSOfficer = this.rowData[ESCALATION_COMMENT_FROM_MVS_OFFICER] || '';
     this.commentMVSSupervisor = this.rowData[ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] || '';
   }
+  // Added: Methods to toggle left and right sections
+  toggleLeft() {
+    this.isLeftCollapsed = !this.isLeftCollapsed;
+  }
 
+  toggleRight() {
+    this.isRightCollapsed = !this.isRightCollapsed;
+  }
+  setActiveTab(tabName: string): void {
+    this.activeTab = tabName;
+  }
+  
   changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = '') {
     const applicationId = this.rowData.applicationId;
     this.dataService
@@ -291,5 +304,13 @@ export class ApplicationDetailComponent implements OnInit {
       }
     );
   }
-
+  parseJson(jsonString: string): any {
+    try {
+      return JSON.parse(jsonString);
+    } catch (e) {
+      console.error('Error parsing JSON:', e);
+      return null;
+    }
+  }
+  
 }
