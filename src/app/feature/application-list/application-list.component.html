@@ -155,11 +155,54 @@
         <button class="collapse-btn" (click)="togglePanel()">Collapse</button>
         <div class="details-container">
           <h3>Details for Application ID: {{ selectedRow?.[constants.API_CONST_APPLICATION_ID] }}</h3>
+
           <div *ngIf="selectedRow">
-            <div *ngFor="let key of extraFields">
-              <strong>{{ key }}:</strong> {{ selectedRow[key] || 'N/A' }}
+            <!-- Officer Escalation Details -->
+            <div *ngIf="selectedRow.officerEscDetails" class="escalation-section">
+              <button class="escalation-header" (click)="toggleEscalation('officer')">
+                Officer Escalation Details
+                <span [class]="isEscalationExpanded('officer') ? 'expanded' : 'collapsed'"></span>
+              </button>
+              <div *ngIf="isEscalationExpanded('officer')" class="escalation-content">
+                <p><strong>Level:</strong> {{ selectedRow.officerEscDetails.level || 'N/A' }}</p>
+                <p><strong>Category:</strong> {{ selectedRow.officerEscDetails.category || 'N/A' }}</p>
+                <p><strong>Comment:</strong> {{ selectedRow.officerEscDetails.comment || 'N/A' }}</p>
+                <p><strong>Escalated By:</strong> {{ selectedRow.officerEscDetails.escBy || 'N/A' }}</p>
+                <p><strong>Escalation Time:</strong> {{ selectedRow.officerEscDetails.escDTimes || 'N/A' }}</p>
+              </div>
+            </div>
+
+            <!-- Supervisor Escalation Details -->
+            <div *ngIf="selectedRow.supervisorEscDetails" class="escalation-section">
+              <button class="escalation-header" (click)="toggleEscalation('supervisor')">
+                Supervisor Escalation Details
+                <span [class]="isEscalationExpanded('supervisor') ? 'expanded' : 'collapsed'"></span>
+              </button>
+              <div *ngIf="isEscalationExpanded('supervisor')" class="escalation-content">
+                <p><strong>Level:</strong> {{ selectedRow.supervisorEscDetails.level || 'N/A' }}</p>
+                <p><strong>Category:</strong> {{ selectedRow.supervisorEscDetails.category || 'N/A' }}</p>
+                <p><strong>Comment:</strong> {{ selectedRow.supervisorEscDetails.comment || 'N/A' }}</p>
+                <p><strong>Escalated By:</strong> {{ selectedRow.supervisorEscDetails.escBy || 'N/A' }}</p>
+                <p><strong>Escalation Time:</strong> {{ selectedRow.supervisorEscDetails.escDTimes || 'N/A' }}</p>
+              </div>
+            </div>
+
+            <!-- Legal Escalation Details -->
+            <div *ngIf="selectedRow.legalEscDetails" class="escalation-section">
+              <button class="escalation-header" (click)="toggleEscalation('legal')">
+                Legal Escalation Details
+                <span [class]="isEscalationExpanded('legal') ? 'expanded' : 'collapsed'"></span>
+              </button>
+              <div *ngIf="isEscalationExpanded('legal')" class="escalation-content">
+                <p><strong>Level:</strong> {{ selectedRow.legalEscDetails.level || 'N/A' }}</p>
+                <p><strong>Category:</strong> {{ selectedRow.legalEscDetails.category || 'N/A' }}</p>
+                <p><strong>Comment:</strong> {{ selectedRow.legalEscDetails.comment || 'N/A' }}</p>
+                <p><strong>Escalated By:</strong> {{ selectedRow.legalEscDetails.escBy || 'N/A' }}</p>
+                <p><strong>Escalation Time:</strong> {{ selectedRow.legalEscDetails.escDTimes || 'N/A' }}</p>
+              </div>
             </div>
           </div>
+
           <div *ngIf="!selectedRow">
             <p>No row selected. Click on a row to see details.</p>
           </div>

@@ -77,7 +77,7 @@ export class ApplicationListComponent implements OnInit {
 
   isPanelExpanded = false;
   selectedRow: any = null;
-  extraFields: string[] = [];
+  expandedSections: { [key: string]: boolean } = {};
 
   uniqueServices: string[] = [];
   uniqueServiceTypes: string[] = [];
@@ -171,6 +171,13 @@ export class ApplicationListComponent implements OnInit {
     this.isPanelExpanded = !this.isPanelExpanded;
   }
 
+  toggleEscalation(section: string): void {
+    this.expandedSections[section] = !this.expandedSections[section];
+  }
+  
+  isEscalationExpanded(section: string): boolean {
+    return this.expandedSections[section] || false;
+  }
 
   get totalPages(): number {
     return Math.ceil(this.totalRecords / this.pageSize) || 0;
@@ -227,16 +234,6 @@ export class ApplicationListComponent implements OnInit {
 
   selectRow(row: any) {
     this.selectedRow = row;
-    this.extraFields = Object.keys(row).filter(
-      (key) =>
-        ![
-          this.constants.API_CONST_APPLICATION_ID,
-          this.constants.API_CONST_SERVICE,
-          this.constants.API_CONST_SERVICE_TYPE,
-          this.constants.API_CONST_CREATED_DATE,
-          this.constants.APPLICATION_STATUS,
-        ].includes(key)
-    );
     this.isPanelExpanded = true;
   }
 
