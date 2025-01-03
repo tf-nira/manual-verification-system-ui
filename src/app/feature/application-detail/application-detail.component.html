@@ -1,285 +1,126 @@
 <div class="container">
   <!-- Header Section -->
   <app-header [role]="role"></app-header>
-  <!--<app-header [view]="'Details'" [role]=role></app-header>-->
-  
-  <!-- Application Information Section -->
-  <div class="application-info">
-    <div class="info-group">
-      <label>{{ constants.APPLICATION_ID }}</label>
-      <input type="text" placeholder="Enter ID" [(ngModel)]="applicationId" [disabled]="!isEditable"/>
-    </div>
-    <div class="info-group">
-      <label>{{ constants.APPLICANT_NAME }}</label>
-      <input type="text" placeholder="Enter Name" [(ngModel)]="applicantName" [disabled]="!isEditable"/>
-    </div>
-    <div class="info-group">
-      <label>{{ constants.SERVICE }}</label>
-      <input type="text" placeholder="Enter Service" [(ngModel)]="service" [disabled]="!isEditable"/>
-    </div>
-    <div class="info-group">
-      <label>{{ constants.SERVICE_TYPE }}</label>
-      <input type="text" placeholder="Enter Service Type" [(ngModel)]="serviceType" [disabled]="!isEditable" />
-    </div>
-    <div class="info-group" *ngIf="role === 'MVS_SUPERVISOR' || role === 'MVS_DISTRICT_OFFICER'">
-      <label>{{ constants.ESCALATION_REASON_FROM_MVS_OFFICER }}</label>
-      <input type="text" placeholder="Enter Reason" [(ngModel)]="commentMVSOfficer" [disabled]="!isEditable"/>
-    </div>
-    <div class="info-group" *ngIf="role === 'MVS_DISTRICT_OFFICER'">
-      <label>{{ constants.ESCALATION_REASON_FROM_MVS_SUPERVISOR }}</label>
-      <input type="text" placeholder="Enter Reason" [(ngModel)]="commentMVSSupervisor" [disabled]="!isEditable"/>
-    </div>
-  </div>
 
-  <!-- Main Content Section -->
-  <div class="content-section" [class.no-right-section]="serviceType !== 'By Birth'">
+  <div class="layout">
     <!-- Left Section -->
-    <div class="left-section">
-      <div class="tab-container full-width">
-        <button class="tab" [class.active]="selectedTab === 'demographic'" (click)="selectTab('demographic')">
-          {{ constants.DEMOGRAPHIC_DETAILS }}
-        </button>
-        <button class="tab" [class.active]="selectedTab === 'documents'" (click)="selectTab('documents')">
-          {{ constants.DOCUMENTS_UPLOADED }}
+    <div class="left-section" [class.collapsed]="isLeftCollapsed">
+      <div class="section-header">
+        <h3 *ngIf="!isLeftCollapsed">Navigation</h3>
+        <button class="toggle-btn" (click)="toggleLeft()">
+          {{ isLeftCollapsed ? '>' : '<' }}
         </button>
       </div>
-  
-      <!-- Show Demographic Details Component if demographic tab is selected -->
-      <app-demographic-details *ngIf="selectedTab === 'demographic'"></app-demographic-details>
-  
-      <!-- Show Documents Uploaded Component if documents tab is selected -->
-      <app-documents-uploaded *ngIf="selectedTab === 'documents'"></app-documents-uploaded>
-    </div>
-  
-    <!-- Right Section -->
-    <!-- Right Section -->
-<div class="right-section" *ngIf="serviceType === 'By Birth'">
-  <div class="tab-container full-width">
-    <button class="tab active center-text">{{ constants.AUTO_RETRIEVE_NIN_DETAILS }}</button>
-  </div>
-  <div class="nin-details-container">
-    <div class="nin-detail">
-      <label>Father's NIN:</label>
-      <span>XXXXXXXXXXXX</span>
-      <div class="nin-info">
-        <p>Personal Info</p>
-        <p>Place of Origin</p>
+      <div class="navigation-content" *ngIf="!isLeftCollapsed">
+        <div class="info-group">
+          <label>{{ constants.APPLICATION_ID }}</label>
+          <input type="text" placeholder="Enter ID" [(ngModel)]="applicationId" [disabled]="!isEditable" />
+        </div>
+        <div class="info-group">
+          <label>{{ constants.APPLICANT_NAME }}</label>
+          <input type="text" placeholder="Enter Name" [(ngModel)]="applicantName" [disabled]="!isEditable" />
+        </div>
+        <div class="info-group">
+          <label>{{ constants.SERVICE }}</label>
+          <input type="text" placeholder="Enter Service" [(ngModel)]="service" [disabled]="!isEditable" />
+        </div>
+        <div class="info-group">
+          <label>{{ constants.SERVICE_TYPE }}</label>
+          <input type="text" placeholder="Enter Service Type" [(ngModel)]="serviceType" [disabled]="!isEditable" />
+        </div>
       </div>
     </div>
-    <div class="nin-detail">
-      <label>Mother's NIN:</label>
-      <span>XXXXXXXXXXXX</span>
-      <div class="nin-info">
-        <p>Personal Info</p>
-      </div>
-    </div>
-  </div>
-</div>
+    
 
+    <!-- Middle Section -->
+    <div class="middle-section">
+      <h3>Applicant - Personal Information</h3>
+      <div class="personal-information">
+        
+        <div class="form-group">
+          <label>Gender</label>
+          <div class="field-container">
+            {{ parseJson(rowData?.demographics?.gender)?.[0]?.value }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Place of Residence (District)</label>
+          <div class="field-container">
+            {{ parseJson(rowData?.demographics?.applicantPlaceOfResidenceDistrict)?.[0]?.value }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <div class="field-container">
+            {{ rowData?.demographics?.phone }}
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Date of Birth</label>
+          <div class="field-container">
+            {{ rowData?.demographics?.dateOfBirth }}
+          </div>
+        </div>
+      </div>
+    </div>
+    
+
+    <!-- Right Section -->
+    <div class="right-section" [class.collapsed]="isRightCollapsed">
+      <div class="section-header">
+        <h3>References</h3>
+        <button class="toggle-btn" (click)="toggleRight()">
+          {{ isRightCollapsed ? '<' : '>' }}
+        </button>
+      </div>
+      <div class="references-content">
+        <div class="tabs">
+          <button 
+            class="tab-button" 
+            [class.active]="activeTab === 'history'" 
+            (click)="setActiveTab('history')">
+            <i class="icon-history"></i> History
+          </button>
+          <button 
+            class="tab-button" 
+            [class.active]="activeTab === 'records'" 
+            (click)="setActiveTab('records')">
+            <i class="icon-records"></i> Records
+          </button>
+          <button 
+            class="tab-button" 
+            [class.active]="activeTab === 'documents'" 
+            (click)="setActiveTab('documents')">
+            <i class="icon-documents"></i> Documents
+          </button>
+        </div>
+      
+        <div class="tab-content" *ngIf="activeTab === 'history'">
+          <!-- History Content -->
+          <p>History content goes here...</p>
+        </div>
+        <div class="tab-content" *ngIf="activeTab === 'records'">
+          <!-- Records Content -->
+          <p>Records content goes here...</p>
+        </div>
+        <div class="tab-content" *ngIf="activeTab === 'documents'">
+          <!-- Documents Content -->
+          <p>Documents content goes here...</p>
+        </div>
+      </div>
+    </div>
   </div>
-  
+
+  <!-- Back Button -->
   <div class="footer">
-    <button (click)="goBack()" class="back-button">{{ constants.BACK }}</button>
+    <button class="back-button" (click)="goBack()">{{ constants.BACK }}</button>
   </div>
 
   <!-- Action Buttons -->
-  <div class="action-buttons">
-
-    <!-- Approve Btn -->
-    <button class="approve" (click)="openApprovalModal()">{{ constants.APPROVE }}</button>
-
-    <!-- Escalate Btn -->
-    <button 
-      [ngClass]="{
-        'escalate': role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR',
-        'hidden': role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_LEGAL_OFFICER'
-      }" 
-      (click)="openEscalateModal()">
-      {{ constants.ESCALATE }}
-    </button>
-
-    <!-- Schedule Interview Btn -->
-    <button 
-      [ngClass]="{
-        'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') ,
-        'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR')
-      }" 
-      (click)="openScheduleInterviewModal()">
-      {{ constants.SCHEDULE_INTERVIEW }}
-    </button>
-
-    <!-- Document Upload Btn -->
-    <button 
-      [ngClass]="{
-        'document-upload': role === 'MVS_DISTRICT_OFFICER',
-        'hidden': role !== 'MVS_DISTRICT_OFFICER'
-      }" 
-      (click)="openDocumentUploadwModal()">
-      {{ constants.UPLOAD_DCOUMENTS }}
-    </button>
-    
-    <!-- Reject Btn -->
-    <button class="reject" (click)="openRejectModal()">{{ constants.REJECT }}</button>
-  </div>
-  
-  <!-- Approval Modal -->
-  <div class="modal-backdrop" *ngIf="showApprovalModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>Confirm Application Approval</h3>
-      </div>
-      <div class="modal-body">
-        <p>Are you sure you want to approve this application?</p>
-        <textarea placeholder="Comments" [(ngModel)]="approvalComment"></textarea>
-      </div>
-      <div class="modal-footer">
-        <button class="btn back" (click)="closeApprovalModal()">Back to Review</button>
-        <button class="btn approve" (click)="approveApplication()">{{ constants.APPROVE }}</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Escalate Modal -->
-<div class="modal-backdrop" *ngIf="showEscalateModal">
-  <div class="modal">
-      <div class="modal-header">
-          <h3>Confirm Application Escalation</h3>
-      </div>
-      <div class="modal-body">
-          <p>Are you sure you want to escalate this application?</p>
-          <div class="checkbox-container" *ngIf="role === 'MVS_OFFICER'">
-              <input type="checkbox" id="escalate-checkbox" [(ngModel)]="escalateOption" />
-              <label for="escalate-checkbox">
-                  Escalate to District Officer (Insufficient Documentation)
-              </label>
-          </div>
-          <textarea placeholder="Comments*" [(ngModel)]="escalationComment" required></textarea>
-      </div>
-      <div class="modal-footer">
-          <button class="btn back" (click)="closeEscalateModal()">Back to Review</button>
-          <button class="btn escalate" (click)="escalateApplication()">{{ constants.ESCALATE }}</button>
-      </div>
-  </div>
+<div class="action-buttons">
+  <button class="approve" (click)="openApprovalModal()">{{ constants.APPROVE }}</button>
+  <button class="escalate" (click)="openEscalateModal()">{{ constants.ESCALATE }}</button>
+  <button class="reject" (click)="openRejectModal()">{{ constants.REJECT }}</button>
 </div>
 
-<!-- Schedule Interview Modal -->
-<div class="modal-backdrop" *ngIf="showScheduleInterviewModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Schedule a Meeting</h3>
-    </div>
-    <div class="modal-body">
-      <div class="form-group">
-        <label for="subject">Subject*</label>
-        <input
-          id="subject"
-          type="text"
-          placeholder="Interview Subject*"
-          [(ngModel)]="interviewDetails.subject"
-          required
-        />
-      </div>
-
-      <div class="form-group">
-        <label for="content">Content*</label>
-        <textarea
-          id="content"
-          placeholder="Content/ List of Additional Documents*"
-          [(ngModel)]="interviewDetails.content"
-          required
-        ></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="districtOffice">District Office*</label>
-        <select
-          id="districtOffice"
-          [(ngModel)]="interviewDetails.districtOffice"
-          required
-        >
-          <option value="" disabled selected>Select District Office*</option>
-          <option *ngFor="let office of districtOffices" [value]="office">
-            {{ office }}
-          </option>
-        </select>
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn back" (click)="closeScheduleInterviewModal()">Cancel</button>
-      <button class="btn send-invite" [disabled]="!isFormValid()" (click)="sendInvite()">Send Invite</button>
-    </div>
-  </div>
-</div>
-
-<!-- Document Upload Modal -->
-<div class="modal-backdrop" *ngIf="showDocumentUploadModal">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Documents</h3>
-    </div>
-    <div class="modal-body">
-      <div *ngFor="let document of documents; let i = index" class="document-row">
-        <select
-          class="dropdown"
-          [(ngModel)]="document.category"
-          required
-        >
-          <option value="" disabled selected>Doc Category *</option>
-          <option *ngFor="let category of docCategories" [value]="category">
-            {{ category }}
-          </option>
-        </select>
-
-        <select
-          class="dropdown"
-          [(ngModel)]="document.title"
-          required
-        >
-          <option value="" disabled selected>Doc Title *</option>
-          <option *ngFor="let title of docTitles" [value]="title">
-            {{ title }}
-          </option>
-        </select>
-
-        <input
-          type="file"
-          (change)="onFileSelect($event, i)"
-          required
-        />
-        <span class="file-name">{{ document.fileName }}</span>
-
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn back" (click)="closeDocumentUploadModal()">Cancel</button>
-      <button class="btn add" (click)="addDocumentRow()">Upload Another Doc</button>
-      <button class="btn approve" (click)="confirmAndApprove()">Confirm & Approve</button>
-    </div>
-  </div>
-</div>
-
-  <!-- Reject Modal -->
-<div class="modal-backdrop" *ngIf="showRejectModal">
-  <div class="modal">
-      <div class="modal-header">
-          <h3>Confirm Application Rejection</h3>
-      </div>
-      <div class="modal-body">
-          <p>Are you sure you want to reject this application?</p>
-          <select class="reject-category" [(ngModel)]="rejectionCategory" required>
-              <option value="" disabled selected>Select Rejection Category*</option>
-              <option value="incomplete-documents">Incomplete Documents</option>
-              <option value="invalid-information">Invalid Information</option>
-              <option value="other">Other</option>
-          </select>
-          <textarea placeholder="Comments*" [(ngModel)]="rejectionComment" required></textarea>
-      </div>
-      <div class="modal-footer">
-          <button class="btn back" (click)="closeRejectModal()">Back to Review</button>
-          <button class="btn reject" (click)="rejectApplication()">Reject</button>
-      </div>
-  </div>
-</div>
 </div>
