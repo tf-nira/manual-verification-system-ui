@@ -407,7 +407,7 @@
 }
 
 
-/* Modal Styling */
+Modal Styling
 .modal {
   display: none;
   position: fixed;
@@ -710,7 +710,7 @@ textarea {
     transform: scale(1);
   }
 }
-/* Modal Backdrop */
+/* Modal Backdrop
 .modal-backdrop {
   position: fixed;
   top: 0;
@@ -722,4 +722,310 @@ textarea {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+} */
+.schedule-interview {
+  display: inline-block; /* Ensures the button is displayed inline with other buttons */
+  background-color: #007bff; /* Set a default background color (optional) */
+  color: #fff; /* Set text color to white for better visibility */
+  padding: 10px 15px; /* Adjust padding for better button size */
+  border: none; /* Remove border if unnecessary */
+  border-radius: 5px; /* Optional rounded corners */
+  cursor: pointer; /* Change cursor to pointer */
+  font-size: 14px; /* Adjust font size */
+  text-align: center; /* Center text */
+}
+.document-upload {
+  display: inline-block; /* Ensures the button is displayed inline */
+  background-color: #28a745; /* Green background color */
+  color: #fff; /* White text */
+  padding: 10px 15px; /* Adjust padding for size */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Optional rounded corners */
+  cursor: pointer; /* Show pointer cursor on hover */
+  font-size: 14px; /* Adjust font size */
+  text-align: center; /* Center text */
+  transition: background-color 0.3s ease; /* Smooth hover effect */
+}
+.hidden {
+  display: none; /* Completely hides the button */
+}
+/* Backdrop styling */
+.interviewModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex; /* Flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 1000; /* Ensure it appears above all other elements */
+}
+
+/* Modal container */
+.interviewModal .modal {
+  background-color: #fff; /* White background */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  width: 400px; /* Fixed width */
+  max-width: 90%; /* Responsive design for smaller screens */
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* Vertical layout for content */
+  z-index: 1100; /* Higher than the backdrop */
+  animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in effect */
+}
+
+/* Modal header */
+.interviewModal .modal-header {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center; /* Center-align the title */
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd; /* Optional divider */
+  padding-bottom: 10px;
+}
+
+/* Modal body */
+.interviewModal .modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Space between form groups */
+}
+
+.interviewModal .modal-body .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.interviewModal .modal-body label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.interviewModal .modal-body input,
+.interviewModal .modal-body textarea,
+.interviewModal .modal-body select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.interviewModal .modal-body textarea {
+  resize: none; /* Disable resizing */
+  height: 100px; /* Default height */
+}
+
+/* Modal footer */
+.interviewModal .modal-footer {
+  display: flex;
+  justify-content: flex-end; /* Align buttons to the right */
+  gap: 10px; /* Space between buttons */
+}
+
+.interviewModal .modal-footer .btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.interviewModal .modal-footer .btn.back {
+  background: #e0e0e0; /* Gray for Cancel button */
+  color: #333;
+}
+
+.interviewModal .modal-footer .btn.back:hover {
+  background: #d6d6d6;
+}
+
+.interviewModal .modal-footer .btn.send-invite {
+  background: #007bff; /* Blue for Submit */
+  color: #fff;
+}
+
+.interviewModal .modal-footer .btn.send-invite:hover {
+  background: #0056b3;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+/* Backdrop Styling */
+.uploadDocumentModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050; /* High z-index to prevent overlapping issues */
+  overflow: hidden; /* Prevent scroll in the background */
+}
+
+/* Modal Container */
+.uploadDocumentModal .modal {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+  width: 600px;
+  max-width: 90%; /* Responsive width */
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease-in-out;
+  overflow: hidden;
+  z-index: 1060; /* Layering above the backdrop */
+}
+
+/* Modal Header */
+.uploadDocumentModal .modal-header {
+  background-color: #007bff; /* Blue background */
+  color: #fff;
+  padding: 20px;
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+}
+
+/* Modal Body */
+.uploadDocumentModal .modal-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Spacing between rows */
+}
+
+/* Document Row Styling */
+.uploadDocumentModal .document-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px; /* Spacing between inputs */
+}
+
+/* Dropdown Styling */
+.uploadDocumentModal .dropdown {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* File Input Styling */
+.uploadDocumentModal input[type="file"] {
+  flex: 2;
+  font-size: 14px;
+}
+
+/* Filename Display */
+.uploadDocumentModal .file-name {
+  flex: 1;
+  font-size: 14px;
+  color: #555;
+  word-break: break-word;
+}
+
+/* Modal Footer */
+.uploadDocumentModal .modal-footer {
+  padding: 20px;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px; /* Spacing between buttons */
+}
+
+/* Button Styling */
+.uploadDocumentModal .btn {
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Cancel Button */
+.uploadDocumentModal .btn.back {
+  background-color: #dc3545; /* Red */
+  color: white;
+}
+
+.uploadDocumentModal .btn.back:hover {
+  background-color: #b02a37;
+}
+
+/* Add Button */
+.uploadDocumentModal .btn.add {
+  background-color: #ffc107; /* Yellow */
+  color: white;
+}
+
+.uploadDocumentModal .btn.add:hover {
+  background-color: #e0a800;
+}
+
+/* Approve Button */
+.uploadDocumentModal .btn.approve {
+  background-color: #28a745; /* Green */
+  color: white;
+}
+
+.uploadDocumentModal .btn.approve:hover {
+  background-color: #218838;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .uploadDocumentModal .modal {
+    width: 90%;
+  }
+
+  .uploadDocumentModal .document-row {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .uploadDocumentModal .dropdown,
+  .uploadDocumentModal input[type="file"] {
+    width: 100%; /* Full width for better responsiveness */
+  }
+}
+.scrollable-container {
+  max-height: 300px; /* Adjust the height based on your UI needs */
+  overflow-y: auto; /* Enable vertical scrolling */
+  padding: 10px; /* Add some padding for better spacing */
+  border: 1px solid #ccc; /* Optional: Add a border to distinguish the section */
+  background-color: #f9f9f9; /* Optional: Add a background color */
 }

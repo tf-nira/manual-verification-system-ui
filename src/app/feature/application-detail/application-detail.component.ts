@@ -68,7 +68,7 @@ export class ApplicationDetailComponent implements OnInit {
   documents: { category: string; title: string; fileName: string; file: File | null }[] = [
     { category: '', title: '', fileName: '', file: null }
   ];
-
+  personDetails: { role: string; details: { [key: string]: any } }[] = []; // Store details for Father, Mother, Guardian
   constants = {
     MVS_DISTRICT_OFFICER,
     APPLICATION_ID,
@@ -102,6 +102,19 @@ export class ApplicationDetailComponent implements OnInit {
 
     this.role = state.role || '';
     this.rowData = state.data || {};
+    /**below two row data sets need to be removed data would come from polcy, this is for example */
+    this.rowData = {
+      ...this.rowData,
+      fatherNin: "123456789", // Example NIN
+      fatherName: "John Doe", // Example Name
+      fatherAddress: "123 Main Street, Cityville", // Example Address
+    }
+    this.rowData = {
+      ...this.rowData,
+      motherNin: "654321", // Example NIN
+      motherName: "rosy", // Example Name
+      motherAddress: "123 Main Street, Cityville", // Example Address
+    }
     
     if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER) {
       this.applicationStatus = this.rowData[APPLICANT_NAME];
@@ -112,6 +125,8 @@ export class ApplicationDetailComponent implements OnInit {
     this.service = this.rowData.service || '';
     this.commentMVSOfficer = this.rowData[ESCALATION_COMMENT_FROM_MVS_OFFICER] || '';
     this.commentMVSSupervisor = this.rowData[ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] || '';
+
+    this.checkPersonDetails();
   }
   // Added: Methods to toggle left and right sections
   toggleLeft() {
@@ -123,6 +138,27 @@ export class ApplicationDetailComponent implements OnInit {
   }
   setActiveTab(tabName: string): void {
     this.activeTab = tabName;
+  }
+  checkPersonDetails() {
+    const roles = ['father', 'mother', 'guardian']; // Define roles to check
+  
+    this.personDetails = roles
+      .map((role) => {
+        const ninKey = `${role}Nin`;
+        if (this.rowData[ninKey]) {
+          // If NIN exists for the person, collect all details related to the role
+          const personData = Object.keys(this.rowData)
+            .filter((key) => key.startsWith(role)) // Match keys starting with the role (e.g., father)
+            .reduce((acc: { [key: string]: any }, key) => {
+              acc[key] = this.rowData[key]; // Add key-value pair to the accumulator
+              return acc;
+            }, {}); // Initialize acc as an empty object
+  
+          return { role, details: personData };
+        }
+        return null;
+      })
+      .filter((person) => person !== null); // Remove null entries
   }
   
   changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = '') {
@@ -316,6 +352,23 @@ export class ApplicationDetailComponent implements OnInit {
       console.error('Error parsing JSON:', e);
       return null;
     }
+  }
+  showDemographicData(registrationId: string){
+    console.log("showDemographicData"+registrationId);
+    this.dataService.fetchDemographicData("10040100290004320241210093511").subscribe(
+      (response:any) => {
+        if (response?.response?.status === 'ACTIVATED') {
+          alert('Demographic Data fetched success from id repo');
+          
+        } else {
+          alert('Failed to fetch demographic data from id repo');
+        }
+      },
+      (error) => {
+        console.error('Error in fetching demographic data', error);
+        alert('An error occurred while fetching demographic data from id repo');
+      }
+    );
   }
   
 }
