@@ -8,8 +8,7 @@
       <div class="section-header">
         <h3 *ngIf="!isLeftCollapsed">Navigation</h3>
         <button class="toggle-btn" (click)="toggleLeft()">
-          {{ isLeftCollapsed ? '>' : '<' }}
-        </button>
+          {{ isLeftCollapsed ? '>' : '<' }} </button>
       </div>
       <div class="navigation-content" *ngIf="!isLeftCollapsed">
         <div class="info-group">
@@ -30,13 +29,13 @@
         </div>
       </div>
     </div>
-    
+
 
     <!-- Middle Section -->
     <div class="middle-section">
       <h3>Applicant - Personal Information</h3>
       <div class="personal-information">
-        
+
         <div class="form-group">
           <label>Gender</label>
           <div class="field-container">
@@ -63,38 +62,28 @@
         </div>
       </div>
     </div>
-    
+
 
     <!-- Right Section -->
     <div class="right-section" [class.collapsed]="isRightCollapsed">
       <div class="section-header">
         <h3>References</h3>
         <button class="toggle-btn" (click)="toggleRight()">
-          {{ isRightCollapsed ? '<' : '>' }}
-        </button>
+          {{ isRightCollapsed ? '<' : '>' }} </button>
       </div>
       <div class="references-content">
         <div class="tabs">
-          <button 
-            class="tab-button" 
-            [class.active]="activeTab === 'history'" 
-            (click)="setActiveTab('history')">
+          <button class="tab-button" [class.active]="activeTab === 'history'" (click)="setActiveTab('history')">
             <i class="icon-history"></i> History
           </button>
-          <button 
-            class="tab-button" 
-            [class.active]="activeTab === 'records'" 
-            (click)="setActiveTab('records')">
+          <button class="tab-button" [class.active]="activeTab === 'records'" (click)="setActiveTab('records')">
             <i class="icon-records"></i> Records
           </button>
-          <button 
-            class="tab-button" 
-            [class.active]="activeTab === 'documents'" 
-            (click)="setActiveTab('documents')">
+          <button class="tab-button" [class.active]="activeTab === 'documents'" (click)="setActiveTab('documents')">
             <i class="icon-documents"></i> Documents
           </button>
         </div>
-      
+
         <div class="tab-content" *ngIf="activeTab === 'history'">
           <!-- History Content -->
           <p>History content goes here...</p>
@@ -117,10 +106,178 @@
   </div>
 
   <!-- Action Buttons -->
-<div class="action-buttons">
-  <button class="approve" (click)="openApprovalModal()">{{ constants.APPROVE }}</button>
-  <button class="escalate" (click)="openEscalateModal()">{{ constants.ESCALATE }}</button>
-  <button class="reject" (click)="openRejectModal()">{{ constants.REJECT }}</button>
-</div>
+  <div class="action-buttons">
+    <button class="approve" (click)="openApprovalModal()">{{ constants.APPROVE }}</button>
+    <button class="escalate" (click)="openEscalateModal()">{{ constants.ESCALATE }}</button>
+    <button class="reject" (click)="openRejectModal()">{{ constants.REJECT }}</button>
+    <!-- Schedule Interview Btn -->
+    <button [ngClass]="{
+        'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') ,
+        'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR')
+      }" (click)="openScheduleInterviewModal()">
+      {{ constants.SCHEDULE_INTERVIEW }}
+    </button>
+    <!-- Document Upload Btn -->
+    <button [ngClass]="{
+        'document-upload': role === 'MVS_DISTRICT_OFFICER',
+        'hidden': role !== 'MVS_DISTRICT_OFFICER'
+      }" (click)="openDocumentUploadwModal()">
+      {{ constants.UPLOAD_DCOUMENTS }}
+    </button>
+  </div>
 
-</div>
+  <!-- Approval Modal -->
+  <div id="approvalModal" class="modal" [class.show]="showApprovalModal">
+    <div class="modal-content">
+      <span class="close-button" (click)="closeApprovalModal()">&times;</span>
+      <h2>Approve Application?</h2>
+      <div class="modal-body">
+        <label>
+          <input type="checkbox" [(ngModel)]="isChecked" />
+          I have reviewed all the details in the application and found them acceptable.
+        </label>
+        <div class="comments-section">
+          <label for="comments">Comments</label>
+          <textarea id="comments" [(ngModel)]="approvalComment" placeholder="Enter your comments"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-button" (click)="closeApprovalModal()">Cancel</button>
+        <button class="approve-button" [disabled]="!isChecked" (click)="approveApplication()">Approve</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Escalate Modal -->
+  <div class="escalateModal" *ngIf="showEscalateModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Escalate Application?</h3>
+        <button class="close-button" (click)="closeEscalateModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Change Officer Level <span title="Select the officer level to escalate to.">ℹ️</span></label>
+          <select [(ngModel)]="selectedOfficerLevel" class="dropdown">
+            <option value="district-officer">District Officer (Default)</option>
+            <option value="regional-officer">Regional Officer</option>
+            <option value="national-officer">National Officer</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="escalate-comments">Comments <span title="Comments are required."> *</span></label>
+          <textarea id="escalate-comments" [(ngModel)]="escalationComment" placeholder="Enter your comments"
+            required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn cancel" (click)="closeEscalateModal()">Cancel</button>
+        <button class="btn escalate" [disabled]="!escalationComment.trim()" (click)="escalateApplication()">
+          Escalate
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reject Modal -->
+  <div class="rejectModal" [class.show]="showRejectModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Reject Application?</h3>
+        <button class="close-button" (click)="closeRejectModal()">×</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Reason Category <span title="Select the reason for rejection.">*</span></label>
+          <select [(ngModel)]="rejectionCategory" class="dropdown">
+            <option value="" disabled selected>-Select Reason Category-</option>
+            <option value="invalid-information">Invalid Information</option>
+            <option value="incomplete-documents">Incomplete Documents</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="reject-comments">Comments <span title="Comments are required."> *</span></label>
+          <textarea id="reject-comments" [(ngModel)]="rejectionComment" placeholder="Enter your comments"
+            required></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn cancel" (click)="closeRejectModal()">Cancel</button>
+        <button class="btn reject" [disabled]="!rejectionCategory || !rejectionComment.trim()"
+          (click)="rejectApplication()">
+          Reject
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Schedule Interview Modal -->
+  <div class="modal-backdrop" *ngIf="showScheduleInterviewModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Schedule a Meeting</h3>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label for="subject">Subject*</label>
+          <input id="subject" type="text" placeholder="Interview Subject*" [(ngModel)]="interviewDetails.subject"
+            required />
+        </div>
+
+
+        <div class="form-group">
+          <label for="content">Content*</label>
+          <textarea id="content" placeholder="Content/ List of Additional Documents*"
+            [(ngModel)]="interviewDetails.content" required></textarea>
+        </div>
+        <div class="form-group">
+          <label for="districtOffice">District Office*</label>
+          <select id="districtOffice" [(ngModel)]="interviewDetails.districtOffice" required>
+            <option value="" disabled selected>Select District Office*</option>
+            <option *ngFor="let office of districtOffices" [value]="office">
+              {{ office }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn back" (click)="closeScheduleInterviewModal()">Cancel</button>
+        <button class="btn send-invite" [disabled]="!isFormValid()" (click)="sendInvite()">Send Invite</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Document Upload Modal -->
+  <div class="modal-backdrop" *ngIf="showDocumentUploadModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Documents</h3>
+      </div>
+      <div class="modal-body">
+        <div *ngFor="let document of documents; let i = index" class="document-row">
+          <select class="dropdown" [(ngModel)]="document.category" required>
+            <option value="" disabled selected>Doc Category *</option>
+            <option *ngFor="let category of docCategories" [value]="category">
+              {{ category }}
+            </option>
+          </select>
+          <select class="dropdown" [(ngModel)]="document.title" required>
+            <option value="" disabled selected>Doc Title *</option>
+            <option *ngFor="let title of docTitles" [value]="title">
+              {{ title }}
+            </option>
+          </select>
+          <input type="file" (change)="onFileSelect($event, i)" required />
+          <span class="file-name">{{ document.fileName }}</span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn back" (click)="closeDocumentUploadModal()">Cancel</button>
+        <button class="btn add" (click)="addDocumentRow()">Upload Another Doc</button>
+        <button class="btn approve" (click)="confirmAndApprove()">Confirm & Approve</button>
+      </div>
+    </div>
+
+  </div>

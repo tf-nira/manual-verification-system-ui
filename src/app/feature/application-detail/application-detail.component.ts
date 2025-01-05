@@ -34,11 +34,13 @@ type DocumentPayload = {
 })
 
 export class ApplicationDetailComponent implements OnInit {
+  isChecked = false;
   role: string = '';
   selectedTab: string = 'demographic'; // Default to 'demographic'
   escalateOption: boolean = false;
   showApprovalModal: boolean = false;
   showEscalateModal: boolean = false;
+  selectedOfficerLevel = 'district-officer';
   showScheduleInterviewModal: boolean = false;
   showDocumentUploadModal: boolean = false;
   showRejectModal: boolean = false;
@@ -153,6 +155,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.showApprovalModal = true;
   }
   openEscalateModal() {
+    console.log('Escalate Modal Opened');
     this.showEscalateModal = true;
   }
 
@@ -186,10 +189,12 @@ export class ApplicationDetailComponent implements OnInit {
   }
   approveApplication() {
     // Approval logic
+    if (this.isChecked) {
     this.showApprovalModal = false;
     const comment = this.approvalComment.trim();
     this.changeApplicationStatus(API_CONST_APPROVE, comment);
-    this.closeEscalateModal();
+    this.closeApprovalModal();
+    }
   }
   escalateApplication() {
     // Escalate logic 
