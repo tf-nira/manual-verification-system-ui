@@ -4,31 +4,33 @@
 
   <div class="layout">
     <!-- Left Section -->
-    <div class="left-section" [class.collapsed]="isLeftCollapsed">
-      <div class="section-header">
-        <h3 *ngIf="!isLeftCollapsed">Navigation</h3>
-        <button class="toggle-btn" (click)="toggleLeft()">
-          {{ isLeftCollapsed ? '>' : '<' }} </button>
-      </div>
-      <div class="navigation-content" *ngIf="!isLeftCollapsed">
-        <div class="info-group">
-          <label>{{ constants.APPLICATION_ID }}</label>
-          <input type="text" placeholder="Enter ID" [(ngModel)]="applicationId" [disabled]="!isEditable" />
-        </div>
-        <div class="info-group">
-          <label>{{ constants.APPLICANT_NAME }}</label>
-          <input type="text" placeholder="Enter Name" [(ngModel)]="applicantName" [disabled]="!isEditable" />
-        </div>
-        <div class="info-group">
-          <label>{{ constants.SERVICE }}</label>
-          <input type="text" placeholder="Enter Service" [(ngModel)]="service" [disabled]="!isEditable" />
-        </div>
-        <div class="info-group">
-          <label>{{ constants.SERVICE_TYPE }}</label>
-          <input type="text" placeholder="Enter Service Type" [(ngModel)]="serviceType" [disabled]="!isEditable" />
-        </div>
-      </div>
+<div class="left-section" [class.collapsed]="isLeftCollapsed">
+  <div class="section-header">
+    <h3>Navigation</h3>
+    <button class="toggle-btn" (click)="toggleLeft()">
+      {{ isLeftCollapsed ? '>' : '<' }}
+    </button>
+  </div>
+  <div class="navigation-content">
+    <div class="info-item">
+      <span class="label">ID</span>
+      <span class="value">{{ applicationId || 'N/A' }}</span>
     </div>
+    <div class="info-item">
+      <span class="label">Status</span>
+      <span class="value">{{'Pending' }}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Service</span>
+      <span class="value">{{ service || 'By Birth' }}</span>
+    </div>
+    <div class="info-item">
+      <span class="label">Service Type</span>
+      <span class="value">{{ serviceType || 'Section ABC' }}</span>
+    </div>
+  </div>
+</div>
+
 
 
     <!-- Middle Section -->
@@ -96,10 +98,10 @@
               <div *ngFor="let person of personDetails">
                 <h4>{{ person.role | titlecase }} Details</h4>
                 <div *ngFor="let key of objectKeys(person.details)">
-                  <p>{{ key | titlecase }}: {{ person.details[key] }}</p>
+                  <p>{{ formatKey(key) }}: {{ person.details[key] }}</p>
                 </div>
                 <button (click)="showDemographicData(person.details[person.role + 'Nin'])">Open</button>
-              </div>
+                 </div>
 
             </ng-container>
             <ng-template #noData>
@@ -169,9 +171,10 @@
   <!-- Escalate Modal -->
   <div class="escalateModal" *ngIf="showEscalateModal">
     <div class="modal-content">
+      
+    <button class="close-button" (click)="closeEscalateModal()">×</button>
       <div class="modal-header">
         <h3>Escalate Application?</h3>
-        <button class="close-button" (click)="closeEscalateModal()">×</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
@@ -237,6 +240,7 @@
     <div class="modal">
       <div class="modal-header">
         <h3>Schedule a Meeting</h3>
+        <button class="close-button" (click)="closeScheduleInterviewModal()">×</button>
       </div>
       <div class="modal-body">
         <div class="form-group">
@@ -271,6 +275,8 @@
     <div class="modal">
       <div class="modal-header">
         <h3>Documents</h3>
+        <!-- Close Button -->
+        <button class="close-button" (click)="closeDocumentUploadModal()">×</button>
       </div>
       <div class="modal-body">
         <div *ngFor="let document of documents; let i = index" class="document-row">

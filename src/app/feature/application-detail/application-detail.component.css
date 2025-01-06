@@ -9,19 +9,74 @@
   display: flex;
   flex-grow: 1;
 }
-
 /* Left Section */
 .left-section {
   width: 250px;
-  background-color: #f5f5f5;
+  background-color: #f9f9f9;
   border: 1px solid #ddd;
-  overflow-y: auto; /* Ensures scrolling for large content */
-  transition: width 0.3s ease; /* Smooth animation for collapse/expand */
-  position: relative; /* Ensure toggle button stays visible */
+  padding: 15px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+  transition: width 0.3s ease-in-out;
 }
 
 .left-section.collapsed {
-  width: 50px; /* Reduced width when collapsed */
+  width: 50px;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.toggle-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.navigation-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eaeaea;
+}
+
+.label {
+  font-weight: bold;
+  color: #333;
+}
+
+.value {
+  color: #555;
+}
+
+.left-section.collapsed .navigation-content {
+  display: none;
+}
+
+/* Adjustments for toggle button and collapsed state */
+.left-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Keep heading and toggle aligned */
+}
+
+.left-section.collapsed .section-header {
+  justify-content: center; /* Center toggle button when collapsed */
+}
+
+.left-section.collapsed .section-header h3 {
+  display: none; /* Hide heading when collapsed */
 }
 
 /* Middle Section */
@@ -49,9 +104,15 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Space between label and input */
 }
-
+/* Dropdown */
+.dropdown {
+  height: 40px; /* Increased height */
+  padding: 5px 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
 .form-group label {
   font-size: 14px;
   font-weight: bold;
@@ -101,18 +162,6 @@
   padding: 5px 10px; /* Adjust padding for a compact button */
 }
 
-.left-section.collapsed .section-header {
-  justify-content: center; /* Center the toggle button */
-}
-
-.left-section .navigation-content {
-  display: none; /* Hide navigation content when collapsed */
-}
-
-.left-section:not(.collapsed) .navigation-content {
-  display: block; /* Show navigation content when not collapsed */
-  padding: 15px; /* Add padding for content */
-}
 
 .info-group {
   margin-bottom: 15px;
@@ -176,7 +225,7 @@
 } */
 
 .back-button:hover {
-  background-color: #0056b3;
+  background-color: #b1b1b1;
 }
 
 /* Action Buttons */
@@ -216,7 +265,7 @@
 
 /* Approve Button */
 .action-buttons .approve {
-  background-color: #8d6c5f; /* Brown */
+  background-color: #a98b80; /* Brown */
   color: #fff;
   border: 1px solid #5d4037; /* Darker brown */
   border-radius: 5px;
@@ -271,22 +320,6 @@
   background-repeat: no-repeat;
 }
 
-
-
-/* Adjustments for toggle button and collapsed state */
-.left-section .section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between; /* Keep heading and toggle aligned */
-}
-
-.left-section.collapsed .section-header {
-  justify-content: center; /* Center toggle button when collapsed */
-}
-
-.left-section.collapsed .section-header h3 {
-  display: none; /* Hide heading when collapsed */
-}
 
 /* Right Section */
 .right-section {
@@ -473,7 +506,7 @@ Modal Styling
 }
 
 textarea {
-  width: 100%;
+  width: 90%;
   height: 80px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -638,7 +671,7 @@ textarea {
 }
 
 .rejectModal .modal-body .dropdown {
-  width: 100%;
+  width: 95%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -648,7 +681,7 @@ textarea {
 }
 
 .rejectModal .modal-body textarea {
-  width: 100%;
+  width: 90%;
   height: 80px;
   padding: 10px;
   border: 1px solid #ccc;
@@ -725,7 +758,7 @@ textarea {
 } */
 .schedule-interview {
   display: inline-block; /* Ensures the button is displayed inline with other buttons */
-  background-color: #007bff; /* Set a default background color (optional) */
+  background-color: #5ca0e9; /* Set a default background color (optional) */
   color: #fff; /* Set text color to white for better visibility */
   padding: 10px 15px; /* Adjust padding for better button size */
   border: none; /* Remove border if unnecessary */
@@ -736,7 +769,7 @@ textarea {
 }
 .document-upload {
   display: inline-block; /* Ensures the button is displayed inline */
-  background-color: #28a745; /* Green background color */
+  background-color: #68b179; /* Green background color */
   color: #fff; /* White text */
   padding: 10px 15px; /* Adjust padding for size */
   border: none; /* Remove border */
@@ -768,23 +801,43 @@ textarea {
   background-color: #fff; /* White background */
   border-radius: 10px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  width: 400px; /* Fixed width */
+  width: 400px; /* Adjusted width */
+  height: auto; /* Automatically adjusts to content */
+  overflow-y: auto; /* Add scroll for overflow content */
+  padding: 20px; /* Adjusted padding for better spacing */
   max-width: 90%; /* Responsive design for smaller screens */
-  padding: 20px;
   display: flex;
   flex-direction: column; /* Vertical layout for content */
   z-index: 1100; /* Higher than the backdrop */
   animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in effect */
+  position: relative; /* To position the close button */
 }
 
 /* Modal header */
 .interviewModal .modal-header {
-  font-size: 20px;
+  font-size: 18px; /* Slightly smaller font size */
   font-weight: bold;
   text-align: center; /* Center-align the title */
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  padding-bottom: 10px; /* Add padding below the header */
   border-bottom: 1px solid #ddd; /* Optional divider */
-  padding-bottom: 10px;
+}
+
+/* Close button */
+.interviewModal .modal-header .close-button {
+  position: absolute; /* Positioned relative to the modal */
+  top: 10px; /* Adjust top positioning */
+  right: 15px; /* Adjust right positioning */
+  font-size: 20px; /* Slightly larger close button */
+  background: none; /* Remove background */
+  border: none; /* Remove border */
+  cursor: pointer; /* Pointer cursor on hover */
+  color: #333; /* Default color */
+  transition: color 0.2s ease; /* Hover effect */
+}
+
+.interviewModal .modal-header .close-button:hover {
+  color: #ff0000; /* Red color on hover */
 }
 
 /* Modal body */
@@ -800,7 +853,7 @@ textarea {
 }
 
 .interviewModal .modal-body label {
-  font-size: 14px;
+  font-size: 14px; /* Slightly reduced font size */
   font-weight: bold;
   margin-bottom: 5px;
 }
@@ -809,15 +862,15 @@ textarea {
 .interviewModal .modal-body textarea,
 .interviewModal .modal-body select {
   width: 100%;
-  padding: 10px;
+  padding: 10px; /* Standard padding */
   border: 1px solid #ccc;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 14px; /* Slightly reduced font size */
 }
 
 .interviewModal .modal-body textarea {
   resize: none; /* Disable resizing */
-  height: 100px; /* Default height */
+  height: 80px; /* Adjusted height */
 }
 
 /* Modal footer */
@@ -828,10 +881,10 @@ textarea {
 }
 
 .interviewModal .modal-footer .btn {
-  padding: 10px 15px;
+  padding: 10px 15px; /* Standard padding */
   border: none;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 14px; /* Standard font size */
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
@@ -846,7 +899,7 @@ textarea {
 }
 
 .interviewModal .modal-footer .btn.send-invite {
-  background: #007bff; /* Blue for Submit */
+  background: #5ca0e9; /* Blue for Submit */
   color: #fff;
 }
 
@@ -870,39 +923,54 @@ textarea {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1050; /* High z-index to prevent overlapping issues */
-  overflow: hidden; /* Prevent scroll in the background */
+  width: 100vw; /* Full viewport width */
+  height: 100vh; /* Full viewport height */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  display: flex; /* Flexbox for centering */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  z-index: 1000; /* Ensure it appears above all other elements */
 }
 
 /* Modal Container */
 .uploadDocumentModal .modal {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
-  width: 600px;
-  max-width: 90%; /* Responsive width */
+  background-color: #fff; /* White background */
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  width: 400px; /* Adjusted width */
+  height: auto; /* Automatically adjusts to content */
+  overflow-y: auto; /* Add scroll for overflow content */
+  padding: 20px; /* Adjusted padding for better spacing */
+  max-width: 90%; /* Responsive design for smaller screens */
   display: flex;
-  flex-direction: column;
-  animation: fadeIn 0.3s ease-in-out;
-  overflow: hidden;
-  z-index: 1060; /* Layering above the backdrop */
+  flex-direction: column; /* Vertical layout for content */
+  z-index: 1100; /* Higher than the backdrop */
+  animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in effect */
+  position: relative; /* To position the close button */
 }
 
 /* Modal Header */
 .uploadDocumentModal .modal-header {
-  background-color: #007bff; /* Blue background */
-  color: #fff;
-  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
   font-size: 20px;
   font-weight: bold;
-  text-align: center;
   border-bottom: 1px solid #ddd;
+  color: #171717;
+}
+
+.uploadDocumentModal .modal-header .close-button {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.uploadDocumentModal .modal-header .close-button:hover {
+  color: #ff0000; /* Red hover effect */
 }
 
 /* Modal Body */
@@ -910,7 +978,7 @@ textarea {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Spacing between rows */
+  gap: 15px; /* Space between elements */
 }
 
 /* Document Row Styling */
@@ -918,42 +986,47 @@ textarea {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px; /* Spacing between inputs */
+  gap: 15px;
+}
+/* Close Button Styling */
+.uploadDocumentModal .modal-header .close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  line-height: 1;
 }
 
-/* Dropdown Styling */
-.uploadDocumentModal .dropdown {
-  flex: 1;
+.uploadDocumentModal .modal-header .close-button:hover {
+  color: #ff0000; /* Red color on hover */
+}
+
+
+/* Inputs and Dropdowns */
+.uploadDocumentModal .dropdown,
+.uploadDocumentModal input[type="file"] {
   padding: 10px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-/* File Input Styling */
-.uploadDocumentModal input[type="file"] {
-  flex: 2;
-  font-size: 14px;
-}
-
-/* Filename Display */
-.uploadDocumentModal .file-name {
   flex: 1;
-  font-size: 14px;
-  color: #555;
-  word-break: break-word;
 }
 
-/* Modal Footer */
+/* Footer Styling */
 .uploadDocumentModal .modal-footer {
-  padding: 20px;
-  background-color: #f9f9f9;
   display: flex;
-  justify-content: space-between;
-  gap: 15px; /* Spacing between buttons */
+  justify-content: flex-end;
+  padding: 15px;
+  gap: 10px;
+  background-color: #f9f9f9;
 }
 
-/* Button Styling */
+/* Buttons */
 .uploadDocumentModal .btn {
   padding: 10px 15px;
   font-size: 14px;
@@ -964,9 +1037,8 @@ textarea {
   transition: background-color 0.3s ease;
 }
 
-/* Cancel Button */
 .uploadDocumentModal .btn.back {
-  background-color: #dc3545; /* Red */
+  background-color: #dc3545;
   color: white;
 }
 
@@ -974,9 +1046,8 @@ textarea {
   background-color: #b02a37;
 }
 
-/* Add Button */
 .uploadDocumentModal .btn.add {
-  background-color: #ffc107; /* Yellow */
+  background-color: #ffc107;
   color: white;
 }
 
@@ -984,9 +1055,8 @@ textarea {
   background-color: #e0a800;
 }
 
-/* Approve Button */
 .uploadDocumentModal .btn.approve {
-  background-color: #28a745; /* Green */
+  background-color: #28a745;
   color: white;
 }
 
@@ -1006,22 +1076,7 @@ textarea {
   }
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .uploadDocumentModal .modal {
-    width: 90%;
-  }
 
-  .uploadDocumentModal .document-row {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .uploadDocumentModal .dropdown,
-  .uploadDocumentModal input[type="file"] {
-    width: 100%; /* Full width for better responsiveness */
-  }
-}
 .scrollable-container {
   max-height: 300px; /* Adjust the height based on your UI needs */
   overflow-y: auto; /* Enable vertical scrolling */

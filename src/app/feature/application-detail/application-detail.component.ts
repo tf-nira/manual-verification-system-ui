@@ -34,6 +34,7 @@ type DocumentPayload = {
 })
 
 export class ApplicationDetailComponent implements OnInit {
+  demographicData: any;
   isChecked = false;
   role: string = '';
   selectedTab: string = 'demographic'; // Default to 'demographic'
@@ -389,8 +390,14 @@ export class ApplicationDetailComponent implements OnInit {
       (response:any) => {
         console.log("response:: malay :: "+ response)
         if (response?.response?.response?.status === 'ACTIVATED') {
-          alert('Demographic Data fetched success from id repo');
-          
+          this.demographicData = response.response.response.identity; // Pass identity data to child
+         // Create a new window and navigate to 'demographic-details' route
+        const newWindow = window.open(`/demographic-details`, '_blank', 'width=800,height=600');
+
+        // Use localStorage to pass data to the new window
+        if (newWindow) {
+          localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
+        }
         } else {
           alert('Failed to fetch demographic data from id repo');
         }
@@ -400,6 +407,14 @@ export class ApplicationDetailComponent implements OnInit {
         alert('An error occurred while fetching demographic data from id repo');
       }
     );
+  }
+  /**
+   * Format a key by inserting spaces before uppercase letters and capitalizing the result.
+   */
+  formatKey(key: string): string {
+    return key
+      .replace(/([A-Z])/g, ' $1') // Add space before uppercase letters
+      .replace(/^./, str => str.toUpperCase()); // Capitalize the first letter
   }
   
 }
