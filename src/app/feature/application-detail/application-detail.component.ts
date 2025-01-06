@@ -34,13 +34,13 @@ type DocumentPayload = {
 })
 
 export class ApplicationDetailComponent implements OnInit {
+  demographicData: any;
   isChecked = false;
   role: string = '';
   selectedTab: string = 'demographic'; // Default to 'demographic'
   escalateOption: boolean = false;
   showApprovalModal: boolean = false;
   showEscalateModal: boolean = false;
-  selectedOfficerLevel = 'district-officer';
   showScheduleInterviewModal: boolean = false;
   showDocumentUploadModal: boolean = false;
   showRejectModal: boolean = false;
@@ -57,7 +57,9 @@ export class ApplicationDetailComponent implements OnInit {
   approvalComment: string = '';
   applicationId: string = '';
   commentMVSOfficer: string = '';
-  commentMVSSupervisor: string = ''
+  commentMVSSupervisor: string = '';
+  dropdownOptions: { value: string; label: string; default: boolean }[] = [];
+  selectedOfficerLevel: string = '';
   escalationComment: string = '';
   rejectionCategory: string = '';
   rejectionComment: string = '';
@@ -127,6 +129,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.commentMVSSupervisor = this.rowData[ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] || '';
 
     this.checkPersonDetails();
+    this.setDropdownOptions();
   }
   // Added: Methods to toggle left and right sections
   toggleLeft() {
@@ -161,10 +164,10 @@ export class ApplicationDetailComponent implements OnInit {
       .filter((person) => person !== null); // Remove null entries
   }
   
-  changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = '') {
+  changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = '', selectedOfficerLevel?: string) {
     const applicationId = this.rowData.applicationId;
     this.dataService
-      .changeStatus(applicationId, status, comment, rejectionCategory)
+      .changeStatus(applicationId, status, comment, rejectionCategory, selectedOfficerLevel)
       .subscribe(
         (response) => {
           alert(`Application ${status.toLowerCase()}d successfully.`);
@@ -176,6 +179,34 @@ export class ApplicationDetailComponent implements OnInit {
           console.error('Error updating status:', error);
           alert('Failed to update status. Please try again.');
         });
+  }
+  setDropdownOptions() {
+    switch (this.role) {
+      case 'MVS_OFFICER':
+        this.dropdownOptions = [
+          { value: 'MVS_SUPERVISOR', label: 'Supervisor', default: true },
+          { value: 'MVS_DISTRICT_OFFICER', label: 'District', default: false },
+          { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false }
+        ];
+        this.selectedOfficerLevel = 'MVS_SUPERVISOR';
+        break;
+      case 'MVS_SUPERVISOR':
+        this.dropdownOptions = [
+          { value: 'MVS_DISTRICT_OFFICER', label: 'District', default: true },
+          { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false }
+        ];
+        this.selectedOfficerLevel = 'MVS_DISTRICT_OFFICER';
+        break;
+      case 'MVS_LEGAL_OFFICER':
+        this.dropdownOptions = [
+          { value: 'MVS_EXECUTIVE_DIRECTOR', label: 'Executive Director', default: true }
+        ];
+        this.selectedOfficerLevel = 'MVS_EXECUTIVE_DIRECTOR';
+        break;
+      default:
+        this.dropdownOptions = [];
+        this.selectedOfficerLevel = '';
+    }
   }
 
   objectKeys(obj: any): string[] {
@@ -236,8 +267,8 @@ export class ApplicationDetailComponent implements OnInit {
     // Escalate logic 
     this.showEscalateModal = false;
     const comment = this.escalationComment.trim();
-    console.log(comment)
-    this.changeApplicationStatus(API_CONST_ESCALATE, comment);
+    console.log(this.selectedOfficerLevel)
+    this.changeApplicationStatus(API_CONST_ESCALATE, comment, '', this.selectedOfficerLevel);
     this.closeEscalateModal();
   }
 
@@ -357,9 +388,16 @@ export class ApplicationDetailComponent implements OnInit {
     console.log("showDemographicData"+registrationId);
     this.dataService.fetchDemographicData("10040100290004320241210093511").subscribe(
       (response:any) => {
-        if (response?.response?.status === 'ACTIVATED') {
-          alert('Demographic Data fetched success from id repo');
-          
+        console.log("response:: malay :: "+ response)
+        if (response?.response?.response?.status === 'ACTIVATED') {
+          this.demographicData = response.response.response.identity; // Pass identity data to child
+         // Create a new window and navigate to 'demographic-details' route
+        const newWindow = window.open(`/demographic-details`, '_blank', 'width=800,height=600');
+
+        // Use localStorage to pass data to the new window
+        if (newWindow) {
+          localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
+        }
         } else {
           alert('Failed to fetch demographic data from id repo');
         }
@@ -369,6 +407,14 @@ export class ApplicationDetailComponent implements OnInit {
         alert('An error occurred while fetching demographic data from id repo');
       }
     );
+  }
+  /**
+   * Format a key by inserting spaces before uppercase letters and capitalizing the result.
+   */
+  formatKey(key: string): string {
+    return key
+      .replace(/([A-Z])/g, ' $1') // Add space before uppercase letters
+      .replace(/^./, str => str.toUpperCase()); // Capitalize the first letter
   }
   
 }

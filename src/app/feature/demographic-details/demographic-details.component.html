@@ -1,8 +1,36 @@
-<div class="detail-group">
-  <h3>Personal Details</h3>
-  <div class="detail-content"> <!-- Demographic content goes here --> </div>
-</div>
-<div class="detail-group">
-  <h3>Father Details</h3>
-  <div class="detail-content"> <!-- More demographic content goes here --> </div>
+<div class="container">
+  <h1>Demographic Details</h1>
+
+  <!-- Dynamically iterate over all fields in demographicData -->
+  <div *ngIf="demographicData">
+    <div *ngFor="let key of objectKeys(demographicData)">
+      <div class="field">
+        <div class="label">{{ formatKey(key) }}</div>
+        <div class="value">
+          <!-- Handle different data types dynamically -->
+          <span *ngIf="isArray(demographicData[key])">
+            <!-- Handle Arrays -->
+            <span *ngFor="let item of demographicData[key]">
+              {{ item?.value || 'N/A' }} <!-- Display the value if present -->
+              <span *ngIf="!item?.value && isObject(item)">
+                <!-- Handle case where array contains objects without a value -->
+                <ng-container *ngFor="let subKey of objectKeys(item)">
+                  <strong>{{ formatKey(subKey) }}:</strong> {{ item[subKey] || 'N/A' }}<br />
+                </ng-container>
+              </span>
+            </span>
+          </span>
+          
+          <span *ngIf="!isArray(demographicData[key]) && !isObject(demographicData[key])">
+            <!-- Handle Primitive Values -->
+            {{ demographicData[key] || 'N/A' }}
+          </span>
+          <span *ngIf="isObject(demographicData[key])">
+            <!-- Handle Nested Objects -->
+            <pre>{{ demographicData[key] | json }}</pre>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
