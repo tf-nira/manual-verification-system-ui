@@ -88,27 +88,27 @@
           <!-- History Content -->
           <p>History content goes here...</p>
         </div>
-          <!-- Records Content -->
-          <div class="tab-content" *ngIf="activeTab === 'records'">
-            <div class="scrollable-container">
-              <!-- Check if there are person details -->
-              <ng-container *ngIf="personDetails.length > 0; else noData">
-                <div *ngFor="let person of personDetails">
-                  <h4>{{ person.role | titlecase }} Details</h4>
-                  <div *ngFor="let key of objectKeys(person.details)">
-                    <p>{{ key | titlecase }}: {{ person.details[key] }}</p>
-                  </div>
-                  <button (click)="showDemographicData(person.details[person.role + 'Nin'])">Open</button>
+        <!-- Records Content -->
+        <div class="tab-content" *ngIf="activeTab === 'records'">
+          <div class="scrollable-container">
+            <!-- Check if there are person details -->
+            <ng-container *ngIf="personDetails.length > 0; else noData">
+              <div *ngFor="let person of personDetails">
+                <h4>{{ person.role | titlecase }} Details</h4>
+                <div *ngFor="let key of objectKeys(person.details)">
+                  <p>{{ key | titlecase }}: {{ person.details[key] }}</p>
                 </div>
+                <button (click)="showDemographicData(person.details[person.role + 'Nin'])">Open</button>
+              </div>
 
-              </ng-container>
-              <ng-template #noData>
-                <p>No NIN data found for Father, Mother, or Guardian.</p>
-              </ng-template>
-            </div>
+            </ng-container>
+            <ng-template #noData>
+              <p>No NIN data found for Father, Mother, or Guardian.</p>
+            </ng-template>
           </div>
+        </div>
 
-        
+
         <div class="tab-content" *ngIf="activeTab === 'documents'">
           <!-- Documents Content -->
           <p>Documents content goes here...</p>
@@ -125,7 +125,8 @@
   <!-- Action Buttons -->
   <div class="action-buttons">
     <button class="approve" (click)="openApprovalModal()">{{ constants.APPROVE }}</button>
-    <button class="escalate" (click)="openEscalateModal()">{{ constants.ESCALATE }}</button>
+    <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR'"
+      (click)="openEscalateModal()">{{ constants.ESCALATE }}</button>
     <button class="reject" (click)="openRejectModal()">{{ constants.REJECT }}</button>
     <!-- Schedule Interview Btn -->
     <button [ngClass]="{
@@ -176,9 +177,9 @@
         <div class="form-group">
           <label>Change Officer Level <span title="Select the officer level to escalate to.">ℹ️</span></label>
           <select [(ngModel)]="selectedOfficerLevel" class="dropdown">
-            <option value="district-officer">District Officer (Default)</option>
-            <option value="regional-officer">Regional Officer</option>
-            <option value="national-officer">National Officer</option>
+            <option *ngFor="let option of dropdownOptions" [value]="option.value" [selected]="option.default">
+              {{ option.label }}
+            </option>
           </select>
         </div>
         <div class="form-group">
@@ -195,6 +196,7 @@
       </div>
     </div>
   </div>
+
 
   <!-- Reject Modal -->
   <div class="rejectModal" [class.show]="showRejectModal">
