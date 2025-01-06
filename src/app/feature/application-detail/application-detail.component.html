@@ -88,10 +88,27 @@
           <!-- History Content -->
           <p>History content goes here...</p>
         </div>
-        <div class="tab-content" *ngIf="activeTab === 'records'">
           <!-- Records Content -->
-          <p>Records content goes here...</p>
-        </div>
+          <div class="tab-content" *ngIf="activeTab === 'records'">
+            <div class="scrollable-container">
+              <!-- Check if there are person details -->
+              <ng-container *ngIf="personDetails.length > 0; else noData">
+                <div *ngFor="let person of personDetails">
+                  <h4>{{ person.role | titlecase }} Details</h4>
+                  <div *ngFor="let key of objectKeys(person.details)">
+                    <p>{{ key | titlecase }}: {{ person.details[key] }}</p>
+                  </div>
+                  <button (click)="showDemographicData(person.details[person.role + 'Nin'])">Open</button>
+                </div>
+
+              </ng-container>
+              <ng-template #noData>
+                <p>No NIN data found for Father, Mother, or Guardian.</p>
+              </ng-template>
+            </div>
+          </div>
+
+        
         <div class="tab-content" *ngIf="activeTab === 'documents'">
           <!-- Documents Content -->
           <p>Documents content goes here...</p>
@@ -214,7 +231,7 @@
 
 
   <!-- Schedule Interview Modal -->
-  <div class="modal-backdrop" *ngIf="showScheduleInterviewModal">
+  <div class="interviewModal" *ngIf="showScheduleInterviewModal">
     <div class="modal">
       <div class="modal-header">
         <h3>Schedule a Meeting</h3>
@@ -225,8 +242,6 @@
           <input id="subject" type="text" placeholder="Interview Subject*" [(ngModel)]="interviewDetails.subject"
             required />
         </div>
-
-
         <div class="form-group">
           <label for="content">Content*</label>
           <textarea id="content" placeholder="Content/ List of Additional Documents*"
@@ -250,7 +265,7 @@
   </div>
 
   <!-- Document Upload Modal -->
-  <div class="modal-backdrop" *ngIf="showDocumentUploadModal">
+  <div class="uploadDocumentModal" *ngIf="showDocumentUploadModal">
     <div class="modal">
       <div class="modal-header">
         <h3>Documents</h3>
