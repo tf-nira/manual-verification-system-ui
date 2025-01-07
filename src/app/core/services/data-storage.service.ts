@@ -18,16 +18,22 @@ export class DataStorageService {
    */
 
   serverDtFormat = 'YYYY/MM/DD';
-  private BASE_URL: string =
-    'http://localhost:9002/v1/manual-verification-service';
-  private ID_REPO_URL : string = 'https://api-internal.niradev.idencode.link/idrepository/v1/identity/idvid/';
+  private BASE_URL: string = '';
+    private MVS_URL : string ='';
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService
-  ) {}
+
+  ) {
+    configService.loadConfig();
+    const config =configService.getConfig();
+    this.BASE_URL = config['BASE_URL'];
+    this.MVS_URL = config['MVS_URL']
+    
+  }
 
   userLogin(userName: string, password: string) {
-    const url = this.BASE_URL + appConstants.APPEND_URL.auth;
+    const url = this.BASE_URL + this.MVS_URL + appConstants.APPEND_URL.auth;
 
     const req = {
       userName: userName,
@@ -44,7 +50,7 @@ export class DataStorageService {
     pagination: any = { pageStart: 0, pageFetch: 3 }
   ) {
     const url =
-      this.BASE_URL +
+      this.BASE_URL + this.MVS_URL +
       appConstants.APPEND_URL.applications +
       appConstants.APPEND_URL.search;
 
@@ -83,7 +89,7 @@ export class DataStorageService {
 
   getApplicationDetails(applicationId: string) {
     const url =
-      this.BASE_URL + appConstants.APPEND_URL.applications + applicationId;
+      this.BASE_URL + this.MVS_URL + appConstants.APPEND_URL.applications + applicationId;
 
     return this.httpClient.get(url);
   }
@@ -96,7 +102,7 @@ export class DataStorageService {
     selectedOfficerLevel?: string
   ) {
     const url =
-      this.BASE_URL +
+      this.BASE_URL + this.MVS_URL +
       appConstants.APPEND_URL.applications +
       applicationId +
       appConstants.APPEND_URL.status;
@@ -125,7 +131,7 @@ export class DataStorageService {
     }
   ) {
     const url =
-      this.BASE_URL +
+      this.BASE_URL + this.MVS_URL +
       appConstants.APPEND_URL.applications +
       applicationId +
       appConstants.APPEND_URL.schedule_interview;
@@ -142,7 +148,7 @@ export class DataStorageService {
   // Method to upload documents
   uploadDocuments(applicationId: string, docPayload: any): Observable<any> {
     const url =
-      this.BASE_URL +
+      this.BASE_URL + this.MVS_URL +
       appConstants.APPEND_URL.applications +
       applicationId +
       appConstants.APPEND_URL.upload_document;
@@ -158,7 +164,7 @@ export class DataStorageService {
   //method to retrieve demographic data from idrepo
   fetchDemographicData(registrationId: string){
     const url =
-      this.BASE_URL +
+      this.BASE_URL + this.MVS_URL +
       appConstants.APPEND_URL.applications +
       'demographics/'+
       registrationId;

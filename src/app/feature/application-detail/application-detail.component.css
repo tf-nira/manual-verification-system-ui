@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
+  font-family: 'Arial', sans-serif; /* Change the font family */
 }
 
 .layout {
@@ -423,9 +424,10 @@
 
 /* Active Tab */
 .tab-button.active {
-  color: #007bff;
-  border-bottom: 3px solid #007bff;
+  color: #000000;
+  border-bottom: 3px solid #b18017f7;
   font-weight: bold;
+  background-color: #cac9c9;
 }
 
 /* Tab Content */
@@ -1084,3 +1086,43 @@ textarea {
   border: 1px solid #ccc; /* Optional: Add a border to distinguish the section */
   background-color: #f9f9f9; /* Optional: Add a background color */
 }
+.escalation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #4396f0;
+  color: white;
+  padding: 6px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.escalation-content {
+  padding: 10px;
+  background-color: #eef3f7;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 5px;
+}
+.details-container h3 {
+  font-size: 14px; /* Adjust the font size */
+  font-weight: bold; /* Make the text bold */
+  font-family: 'Arial', sans-serif; /* Change the font family */
+  color: #151515; /* Use a dark color for the text */
+  margin-bottom: 10px; /* Add space below the heading */
+  display: flex; /* Use flexbox for alignment */
+  justify-content: space-between; /* Space out the text horizontally */
+  align-items: center; /* Center-align vertically */
+  border-bottom: 1px solid #ddd; /* Add a subtle border below */
+  padding-bottom: 5px; /* Add padding below the text */
+}
+
+
+/* .expanded::after {
+  content: '\25BC';
+}
+
+.collapsed::after {
+  content: '\25B6';
+} */
