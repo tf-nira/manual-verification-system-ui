@@ -46,7 +46,6 @@ export class ConfigService {
   }
 
   getConfig(): { [key: string]: any } {
-    // console.log(this.config);
     return this.config;
   }
   

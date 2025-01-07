@@ -246,7 +246,7 @@ export class ApplicationListComponent implements OnInit {
       (response: any) => {
         // Navigate to the details page with fetched data
         this.router.navigate(['/application-detail'], {
-          state: { role: this.role, data: response.response },
+          state: { role: this.role, data: response.response ,rowData: rowData},
         });
       },
       (error) => {

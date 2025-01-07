@@ -51,6 +51,7 @@ export class ApplicationDetailComponent implements OnInit {
     content: '',
     districtOffice: ''
   };
+  expandedSections: { [key: string]: boolean } = {};
   activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
   serviceType: string = ''; 
@@ -67,6 +68,7 @@ export class ApplicationDetailComponent implements OnInit {
   isLeftCollapsed: boolean = false;
   isRightCollapsed: boolean = false;
   isEditable: boolean = false;
+  selectedRow: any = {};
   documents: { category: string; title: string; fileName: string; file: File | null }[] = [
     { category: '', title: '', fileName: '', file: null }
   ];
@@ -104,6 +106,8 @@ export class ApplicationDetailComponent implements OnInit {
 
     this.role = state.role || '';
     this.rowData = state.data || {};
+    console.log(this.rowData.applicationId);
+    this.selectedRow = state.rowData || {};
     /**below two row data sets need to be removed data would come from polcy, this is for example */
     this.rowData = {
       ...this.rowData,
@@ -141,6 +145,13 @@ export class ApplicationDetailComponent implements OnInit {
   }
   setActiveTab(tabName: string): void {
     this.activeTab = tabName;
+  }
+  isEscalationExpanded(section: string): boolean {
+    return this.expandedSections[section] || false;
+  }
+  
+  toggleEscalation(section: string): void {
+    this.expandedSections[section] = !this.expandedSections[section];
   }
   checkPersonDetails() {
     const roles = ['father', 'mother', 'guardian']; // Define roles to check
