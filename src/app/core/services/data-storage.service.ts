@@ -27,8 +27,8 @@ export class DataStorageService {
   ) {
     configService.loadConfig();
     const config =configService.getConfig();
-    this.BASE_URL = config['BASE_URL'];
-    this.MVS_URL = config['MVS_URL']
+    // this.BASE_URL = config['BASE_URL'];
+    // this.MVS_URL = config['MVS_URL']
     
   }
 
