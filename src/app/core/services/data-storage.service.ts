@@ -18,8 +18,8 @@ export class DataStorageService {
    */
 
   serverDtFormat = 'YYYY/MM/DD';
-  private BASE_URL: string = '';
-    private MVS_URL : string ='';
+  private BASE_URL: string = 'https://api-internal.niradev.idencode.link';
+    private MVS_URL : string ='/v1/manual-verification-service';
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService
