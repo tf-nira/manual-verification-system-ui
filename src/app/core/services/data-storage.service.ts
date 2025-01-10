@@ -60,7 +60,7 @@ export class DataStorageService {
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/`,
+      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
     });
 
     const filterArray = filters.map((filter: any) => ({
