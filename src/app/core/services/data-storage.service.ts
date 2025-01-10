@@ -18,8 +18,8 @@ export class DataStorageService {
    */
 
   serverDtFormat = 'YYYY/MM/DD';
-  private BASE_URL: string = '';
-    private MVS_URL : string ='';
+  private BASE_URL: string = 'https://api-internal.niradev.idencode.link';
+    private MVS_URL : string ='/v1/manual-verification-service';
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService
@@ -27,8 +27,8 @@ export class DataStorageService {
   ) {
     configService.loadConfig();
     const config =configService.getConfig();
-    this.BASE_URL = config['BASE_URL'];
-    this.MVS_URL = config['MVS_URL']
+    // this.BASE_URL = config['BASE_URL'];
+    // this.MVS_URL = config['MVS_URL']
     
   }
 
@@ -40,7 +40,8 @@ export class DataStorageService {
       password: password,
     };
     const obj = new RequestModel(req);
-
+    console.log(url);
+    console.log(obj);
     return this.httpClient.post(url, obj);
   }
 
@@ -55,10 +56,11 @@ export class DataStorageService {
       appConstants.APPEND_URL.search;
 
     const token = localStorage.getItem('authToken');
-    document.cookie = `Authorization=${token}; path=/`;
+    document.cookie = `Authorization=${token}; path=/; SameSite=None; Secure`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
     });
 
     const filterArray = filters.map((filter: any) => ({
