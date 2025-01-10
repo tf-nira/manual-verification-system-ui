@@ -56,7 +56,7 @@ export class DataStorageService {
       appConstants.APPEND_URL.search;
 
     const token = localStorage.getItem('authToken');
-    document.cookie = `Authorization=${token}; path=/`;
+    // document.cookie = `Authorization=${token}; path=/`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
