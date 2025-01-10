@@ -90,10 +90,17 @@ export class DataStorageService {
   }
 
   getApplicationDetails(applicationId: string) {
-    const url =
-      this.BASE_URL + this.MVS_URL + appConstants.APPEND_URL.applications + applicationId;
+    const url = this.BASE_URL + this.MVS_URL + appConstants.APPEND_URL.applications + applicationId;
 
-    return this.httpClient.get(url);
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
+    });
+
+    return this.httpClient.get(url, {
+      headers,
+      withCredentials: true,
+    });
   }
 
   changeStatus(
@@ -108,6 +115,11 @@ export class DataStorageService {
       appConstants.APPEND_URL.applications +
       applicationId +
       appConstants.APPEND_URL.status;
+    
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
+    });
 
     const request: any = {
       status: status,
@@ -121,7 +133,10 @@ export class DataStorageService {
       request.rejectionCategory = rejectionCategory;
     }
     const obj = new RequestModel(request);
-    return this.httpClient.put(url, obj);
+    return this.httpClient.put(url, obj, {
+      headers,
+      withCredentials: true,
+    });
   }
 
   scheduleInterview(
@@ -138,13 +153,21 @@ export class DataStorageService {
       applicationId +
       appConstants.APPEND_URL.schedule_interview;
 
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
+    });
+
     const request = {
       subject: interviewDetails.subject,
       content: interviewDetails.content,
     };
     const obj = new RequestModel(request);
 
-    return this.httpClient.post(url, obj);
+    return this.httpClient.post(url, obj, {
+      headers,
+      withCredentials: true,
+    });
   }
 
   // Method to upload documents
@@ -155,12 +178,20 @@ export class DataStorageService {
       applicationId +
       appConstants.APPEND_URL.upload_document;
 
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
+    });
+
     const request = {
       documents: docPayload,
     };
     const obj = new RequestModel(request);
 
-    return this.httpClient.post(url, obj);
+    return this.httpClient.post(url, obj, {
+      headers,
+      withCredentials: true,
+    });
   }
 
   //method to retrieve demographic data from idrepo
@@ -170,6 +201,15 @@ export class DataStorageService {
       appConstants.APPEND_URL.applications +
       'demographics/'+
       registrationId;
-      return this.httpClient.get(url);
+
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
+    });
+
+    return this.httpClient.get(url, {
+      headers,
+      withCredentials: true,
+    });
   }
 }
