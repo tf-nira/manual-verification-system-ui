@@ -56,7 +56,7 @@ export class DataStorageService {
       appConstants.APPEND_URL.search;
 
     const token = localStorage.getItem('authToken');
-    document.cookie = `Authorization=${token}; path=/; SameSite=None; Secure`;
+    document.cookie = `Authorization=${token}; path=/; SameSite=None; Secure; Domain=api-internal.niradev.idencode.link`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
