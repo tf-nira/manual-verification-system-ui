@@ -57,7 +57,22 @@ export class ApplicationDetailComponent implements OnInit {
     fileName: '',
     file: null as File | null // Allow both File and null
   };
-  
+  sections = [
+    { id: 'personal-info-section', label: 'Personal Information' },
+    { id: 'place-of-residence-section', label: 'Place Of Residenc' },
+    { id: 'foundling-section', label: 'Foundling Check' },
+    { id: 'place-of-birth-section', label: 'Place Of Birth' },
+    { id: 'place-of-origin-section', label: 'Place of Origin' },
+    { id: 'citizenship-details-section', label: 'Citizenship Details' },
+    { id: 'voter-info-section', label: 'Voters Information' }, 
+    { id: 'marital-status-section', label: 'Marital Status' },
+    { id: 'spouse-details-section', label: 'Spouse Details' },
+    { id: 'father-details-section', label: 'Fathers Details' },
+    { id: 'mother-details-section', label: 'mother Details' },
+    { id: 'intoducer-details-section', label: 'Blood Relatives/Introducer Details' },
+    { id: 'childrent-details-section', label: 'Particulars of Applicants Children' },
+    { id: 'declarant-details-section', label: 'Declarants Details' }
+  ];
   expandedSections: { [key: string]: boolean } = {};
   activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
@@ -220,6 +235,13 @@ processDocuments(documentsData: any) {
       .filter((person) => person !== null); // Remove null entries
   }
   
+  scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
   changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = '', selectedOfficerLevel?: string) {
     const applicationId = this.rowData.applicationId;
     this.dataService
