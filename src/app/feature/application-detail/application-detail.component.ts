@@ -51,6 +51,28 @@ export class ApplicationDetailComponent implements OnInit {
     content: '',
     districtOffice: ''
   };
+  currentDocument = {
+    category: '',
+    title: '',
+    fileName: '',
+    file: null as File | null // Allow both File and null
+  };
+  sections = [
+    { id: 'personal-info-section', label: 'Personal Information' },
+    { id: 'place-of-residence-section', label: 'Place Of Residenc' },
+    { id: 'foundling-section', label: 'Foundling Check' },
+    { id: 'place-of-birth-section', label: 'Place Of Birth' },
+    { id: 'place-of-origin-section', label: 'Place of Origin' },
+    { id: 'citizenship-details-section', label: 'Citizenship Details' },
+    { id: 'voter-info-section', label: 'Voters Information' }, 
+    { id: 'marital-status-section', label: 'Marital Status' },
+    { id: 'spouse-details-section', label: 'Spouse Details' },
+    { id: 'father-details-section', label: 'Fathers Details' },
+    { id: 'mother-details-section', label: 'mother Details' },
+    { id: 'intoducer-details-section', label: 'Blood Relatives/Introducer Details' },
+    { id: 'childrent-details-section', label: 'Particulars of Applicants Children' },
+    { id: 'declarant-details-section', label: 'Declarants Details' }
+  ];
   expandedSections: { [key: string]: boolean } = {};
   activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
@@ -64,6 +86,8 @@ export class ApplicationDetailComponent implements OnInit {
   escalationComment: string = '';
   rejectionCategory: string = '';
   rejectionComment: string = '';
+  isSectionExpanded: boolean[] = []; // Tracks expanded/collapsed states for each section
+
   // Added: State variables for left and right section collapse
   isLeftCollapsed: boolean = false;
   isRightCollapsed: boolean = false;
@@ -134,7 +158,43 @@ export class ApplicationDetailComponent implements OnInit {
 
     this.checkPersonDetails();
     this.setDropdownOptions();
+
+    //doc show-pload
+    if (this.rowData.response?.documents?.length) {
+      // Use documents from API response
+      this.documents = this.rowData.response.documents.map((doc: any) => ({
+        category: doc.category || 'Unknown Category', // Fallback for missing category
+        title: doc.title || 'Untitled Document', // Fallback for missing title
+        fileName: doc.fileName || '', // Default empty fileName
+        file: doc.file || null // Default null file
+      }));
+    } else {
+      // Fallback for demonstration purposes
+      this.documents = [
+        { category: 'Proof of Citizenship', title: 'Father - National ID', fileName: '', file: null },
+        { category: 'Proof of Citizenship', title: 'Document Title', fileName: '', file: null },
+        { category: 'Proof of Residence', title: 'Local Counsel Letter', fileName: '', file: null },
+        { category: 'Proof of Event of Birth', title: 'Birth Certificate', fileName: '', file: null }
+      ];
+    }
+    this.isSectionExpanded = this.documents.map(() => false);
   }
+
+
+  toggleSection(index: number): void {
+    // Toggle the state of the clicked section
+    this.isSectionExpanded[index] = !this.isSectionExpanded[index];
+  }
+  // Process the documents data into the required structure
+processDocuments(documentsData: any) {
+  this.documents = documentsData.map((docSection: any) => ({
+    section: docSection.sectionName,
+    items: docSection.items.map((item: any) => ({
+      title: item.documentTitle,
+      id: item.documentId
+    }))
+  }));
+}
   // Added: Methods to toggle left and right sections
   toggleLeft() {
     this.isLeftCollapsed = !this.isLeftCollapsed;
@@ -175,6 +235,13 @@ export class ApplicationDetailComponent implements OnInit {
       .filter((person) => person !== null); // Remove null entries
   }
   
+  scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
   changeApplicationStatus(status: string, comment: string = '', rejectionCategory: string = '', selectedOfficerLevel?: string) {
     const applicationId = this.rowData.applicationId;
     this.dataService
@@ -248,7 +315,11 @@ export class ApplicationDetailComponent implements OnInit {
     this.showScheduleInterviewModal = false;
   }
 
-  openDocumentUploadwModal() {
+  openDocumentUploadwModal(category: string, title: string) {
+    this.currentDocument.category = category;
+  this.currentDocument.title = title;
+  this.currentDocument.fileName = '';
+  this.currentDocument.file = null;
     this.showDocumentUploadModal = true;
   }
   closeDocumentUploadModal() {
@@ -329,14 +400,28 @@ export class ApplicationDetailComponent implements OnInit {
       alert('Please fill all the required fields.');
     }
   }
-
-  // Handle file selection
-  onFileSelect(event: any, index: number) {
-    const file = event.target.files[0];
-    if (file) {
-      this.documents[index].fileName = file.name;
-      this.documents[index].file = file;
+  viewDocument(document: { category: string; title: string; fileName: string; file: File | null }) {
+    if (document.file) {
+      const fileURL = URL.createObjectURL(document.file);
+      window.open(fileURL, '_blank');
+      console.log('Viewing document:', document.fileName);
+    } else {
+      alert('No file available to view.');
     }
+  }
+  
+  // Handle file selection
+  onFileSelect(event: any) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.currentDocument.fileName = file.name;
+      this.currentDocument.file = file;
+      console.log('File selected:', file.name);
+    }else {
+      console.error('No file selected.');
+    }
+    
   }
 
   // Add a new document row
@@ -346,11 +431,15 @@ export class ApplicationDetailComponent implements OnInit {
 
   // Confirm and approve action
   confirmAndApprove() {
+    debugger
     const docPayload : DocumentPayload = {} ;
-  
-    this.documents.forEach((doc) => {
+    const doc= this.currentDocument;
       if (doc.category && doc.file) { 
         const reader = new FileReader();
+        if (doc.file) {
+          console.log('File to be read:', doc.file);
+        }
+        
         reader.onload = () => {
           if (reader.result) {
             const fileBytes = new Uint8Array(reader.result as ArrayBuffer);
@@ -360,15 +449,15 @@ export class ApplicationDetailComponent implements OnInit {
               type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(), 
               format: doc.fileName.split('.').pop() || '' 
             };
-  
-            if (Object.keys(docPayload).length === this.documents.length) {
               this.uploadDocuments(docPayload);
-            }
           }
         };
         reader.readAsArrayBuffer(doc.file);
+        reader.onerror = () => {
+          console.error('Error reading file:', reader.error);
+        };
+        
       }
-    });
   }
 
   uploadDocuments(payload: any) {
@@ -376,6 +465,7 @@ export class ApplicationDetailComponent implements OnInit {
       (response) => {
         if (response?.response?.status === 'Success') {
           alert('All documents uploaded successfully.');
+          this.closeDocumentUploadModal();
           
         } else {
           alert('Failed to upload documents. Please try again.');
@@ -427,5 +517,6 @@ export class ApplicationDetailComponent implements OnInit {
       .replace(/([A-Z])/g, ' $1') // Add space before uppercase letters
       .replace(/^./, str => str.toUpperCase()); // Capitalize the first letter
   }
+  
   
 }
