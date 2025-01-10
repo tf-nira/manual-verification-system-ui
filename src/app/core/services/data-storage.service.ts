@@ -56,10 +56,11 @@ export class DataStorageService {
       appConstants.APPEND_URL.search;
 
     const token = localStorage.getItem('authToken');
-    document.cookie = `Authorization=${token};`;
+    document.cookie = `Authorization=${token}; path=/; SameSite=None; Secure`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
+      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/`,
     });
 
     const filterArray = filters.map((filter: any) => ({
