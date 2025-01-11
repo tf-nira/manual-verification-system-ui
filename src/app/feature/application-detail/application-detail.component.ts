@@ -58,21 +58,39 @@ export class ApplicationDetailComponent implements OnInit {
     file: null as File | null // Allow both File and null
   };
   sections = [
+    {
+      id: 'partA',
+      label: 'Part - A',
+      open: false,
+      subSections: [
     { id: 'personal-info-section', label: 'Personal Information' },
     { id: 'place-of-residence-section', label: 'Place Of Residenc' },
     { id: 'foundling-section', label: 'Foundling Check' },
     { id: 'place-of-birth-section', label: 'Place Of Birth' },
     { id: 'place-of-origin-section', label: 'Place of Origin' },
     { id: 'citizenship-details-section', label: 'Citizenship Details' },
+      ],},
+      {
+        id: 'partB',
+        label: 'Part - B',
+        open: false,
+        subSections: [
     { id: 'voter-info-section', label: 'Voters Information' }, 
     { id: 'marital-status-section', label: 'Marital Status' },
     { id: 'spouse-details-section', label: 'Spouse Details' },
+  ],
+},
+{
+  id: 'partC',
+  label: 'Part - C',
+  open: false,
+  subSections: [
     { id: 'father-details-section', label: 'Fathers Details' },
     { id: 'mother-details-section', label: 'mother Details' },
     { id: 'intoducer-details-section', label: 'Blood Relatives/Introducer Details' },
     { id: 'childrent-details-section', label: 'Particulars of Applicants Children' },
     { id: 'declarant-details-section', label: 'Declarants Details' }
-  ];
+],},];
   expandedSections: { [key: string]: boolean } = {};
   activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
@@ -184,6 +202,11 @@ export class ApplicationDetailComponent implements OnInit {
   toggleSection(index: number): void {
     // Toggle the state of the clicked section
     this.isSectionExpanded[index] = !this.isSectionExpanded[index];
+  }
+  toggleRightSection(sectionId: string): void {
+    this.sections = this.sections.map((section) =>
+      section.id === sectionId ? { ...section, open: !section.open } : section
+    );
   }
   // Process the documents data into the required structure
 processDocuments(documentsData: any) {
