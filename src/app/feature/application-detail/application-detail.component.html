@@ -50,8 +50,9 @@
           </div>
         </div>
       </div>
-      
-      
+
+
+
     </div>
 
 
@@ -59,7 +60,15 @@
     <!-- Middle Section -->
 
     <div class="middle-section">
-      <div id="personal-info-section" class="section">
+      <div id="personal-info-section" class="section" *ngIf="hasSectionData([
+      'fullName', 'surname', 'givenName', 'otherNames', 'maidenName', 'previousName',
+      'dateOfBirth', 'gender', 'phone', 'email', 'applicantLivingStatus', 'CountryCode',
+      'homePhoneNumber', 'highestLevelOfEducation', 'profession', 'occupation',
+      'religion', 'disabilities', 'userServiceType', 'userService', 'IDSchemaVersion',
+      'cardNumber', 'UIN', 'NIN', 'preferredLang', 'selectedHandles', 'NINVerified',
+      'updatedAt', 'renewalNIN', 'nextOfKinPhoneNumber', 'ninExpiryDate', 'applicantNationality',
+      'applicantOtherNationality', 'citizenshipCertificateNo', 'foundLink'
+    ])">
         <h3>Personal Information</h3>
         <div class="personal-information">
 
@@ -244,7 +253,16 @@
       </div>
 
 
-      <div id="place-of-residence-section" class="section">
+      <div id="place-of-residence-section" class="section" *ngIf="hasSectionData([
+      'residenceStatus', 'applicantPlaceOfResidence', 'applicantForeignResidenceCountry',
+      'applicantForeignResidenceAddress', 'appResCountryUGA', 'applicantPlaceOfResidenceCounty',
+      'applicantPlaceOfResidenceSubCounty', 'applicantPlaceOfResidenceParish',
+      'applicantPlaceOfResidenceVillage', 'applicantPlaceOfResidenceStreet',
+      'applicantPlaceOfResidenceYearsLived', 'applicantPlaceOfResidenceDistrictOfPrevRes',
+      'applicantPlaceOfResidencePostalAddress', 'applicantPlaceOfResidenceHouseNo',
+      'applicantPlaceOfResidenceDistrict'
+    ])">
+
         <h3>Place Of Residence</h3>
         <div class="personal-information">
           <div class="form-group" *ngIf="rowData?.demographics?.residenceStatus">
@@ -325,7 +343,12 @@
         </div>
       </div>
 
-      <div id="place-of-birth-section" class="section">
+      <div id="place-of-birth-section" class="section" *ngIf="hasSectionData([
+      'applicantForeignBirthCountry', 'applicantForeignBirthAddress', 'appBirCountryUGA',
+      'applicantPlaceOfBirthDistrict', 'applicantPlaceOfBirthCounty',
+      'applicantPlaceOfBirthSubCounty', 'applicantPlaceOfBirthParish',
+      'applicantPlaceOfBirthVillage', 'applicantPlaceOfBirthCity'
+    ])">
         <h3>Place Of Birth</h3>
         <div class="personal-information">
 
@@ -377,7 +400,14 @@
         </div>
       </div>
 
-      <div id="place-of-origin-section" class="section">
+      <div id="place-of-origin-section" class="section" *ngIf="hasSectionData([
+      'applicantForeignOriginCountry', 'applicantForeignOriginAddress', 'appOriCountryUGA',
+      'applicantPlaceOfOriginDistrict', 'applicantPlaceOfOriginCounty',
+      'applicantPlaceOfOriginSubCounty', 'applicantPlaceOfOriginParish',
+      'applicantPlaceOfOriginVillage', 'applicantPlaceOfOriginIndigenousCommunityTribe',
+      'applicantPlaceOfOriginClan'
+    ])">
+
         <h3>Place of Origin</h3>
         <div class="personal-information">
           <div class="form-group" *ngIf="rowData?.demographics?.applicantForeignOriginCountry">
@@ -435,7 +465,9 @@
       </div>
 
 
-      <div id="citizenship-details-section" class="section">
+      <div id="citizenship-details-section" class="section"
+        *ngIf="hasSectionData(['applicantPassportNumber', 'applicantPassportFileNumber'])">
+
         <h3>Citizenship Details</h3>
         <div class="personal-information">
           <div class="form-group" *ngIf="rowData?.demographics?.applicantPassportNumber">
@@ -451,7 +483,10 @@
         </div>
       </div>
 
-      <div id="voter-info-section" class="section">
+      <div id="voter-info-section" class="section" *ngIf="hasSectionData( [
+      'preferredPollingStation', 'pollingStationNameResidence', 'pollingStationNameOrigin'
+    ])">
+
         <h3>Voters Information</h3>
         <div class="personal-information">
 
@@ -472,7 +507,8 @@
         </div>
       </div>
 
-      <div id="marital-status-section" class="section">
+      <div id="marital-status-section" class="section" *ngIf="hasSectionData(['maritalStatus'])">
+
         <h3>Marital Status</h3>
         <div class="personal-information">
           <div class="form-group" *ngIf="rowData?.demographics?.maritalStatus">
@@ -482,8 +518,17 @@
         </div>
       </div>
 
-      <div id="spouse-details-section" class="section">
-
+      <div id="spouse-details-section" class="section" *ngIf="hasSectionData(['spouseSurname', 
+      'spouseGivenName', 'spouseOtherNames', 'spouseMaidenName', 'spousePreviousName', 'spouseNIN', 
+      'spouseCitizenshipType', 'spousePlaceOfMarriage', 'spouseDateOfMarriage', 'spouseTypeOfMarriage', 
+      'spouseMarriageCertificateNumber', 'numberOfOtherSpouses', 
+      'spouseTwoSurname', 'spouseTwoGivenName', 'spouseTwoOtherNames', 'spouseTwoPreviousName', 'spouseTwoNIN', 
+      'spouseTwoCitizenshipType', 'spouseTwoPlaceOfMarriage', 'spouseTwoDateOfMarriage', 'spouseTwoTypeOfMarriage', 
+      'spouseTwoMarriageCertificateNumber', 'spouseThreeSurname',
+       'spouseThreeGivenName', 'spouseThreeOtherNames', 'spouseThreeMaidenName', 'spouseThreePreviousName', 'spouseThreeNIN',
+        'spouseThreeCitizenshipType', 
+       'spouseThreePlaceOfMarriage', 'spouseThreeDateOfMarriage', 'spouseThreeTypeOfMarriage', 
+       'spouseThreeMarriageCertificateNumber'])">
 
         <h3>Spouse Details</h3>
         <div class="personal-information">
@@ -654,7 +699,19 @@
         </div>
       </div>
 
-      <div id="father-details-section" class="section">
+      <div id="father-details-section" class="section" *ngIf="hasSectionData( [
+      'fatherLivingStatus', 'fatherSurname', 'fatherGivenName', 'fatherOtherNames',
+      'fatherPreviousName', 'fatherNIN', 'fatherUIN', 'fatherIDDocumentNo', 'fatherCitizenshipType',
+      'fatherCitizenCertificateNumber', 'fatherIndigenousCommunityTribe', 'fatherIndigenousCommunityClan',
+      'fatherOccupation', 'fatherForeignResidenceCountry', 'fatherForeignResidenceAddress',
+      'fatherPostalAddress', 'fatResCountryUGA', 'fatherPlaceOfResidenceDistrict',
+      'fatherPlaceOfResidenceCounty', 'fatherPlaceOfResidenceSubCounty', 'fatherPlaceOfResidenceParish',
+      'fatherPlaceOfResidenceVillage', 'fatherPlaceOfResidenceStreet', 'fatherPlaceOfResidenceHouseNo',
+      'fatherForeignOriginCountry', 'fatherForeignOriginAddress', 'fatOriCountryUGA',
+      'fatherPlaceOfOriginDistrict', 'fatherPlaceOfOriginCounty', 'fatherPlaceOfOriginSubCounty',
+      'fatherPlaceOfOriginParish', 'fatherPlaceOfOriginVillage'
+    ])">
+        >
         <h3>Father's Details</h3>
         <div class="personal-information">
           <div class="form-group" *ngIf="rowData?.demographics?.fatherLivingStatus">
@@ -820,172 +877,193 @@
         </div>
       </div>
 
-      <div id="mother-details-section" class="section">
+      <div id="mother-details-section" class="section" *ngIf="hasSectionData([
+      'motherLivingStatus', 'motherSurname', 'motherGivenName', 'motherOtherNames',
+      'motherPreviousName', 'motherMaidenName', 'motherNIN', 'motherIDDocumentNo',
+      'motherCitizenshipType', 'motherCitizenCertificateNumber', 'motherIndigenousCommunityTribe',
+      'motherIndigenousCommunityClan', 'motherOccupation', 'motherForeignResidenceCountry',
+      'motherForeignResidenceAddress', 'motherPostalAddress', 'motResCountryUGA',
+      'motherPlaceOfResidenceDistrict', 'motherPlaceOfResidenceCounty', 'motherPlaceOfResidenceSubCounty',
+      'motherPlaceOfResidenceParish', 'motherPlaceOfResidenceVillage', 'motherPlaceOfResidenceStreet',
+      'motherPlaceOfResidenceHouseNo', 'motherForeignOriginCountry', 'motherForeignOriginAddress',
+      'motOriCountryUGA', 'motherPlaceOfOriginDistrict', 'motherPlaceOfOriginCounty',
+      'motherPlaceOfOriginSubCounty', 'motherPlaceOfOriginParish', 'motherPlaceOfOriginVillage'
+    ])">
+
         <h3>Mother's Details</h3>
-          <div class="personal-information">
-            <div class="form-group" *ngIf="rowData?.demographics?.motherLivingStatus">
-              <label>Motherlivingstatus</label>
-              <div class="field-container">{{ rowData?.demographics?.motherLivingStatus }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherSurname">
-              <label>Mothersurname</label>
-              <div class="field-container">{{ rowData?.demographics?.motherSurname }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherGivenName">
-              <label>Mothergivenname</label>
-              <div class="field-container">{{ rowData?.demographics?.motherGivenName }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherOtherNames">
-              <label>Motherothernames</label>
-              <div class="field-container">{{ rowData?.demographics?.motherOtherNames }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPreviousName">
-              <label>Motherpreviousname</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPreviousName }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherMaidenName">
-              <label>Mothermaidenname</label>
-              <div class="field-container">{{ rowData?.demographics?.motherMaidenName }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherNIN">
-              <label>Mothernin</label>
-              <div class="field-container">{{ rowData?.demographics?.motherNIN }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherIDDocumentNo">
-              <label>Motheriddocumentno</label>
-              <div class="field-container">{{ rowData?.demographics?.motherIDDocumentNo }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherCitizenshipType">
-              <label>Mothercitizenshiptype</label>
-              <div class="field-container">{{ rowData?.demographics?.motherCitizenshipType }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherCitizenCertificateNumber">
-              <label>Mothercitizencertificatenumber</label>
-              <div class="field-container">{{ rowData?.demographics?.motherCitizenCertificateNumber }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherIndigenousCommunityTribe">
-              <label>Motherindigenouscommunitytribe</label>
-              <div class="field-container">{{ rowData?.demographics?.motherIndigenousCommunityTribe }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherIndigenousCommunityClan">
-              <label>Motherindigenouscommunityclan</label>
-              <div class="field-container">{{ rowData?.demographics?.motherIndigenousCommunityClan }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherOccupation">
-              <label>Motheroccupation</label>
-              <div class="field-container">{{ rowData?.demographics?.motherOccupation }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherForeignResidenceCountry">
-              <label>Motherforeignresidencecountry</label>
-              <div class="field-container">{{ rowData?.demographics?.motherForeignResidenceCountry }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherForeignResidenceAddress">
-              <label>Motherforeignresidenceaddress</label>
-              <div class="field-container">{{ rowData?.demographics?.motherForeignResidenceAddress }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPostalAddress">
-              <label>Motherpostaladdress</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPostalAddress }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motResCountryUGA">
-              <label>Motrescountryuga</label>
-              <div class="field-container">{{ rowData?.demographics?.motResCountryUGA }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceDistrict">
-              <label>Motherplaceofresidencedistrict</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceDistrict }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceCounty">
-              <label>Motherplaceofresidencecounty</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceCounty }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceSubCounty">
-              <label>Motherplaceofresidencesubcounty</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceSubCounty }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceParish">
-              <label>Motherplaceofresidenceparish</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceParish }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceVillage">
-              <label>Motherplaceofresidencevillage</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceVillage }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceStreet">
-              <label>Motherplaceofresidencestreet</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceStreet }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceHouseNo">
-              <label>Motherplaceofresidencehouseno</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceHouseNo }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherForeignOriginCountry">
-              <label>Motherforeignorigincountry</label>
-              <div class="field-container">{{ rowData?.demographics?.motherForeignOriginCountry }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherForeignOriginAddress">
-              <label>Motherforeignoriginaddress</label>
-              <div class="field-container">{{ rowData?.demographics?.motherForeignOriginAddress }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motOriCountryUGA">
-              <label>Motoricountryuga</label>
-              <div class="field-container">{{ rowData?.demographics?.motOriCountryUGA }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginDistrict">
-              <label>Motherplaceoforigindistrict</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginDistrict }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginCounty">
-              <label>Motherplaceoforigincounty</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginCounty }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginSubCounty">
-              <label>Motherplaceoforiginsubcounty</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginSubCounty }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginParish">
-              <label>Motherplaceoforiginparish</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginParish }}</div>
-            </div>
-
-            <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginVillage">
-              <label>Motherplaceoforiginvillage</label>
-              <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginVillage }}</div>
-            </div>
+        <div class="personal-information">
+          <div class="form-group" *ngIf="rowData?.demographics?.motherLivingStatus">
+            <label>Motherlivingstatus</label>
+            <div class="field-container">{{ rowData?.demographics?.motherLivingStatus }}</div>
           </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherSurname">
+            <label>Mothersurname</label>
+            <div class="field-container">{{ rowData?.demographics?.motherSurname }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherGivenName">
+            <label>Mothergivenname</label>
+            <div class="field-container">{{ rowData?.demographics?.motherGivenName }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherOtherNames">
+            <label>Motherothernames</label>
+            <div class="field-container">{{ rowData?.demographics?.motherOtherNames }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPreviousName">
+            <label>Motherpreviousname</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPreviousName }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherMaidenName">
+            <label>Mothermaidenname</label>
+            <div class="field-container">{{ rowData?.demographics?.motherMaidenName }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherNIN">
+            <label>Mothernin</label>
+            <div class="field-container">{{ rowData?.demographics?.motherNIN }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherIDDocumentNo">
+            <label>Motheriddocumentno</label>
+            <div class="field-container">{{ rowData?.demographics?.motherIDDocumentNo }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherCitizenshipType">
+            <label>Mothercitizenshiptype</label>
+            <div class="field-container">{{ rowData?.demographics?.motherCitizenshipType }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherCitizenCertificateNumber">
+            <label>Mothercitizencertificatenumber</label>
+            <div class="field-container">{{ rowData?.demographics?.motherCitizenCertificateNumber }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherIndigenousCommunityTribe">
+            <label>Motherindigenouscommunitytribe</label>
+            <div class="field-container">{{ rowData?.demographics?.motherIndigenousCommunityTribe }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherIndigenousCommunityClan">
+            <label>Motherindigenouscommunityclan</label>
+            <div class="field-container">{{ rowData?.demographics?.motherIndigenousCommunityClan }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherOccupation">
+            <label>Motheroccupation</label>
+            <div class="field-container">{{ rowData?.demographics?.motherOccupation }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherForeignResidenceCountry">
+            <label>Motherforeignresidencecountry</label>
+            <div class="field-container">{{ rowData?.demographics?.motherForeignResidenceCountry }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherForeignResidenceAddress">
+            <label>Motherforeignresidenceaddress</label>
+            <div class="field-container">{{ rowData?.demographics?.motherForeignResidenceAddress }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPostalAddress">
+            <label>Motherpostaladdress</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPostalAddress }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motResCountryUGA">
+            <label>Motrescountryuga</label>
+            <div class="field-container">{{ rowData?.demographics?.motResCountryUGA }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceDistrict">
+            <label>Motherplaceofresidencedistrict</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceDistrict }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceCounty">
+            <label>Motherplaceofresidencecounty</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceCounty }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceSubCounty">
+            <label>Motherplaceofresidencesubcounty</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceSubCounty }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceParish">
+            <label>Motherplaceofresidenceparish</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceParish }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceVillage">
+            <label>Motherplaceofresidencevillage</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceVillage }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceStreet">
+            <label>Motherplaceofresidencestreet</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceStreet }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfResidenceHouseNo">
+            <label>Motherplaceofresidencehouseno</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfResidenceHouseNo }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherForeignOriginCountry">
+            <label>Motherforeignorigincountry</label>
+            <div class="field-container">{{ rowData?.demographics?.motherForeignOriginCountry }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherForeignOriginAddress">
+            <label>Motherforeignoriginaddress</label>
+            <div class="field-container">{{ rowData?.demographics?.motherForeignOriginAddress }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motOriCountryUGA">
+            <label>Motoricountryuga</label>
+            <div class="field-container">{{ rowData?.demographics?.motOriCountryUGA }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginDistrict">
+            <label>Motherplaceoforigindistrict</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginDistrict }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginCounty">
+            <label>Motherplaceoforigincounty</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginCounty }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginSubCounty">
+            <label>Motherplaceoforiginsubcounty</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginSubCounty }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginParish">
+            <label>Motherplaceoforiginparish</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginParish }}</div>
+          </div>
+
+          <div class="form-group" *ngIf="rowData?.demographics?.motherPlaceOfOriginVillage">
+            <label>Motherplaceoforiginvillage</label>
+            <div class="field-container">{{ rowData?.demographics?.motherPlaceOfOriginVillage }}</div>
+          </div>
+        </div>
       </div>
 
-      <div id="intoducer-details-section" class="section">
+      <div id="intoducer-details-section" class="section" *ngIf="hasSectionData( [
+      'guardianRelationToApplicant', 'guardianSurname', 'guardianGivenName', 'guardianOtherNames',
+      'guardianOccupation', 'guardianNIN_AIN', 'guardianIDDocumentnumber', 'guardianPassportNumber',
+      'guardianTribe', 'guardianClan', 'guardianCitizenshipType', 'guardianCitizenshipCertificateNumber',
+      'guardianOtherNationality', 'guardianForeignOriginCountry', 'guardianForeignOriginAddress',
+      'guardiansCountry', 'guardianResidenceDistrict', 'guardianResidenceCounty',
+      'guardianResidenceSubCounty', 'guardianResidenceParish', 'guardianResidenceVillage',
+      'guardianResidenceStreet', 'guardianResidence', 'guardianDateOfBirth'
+    ])">
+
         <h3>Blood Relative's/Introducer Details</h3>
         <div class="personal-information">
           <div class="form-group" *ngIf="rowData?.demographics?.guardianRelationToApplicant">
@@ -1111,7 +1189,13 @@
         </div>
       </div>
 
-      <div id="children-details-section" class="section">
+      <div id="children-details-section" class="section" *ngIf="hasSectionData([
+      'childName', 'childSex', 'childDateOfBirth', 'childTwoName', 'childTwoSex',
+      'childTwoDateOfBirth', 'childThreeName', 'childThreeSex', 'childThreeDateOfBirth',
+      'childFourName', 'childFourSex', 'childFourDateOfBirth', 'childFiveName',
+      'childFiveSex', 'childFiveDateOfBirth'
+    ])">
+
         <h3>Particulars of Applicant’s Children</h3>
         <div class="personal-information">
           <div class="form-group" *ngIf="rowData?.demographics?.childName">
@@ -1191,7 +1275,12 @@
         </div>
       </div>
 
-      <div id="declarant-details-section" class="section">
+      <div id="declarant-details-section" class="section" *ngIf="hasSectionData([
+      'declarant', 'declarantSurname', 'declarantgivenName', 'declarantotherNames',
+      'declarantPreviousNames', 'declarantMaidenName', 'declarantGender', 'declarantNationality',
+      'declarantResidenceStatus', 'introducerNIN', 'relationToApplicant', 'PRN'
+    ])">
+
         <h3>Declarant's Details</h3>
         <div class="personal-information">
           <div class="form-group" *ngIf="rowData?.demographics?.declarant">

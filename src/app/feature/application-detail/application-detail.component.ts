@@ -540,6 +540,12 @@ processDocuments(documentsData: any) {
       .replace(/([A-Z])/g, ' $1') // Add space before uppercase letters
       .replace(/^./, str => str.toUpperCase()); // Capitalize the first letter
   }
+  hasSectionData(keys: string[]): boolean {
+    if (!this.rowData?.demographics) {
+      return false;
+    }
+    return keys.some(key => this.rowData.demographics[key]);
+  }
   
   
 }

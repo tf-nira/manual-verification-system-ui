@@ -1,36 +1,55 @@
 <div class="container">
-  <h1>Demographic Details</h1>
+  <!-- Header Section -->
+  <app-header [role]="role"></app-header>
+<div class="layout">
+  <!-- Navigation Toggle Button -->
+  <div class="left-section" [class.collapsed]="isLeftCollapsed">
+  <!-- Left Navigation Panel -->
+  <div class="section-header">
+    <h3>Navigation</h3>
+    <button class="toggle-btn" (click)="toggleLeft()">
+      <i class="fas fa-toggle-on"></i>
+    </button>
+  </div>
+    <div class="part" *ngFor="let part of parts; let i = index">
+      <div class="part-header" (click)="togglePart(i)">
+        <span>{{ part.label }}</span>
+      </div>
+      <ul *ngIf="expandedParts[i]">
+        <li *ngFor="let section of part.sections" (click)="scrollToSection(section.id)">
+          {{ section.label }}
+        </li>
+      </ul>
+    </div>
+  </div>
 
-  <!-- Dynamically iterate over all fields in demographicData -->
-  <div *ngIf="demographicData">
-    <div *ngFor="let key of objectKeys(demographicData)">
-      <div class="field">
-        <div class="label">{{ formatKey(key) }}</div>
-        <div class="value">
-          <!-- Handle different data types dynamically -->
-          <span *ngIf="isArray(demographicData[key])">
-            <!-- Handle Arrays -->
-            <span *ngFor="let item of demographicData[key]">
-              {{ item?.value || 'N/A' }} <!-- Display the value if present -->
-              <span *ngIf="!item?.value && isObject(item)">
-                <!-- Handle case where array contains objects without a value -->
-                <ng-container *ngFor="let subKey of objectKeys(item)">
-                  <strong>{{ formatKey(subKey) }}:</strong> {{ item[subKey] || 'N/A' }}<br />
-                </ng-container>
+  <!-- Main Content Area -->
+  <div class="content">
+    <h1>Demographic Details</h1>
+    <div *ngIf="sectionsData.length > 0">
+      <div *ngFor="let section of sectionsData" [id]="section.id" class="section">
+        <h2>{{ section.label }}</h2>
+        <div *ngFor="let key of objectKeys(section.data)" class="field">
+          <div class="label">{{ formatKey(key) }}</div>
+          <div class="value">
+            <span *ngIf="isArray(section.data[key])">
+              <span *ngFor="let item of section.data[key]">
+                {{ item?.value || 'N/A' }}
               </span>
             </span>
-          </span>
-          
-          <span *ngIf="!isArray(demographicData[key]) && !isObject(demographicData[key])">
-            <!-- Handle Primitive Values -->
-            {{ demographicData[key] || 'N/A' }}
-          </span>
-          <span *ngIf="isObject(demographicData[key])">
-            <!-- Handle Nested Objects -->
-            <pre>{{ demographicData[key] | json }}</pre>
-          </span>
+            <span *ngIf="!isArray(section.data[key]) && !isObject(section.data[key])">
+              {{ section.data[key] || 'N/A' }}
+            </span>
+            <span *ngIf="isObject(section.data[key])">
+              <pre>{{ section.data[key] | json }}</pre>
+            </span>
+          </div>
         </div>
       </div>
     </div>
+    <div *ngIf="sectionsData.length === 0">
+      <p>No demographic data available.</p>
+    </div>
   </div>
+</div>
 </div>
