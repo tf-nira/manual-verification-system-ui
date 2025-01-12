@@ -58,7 +58,6 @@
 
 
     <!-- Middle Section -->
-
     <div class="middle-section">
       <div id="personal-info-section" class="section" *ngIf="hasSectionData([
       'fullName', 'surname', 'givenName', 'otherNames', 'maidenName', 'previousName',
@@ -1341,7 +1340,6 @@
 
 
 
-
     <!-- Right Section -->
     <div class="right-section" [class.collapsed]="isRightCollapsed">
       <div class="section-header">
@@ -1483,43 +1481,47 @@
 
       </div>
     </div>
-  </div>
 
-  <!-- Back Button -->
-  <div class="footer">
-    <button class="back-button" (click)="goBack()">{{ constants.BACK }}</button>
-  </div>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 
-  <!-- Action Buttons -->
-  <div class="action-buttons">
-    <button class="approve" (click)="openApprovalModal()">
-      <i class="fas fa-check-circle"></i>
-      {{ constants.APPROVE }}
-    </button>
-    <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR'"
-      (click)="openEscalateModal()">
-      <i class="fas fa-exclamation-triangle"></i>
-      {{ constants.ESCALATE }}
-    </button>
-    <button class="reject" (click)="openRejectModal()">
-      <i class="fas fa-times-circle"></i>
-      {{ constants.REJECT }}
-    </button>
-    <!-- Schedule Interview Btn -->
-    <button [ngClass]="{
-        'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') ,
-        'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR')
-      }" (click)="openScheduleInterviewModal()">
-      {{ constants.SCHEDULE_INTERVIEW }}
-    </button>
-    <!-- Document Upload Btn -->
-    <!-- <button [ngClass]="{
-        'document-upload': role === 'MVS_DISTRICT_OFFICER',
-        'hidden': role !== 'MVS_DISTRICT_OFFICER'
-      }" (click)="openDocumentUploadwModal('','')">
-      {{ constants.UPLOAD_DCOUMENTS }}
-    </button> -->
+
+    <!-- Footer -->
+    <div class="footer">
+      <!-- Back Button -->
+      <button class="back-button" (click)="goBack()">{{ constants.BACK }}</button>
+  
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="approve" (click)="openApprovalModal()">
+          <i class="fas fa-check-circle"></i>
+          {{ constants.APPROVE }}
+        </button>
+        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR'"
+          (click)="openEscalateModal()">
+          <i class="fas fa-exclamation-triangle"></i>
+          {{ constants.ESCALATE }}
+        </button>
+        <button class="reject" (click)="openRejectModal()">
+          <i class="fas fa-times-circle"></i>
+          {{ constants.REJECT }}
+        </button>
+        <!-- Schedule Interview Btn -->
+        <button [ngClass]="{
+            'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') ,
+            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR')
+          }" (click)="openScheduleInterviewModal()">
+          {{ constants.SCHEDULE_INTERVIEW }}
+        </button>
+        <!-- Document Upload Btn -->
+        <!-- <button [ngClass]="{
+            'document-upload': role === 'MVS_DISTRICT_OFFICER',
+            'hidden': role !== 'MVS_DISTRICT_OFFICER'
+          }" (click)="openDocumentUploadwModal('','')">
+          {{ constants.UPLOAD_DCOUMENTS }}
+        </button> -->
+      </div>
+  
+    </div>
+
   </div>
 
   <!-- Approval Modal -->
