@@ -84,7 +84,7 @@ export class DataStorageService {
     const requestModel = new RequestModel(requestPayload);
 
     return this.httpClient.post(url, requestModel, {
-      // headers,
+      headers,
       withCredentials: true,
     });
   }
@@ -98,7 +98,7 @@ export class DataStorageService {
     });
 
     return this.httpClient.get(url, {
-      // headers,
+      headers,
       withCredentials: true,
     });
   }
@@ -134,7 +134,7 @@ export class DataStorageService {
     }
     const obj = new RequestModel(request);
     return this.httpClient.put(url, obj, {
-      // headers,
+      headers,
       withCredentials: true,
     });
   }
@@ -165,7 +165,7 @@ export class DataStorageService {
     const obj = new RequestModel(request);
 
     return this.httpClient.post(url, obj, {
-      // headers,
+      headers,
       withCredentials: true,
     });
   }
@@ -189,7 +189,7 @@ export class DataStorageService {
     const obj = new RequestModel(request);
 
     return this.httpClient.post(url, obj, {
-      // headers,
+      headers,
       withCredentials: true,
     });
   }
@@ -208,7 +208,7 @@ export class DataStorageService {
     });
 
     return this.httpClient.get(url, {
-      // headers,
+      headers,
       withCredentials: true,
     });
   }
