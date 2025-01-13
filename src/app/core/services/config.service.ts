@@ -35,7 +35,7 @@ export class ConfigService {
       this.config = this.transferState.get(CONFIG_KEY, {});
     } else if (isPlatformServer(this.platformId)) {
       try {
-        const data = await this.http.get<{ [key: string]: any }>('/assets/config.json').toPromise();
+        const data = await this.http.get<{ [key: string]: any }>('/config.json').toPromise();
         this.transferState.set(CONFIG_KEY, data || {});
         this.config = data || {};
       } catch (error) {
