@@ -18,8 +18,11 @@ export class DataStorageService {
    */
 
   serverDtFormat = 'YYYY/MM/DD';
-  private BASE_URL: string = 'https://api-internal.niradev.idencode.link';
-    private MVS_URL : string ='/v1/manual-verification-service';
+  // private BASE_URL: string = 'https://api-internal.niradev.idencode.link';
+  // private MVS_URL : string ='/v1/manual-verification-service';
+  private BASE_URL: string = '';
+  private MVS_URL : string ='';
+
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService
@@ -27,9 +30,8 @@ export class DataStorageService {
   ) {
     configService.loadConfig();
     const config =configService.getConfig();
-    // this.BASE_URL = config['BASE_URL'];
-    // this.MVS_URL = config['MVS_URL']
-    
+    this.BASE_URL = config['BASE_URL'];
+    this.MVS_URL = config['MVS_URL']
   }
 
   userLogin(userName: string, password: string) {
