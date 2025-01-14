@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RequestModel } from '../../shared/models/request-model/RequestModel';
 import { ConfigService } from './config.service';
-import { AppConfigService } from '../../app-config.service';
 import * as appConstants from '../../app.constants';
 import { Observable } from 'rxjs';
 @Injectable({
@@ -18,18 +17,20 @@ export class DataStorageService {
    */
 
   serverDtFormat = 'YYYY/MM/DD';
-  private BASE_URL: string = 'https://api-internal.niradev.idencode.link';
-    private MVS_URL : string ='/v1/manual-verification-service';
+  // private BASE_URL: string = 'https://api-internal.niradev.idencode.link';
+  // private MVS_URL : string ='/v1/manual-verification-service';
+  private BASE_URL: string = '';
+  private MVS_URL : string ='';
+
   constructor(
     private httpClient: HttpClient,
     private configService: ConfigService
 
   ) {
     configService.loadConfig();
-    const config =configService.getConfig();
-    // this.BASE_URL = config['BASE_URL'];
-    // this.MVS_URL = config['MVS_URL']
-    
+    const config = configService.getConfig();
+    this.BASE_URL = config['BASE_URL'];
+    this.MVS_URL = config['MVS_URL'];
   }
 
   userLogin(userName: string, password: string) {
@@ -56,7 +57,7 @@ export class DataStorageService {
       appConstants.APPEND_URL.search;
 
     const token = localStorage.getItem('authToken');
-    document.cookie = `Authorization=${token}; path=/; SameSite=None; Secure; Domain=api-internal.niradev.idencode.link`;
+    // document.cookie = `Authorization=${token}; path=/; SameSite=None; Secure; Domain=api-internal.niradev.idencode.link`;
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',

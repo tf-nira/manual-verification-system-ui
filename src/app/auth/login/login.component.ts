@@ -49,9 +49,6 @@ export class LoginComponent implements OnInit {
           response.response &&
           response.response.status === API_CONST_SUCCESS
         ) {
-          localStorage.setItem('authToken', response.response.token);
-          localStorage.setItem('userId', response.response.userId || '');
-          // const userId = response.response.userId;
 
           const decoded = this.decodeJwt(response.response.token);
           const userId = this.fetchPreferredUsername(decoded);
@@ -60,6 +57,8 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('authToken', response.response.token);
           localStorage.setItem('userId', userId || '');
           localStorage.setItem('name', name || '');
+
+          document.cookie = `Authorization=${response.response.token}; path=/; SameSite=None; Secure; Domain=api-internal.niradev.idencode.link`;
 
           const role = this.fetchRole(decoded);
           localStorage.setItem('role', role || '');

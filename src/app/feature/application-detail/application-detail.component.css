@@ -12,8 +12,20 @@
 
 .layout {
   display: flex;
-  flex-grow: 1;
+  flex: 1;
+  overflow: hidden;
+  padding-bottom: 50px;
 }
+
+.left-section,
+.middle-section,
+.right-section {
+  height: 100%; /* Full height of the container */
+  overflow-y: auto; /* Independent vertical scrolling */
+  padding: 16px;
+  box-sizing: border-box;
+}
+
 /* Left Section */
 .left-section {
   width: 250px;
@@ -217,17 +229,6 @@
   border-top: 1px solid #ddd;
   width: 100%;
 }
-
-/* .back-button {
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-} */
 
 .back-button:hover {
   background-color: #b1b1b1;
