@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RequestModel } from '../../shared/models/request-model/RequestModel';
 import { ConfigService } from './config.service';
-import { AppConfigService } from '../../app-config.service';
 import * as appConstants from '../../app.constants';
 import { Observable } from 'rxjs';
 @Injectable({
@@ -29,9 +28,9 @@ export class DataStorageService {
 
   ) {
     configService.loadConfig();
-    const config =configService.getConfig();
+    const config = configService.getConfig();
     this.BASE_URL = config['BASE_URL'];
-    this.MVS_URL = config['MVS_URL']
+    this.MVS_URL = config['MVS_URL'];
   }
 
   userLogin(userName: string, password: string) {
