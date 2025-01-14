@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
 import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
-
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 type DocumentPayload = {
   [key: string]: {
     document: number[];
@@ -37,6 +37,9 @@ export class ApplicationDetailComponent implements OnInit {
   demographicData: any;
   isChecked = false;
   role: string = '';
+  photoBase64: string = '';
+  isPhotoError = false;
+
   selectedTab: string = 'demographic'; // Default to 'demographic'
   escalateOption: boolean = false;
   showApprovalModal: boolean = false;
@@ -63,38 +66,40 @@ export class ApplicationDetailComponent implements OnInit {
       label: 'Part - A',
       open: false,
       subSections: [
-    { id: 'personal-info-section', label: 'Personal Information' },
-    { id: 'place-of-residence-section', label: 'Place Of Residenc' },
-    { id: 'foundling-section', label: 'Foundling Check' },
-    { id: 'place-of-birth-section', label: 'Place Of Birth' },
-    { id: 'place-of-origin-section', label: 'Place of Origin' },
-    { id: 'citizenship-details-section', label: 'Citizenship Details' },
-      ],},
-      {
-        id: 'partB',
-        label: 'Part - B',
-        open: false,
-        subSections: [
-    { id: 'voter-info-section', label: 'Voters Information' }, 
-    { id: 'marital-status-section', label: 'Marital Status' },
-    { id: 'spouse-details-section', label: 'Spouse Details' },
-  ],
-},
-{
-  id: 'partC',
-  label: 'Part - C',
-  open: false,
-  subSections: [
-    { id: 'father-details-section', label: 'Fathers Details' },
-    { id: 'mother-details-section', label: 'mother Details' },
-    { id: 'intoducer-details-section', label: 'Blood Relatives/Introducer Details' },
-    { id: 'childrent-details-section', label: 'Particulars of Applicants Children' },
-    { id: 'declarant-details-section', label: 'Declarants Details' }
-],},];
+        { id: 'personal-info-section', label: 'Personal Information' },
+        { id: 'place-of-residence-section', label: 'Place Of Residenc' },
+        { id: 'foundling-section', label: 'Foundling Check' },
+        { id: 'place-of-birth-section', label: 'Place Of Birth' },
+        { id: 'place-of-origin-section', label: 'Place of Origin' },
+        { id: 'citizenship-details-section', label: 'Citizenship Details' },
+      ],
+    },
+    {
+      id: 'partB',
+      label: 'Part - B',
+      open: false,
+      subSections: [
+        { id: 'voter-info-section', label: 'Voters Information' },
+        { id: 'marital-status-section', label: 'Marital Status' },
+        { id: 'spouse-details-section', label: 'Spouse Details' },
+      ],
+    },
+    {
+      id: 'partC',
+      label: 'Part - C',
+      open: false,
+      subSections: [
+        { id: 'father-details-section', label: 'Fathers Details' },
+        { id: 'mother-details-section', label: 'mother Details' },
+        { id: 'intoducer-details-section', label: 'Blood Relatives/Introducer Details' },
+        { id: 'childrent-details-section', label: 'Particulars of Applicants Children' },
+        { id: 'declarant-details-section', label: 'Declarants Details' }
+      ],
+    },];
   expandedSections: { [key: string]: boolean } = {};
   activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
-  serviceType: string = ''; 
+  serviceType: string = '';
   approvalComment: string = '';
   applicationId: string = '';
   commentMVSOfficer: string = '';
@@ -111,7 +116,7 @@ export class ApplicationDetailComponent implements OnInit {
   isRightCollapsed: boolean = false;
   isEditable: boolean = false;
   selectedRow: any = {};
-  documents: { category: string; title: string; fileName: string; file: File | null }[] = [
+  documents: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
     { category: '', title: '', fileName: '', file: null }
   ];
   personDetails: { role: string; details: { [key: string]: any } }[] = []; // Store details for Father, Mother, Guardian
@@ -137,11 +142,14 @@ export class ApplicationDetailComponent implements OnInit {
 
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
-  docCategories = ['Category 1', 'Category 2', 'Category 3']; 
-  docTitles = ['Title 1', 'Title 2', 'Title 3']; 
+  docCategories = ['Category 1', 'Category 2', 'Category 3'];
+  docTitles = ['Title 1', 'Title 2', 'Title 3'];
   applicantName = 'Steve Smith'
+  pdfUrl: any;
 
-  constructor(private router: Router, private dataService: DataStorageService) { }
+  constructor(private router: Router, private dataService: DataStorageService,
+    private sanitizer: DomSanitizer
+  ) { }
 
   ngOnInit() {
     const state = history.state;
@@ -150,6 +158,15 @@ export class ApplicationDetailComponent implements OnInit {
     this.rowData = state.data || {};
     console.log(this.rowData.applicationId);
     this.selectedRow = state.rowData || {};
+    this.photoBase64 = this.rowData?.biometricAttributes?.ApplicantPhoto?.trim() || '';
+    console.log("photoBase64:::: " + this.photoBase64)
+    console.log('Base64 String Length:', this.photoBase64.length);
+    const base64Pdf = this.rowData?.documents?.proofOfPhysicalApplicationForm?.trim() || '';
+    if (base64Pdf) {
+      this.pdfUrl = this.convertBase64ToPdfUrl(base64Pdf);
+    } else {
+      this.pdfUrl = null;
+    }
     /**below two row data sets need to be removed data would come from polcy, this is for example */
     this.rowData = {
       ...this.rowData,
@@ -163,7 +180,7 @@ export class ApplicationDetailComponent implements OnInit {
       motherName: "rosy", // Example Name
       motherAddress: "123 Main Street, Cityville", // Example Address
     }
-    
+
     if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER) {
       this.applicationStatus = this.rowData[APPLICANT_NAME];
     }
@@ -177,28 +194,36 @@ export class ApplicationDetailComponent implements OnInit {
     this.checkPersonDetails();
     this.setDropdownOptions();
 
-    //doc show-pload
-    if (this.rowData.response?.documents?.length) {
-      // Use documents from API response
-      this.documents = this.rowData.response.documents.map((doc: any) => ({
-        category: doc.category || 'Unknown Category', // Fallback for missing category
-        title: doc.title || 'Untitled Document', // Fallback for missing title
-        fileName: doc.fileName || '', // Default empty fileName
-        file: doc.file || null // Default null file
-      }));
+    // Check if the rowData contains documents and process them
+    if (this.rowData?.documents) {
+      this.processDocuments();
     } else {
-      // Fallback for demonstration purposes
-      this.documents = [
-        { category: 'Proof of Citizenship', title: 'Father - National ID', fileName: '', file: null },
-        { category: 'Proof of Citizenship', title: 'Document Title', fileName: '', file: null },
-        { category: 'Proof of Residence', title: 'Local Counsel Letter', fileName: '', file: null },
-        { category: 'Proof of Event of Birth', title: 'Birth Certificate', fileName: '', file: null }
-      ];
+      console.log('No documents found in the API response.');
     }
     this.isSectionExpanded = this.documents.map(() => false);
   }
+  convertBase64ToPdfUrl(base64: string): SafeResourceUrl {
+    // Decode Base64 string to a byte array
+    const byteCharacters = atob(base64.split(',')[1] || base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
 
+    // Create a Blob from the byte array
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
 
+    // Create a safe object URL for the Blob
+    const pdfUrl = URL.createObjectURL(blob);
+
+    // Use Angular's DomSanitizer to sanitize the URL
+    return this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
+  }
+  onImageError() {
+    this.isPhotoError = true;
+    console.error('Image failed to load:', this.photoBase64);
+  }
   toggleSection(index: number): void {
     // Toggle the state of the clicked section
     this.isSectionExpanded[index] = !this.isSectionExpanded[index];
@@ -209,15 +234,33 @@ export class ApplicationDetailComponent implements OnInit {
     );
   }
   // Process the documents data into the required structure
-processDocuments(documentsData: any) {
-  this.documents = documentsData.map((docSection: any) => ({
-    section: docSection.sectionName,
-    items: docSection.items.map((item: any) => ({
-      title: item.documentTitle,
-      id: item.documentId
-    }))
-  }));
-}
+  processDocuments() {
+    console.log("inside processDocuments")
+    const documents = this.rowData?.documents || {};
+
+    this.documents = Object.keys(documents).map((key) => {
+      const base64Pdf = documents[key]?.trim();
+      return {
+        category: key, // Use the key as the category
+        title: this.getDocumentTitle(key), // Map keys to human-readable titles
+        fileName: `${key}.pdf`, // Generate a filename dynamically
+        file: base64Pdf ? this.convertBase64ToPdfUrl(base64Pdf) : null, // Convert Base64 to a SafeResourceUrl
+      };
+    });
+
+    // Set the initial state of section expansion
+    this.isSectionExpanded = this.documents.map(() => false);
+  }
+
+  getDocumentTitle(key: string): string {
+    // Map document keys to readable titles
+    const titleMap: { [key: string]: string } = {
+      proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
+      proofOfAbandonment: 'Proof of Abandonment',
+      // Add other mappings as needed
+    };
+    return titleMap[key] || 'Unknown Document';
+  }
   // Added: Methods to toggle left and right sections
   toggleLeft() {
     this.isLeftCollapsed = !this.isLeftCollapsed;
@@ -232,13 +275,13 @@ processDocuments(documentsData: any) {
   isEscalationExpanded(section: string): boolean {
     return this.expandedSections[section] || false;
   }
-  
+
   toggleEscalation(section: string): void {
     this.expandedSections[section] = !this.expandedSections[section];
   }
   checkPersonDetails() {
     const roles = ['father', 'mother', 'guardian']; // Define roles to check
-  
+
     this.personDetails = roles
       .map((role) => {
         const ninKey = `${role}Nin`;
@@ -250,14 +293,14 @@ processDocuments(documentsData: any) {
               acc[key] = this.rowData[key]; // Add key-value pair to the accumulator
               return acc;
             }, {}); // Initialize acc as an empty object
-  
+
           return { role, details: personData };
         }
         return null;
       })
       .filter((person) => person !== null); // Remove null entries
   }
-  
+
   scrollToSection(sectionId: string): void {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -340,9 +383,9 @@ processDocuments(documentsData: any) {
 
   openDocumentUploadwModal(category: string, title: string) {
     this.currentDocument.category = category;
-  this.currentDocument.title = title;
-  this.currentDocument.fileName = '';
-  this.currentDocument.file = null;
+    this.currentDocument.title = title;
+    this.currentDocument.fileName = '';
+    this.currentDocument.file = null;
     this.showDocumentUploadModal = true;
   }
   closeDocumentUploadModal() {
@@ -362,10 +405,10 @@ processDocuments(documentsData: any) {
   approveApplication() {
     // Approval logic
     if (this.isChecked) {
-    this.showApprovalModal = false;
-    const comment = this.approvalComment.trim();
-    this.changeApplicationStatus(API_CONST_APPROVE, comment);
-    this.closeApprovalModal();
+      this.showApprovalModal = false;
+      const comment = this.approvalComment.trim();
+      this.changeApplicationStatus(API_CONST_APPROVE, comment);
+      this.closeApprovalModal();
     }
   }
   escalateApplication() {
@@ -423,16 +466,42 @@ processDocuments(documentsData: any) {
       alert('Please fill all the required fields.');
     }
   }
-  viewDocument(document: { category: string; title: string; fileName: string; file: File | null }) {
+  viewDocument(document: { file: File | SafeResourceUrl | null }): void {
     if (document.file) {
-      const fileURL = URL.createObjectURL(document.file);
-      window.open(fileURL, '_blank');
-      console.log('Viewing document:', document.fileName);
+      const sanitizedUrl = this.sanitizer.sanitize(4, document.file); // Sanitizes the SafeResourceUrl
+      if (!sanitizedUrl) {
+        alert('Invalid or unsafe URL for the document.');
+        return;
+      }
+
+      // Open a new window and inject sanitized HTML
+      const newWindow = window.open('', '_blank');
+      if (newWindow) {
+        newWindow.document.write(`
+            <html>
+              <head>
+                <title>${document.file || 'Document'}</title>
+              </head>
+              <body style="margin: 0;">
+                <iframe
+                  src="${sanitizedUrl}"
+                  width="100%"
+                  height="100%"
+                  style="border: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"
+                ></iframe>
+              </body>
+            </html>
+          `);
+      } else {
+        alert('Unable to open a new window. Please check your browser settings.');
+      }
     } else {
-      alert('No file available to view.');
+      alert('Document is not available.');
     }
   }
-  
+
+
+
   // Handle file selection
   onFileSelect(event: any) {
     const input = event.target as HTMLInputElement;
@@ -441,10 +510,10 @@ processDocuments(documentsData: any) {
       this.currentDocument.fileName = file.name;
       this.currentDocument.file = file;
       console.log('File selected:', file.name);
-    }else {
+    } else {
       console.error('No file selected.');
     }
-    
+
   }
 
   // Add a new document row
@@ -455,32 +524,32 @@ processDocuments(documentsData: any) {
   // Confirm and approve action
   confirmAndApprove() {
     debugger
-    const docPayload : DocumentPayload = {} ;
-    const doc= this.currentDocument;
-      if (doc.category && doc.file) { 
-        const reader = new FileReader();
-        if (doc.file) {
-          console.log('File to be read:', doc.file);
-        }
-        
-        reader.onload = () => {
-          if (reader.result) {
-            const fileBytes = new Uint8Array(reader.result as ArrayBuffer);
-            docPayload[doc.category] = {
-              document: Array.from(fileBytes),
-              value: doc.title,
-              type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(), 
-              format: doc.fileName.split('.').pop() || '' 
-            };
-              this.uploadDocuments(docPayload);
-          }
-        };
-        reader.readAsArrayBuffer(doc.file);
-        reader.onerror = () => {
-          console.error('Error reading file:', reader.error);
-        };
-        
+    const docPayload: DocumentPayload = {};
+    const doc = this.currentDocument;
+    if (doc.category && doc.file) {
+      const reader = new FileReader();
+      if (doc.file) {
+        console.log('File to be read:', doc.file);
       }
+
+      reader.onload = () => {
+        if (reader.result) {
+          const fileBytes = new Uint8Array(reader.result as ArrayBuffer);
+          docPayload[doc.category] = {
+            document: Array.from(fileBytes),
+            value: doc.title,
+            type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(),
+            format: doc.fileName.split('.').pop() || ''
+          };
+          this.uploadDocuments(docPayload);
+        }
+      };
+      reader.readAsArrayBuffer(doc.file);
+      reader.onerror = () => {
+        console.error('Error reading file:', reader.error);
+      };
+
+    }
   }
 
   uploadDocuments(payload: any) {
@@ -489,7 +558,7 @@ processDocuments(documentsData: any) {
         if (response?.response?.status === 'Success') {
           alert('All documents uploaded successfully.');
           this.closeDocumentUploadModal();
-          
+
         } else {
           alert('Failed to upload documents. Please try again.');
         }
@@ -508,20 +577,20 @@ processDocuments(documentsData: any) {
       return null;
     }
   }
-  showDemographicData(registrationId: string){
-    console.log("showDemographicData"+registrationId);
+  showDemographicData(registrationId: string) {
+    console.log("showDemographicData" + registrationId);
     this.dataService.fetchDemographicData("10040100290004320241210093511").subscribe(
-      (response:any) => {
-        console.log("response:: malay :: "+ response)
+      (response: any) => {
+        console.log("response:: malay :: " + response)
         if (response?.response?.response?.status === 'ACTIVATED') {
           this.demographicData = response.response.response.identity; // Pass identity data to child
-         // Create a new window and navigate to 'demographic-details' route
-        const newWindow = window.open(`/demographic-details`, '_blank', 'width=800,height=600');
+          // Create a new window and navigate to 'demographic-details' route
+          const newWindow = window.open(`/demographic-details`, '_blank', 'width=800,height=600');
 
-        // Use localStorage to pass data to the new window
-        if (newWindow) {
-          localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
-        }
+          // Use localStorage to pass data to the new window
+          if (newWindow) {
+            localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
+          }
         } else {
           alert('Failed to fetch demographic data from id repo');
         }
@@ -546,6 +615,6 @@ processDocuments(documentsData: any) {
     }
     return keys.some(key => this.rowData.demographics[key]);
   }
-  
-  
+
+
 }

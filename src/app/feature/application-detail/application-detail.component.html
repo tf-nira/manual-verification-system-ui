@@ -68,6 +68,14 @@
       'updatedAt', 'renewalNIN', 'nextOfKinPhoneNumber', 'ninExpiryDate', 'applicantNationality',
       'applicantOtherNationality', 'citizenshipCertificateNo', 'foundLink'
     ])">
+    
+    <div *ngIf="photoBase64; else noPhoto">
+      <img [src]="photoBase64" alt="Applicant Photo" (error)="onImageError()" />
+    </div>
+    <ng-template #noPhoto>
+      <p>No photo available.</p>
+    </ng-template>
+    
         <h3>Personal Information</h3>
         <div class="personal-information">
 
@@ -1441,43 +1449,39 @@
 
 
         <div class="tab-content" *ngIf="activeTab === 'documents'">
-          <!-- Documents Content -->
+          <!-- Documents Section -->
           <div class="documents-section">
-            <p>Documents content goes here...</p>
+            <p *ngIf="documents.length === 0">No documents available.</p>
             <div *ngFor="let document of documents; let i = index">
               <!-- Section Header -->
               <div class="section-header" (click)="toggleSection(i)">
-                <h4>{{ document.category }}</h4>
+                <h4>{{ document.category || 'Unknown Category' }}</h4>
                 <i class="fas" [ngClass]="isSectionExpanded[i] ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
               </div>
+        
               <!-- Document Items -->
               <div class="document-items" *ngIf="isSectionExpanded[i]">
                 <div class="document-item">
-                  <span><i class="fas fa-file-alt"></i> {{ document.title }}</span>
-                  <button class="view-button" [disabled]="!document.file" (click)="viewDocument(document)">
-                    <i class="fas fa-external-link-alt"></i>
+                  <span><i class="fas fa-file-alt"></i> {{ document.title || 'Untitled Document' }}</span>
+                  <button
+                    class="view-button"
+                    [disabled]="!document.file"
+                    (click)="viewDocument(document)"
+                  >
+                  <p *ngIf="!pdfUrl">PDF not available</p>
+                    <i class="fas fa-external-link-alt"></i> View
                   </button>
                 </div>
                 <div class="document-item">
                   <span>{{ document.fileName || 'No File Uploaded' }}</span>
-                  <button class="btn view-button" [disabled]="!document.file" (click)="viewDocument(document)">
-                    View
-                  </button>
-                </div>
-                <div class="upload-section">
-                  <input type="file" id="fileInput_{{ i }}" class="file-input" (change)="onFileSelect($event)"
-                    accept=".pdf,.doc,.docx,.jpg,.png" />
-                  <button [ngClass]="{
-                      'document-upload': role === 'MVS_DISTRICT_OFFICER',
-                      hidden: role !== 'MVS_DISTRICT_OFFICER'
-                    }" (click)="openDocumentUploadwModal(document.category, document.title)">
-                    {{ constants.UPLOAD_DCOUMENTS }}
-                  </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        
+        
+        
 
       </div>
     </div>
