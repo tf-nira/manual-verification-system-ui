@@ -1477,6 +1477,14 @@
                 </div>
               </div>
             </div>
+
+            <button [ngClass]="{
+              'document-upload': role === 'MVS_DISTRICT_OFFICER',
+              'hidden': role !== 'MVS_DISTRICT_OFFICER'
+            }" (click)="openDocumentUploadwModal()">
+            {{ constants.UPLOAD_DCOUMENTS }}
+          </button>
+
           </div>
         </div>
         
@@ -1656,27 +1664,66 @@
   <div class="uploadDocumentModal" *ngIf="showDocumentUploadModal">
     <div class="modal">
       <div class="modal-header">
-        <h3>Documents</h3>
-        <!-- Close Button -->
-        <button class="close-button" (click)="closeDocumentUploadModal()">×</button>
+        <h3>Upload Documents</h3>
+        <button class="close-button" (click)="closeDocumentUploadModal()">&#10006;</button>
       </div>
+  
       <div class="modal-body">
-        <label for="category">Document Category:</label>
-        <input id="category" type="text" [value]="currentDocument.category" readonly />
-
-        <!-- Prefilled Title -->
-        <label for="title">Document Title:</label>
-        <input id="title" type="text" [value]="currentDocument.title" readonly />
-
-        <input type="file" (change)="onFileSelect($event)" accept=".pdf,.doc,.docx,.jpg,.png" required />
-        <span class="file-name">{{ currentDocument.fileName || 'No file chosen' }}</span>
-
+        <div class="table">
+          <div class="table-header">
+            <div class="header-item">Category</div>
+            <div class="header-item">Title</div>
+            <div class="header-item">File Selection</div>
+            <div class="header-item">Preview</div>
+            <div class="header-item">Delete</div>
+          </div>
+  
+          <div *ngFor="let document of documents; let i = index" class="table-row">
+            <select
+              class="dropdown"
+              [(ngModel)]="document.category"
+              required
+            >
+              <option value="" disabled selected>Category *</option>
+              <option *ngFor="let category of docCategories" [value]="category">
+                {{ category }}
+              </option>
+            </select>
+  
+            <select
+              class="dropdown"
+              [(ngModel)]="document.title"
+              required
+            >
+              <option value="" disabled selected>Title *</option>
+              <option *ngFor="let title of docTitles" [value]="title">
+                {{ title }}
+              </option>
+            </select>
+  
+            <div class="file-selection">
+              <button class="file-button" (click)="triggerFileSelect(i)">Select</button>
+              <button class="file-button" (click)="triggerScan(i)">Scan</button>
+            </div>
+  
+            <button
+              class="preview-button"
+              [disabled]="!document.fileName || !document.file"
+              (click)="previewFile(document.file!)"
+            >
+              Preview
+            </button>
+  
+            <button class="delete-button" (click)="deleteDocumentRow(i)">&#10005;</button>
+          </div>
+        </div>
       </div>
+  
       <div class="modal-footer">
-        <button class="btn back" (click)="closeDocumentUploadModal()">Cancel</button>
-        <!-- <button class="btn add" (click)="addDocumentRow()">Upload Another Doc</button> -->
-        <button class="btn approve" (click)="confirmAndApprove()">Upload</button>
+        <button class="btn cancel" (click)="closeDocumentUploadModal()">Cancel</button>
+        <button class="btn add" (click)="addDocumentRow()">Add Document</button>
+        <button class="btn confirm" (click)="confirmAndUpload()">Confirm & Upload</button>
       </div>
     </div>
-
   </div>
+  

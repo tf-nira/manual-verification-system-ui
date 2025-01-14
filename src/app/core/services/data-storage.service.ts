@@ -187,9 +187,9 @@ export class DataStorageService {
     const request = {
       documents: docPayload,
     };
-    const obj = new RequestModel(request);
+    // const obj = new RequestModel(request);
 
-    return this.httpClient.post(url, obj, {
+    return this.httpClient.post(url, docPayload, {
       headers,
       withCredentials: true,
     });
