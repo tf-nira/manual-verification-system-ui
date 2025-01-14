@@ -381,11 +381,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.showScheduleInterviewModal = false;
   }
 
-  openDocumentUploadwModal(category: string, title: string) {
-    this.currentDocument.category = category;
-    this.currentDocument.title = title;
-    this.currentDocument.fileName = '';
-    this.currentDocument.file = null;
+  openDocumentUploadwModal() {
     this.showDocumentUploadModal = true;
   }
   closeDocumentUploadModal() {
@@ -503,53 +499,112 @@ export class ApplicationDetailComponent implements OnInit {
 
 
   // Handle file selection
-  onFileSelect(event: any) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.currentDocument.fileName = file.name;
-      this.currentDocument.file = file;
-      console.log('File selected:', file.name);
-    } else {
-      console.error('No file selected.');
+  onFileSelect(event: any, index: number) {
+    const file = event.target.files[0];
+    if (file) {
+      this.documents[index].fileName = file.name;
+      this.documents[index].file = file;
     }
-
   }
 
   // Add a new document row
   addDocumentRow() {
+    console.log("add doc row")
     this.documents.push({ category: '', title: '', fileName: '', file: null });
   }
 
-  // Confirm and approve action
-  confirmAndApprove() {
-    debugger
-    const docPayload: DocumentPayload = {};
-    const doc = this.currentDocument;
-    if (doc.category && doc.file) {
-      const reader = new FileReader();
-      if (doc.file) {
-        console.log('File to be read:', doc.file);
+  deleteDocumentRow(index: number) {
+    this.documents.splice(index, 1);
+  }
+
+  triggerFileSelect(index: number) {
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = '.pdf,.doc,.docx,.png,.jpg';
+    fileInput.style.display = 'none';
+
+    fileInput.onchange = (event: Event) => {
+      const inputElement = event.target as HTMLInputElement;
+      if (inputElement.files && inputElement.files.length > 0) {
+        const file = inputElement.files[0];
+        this.documents[index].fileName = file.name;
+        this.documents[index].file = file;
       }
+    };
 
-      reader.onload = () => {
-        if (reader.result) {
-          const fileBytes = new Uint8Array(reader.result as ArrayBuffer);
-          docPayload[doc.category] = {
-            document: Array.from(fileBytes),
-            value: doc.title,
-            type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(),
-            format: doc.fileName.split('.').pop() || ''
-          };
-          this.uploadDocuments(docPayload);
-        }
-      };
-      reader.readAsArrayBuffer(doc.file);
-      reader.onerror = () => {
-        console.error('Error reading file:', reader.error);
-      };
+    document.body.appendChild(fileInput);
+    fileInput.click();
 
+    fileInput.remove();
+  }
+  
+  triggerScan(index: number) {
+    // Trigger scan logic here
+  }
+  
+  previewFile(file: File | SafeResourceUrl) {
+    if (file instanceof File) {
+      const fileURL = URL.createObjectURL(file);
+  
+      if (file.type.startsWith('image/')) {
+        const imageWindow = window.open(fileURL, '_blank');
+        if (!imageWindow) alert('Unable to preview the image.');
+      } else if (file.type === 'application/pdf') {
+        const pdfWindow = window.open(fileURL, '_blank');
+        if (!pdfWindow) alert('Unable to preview the PDF.');
+      } else {
+        alert('Preview is not supported for this file type.');
+      }
+    } else {
+      alert('Invalid file type for preview.');
     }
+  }
+
+  // Confirm and approve action
+  confirmAndUpload() {
+    const payload: {
+      id: string;
+      version: string;
+      requesttime: string;
+      metadata: null;
+      request: {
+        documents: DocumentPayload;
+      };
+    } = {
+      id: '',
+      version: '',
+      requesttime: new Date().toISOString(),
+      metadata: null,
+      request: {
+        documents: {}
+      }
+    };
+  
+    this.documents.forEach((doc) => {
+      if (doc.category && doc.file) { 
+        if (doc.file instanceof File) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            if (reader.result) {
+              const fileBytes = new Uint8Array(reader.result as ArrayBuffer);
+              payload.request.documents[doc.category] = {
+                document: Array.from(fileBytes),
+                value: doc.title,
+                type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(),
+                format: doc.fileName.split('.').pop() || ''
+              };
+  
+              if (Object.keys(payload.request.documents).length === this.documents.length) {
+                this.uploadDocuments(payload);
+              }
+            }
+          };
+          reader.readAsArrayBuffer(doc.file);
+        } else {
+          console.error(`Invalid file type for category ${doc.category}`);
+        }
+      }
+    });
   }
 
   uploadDocuments(payload: any) {
@@ -557,8 +612,7 @@ export class ApplicationDetailComponent implements OnInit {
       (response) => {
         if (response?.response?.status === 'Success') {
           alert('All documents uploaded successfully.');
-          this.closeDocumentUploadModal();
-
+          
         } else {
           alert('Failed to upload documents. Please try again.');
         }

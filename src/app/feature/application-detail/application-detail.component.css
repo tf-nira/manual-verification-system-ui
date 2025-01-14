@@ -951,12 +951,12 @@ textarea {
 /* Modal Container */
 .uploadDocumentModal .modal {
   background-color: #fff; /* White background */
-  border-radius: 10px; /* Rounded corners */
+  border-radius: 8px; /* Rounded corners */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  width: 400px; /* Adjusted width */
+  width: 600px; /* Adjusted width */
   height: auto; /* Automatically adjusts to content */
   overflow-y: auto; /* Add scroll for overflow content */
-  padding: 20px; /* Adjusted padding for better spacing */
+  padding: 5px; /* Adjusted padding for better spacing */
   max-width: 90%; /* Responsive design for smaller screens */
   display: flex;
   flex-direction: column; /* Vertical layout for content */
@@ -967,14 +967,11 @@ textarea {
 
 /* Modal Header */
 .uploadDocumentModal .modal-header {
+  padding: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px;
-  font-size: 20px;
-  font-weight: bold;
   border-bottom: 1px solid #ddd;
-  color: #171717;
 }
 
 .uploadDocumentModal .modal-header .close-button {
@@ -991,93 +988,102 @@ textarea {
 
 /* Modal Body */
 .uploadDocumentModal .modal-body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 5px; /* Space between elements */
+  padding: 16px;
+  overflow-y: auto;
 }
 
-/* Document Row Styling */
-.uploadDocumentModal .document-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 15px;
+.uploadDocumentModal .modal-body .table {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr 1fr 1fr;
+  gap: 8px;
 }
-/* Close Button Styling */
-.uploadDocumentModal .modal-header .close-button {
+
+.uploadDocumentModal .modal-body .table .table-header {
+  display: contents;
+  font-weight: bold;
+  background: #f7f7f7;
+  padding: 8px 0;
+}
+
+.uploadDocumentModal .modal-body .table .table-row {
+  display: contents;
+  align-items: center;
+}
+
+.uploadDocumentModal .modal-body .table .table-row .dropdown {
+  width: 100%;
+  padding: 8px;
+}
+
+.uploadDocumentModal .modal-body .table .table-row .file-selection {
+  display: flex;
+  gap: 8px;
+}
+
+.uploadDocumentModal .modal-body .table .table-row .file-selection .file-button {
+  padding: 8px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.uploadDocumentModal .modal-body .table .table-row .file-selection .file-button:hover {
+  background: #0056b3;
+}
+
+.uploadDocumentModal .modal-body .table .table-row .preview-button {
+  padding: 8px;
+  background: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.uploadDocumentModal .modal-body .table .table-row .preview-button:disabled {
+  background: #e9ecef;
+  cursor: not-allowed;
+}
+
+
+.uploadDocumentModal .modal-body .table .table-row  .delete-button {
   background: none;
   border: none;
-  font-size: 24px;
-  font-weight: bold;
-  color: #333;
+  font-size: 18px;
+  color: red;
   cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  line-height: 1;
 }
 
-.uploadDocumentModal .modal-header .close-button:hover {
-  color: #ff0000; /* Red color on hover */
-}
-
-
-/* Inputs and Dropdowns */
-.uploadDocumentModal .dropdown,
-.uploadDocumentModal input[type="file"] {
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  flex: 1;
-}
-
-/* Footer Styling */
 .uploadDocumentModal .modal-footer {
+  padding: 16px;
   display: flex;
   justify-content: flex-end;
-  padding: 15px;
-  gap: 10px;
-  background-color: #f9f9f9;
+  gap: 8px;
+  border-top: 1px solid #ddd;
 }
 
-/* Buttons */
-.uploadDocumentModal .btn {
-  padding: 10px 15px;
-  font-size: 14px;
-  font-weight: bold;
+.uploadDocumentModal .modal-footer .btn {
+  padding: 8px 16px;
   border: none;
-  border-radius: 5px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.uploadDocumentModal .btn.back {
-  background-color: #e25d6b;
+.uploadDocumentModal .modal-footer .btn.cancel {
+  background: #6c757d;
   color: white;
 }
 
-.uploadDocumentModal .btn.back:hover {
-  background-color: #b02a37;
-}
-
-.uploadDocumentModal .btn.add {
-  background-color: #ffc107;
+.uploadDocumentModal .modal-footer .btn.add {
+  background: #007bff;
   color: white;
 }
 
-.uploadDocumentModal .btn.add:hover {
-  background-color: #e0a800;
-}
-
-.uploadDocumentModal .btn.approve {
-  background-color: #4cad63;
+.uploadDocumentModal .modal-footer .btn.confirm {
+  background: #28a745;
   color: white;
-}
-
-.uploadDocumentModal .btn.approve:hover {
-  background-color: #218838;
 }
 
 /* Fade-in Animation */
