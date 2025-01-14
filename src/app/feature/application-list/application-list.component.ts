@@ -295,7 +295,7 @@ export class ApplicationListComponent implements OnInit {
 
     const sort = [
       {
-        sortField: this.sortColumn || API_CONST_CREATED_DATE,
+        sortField: this.sortColumn === API_CONST_APPLICATION_ID ? API_CONST_REG_ID : this.sortColumn || API_CONST_CREATED_DATE,
         sortType: this.sortDirection || 'desc',
       },
     ];
