@@ -144,6 +144,9 @@ export class ApplicationDetailComponent implements OnInit {
   documents: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
     { category: '', title: '', fileName: '', file: null }
   ];
+  additionalDocuments: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
+    { category: '', title: '', fileName: '', file: null }
+  ];
   personDetails: { role: string; details: { [key: string]: any } }[] = []; // Store details for Father, Mother, Guardian
   constants = {
     MVS_DISTRICT_OFFICER,
@@ -539,11 +542,11 @@ export class ApplicationDetailComponent implements OnInit {
   // Add a new document row
   addDocumentRow() {
     console.log("add doc row")
-    this.documents.push({ category: '', title: '', fileName: '', file: null });
+    this.additionalDocuments.push({ category: '', title: '', fileName: '', file: null });
   }
 
   deleteDocumentRow(index: number) {
-    this.documents.splice(index, 1);
+    this.additionalDocuments.splice(index, 1);
   }
 
   triggerFileSelect(index: number) {
@@ -556,8 +559,8 @@ export class ApplicationDetailComponent implements OnInit {
       const inputElement = event.target as HTMLInputElement;
       if (inputElement.files && inputElement.files.length > 0) {
         const file = inputElement.files[0];
-        this.documents[index].fileName = file.name;
-        this.documents[index].file = file;
+        this.additionalDocuments[index].fileName = file.name;
+        this.additionalDocuments[index].file = file;
       }
     };
 
@@ -609,7 +612,7 @@ export class ApplicationDetailComponent implements OnInit {
       }
     };
 
-    this.documents.forEach((doc) => {
+    this.additionalDocuments.forEach((doc) => {
       if (doc.category && doc.file) {
         if (doc.file instanceof File) {
           const reader = new FileReader();
@@ -623,7 +626,7 @@ export class ApplicationDetailComponent implements OnInit {
                 format: doc.fileName.split('.').pop() || ''
               };
 
-              if (Object.keys(payload.request.documents).length === this.documents.length) {
+              if (Object.keys(payload.request.documents).length === this.additionalDocuments.length) {
                 this.uploadDocuments(payload);
               }
             }
@@ -641,6 +644,12 @@ export class ApplicationDetailComponent implements OnInit {
       (response) => {
         if (response?.response?.status === 'Success') {
           alert('All documents uploaded successfully.');
+          this.router.navigate(['/application-list'], {
+            state: {
+              role: this.role, 
+              data: this.rowData 
+            }
+          });
 
         } else {
           alert('Failed to upload documents. Please try again.');

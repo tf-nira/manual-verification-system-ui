@@ -1765,7 +1765,7 @@
             <div class="header-item">Delete</div>
           </div>
 
-          <div *ngFor="let document of documents; let i = index" class="table-row">
+          <div *ngFor="let document of additionalDocuments; let i = index" class="table-row">
             <select class="dropdown" [(ngModel)]="document.category" required>
               <option value="" disabled selected>Category *</option>
               <option *ngFor="let category of docCategories" [value]="category.key">
