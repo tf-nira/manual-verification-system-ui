@@ -63,9 +63,11 @@
 
 .info-item {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding: 8px 0;
   border-bottom: 1px solid #eaeaea;
+  font-size: 14px;
 }
 
 .label {
@@ -200,7 +202,7 @@
 
 /* References Content */
 .references-content {
-  padding: 15px;
+  padding: 5px;
   overflow-y: auto; /* Enables scrolling if content overflows */
   height: 100%; /* Ensures it occupies the full height of its parent */
   box-sizing: border-box; /* Ensures padding is included in height calculations */
@@ -374,7 +376,7 @@
 }
 
 .references-content {
-  padding: 15px;
+  padding: 5px;
 }
 
 .right-section.collapsed .references-content {
@@ -1106,6 +1108,10 @@ textarea {
   border: 1px solid #ccc; /* Optional: Add a border to distinguish the section */
   background-color: #f9f9f9; /* Optional: Add a background color */
 }
+.escalation-section {
+  margin-bottom: 16px; /* Add space between sections */
+}
+
 .escalation-header {
   display: flex;
   justify-content: space-between;

@@ -83,9 +83,9 @@ export class ApplicationListComponent implements OnInit {
   uniqueServiceTypes: string[] = [];
   uniqueApplicationStatuses: string[] = [];
 
-  services = ['Service A', 'Service B', 'Service C'];
-  serviceTypes = ['Type 1', 'Type 2', 'Type 3'];
-  applicationStatuses = ['Pending', 'Approved', 'Rejected'];
+  services = ['NEW', 'UPDATE', 'RENEWAL', 'LOST'];
+  serviceTypes = ['By Birth /Descent', 'By Registration', 'Citizenship under the Article 9','Dual Citizenship','By Naturalization'];
+  applicationStatuses = ['NEW', 'INTERVIEW SCHEDULED'];
 
   constants = {
     SEARCH,
