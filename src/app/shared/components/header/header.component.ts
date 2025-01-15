@@ -12,7 +12,7 @@ import { LOGOUT, NAME, ROLE } from '../../constants';
 })
 export class HeaderComponent {
   @Input() role: string = '';
-  @Input() view: string = '';
+  @Input() view: string = 'List'; // Default to 'List'
   name: string = '';
   isDropdownOpen: boolean = false;
   constants = {
@@ -44,5 +44,12 @@ export class HeaderComponent {
   }
   clearAuthToken(): void {
     document.cookie = `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
+  }
+  getPageTitle(): string {
+    const titles: { [key: string]: string } = {
+      List: 'Applications List View',
+      Details: 'Application Details View',
+    };
+    return titles[this.view] || 'Default Title'; 
   }
 }

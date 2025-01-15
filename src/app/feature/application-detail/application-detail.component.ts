@@ -39,7 +39,32 @@ export class ApplicationDetailComponent implements OnInit {
   role: string = '';
   photoBase64: string = '';
   isPhotoError = false;
-
+  // Map document keys to readable titles
+   titleMap: { [key: string]: string } = {
+    proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
+    proofOfAbandonment: 'Proof of Abandonment',
+    proofOfException: 'Proof of Exception',
+  proofOfPayment: 'Proof of Payment',
+  proofOfRelationship: 'Proof of Relationship',
+  proofOfCitizenship: 'Proof of Citizenship',
+  proofOfLegalDOcuments: 'Proof of Legal Documents',
+  proofOfIdentity: 'Proof of Identity',
+  proofOfAddress: 'Proof of Address',
+  proofOfReplacement: 'Proof of Replacement',
+  proofOfBirth: 'Proof of Birth',
+  proofOfOtherSupportingdocumentIssuedbyGovt: 'Proof of Other Supporting Document',
+  proofOfOtherSupportingdocuments: 'Proof of Other Supporting Documents',
+  applicantProofOfSignature: 'Applicant Proof of Signature',
+  introducerProofOfSignature: 'Introducer Proof of Signature',
+  proofOfRegistration: 'Proof of Registration',
+  proofOfAdoption: 'Proof of Adoption',
+  proofOfChangeOfParticulars: 'Proof of Change of Particulars',
+  proofOfDeclarant: 'Proof of Declarant',
+  proofOfLegalDeepPoll: 'Proof of Legal Deed Poll',
+  proofOfLegalGazzette: 'Proof of Legal Gazette',
+  proofOfLegalStatutoryDeclaration: 'Proof of Statutory Declaration',
+  proofOfModificationConsent: 'Proof of Modification Consent',
+  };
   selectedTab: string = 'demographic'; // Default to 'demographic'
   escalateOption: boolean = false;
   showApprovalModal: boolean = false;
@@ -159,27 +184,27 @@ export class ApplicationDetailComponent implements OnInit {
     console.log(this.rowData.applicationId);
     this.selectedRow = state.rowData || {};
     this.photoBase64 = this.rowData?.biometricAttributes?.ApplicantPhoto?.trim() || '';
-    console.log("photoBase64:::: " + this.photoBase64)
-    console.log('Base64 String Length:', this.photoBase64.length);
-    const base64Pdf = this.rowData?.documents?.proofOfPhysicalApplicationForm?.trim() || '';
-    if (base64Pdf) {
-      this.pdfUrl = this.convertBase64ToPdfUrl(base64Pdf);
-    } else {
-      this.pdfUrl = null;
-    }
+    // console.log("photoBase64:::: " + this.photoBase64)
+    // console.log('Base64 String Length:', this.photoBase64.length);
+    // const base64Pdf = this.rowData?.documents?.proofOfPhysicalApplicationForm?.trim() || '';
+    // if (base64Pdf) {
+    //   this.pdfUrl = this.convertBase64ToPdfUrl(base64Pdf);
+    // } else {
+    //   this.pdfUrl = null;
+    // }
     /**below two row data sets need to be removed data would come from polcy, this is for example */
-    this.rowData = {
-      ...this.rowData,
-      fatherNin: "123456789", // Example NIN
-      fatherName: "John Doe", // Example Name
-      fatherAddress: "123 Main Street, Cityville", // Example Address
-    }
-    this.rowData = {
-      ...this.rowData,
-      motherNin: "654321", // Example NIN
-      motherName: "rosy", // Example Name
-      motherAddress: "123 Main Street, Cityville", // Example Address
-    }
+    // this.rowData = {
+    //   ...this.rowData,
+    //   fatherNin: "123456789", // Example NIN
+    //   fatherName: "John Doe", // Example Name
+    //   fatherAddress: "123 Main Street, Cityville", // Example Address
+    // }
+    // this.rowData = {
+    //   ...this.rowData,
+    //   motherNin: "654321", // Example NIN
+    //   motherName: "rosy", // Example Name
+    //   motherAddress: "123 Main Street, Cityville", // Example Address
+    // }
 
     if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER) {
       this.applicationStatus = this.rowData[APPLICANT_NAME];
@@ -192,6 +217,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.commentMVSSupervisor = this.rowData[ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] || '';
 
     this.checkPersonDetails();
+    console.log(this.personDetails)
     this.setDropdownOptions();
 
     // Check if the rowData contains documents and process them
@@ -215,10 +241,10 @@ export class ApplicationDetailComponent implements OnInit {
     const blob = new Blob([byteArray], { type: 'application/pdf' });
 
     // Create a safe object URL for the Blob
-    const pdfUrl = URL.createObjectURL(blob);
+    this.pdfUrl = URL.createObjectURL(blob);
 
     // Use Angular's DomSanitizer to sanitize the URL
-    return this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
+    return this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrl);
   }
   onImageError() {
     this.isPhotoError = true;
@@ -253,13 +279,8 @@ export class ApplicationDetailComponent implements OnInit {
   }
 
   getDocumentTitle(key: string): string {
-    // Map document keys to readable titles
-    const titleMap: { [key: string]: string } = {
-      proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
-      proofOfAbandonment: 'Proof of Abandonment',
-      // Add other mappings as needed
-    };
-    return titleMap[key] || 'Unknown Document';
+    
+    return this.titleMap[key] || 'Unknown Document';
   }
   // Added: Methods to toggle left and right sections
   toggleLeft() {
@@ -281,16 +302,19 @@ export class ApplicationDetailComponent implements OnInit {
   }
   checkPersonDetails() {
     const roles = ['father', 'mother', 'guardian']; // Define roles to check
-
+    console.log(this.rowData.demographics)
     this.personDetails = roles
       .map((role) => {
-        const ninKey = `${role}Nin`;
-        if (this.rowData[ninKey]) {
+        const ninKey = role === 'guardian' ? `${role}NIN_AIN` : `${role}NIN`;
+        console.log("for rolw:"+role)
+        console.log("checking"+this.rowData.demographics[ninKey])
+        if (this.rowData.demographics[ninKey]) {
+          console.log(this.rowData.demographics[ninKey]+"exist")
           // If NIN exists for the person, collect all details related to the role
-          const personData = Object.keys(this.rowData)
+          const personData = Object.keys(this.rowData.demographics)
             .filter((key) => key.startsWith(role)) // Match keys starting with the role (e.g., father)
             .reduce((acc: { [key: string]: any }, key) => {
-              acc[key] = this.rowData[key]; // Add key-value pair to the accumulator
+              acc[key] = this.rowData.demographics[key]; // Add key-value pair to the accumulator
               return acc;
             }, {}); // Initialize acc as an empty object
 
@@ -636,11 +660,11 @@ export class ApplicationDetailComponent implements OnInit {
   }
   showDemographicData(registrationId: string) {
     console.log("showDemographicData" + registrationId);
-    this.dataService.fetchDemographicData("10040100290004320241210093511").subscribe(
+    this.dataService.fetchDemographicData(registrationId).subscribe(
       (response: any) => {
-        console.log("response:: malay :: " + response)
-        if (response?.response?.response?.status === 'ACTIVATED') {
-          this.demographicData = response.response.response.identity; // Pass identity data to child
+        console.log("response:: malay :: " + JSON.stringify(response))
+        if (response?.response?.status === 'ACTIVATED') {
+          this.demographicData = response.response.identity; // Pass identity data to child
           // Create a new window and navigate to 'demographic-details' route
           const newWindow = window.open(`/demographic-details`, '_blank', 'width=800,height=600');
 
@@ -673,5 +697,33 @@ export class ApplicationDetailComponent implements OnInit {
     return keys.some(key => this.rowData.demographics[key]);
   }
 
-
+  extractValue(data: any): string | null {
+    if (!data) {
+      return null; // Skip null or undefined values
+    }
+  
+    if (Array.isArray(data) && data[0]?.value) {
+      return data[0].value; // Extract 'value' key from the first array item
+    }
+  
+    if (typeof data === 'object' && data.value) {
+      return data.value; // Handle objects with a 'value' key
+    }
+  
+    if (typeof data === 'string') {
+      try {
+        // Parse JSON strings if applicable
+        const parsed = JSON.parse(data);
+        if (Array.isArray(parsed) && parsed[0]?.value) {
+          return parsed[0].value; // Extract 'value' from parsed array
+        }
+        return data; // Return raw string if not JSON
+      } catch {
+        return data; // Return raw string if parsing fails
+      }
+    }
+  
+    return data; // Return plain value if none of the above conditions match
+  }
+  
 }

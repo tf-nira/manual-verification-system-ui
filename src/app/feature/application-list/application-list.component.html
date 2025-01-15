@@ -142,7 +142,7 @@
                 <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
                 <td>{{ row[constants.API_CONST_CREATED_DATE] }}</td>
                 <td *ngIf="role === constants.MVS_DISTRICT_OFFICER">
-                  {{ row[constants.APPLICATION_STATUS] }}
+                  {{ row[constants.API_CONST_STATUS] === 'INTERVIEW SCHEDULED' ? 'INTERVIEW SCHEDULED' : 'NEW' }}
                 </td>
               </tr>
             </tbody>
@@ -154,7 +154,7 @@
       <div class="right-section" [class.collapsed]="!isPanelExpanded">
         <button class="collapse-btn" (click)="togglePanel()">Collapse</button>
         <div class="details-container">
-          <h3>Details for Application ID: {{ selectedRow?.[constants.API_CONST_APPLICATION_ID] }}</h3>
+          <h5>Details for Application ID: {{ selectedRow?.[constants.API_CONST_APPLICATION_ID] }}</h5>
 
           <div *ngIf="selectedRow">
             <!-- Officer Escalation Details -->
