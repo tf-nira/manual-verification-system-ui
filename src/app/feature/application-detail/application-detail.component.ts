@@ -623,7 +623,10 @@ export class ApplicationDetailComponent implements OnInit {
       }
     );
   }
-  parseJson(jsonString: string): any {
+  parseJson(jsonString: string | null | undefined): any {
+    if (!jsonString) {
+      return [];
+    }
     try {
       return JSON.parse(jsonString);
     } catch (e) {
