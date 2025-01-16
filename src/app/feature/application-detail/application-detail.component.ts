@@ -132,7 +132,9 @@ export class ApplicationDetailComponent implements OnInit {
   commentMVSOfficer: string = '';
   commentMVSSupervisor: string = '';
   dropdownOptions: { value: string; label: string; default: boolean }[] = [];
+  rejectionCategories: { value: string; default: boolean }[] = [];
   selectedOfficerLevel: string = '';
+  escalationCategory: string = '';
   escalationComment: string = '';
   rejectionCategory: string = '';
   rejectionComment: string = '';
@@ -228,6 +230,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.checkPersonDetails();
     console.log(this.personDetails)
     this.setDropdownOptions();
+    this.setRejectionCategories();
 
     // Check if the rowData contains documents and process them
     if (this.rowData?.documents) {
@@ -351,7 +354,7 @@ export class ApplicationDetailComponent implements OnInit {
           if(status == API_CONST_REJECT) statusMsg = 'Application REJECTED successfully.';
           else statusMsg = `Application ${status}D successfully.`
           this.snackBar.open(statusMsg, 'Close', {
-            duration: 100000,
+            duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
@@ -362,7 +365,7 @@ export class ApplicationDetailComponent implements OnInit {
         (error) => {
           console.error('Error updating status:', error);
           this.snackBar.open('Failed to update status. Please try again', 'Close', {
-            duration: 100000,
+            duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
@@ -395,6 +398,36 @@ export class ApplicationDetailComponent implements OnInit {
       default:
         this.dropdownOptions = [];
         this.selectedOfficerLevel = '';
+    }
+  }
+
+  setRejectionCategories() {
+    switch(this.service) {
+      case 'NEW':
+        this.rejectionCategories = [
+          { value: 'Rejected due to evidence of non citizenship',  default: false},
+          { value: 'Insufficient supporting documents to determine citizenship',  default: false},
+          { value: 'Documents provided have inconsistent information',  default: false},
+          { value: 'Documents not in required format ',  default: false},
+          { value: 'Unsatisfactory CV Interview at Point of Registration ',  default: false},
+          { value: 'Second register/application exists (May or may not have a NIN, stop listed)',  default: false},
+          { value: 'Poorly scanned documents to enable decision',  default: false},
+          { value: 'Fraudulent/Altered /doctored documents ',  default: false},
+        ]
+        break;
+      case 'COP':
+        this.rejectionCategories = [
+          { value: 'Documents provided have inconsistent information', default: false },
+          { value: 'Insufficient supporting documents', default: false },
+          { value: 'Documents not in required format (i.e SD exists but not registered)', default: false },
+          { value: 'Poorly scanned documents to enable decision', default: false },
+          { value: 'Fraudulent/Altered /doctored documents ', default: false },
+          { value: 'No payment receipt attached', default: false },
+          { value: 'Payments used on previous unrelated application', default: false },
+          { value: 'Payment lower than statutory fees', default: false },
+          { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false },
+          { value: 'An existing record is stop listed', default: false },
+        ]
     }
   }
 
@@ -458,7 +491,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.showEscalateModal = false;
     const comment = this.escalationComment.trim();
     console.log(this.selectedOfficerLevel)
-    this.changeApplicationStatus(API_CONST_ESCALATE, comment, '', this.selectedOfficerLevel);
+    this.changeApplicationStatus(API_CONST_ESCALATE, comment, this.escalationCategory, this.selectedOfficerLevel);
     this.closeEscalateModal();
   }
 
@@ -491,7 +524,7 @@ export class ApplicationDetailComponent implements OnInit {
           (response: any) => {
             if (response?.response?.status === "Success") {
               this.snackBar.open('Interview scheduled successfully', 'Close', {
-                duration: 100000,
+                duration: 3000,
                 horizontalPosition: 'center',
                 verticalPosition: 'top',
                 panelClass: ['center-snackbar'],
@@ -502,7 +535,7 @@ export class ApplicationDetailComponent implements OnInit {
               });
             } else {
               this.snackBar.open('Failed to schedule the interview. Please try again.', 'Close', {
-                duration: 100000,
+                duration: 3000,
                 horizontalPosition: 'center',
                 verticalPosition: 'top',
                 panelClass: ['center-snackbar'],
@@ -512,7 +545,7 @@ export class ApplicationDetailComponent implements OnInit {
           (error) => {
             console.error('Error scheduling interview:', error);
             this.snackBar.open('An error occurred while scheduling the interview. Please try again later.', 'Close', {
-              duration: 100000,
+              duration: 3000,
               horizontalPosition: 'center',
               verticalPosition: 'top',
               panelClass: ['center-snackbar'],
@@ -520,7 +553,7 @@ export class ApplicationDetailComponent implements OnInit {
           });
     } else {
       this.snackBar.open('Please fill all the required fields.', 'Close', {
-        duration: 100000,
+        duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'top',
         panelClass: ['center-snackbar'],
@@ -532,7 +565,7 @@ export class ApplicationDetailComponent implements OnInit {
       const sanitizedUrl = this.sanitizer.sanitize(4, document.file); // Sanitizes the SafeResourceUrl
       if (!sanitizedUrl) {
         this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
-          duration: 100000,
+          duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
           panelClass: ['center-snackbar'],
@@ -560,7 +593,7 @@ export class ApplicationDetailComponent implements OnInit {
           `);
       } else {
         this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
-          duration: 100000,
+          duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
           panelClass: ['center-snackbar'],
@@ -568,7 +601,7 @@ export class ApplicationDetailComponent implements OnInit {
       }
     } else {
       this.snackBar.open('Document is not available.', 'Close', {
-        duration: 100000,
+        duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'top',
         panelClass: ['center-snackbar'],
@@ -630,7 +663,7 @@ export class ApplicationDetailComponent implements OnInit {
         const imageWindow = window.open(fileURL, '_blank');
         if (!imageWindow) {
           this.snackBar.open('Unable to preview the image.', 'Close', {
-            duration: 100000,
+            duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
@@ -640,7 +673,7 @@ export class ApplicationDetailComponent implements OnInit {
         const pdfWindow = window.open(fileURL, '_blank');
         if (!pdfWindow) {
           this.snackBar.open('Unable to preview the PDF.', 'Close', {
-            duration: 100000,
+            duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
@@ -648,7 +681,7 @@ export class ApplicationDetailComponent implements OnInit {
         }
       } else {
         this.snackBar.open('Preview is not supported for this file type.', 'Close', {
-          duration: 100000,
+          duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
           panelClass: ['center-snackbar'],
@@ -656,7 +689,7 @@ export class ApplicationDetailComponent implements OnInit {
       }
     } else {
       this.snackBar.open('Invalid file type for preview.', 'Close', {
-        duration: 100000,
+        duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'top',
         panelClass: ['center-snackbar'],
@@ -716,7 +749,7 @@ export class ApplicationDetailComponent implements OnInit {
       (response) => {
         if (response?.response?.status === 'Success') {
           this.snackBar.open('All documents uploaded successfully.', 'Close', {
-            duration: 100000,
+            duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
@@ -730,7 +763,7 @@ export class ApplicationDetailComponent implements OnInit {
 
         } else {
           this.snackBar.open('Failed to upload documents. Please try again.', 'Close', {
-            duration: 100000,
+            duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
@@ -740,7 +773,7 @@ export class ApplicationDetailComponent implements OnInit {
       (error) => {
         console.error('Error uploading documents:', error);
         this.snackBar.open('An error occurred while uploading the documents.', 'Close', {
-          duration: 100000,
+          duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
           panelClass: ['center-snackbar'],
@@ -775,7 +808,7 @@ export class ApplicationDetailComponent implements OnInit {
           }
         } else {
           this.snackBar.open('Failed to fetch demographic data from id repo', 'Close', {
-            duration: 100000,
+            duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
@@ -785,7 +818,7 @@ export class ApplicationDetailComponent implements OnInit {
       (error) => {
         console.error('Error in fetching demographic data', error);
         this.snackBar.open('An error occurred while fetching demographic data from id repo', 'Close', {
-          duration: 100000,
+          duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
           panelClass: ['center-snackbar'],
