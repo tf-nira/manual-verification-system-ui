@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
+import { FormsModule } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DemographicDetailsComponent } from '../demographic-details/demographic-details.component';
 import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uploaded.component';
 import { HeaderComponent } from "../../shared/components/header/header.component";
@@ -34,6 +35,7 @@ type DocumentPayload = {
 })
 
 export class ApplicationDetailComponent implements OnInit {
+
   demographicData: any;
   isChecked = false;
   role: string = '';
@@ -180,7 +182,7 @@ export class ApplicationDetailComponent implements OnInit {
   pdfUrl: any;
 
   constructor(private router: Router, private dataService: DataStorageService,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer, private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -345,14 +347,26 @@ export class ApplicationDetailComponent implements OnInit {
       .changeStatus(applicationId, status, comment, rejectionCategory, selectedOfficerLevel)
       .subscribe(
         (response) => {
-          alert(`Application ${status.toLowerCase()}d successfully.`);
-          this.router.navigate(['/application-list'], {
-            state: { role: this.role }
+          let statusMsg = '';
+          if(status == API_CONST_REJECT) statusMsg = 'Application REJECTED successfully.';
+          else statusMsg = `Application ${status}D successfully.`
+          this.snackBar.open(statusMsg, 'Close', {
+            duration: 100000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
           });
+          
+          this.router.navigate(['/application-list'], {state: { role: this.role }});
         },
         (error) => {
           console.error('Error updating status:', error);
-          alert('Failed to update status. Please try again.');
+          this.snackBar.open('Failed to update status. Please try again', 'Close', {
+            duration: 100000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
         });
   }
   setDropdownOptions() {
@@ -476,29 +490,53 @@ export class ApplicationDetailComponent implements OnInit {
         .subscribe(
           (response: any) => {
             if (response?.response?.status === "Success") {
-              alert('Interview scheduled successfully.');
+              this.snackBar.open('Interview scheduled successfully', 'Close', {
+                duration: 100000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                panelClass: ['center-snackbar'],
+              });
               this.closeScheduleInterviewModal();
               this.router.navigate(['/application-list'], {
                 state: { role: this.role, data: history.state.data }
               });
             } else {
-              alert('Failed to schedule the interview. Please try again.');
+              this.snackBar.open('Failed to schedule the interview. Please try again.', 'Close', {
+                duration: 100000,
+                horizontalPosition: 'center',
+                verticalPosition: 'top',
+                panelClass: ['center-snackbar'],
+              });
             }
           },
           (error) => {
             console.error('Error scheduling interview:', error);
-            alert('An error occurred while scheduling the interview. Please try again later.');
-
+            this.snackBar.open('An error occurred while scheduling the interview. Please try again later.', 'Close', {
+              duration: 100000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: ['center-snackbar'],
+            });
           });
     } else {
-      alert('Please fill all the required fields.');
+      this.snackBar.open('Please fill all the required fields.', 'Close', {
+        duration: 100000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
     }
   }
   viewDocument(document: { file: File | SafeResourceUrl | null }): void {
     if (document.file) {
       const sanitizedUrl = this.sanitizer.sanitize(4, document.file); // Sanitizes the SafeResourceUrl
       if (!sanitizedUrl) {
-        alert('Invalid or unsafe URL for the document.');
+        this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
+          duration: 100000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
         return;
       }
 
@@ -521,10 +559,20 @@ export class ApplicationDetailComponent implements OnInit {
             </html>
           `);
       } else {
-        alert('Unable to open a new window. Please check your browser settings.');
+        this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
+          duration: 100000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
       }
     } else {
-      alert('Document is not available.');
+      this.snackBar.open('Document is not available.', 'Close', {
+        duration: 100000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
     }
   }
 
@@ -580,15 +628,39 @@ export class ApplicationDetailComponent implements OnInit {
 
       if (file.type.startsWith('image/')) {
         const imageWindow = window.open(fileURL, '_blank');
-        if (!imageWindow) alert('Unable to preview the image.');
+        if (!imageWindow) {
+          this.snackBar.open('Unable to preview the image.', 'Close', {
+            duration: 100000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
+        }
       } else if (file.type === 'application/pdf') {
         const pdfWindow = window.open(fileURL, '_blank');
-        if (!pdfWindow) alert('Unable to preview the PDF.');
+        if (!pdfWindow) {
+          this.snackBar.open('Unable to preview the PDF.', 'Close', {
+            duration: 100000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
+        }
       } else {
-        alert('Preview is not supported for this file type.');
+        this.snackBar.open('Preview is not supported for this file type.', 'Close', {
+          duration: 100000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
       }
     } else {
-      alert('Invalid file type for preview.');
+      this.snackBar.open('Invalid file type for preview.', 'Close', {
+        duration: 100000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
     }
   }
 
@@ -643,7 +715,12 @@ export class ApplicationDetailComponent implements OnInit {
     this.dataService.uploadDocuments(this.applicationId, payload).subscribe(
       (response) => {
         if (response?.response?.status === 'Success') {
-          alert('All documents uploaded successfully.');
+          this.snackBar.open('All documents uploaded successfully.', 'Close', {
+            duration: 100000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
           this.router.navigate(['/application-list'], {
             state: {
               role: this.role, 
@@ -652,12 +729,22 @@ export class ApplicationDetailComponent implements OnInit {
           });
 
         } else {
-          alert('Failed to upload documents. Please try again.');
+          this.snackBar.open('Failed to upload documents. Please try again.', 'Close', {
+            duration: 100000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
         }
       },
       (error) => {
         console.error('Error uploading documents:', error);
-        alert('An error occurred while uploading the documents.');
+        this.snackBar.open('An error occurred while uploading the documents.', 'Close', {
+          duration: 100000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
       }
     );
   }
@@ -687,12 +774,22 @@ export class ApplicationDetailComponent implements OnInit {
             localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
           }
         } else {
-          alert('Failed to fetch demographic data from id repo');
+          this.snackBar.open('Failed to fetch demographic data from id repo', 'Close', {
+            duration: 100000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
         }
       },
       (error) => {
         console.error('Error in fetching demographic data', error);
-        alert('An error occurred while fetching demographic data from id repo');
+        this.snackBar.open('An error occurred while fetching demographic data from id repo', 'Close', {
+          duration: 100000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
       }
     );
   }
@@ -741,3 +838,4 @@ export class ApplicationDetailComponent implements OnInit {
   }
 
 }
+
