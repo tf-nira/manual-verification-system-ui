@@ -17,7 +17,7 @@ export class DataStorageService {
    */
 
   serverDtFormat = 'YYYY/MM/DD';
-  private BASE_URL: string = 'https://api-internal.niradev.idencode.link';
+  private BASE_URL: string = 'https://api-internal.niraqa1.idencode.link';
   private MVS_URL : string ='/v1/manual-verification-service';
   // private BASE_URL: string = '';
   // private MVS_URL : string ='';
