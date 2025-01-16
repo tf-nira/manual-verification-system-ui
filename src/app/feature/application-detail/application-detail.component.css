@@ -24,6 +24,7 @@
   overflow-y: auto; /* Independent vertical scrolling */
   padding: 16px;
   box-sizing: border-box;
+  margin-top: 5rem;
 }
 
 /* Left Section */

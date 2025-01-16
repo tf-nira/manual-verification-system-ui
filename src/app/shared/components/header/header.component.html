@@ -3,7 +3,6 @@
   <div class="left-section">
     <div class="logo-section">
       <img src="assets/images/logo.png" alt="NIRA Logo" class="nira-logo" />
-      <!-- <span class="material-icons grid-icon">grid_on</span>-->
       <span class="app-title">{{ getPageTitle() }}</span>
     </div>
   </div>
@@ -19,12 +18,6 @@
       <div class="profile-pic" (click)="toggleDropdown()">
         <span class="profile-initials">{{ fetchName }}</span>
       </div>
-      <!-- Dropdown Menu -->
-      <!-- <div *ngIf="isDropdownOpen" class="dropdown-menu">
-      <p><strong>{{ constants.NAME }}:</strong> {{ fetchName }}</p>
-      <p><strong>{{ constants.ROLE }}:</strong> {{ fetchRole }}</p>
-      <button (click)="logout()" class="logout-btn">{{ constants.LOGOUT }}</button>
-    </div> -->
     </div>
 
     <!-- Icons Section -->

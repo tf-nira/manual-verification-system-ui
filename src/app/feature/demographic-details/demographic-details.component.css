@@ -82,6 +82,7 @@ ul li:hover {
   background-color: #ffffff;
   border-left: 1px solid #ddd;
   overflow: auto;
+  margin-top: 5rem;
 }
 
 .section {
@@ -151,6 +152,7 @@ h2 {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   transition: width 0.3s ease-in-out;
+  margin-top: 5rem;
 }
 
 .left-section.collapsed {
