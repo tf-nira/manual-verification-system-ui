@@ -40,30 +40,30 @@ export class ApplicationDetailComponent implements OnInit {
   photoBase64: string = '';
   isPhotoError = false;
   // Map document keys to readable titles
-   titleMap: { [key: string]: string } = {
+  titleMap: { [key: string]: string } = {
     proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
     proofOfAbandonment: 'Proof of Abandonment',
     proofOfException: 'Proof of Exception',
-  proofOfPayment: 'Proof of Payment',
-  proofOfRelationship: 'Proof of Relationship',
-  proofOfCitizenship: 'Proof of Citizenship',
-  proofOfLegalDOcuments: 'Proof of Legal Documents',
-  proofOfIdentity: 'Proof of Identity',
-  proofOfAddress: 'Proof of Address',
-  proofOfReplacement: 'Proof of Replacement',
-  proofOfBirth: 'Proof of Birth',
-  proofOfOtherSupportingdocumentIssuedbyGovt: 'Proof of Other Supporting Document',
-  proofOfOtherSupportingdocuments: 'Proof of Other Supporting Documents',
-  applicantProofOfSignature: 'Applicant Proof of Signature',
-  introducerProofOfSignature: 'Introducer Proof of Signature',
-  proofOfRegistration: 'Proof of Registration',
-  proofOfAdoption: 'Proof of Adoption',
-  proofOfChangeOfParticulars: 'Proof of Change of Particulars',
-  proofOfDeclarant: 'Proof of Declarant',
-  proofOfLegalDeepPoll: 'Proof of Legal Deed Poll',
-  proofOfLegalGazzette: 'Proof of Legal Gazette',
-  proofOfLegalStatutoryDeclaration: 'Proof of Statutory Declaration',
-  proofOfModificationConsent: 'Proof of Modification Consent',
+    proofOfPayment: 'Proof of Payment',
+    proofOfRelationship: 'Proof of Relationship',
+    proofOfCitizenship: 'Proof of Citizenship',
+    proofOfLegalDOcuments: 'Proof of Legal Documents',
+    proofOfIdentity: 'Proof of Identity',
+    proofOfAddress: 'Proof of Address',
+    proofOfReplacement: 'Proof of Replacement',
+    proofOfBirth: 'Proof of Birth',
+    proofOfOtherSupportingdocumentIssuedbyGovt: 'Proof of Other Supporting Document',
+    proofOfOtherSupportingdocuments: 'Proof of Other Supporting Documents',
+    applicantProofOfSignature: 'Applicant Proof of Signature',
+    introducerProofOfSignature: 'Introducer Proof of Signature',
+    proofOfRegistration: 'Proof of Registration',
+    proofOfAdoption: 'Proof of Adoption',
+    proofOfChangeOfParticulars: 'Proof of Change of Particulars',
+    proofOfDeclarant: 'Proof of Declarant',
+    proofOfLegalDeepPoll: 'Proof of Legal Deed Poll',
+    proofOfLegalGazzette: 'Proof of Legal Gazette',
+    proofOfLegalStatutoryDeclaration: 'Proof of Statutory Declaration',
+    proofOfModificationConsent: 'Proof of Modification Consent',
   };
   selectedTab: string = 'demographic'; // Default to 'demographic'
   escalateOption: boolean = false;
@@ -144,6 +144,9 @@ export class ApplicationDetailComponent implements OnInit {
   documents: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
     { category: '', title: '', fileName: '', file: null }
   ];
+  additionalDocuments: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
+    { category: '', title: '', fileName: '', file: null }
+  ];
   personDetails: { role: string; details: { [key: string]: any } }[] = []; // Store details for Father, Mother, Guardian
   constants = {
     MVS_DISTRICT_OFFICER,
@@ -167,7 +170,11 @@ export class ApplicationDetailComponent implements OnInit {
 
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
-  docCategories = ['Category 1', 'Category 2', 'Category 3'];
+  // Create an array of objects mapping keys to titles
+  docCategories = Object.entries(this.titleMap).map(([key, value]) => ({
+    key,
+    title: value,
+  }));
   docTitles = ['Title 1', 'Title 2', 'Title 3'];
   applicantName = 'Steve Smith'
   pdfUrl: any;
@@ -279,7 +286,7 @@ export class ApplicationDetailComponent implements OnInit {
   }
 
   getDocumentTitle(key: string): string {
-    
+
     return this.titleMap[key] || 'Unknown Document';
   }
   // Added: Methods to toggle left and right sections
@@ -306,10 +313,10 @@ export class ApplicationDetailComponent implements OnInit {
     this.personDetails = roles
       .map((role) => {
         const ninKey = role === 'guardian' ? `${role}NIN_AIN` : `${role}NIN`;
-        console.log("for rolw:"+role)
-        console.log("checking"+this.rowData.demographics[ninKey])
+        console.log("for rolw:" + role)
+        console.log("checking" + this.rowData.demographics[ninKey])
         if (this.rowData.demographics[ninKey]) {
-          console.log(this.rowData.demographics[ninKey]+"exist")
+          console.log(this.rowData.demographics[ninKey] + "exist")
           // If NIN exists for the person, collect all details related to the role
           const personData = Object.keys(this.rowData.demographics)
             .filter((key) => key.startsWith(role)) // Match keys starting with the role (e.g., father)
@@ -407,6 +414,7 @@ export class ApplicationDetailComponent implements OnInit {
 
   openDocumentUploadwModal() {
     this.showDocumentUploadModal = true;
+    
   }
   closeDocumentUploadModal() {
     this.showDocumentUploadModal = false;
@@ -534,11 +542,11 @@ export class ApplicationDetailComponent implements OnInit {
   // Add a new document row
   addDocumentRow() {
     console.log("add doc row")
-    this.documents.push({ category: '', title: '', fileName: '', file: null });
+    this.additionalDocuments.push({ category: '', title: '', fileName: '', file: null });
   }
 
   deleteDocumentRow(index: number) {
-    this.documents.splice(index, 1);
+    this.additionalDocuments.splice(index, 1);
   }
 
   triggerFileSelect(index: number) {
@@ -551,8 +559,8 @@ export class ApplicationDetailComponent implements OnInit {
       const inputElement = event.target as HTMLInputElement;
       if (inputElement.files && inputElement.files.length > 0) {
         const file = inputElement.files[0];
-        this.documents[index].fileName = file.name;
-        this.documents[index].file = file;
+        this.additionalDocuments[index].fileName = file.name;
+        this.additionalDocuments[index].file = file;
       }
     };
 
@@ -561,15 +569,15 @@ export class ApplicationDetailComponent implements OnInit {
 
     fileInput.remove();
   }
-  
+
   triggerScan(index: number) {
     // Trigger scan logic here
   }
-  
+
   previewFile(file: File | SafeResourceUrl) {
     if (file instanceof File) {
       const fileURL = URL.createObjectURL(file);
-  
+
       if (file.type.startsWith('image/')) {
         const imageWindow = window.open(fileURL, '_blank');
         if (!imageWindow) alert('Unable to preview the image.');
@@ -603,9 +611,9 @@ export class ApplicationDetailComponent implements OnInit {
         documents: {}
       }
     };
-  
-    this.documents.forEach((doc) => {
-      if (doc.category && doc.file) { 
+
+    this.additionalDocuments.forEach((doc) => {
+      if (doc.category && doc.file) {
         if (doc.file instanceof File) {
           const reader = new FileReader();
           reader.onload = () => {
@@ -617,8 +625,8 @@ export class ApplicationDetailComponent implements OnInit {
                 type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(),
                 format: doc.fileName.split('.').pop() || ''
               };
-  
-              if (Object.keys(payload.request.documents).length === this.documents.length) {
+
+              if (Object.keys(payload.request.documents).length === this.additionalDocuments.length) {
                 this.uploadDocuments(payload);
               }
             }
@@ -636,7 +644,13 @@ export class ApplicationDetailComponent implements OnInit {
       (response) => {
         if (response?.response?.status === 'Success') {
           alert('All documents uploaded successfully.');
-          
+          this.router.navigate(['/application-list'], {
+            state: {
+              role: this.role, 
+              data: this.rowData 
+            }
+          });
+
         } else {
           alert('Failed to upload documents. Please try again.');
         }
@@ -701,15 +715,15 @@ export class ApplicationDetailComponent implements OnInit {
     if (!data) {
       return null; // Skip null or undefined values
     }
-  
+
     if (Array.isArray(data) && data[0]?.value) {
       return data[0].value; // Extract 'value' key from the first array item
     }
-  
+
     if (typeof data === 'object' && data.value) {
       return data.value; // Handle objects with a 'value' key
     }
-  
+
     if (typeof data === 'string') {
       try {
         // Parse JSON strings if applicable
@@ -722,8 +736,8 @@ export class ApplicationDetailComponent implements OnInit {
         return data; // Return raw string if parsing fails
       }
     }
-  
+
     return data; // Return plain value if none of the above conditions match
   }
-  
+
 }
