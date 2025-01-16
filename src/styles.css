@@ -1,1 +1,17 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.mat-snack-bar-container.center-snackbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 50%; /* Position at vertical center */
+  left: 50%; /* Position at horizontal center */
+  transform: translate(-50%, -50%); /* Adjust for centering */
+  z-index: 1000; /* Ensure it's above other content */
+  margin: 0;
+  width: auto; /* Adjust width as needed */
+}

@@ -106,7 +106,7 @@ export class DataStorageService {
     applicationId: string,
     status: string,
     comment: string = '',
-    rejectionCategory: string = '',
+    category: string = '',
     selectedOfficerLevel?: string
   ) {
     const url =
@@ -128,8 +128,8 @@ export class DataStorageService {
     if (status === 'ESCALATE' && selectedOfficerLevel && selectedOfficerLevel.trim() !== '') {
       request.selectedOfficerLevel = selectedOfficerLevel;
     }
-    if (status === 'REJECT' && rejectionCategory) {
-      request.rejectionCategory = rejectionCategory;
+    if ((status === 'REJECT' || status === 'ESCALATE') && category) {
+      request.category = category;
     }
     const obj = new RequestModel(request);
     return this.httpClient.put(url, obj, {

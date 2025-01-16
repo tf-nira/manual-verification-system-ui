@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import { ConfigService } from './core/services/config.service';
 import { provideHttpClient } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 function initializeApp(configService: ConfigService): () => Promise<void> {
   return () => configService.loadConfig();
@@ -23,6 +24,6 @@ export const appConfig: ApplicationConfig = {
       useFactory: initializeApp,
       deps: [ConfigService],
       multi: true,
-    },
+    }, provideAnimationsAsync(),
   ],
 };
