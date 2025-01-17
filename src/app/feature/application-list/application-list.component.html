@@ -45,7 +45,7 @@
       </div>
 
       <!-- Application Status -->
-      <div class="input-group" *ngIf="role === constants.MVS_DISTRICT_OFFICER">
+      <div class="input-group" *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER">
         <label for="selectedApplicationStatus">Application Status</label>
         <select
           id="selectedApplicationStatus"

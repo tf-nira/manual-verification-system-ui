@@ -511,10 +511,7 @@ export class ApplicationDetailComponent implements OnInit {
   // Check if the form is valid
   isFormValid(): boolean {
     const { subject, content, districtOffice } = this.interviewDetails;
-
-    if(this.role == this.constants.MVS_DISTRICT_OFFICER) 
-      return subject.trim() !== '' && content.trim() !== '' && districtOffice.trim() !== '';
-    else return subject.trim() !== '' && content.trim() !== ''
+    return subject.trim() !== '' && content.trim() !== ''
     
   }
 
