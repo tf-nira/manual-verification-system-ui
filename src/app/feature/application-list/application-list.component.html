@@ -124,7 +124,7 @@
                   {{ constants.CREATED_DATE }}
                   <span [class]="getSortClass(constants.API_CONST_CREATED_DATE)"></span>
                 </th>
-                <th *ngIf="role === constants.MVS_DISTRICT_OFFICER" (click)="sortData(constants.APPLICATION_STATUS)">
+                <th *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER" (click)="sortData(constants.APPLICATION_STATUS)">
                   {{ constants.APPLICATION_STATUS }}
                   <span [class]="getSortClass(constants.APPLICATION_STATUS)"></span>
                 </th>
@@ -141,7 +141,7 @@
                 <td>{{ row[constants.API_CONST_SERVICE] }}</td>
                 <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
                 <td>{{ row[constants.API_CONST_CREATED_DATE] }}</td>
-                <td *ngIf="role === constants.MVS_DISTRICT_OFFICER">
+                <td *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER">
                   {{ row[constants.API_CONST_STATUS] === 'INTERVIEW SCHEDULED' ? 'INTERVIEW SCHEDULED' : 'NEW' }}
                 </td>
               </tr>

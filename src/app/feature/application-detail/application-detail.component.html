@@ -1606,17 +1606,10 @@
         <!-- Schedule Interview Btn -->
         <button [ngClass]="{
             'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') ,
-            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_EXECUTIVE_DIRECTOR')
+            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_EXECUTIVE_DIRECTOR' || selectedRow.status === 'INTERVIEW SCHEDULED')
           }" (click)="openScheduleInterviewModal()">
           {{ constants.SCHEDULE_INTERVIEW }}
         </button>
-        <!-- Document Upload Btn -->
-        <!-- <button [ngClass]="{
-            'document-upload': role === 'MVS_DISTRICT_OFFICER',
-            'hidden': role !== 'MVS_DISTRICT_OFFICER'
-          }" (click)="openDocumentUploadwModal('','')">
-          {{ constants.UPLOAD_DCOUMENTS }}
-        </button> -->
       </div>
 
     </div>
@@ -1730,7 +1723,7 @@
         <button class="close-button" (click)="closeScheduleInterviewModal()">×</button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
+        <div *ngIf="role === constants.MVS_DISTRICT_OFFICER" class="form-group">
           <label for="districtOffice">District Office*</label>
           <select id="districtOffice" [(ngModel)]="interviewDetails.districtOffice" required>
             <option value="" disabled selected>Select District Office*</option>
