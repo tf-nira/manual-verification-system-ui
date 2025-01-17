@@ -1779,7 +1779,7 @@
 
             <select class="dropdown" [(ngModel)]="document.title" required>
               <option value="" disabled selected>Title *</option>
-              <option *ngFor="let title of docTitles" [value]="title">
+              <option *ngFor="let title of titleMap[document.category]" [value]="title">
                 {{ title }}
               </option>
             </select>

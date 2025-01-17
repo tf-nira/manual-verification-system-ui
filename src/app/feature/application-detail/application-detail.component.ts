@@ -42,7 +42,7 @@ export class ApplicationDetailComponent implements OnInit {
   photoBase64: string = '';
   isPhotoError = false;
   // Map document keys to readable titles
-  titleMap: { [key: string]: string } = {
+  categoryMap: { [key: string]: string } = {
     proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
     proofOfAbandonment: 'Proof of Abandonment',
     proofOfException: 'Proof of Exception',
@@ -66,6 +66,36 @@ export class ApplicationDetailComponent implements OnInit {
     proofOfLegalGazzette: 'Proof of Legal Gazette',
     proofOfLegalStatutoryDeclaration: 'Proof of Statutory Declaration',
     proofOfModificationConsent: 'Proof of Modification Consent',
+    proofOfIntroducerSignature: 'Proof of Introducer Signature',
+    proofOfCourtOrder: 'Proof Of Court Order'
+  };
+  titleMap: { [key: string]: string[] } = {
+    proofOfPhysicalApplicationForm: ['Physical Application Form'],
+    proofOfAbandonment: ['Police Report'],
+    proofOfException: ['Expetion Photo'],
+    proofOfPayment: ['Payment Slip'],
+    proofOfRelationship: ['LC 1 Recommendation Letter', 'Immunization Card', 'Mother National ID Card', 'Father National ID Card', 'Guardian introduction letter', 'Guardian National ID Card'],
+    proofOfCitizenship: ['LC 1 Recommendation Letter', 'Notification Of Birth Record', 'Passport Document', 'Mother National ID Card', 'Certificate of Dual Citizenship', 'Father National ID Card', 'Relative National ID Card', 'Guardian National ID Card', 'Birth Certificate', 'Tax Document', 'Previous Immigration records', 'National Id', 'Previous passports of self, parents, or grandparents', 'Copies of birth certificates of self parents or grandparents', 'Naturalisation Certificate of self parents', 'Certificate of Citizenship by Naturalization', 'Certificate of Citizenship by Registration'],
+    proofOfLegalDOcuments: [],
+    proofOfIdentity: ['Mother National ID Card', 'Father National ID Card', 'Passport Document', 'Relative National ID Card', 'Guardian National ID Card', 'Photo identification cards issued by the Government', 'Medical card issued by the State Govt', 'Voter Identification card', 'Driving licence of the applicant', 'Expired Card'
+      ],
+    proofOfAddress: ['Birth Document', 'Passport Document', 'LC 1 Recommendation Letter', 'Mother National ID Card', 'Certificate of Relationship', 'Guardian introduction letter', 'Birth Certificate', 'Certificate of Citizenship by Naturalization', 'Address Of Residence Diaspora', 'Guardian National ID Card'],
+    proofOfReplacement: ['Police Letter', 'Damaged Card', 'CID Report'],
+    proofOfBirth: ['Immunization Card', 'Notification Of Birth Record', 'Birth Certificate'],
+    proofOfOtherSupportingdocumentIssuedbyGovt: ['Court Report', 'Welfare and Family', 'Passport Document', 'Voter Card', 'Driving Permit', 'Care Order', 'Probation report', 'Birth Certificate', 'Academic Documents', 'Marriage certificate or Divorce Decree', 'Certified copy of DNA test results', 'Court Order', 'Parent National ID'],
+    proofOfOtherSupportingdocuments: ['Previous Immigration records', 'Baptism Card', 'Any other relevant Documents', 'Certificate of Marriage'],
+    applicantProofOfSignature: [],
+    introducerProofOfSignature: [],
+    proofOfRegistration: [],
+    proofOfAdoption: ['Police Report'],
+    proofOfChangeOfParticulars: [],
+    proofOfDeclarant: ['Declarant National ID Card'],
+    proofOfLegalDeepPoll: ['Deed Poll'],
+    proofOfLegalGazzette: ['Gazzette'],
+    proofOfLegalStatutoryDeclaration: [],
+    proofOfModificationConsent: ['Modification Consent Form'],
+    proofOfIntroducerSignature: ['Introducer Signature'],
+    proofOfCourtOrder: ['Court Order']
   };
   selectedTab: string = 'demographic'; // Default to 'demographic'
   escalateOption: boolean = false;
@@ -175,11 +205,15 @@ export class ApplicationDetailComponent implements OnInit {
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
   // Create an array of objects mapping keys to titles
-  docCategories = Object.entries(this.titleMap).map(([key, value]) => ({
+  docCategories = Object.entries(this.categoryMap).map(([key, value]) => ({
     key,
     title: value,
   }));
-  docTitles = ['Title 1', 'Title 2', 'Title 3'];
+  docTitles = Object.entries(this.titleMap).map(([key, value]) => ({
+    key,
+    title: value,
+  }));
+  // docTitles = ['Title 1', 'Title 2', 'Title 3'];
   applicantName = 'Steve Smith'
   pdfUrl: any;
 
@@ -195,27 +229,6 @@ export class ApplicationDetailComponent implements OnInit {
     console.log(this.rowData.applicationId);
     this.selectedRow = state.rowData || {};
     this.photoBase64 = this.rowData?.biometricAttributes?.ApplicantPhoto?.trim() || '';
-    // console.log("photoBase64:::: " + this.photoBase64)
-    // console.log('Base64 String Length:', this.photoBase64.length);
-    // const base64Pdf = this.rowData?.documents?.proofOfPhysicalApplicationForm?.trim() || '';
-    // if (base64Pdf) {
-    //   this.pdfUrl = this.convertBase64ToPdfUrl(base64Pdf);
-    // } else {
-    //   this.pdfUrl = null;
-    // }
-    /**below two row data sets need to be removed data would come from polcy, this is for example */
-    // this.rowData = {
-    //   ...this.rowData,
-    //   fatherNin: "123456789", // Example NIN
-    //   fatherName: "John Doe", // Example Name
-    //   fatherAddress: "123 Main Street, Cityville", // Example Address
-    // }
-    // this.rowData = {
-    //   ...this.rowData,
-    //   motherNin: "654321", // Example NIN
-    //   motherName: "rosy", // Example Name
-    //   motherAddress: "123 Main Street, Cityville", // Example Address
-    // }
 
     if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER) {
       this.applicationStatus = this.rowData[APPLICANT_NAME];
@@ -292,7 +305,7 @@ export class ApplicationDetailComponent implements OnInit {
 
   getDocumentTitle(key: string): string {
 
-    return this.titleMap[key] || 'Unknown Document';
+    return this.categoryMap[key] || 'Unknown Document';
   }
   // Added: Methods to toggle left and right sections
   toggleLeft() {
@@ -727,7 +740,7 @@ export class ApplicationDetailComponent implements OnInit {
               const fileBytes = new Uint8Array(reader.result as ArrayBuffer);
               payload.request.documents[doc.category] = {
                 document: Array.from(fileBytes),
-                value: doc.title,
+                value: doc.category,
                 type: 'DOC' + Math.floor(100 + Math.random() * 900).toString(),
                 format: doc.fileName.split('.').pop() || ''
               };
