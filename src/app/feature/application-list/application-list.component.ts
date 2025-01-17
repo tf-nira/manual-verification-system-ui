@@ -39,6 +39,7 @@ import {
   API_CONST_STATUS,
   API_CONST_FROM_DATE,
   API_CONST_TO_DATE,
+  MVS_LEGAL_OFFICER,
 } from '../../shared/constants';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
@@ -110,6 +111,7 @@ export class ApplicationListComponent implements OnInit {
     MVS_SUPERVISOR_ESCALATED_DATE,
     APPLICATION_STATUS,
     MVS_DISTRICT_OFFICER,
+    MVS_LEGAL_OFFICER,
     API_CONST_APPLICATION_ID,
     API_CONST_SERVICE,
     API_CONST_SERVICE_TYPE,
