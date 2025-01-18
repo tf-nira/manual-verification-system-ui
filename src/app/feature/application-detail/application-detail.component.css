@@ -14,6 +14,7 @@
   display: flex;
   flex: 1;
   overflow: hidden;
+  padding-top: 5rem;
   padding-bottom: 50px;
 }
 
@@ -24,7 +25,6 @@
   overflow-y: auto; /* Independent vertical scrolling */
   padding: 16px;
   box-sizing: border-box;
-  margin-top: 5rem;
 }
 
 /* Left Section */
@@ -114,43 +114,77 @@
   color: #333;
 }
 
+.photo-container {
+  width: 150px; /* Fixed width for the container */
+  height: 150px; /* Fixed height for the container */
+  border: 1px solid #d1d5db; /* Light border for definition */
+  border-radius: 8px; /* Optional rounded corners */
+  background-color: #f9fafb; /* Light gray background */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Ensures the image does not overflow the container */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+}
+
+.photo-container img {
+  max-width: 100%; /* Ensures the image does not exceed the container's width */
+  max-height: 100%; /* Ensures the image does not exceed the container's height */
+  object-fit: contain; /* Maintains aspect ratio while fitting within the container */
+}
+
+.photo-container.no-photo {
+  color: #6b7280; /* Text color for "No photo available" */
+  font-size: 14px;
+  text-align: center;
+}
+
+
 /* Personal Information Section */
 .personal-information {
   display: flex;
   flex-direction: column;
-  gap: 20px; /* Add spacing between form groups */
+  gap: 10px; /* Spacing between field containers */
+  padding: 10px;
+  background: #f9fafb; /* Light background for better contrast */
+  border-radius: 8px;
 }
 
-.form-group {
+.field-container {
   display: flex;
   flex-direction: column;
+  padding: 10px;
+  background-color: #ffffff; /* White background for the container */
+  border: 1px solid #d1d5db; /* Light border for better definition */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+  transition: box-shadow 0.3s, border-color 0.3s; /* Smooth hover effects */
 }
-/* Dropdown */
+
+.field-container:hover {
+  border-color: #6366f1; /* Highlight border on hover */
+  box-shadow: 0 6px 10px rgba(99, 102, 241, 0.15); /* Enhanced shadow on hover */
+}
+
+.field-container label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333; /* Darker gray for readability */
+}
+
+.field-value {
+  font-size: 14px;
+  font-weight: normal;
+  color: #555; /* Dark gray text */
+  border-radius: 4px; /* Rounded corners for value box */
+}
+
 .dropdown {
   height: 40px; /* Increased height */
   padding: 5px 10px;
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-.form-group label {
-  font-size: 14px;
-  font-weight: bold;
-  color: #555;
-}
-
-.field-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px; /* Spacing between characters or fields */
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-  min-height: 40px; /* Ensures uniform height for fields */
-  font-size: 14px;
-  font-family: monospace;
-  align-items: center;
 }
 
 /* Section Header */
@@ -332,7 +366,7 @@
 
 /* Right Section */
 .right-section {
-  width: 300px; /* Adjust width if necessary */
+  width: 350px; /* Adjust width if necessary */
   background-color: #f5f5f5;
   border: 1px solid #ddd;
   overflow: hidden; /* Prevent content overflow */
@@ -388,6 +422,20 @@
   display: block; /* Show content when not collapsed */
 }
 
+.detail-label {
+  font-weight: bold;
+  font-size: 14px;
+  color: #374151; /* Dark gray for labels */
+   /* Space between label and value */
+}
+
+.detail-value {
+  font-size: 14px;
+  color: #4b5563; /* Medium gray for values */
+  line-height: 1.5; /* Improved readability */
+  margin-bottom: 8px;
+}
+
 .nin-details-container {
   display: flex;
   flex-direction: column;
@@ -441,6 +489,7 @@
 /* Tab Content */
 .tab-content {
   padding: 15px;
+  margin-bottom: 25px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   border-radius: 5px;
