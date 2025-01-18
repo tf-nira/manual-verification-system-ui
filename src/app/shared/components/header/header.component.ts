@@ -13,7 +13,7 @@ import { LOGOUT, NAME, ROLE } from '../../constants';
 export class HeaderComponent {
   @Input() role: string = '';
   @Input() view: string = 'List'; // Default to 'List'
-  name: string = '';
+  userId: string = '';
   isDropdownOpen: boolean = false;
   constants = {
     NAME,
@@ -26,9 +26,9 @@ export class HeaderComponent {
     this.role = localStorage.getItem('role') || '';
     return this.role;
   }
-  get fetchName(): string {
-    this.name = localStorage.getItem('name') || '';
-    return this.name;
+  get fetchUserId(): string {
+    this.userId = localStorage.getItem('userId') || '';
+    return this.userId;
   }
   toggleDropdown(): void {
     this.isDropdownOpen = !this.isDropdownOpen;

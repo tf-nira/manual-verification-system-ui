@@ -14,19 +14,14 @@
         alt="Profile Icon"
         class="profile-pic"
       />
-      <div class="profile-role">{{ fetchRole }}</div>
+      <div class="profile-role">{{ fetchUserId }}</div>
       <div class="profile-pic" (click)="toggleDropdown()">
-        <span class="profile-initials">{{ fetchName }}</span>
+        <!-- <span class="profile-initials">{{ fetchRole }}</span> -->
       </div>
     </div>
 
     <!-- Icons Section -->
     <div class="icons-container">
-      <img
-        src="assets/images/help-icon.png"
-        alt="Help Icon"
-        class="help-icon"
-      />
       <img
         src="assets/images/logout-icon.png"
         alt="Logout Icon"
