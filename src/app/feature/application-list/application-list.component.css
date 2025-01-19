@@ -471,3 +471,17 @@ th.sortable {
 .collapsed::after {
   content: '\25B6';
 }
+
+.detail-label {
+  font-weight: bold;
+  font-size: 14px;
+  color: #374151; /* Dark gray for labels */
+   /* Space between label and value */
+}
+
+.detail-value {
+  font-size: 14px;
+  color: #4b5563; /* Medium gray for values */
+  line-height: 1.5; /* Improved readability */
+  margin-bottom: 8px;
+}
