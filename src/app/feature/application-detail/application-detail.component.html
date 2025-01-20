@@ -178,7 +178,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.userService">
             <label>User Service</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.userService)[0]?.value }}</div>
+            <div class="field-value">{{ rowData?.demographics?.userService }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.cardNumber">
@@ -193,7 +193,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.NIN">
             <label>Nin</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.NIN)[0]?.value }}</div>
+            <div class="field-value">{{ rowData?.demographics?.NIN }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.preferredLang">
@@ -239,7 +239,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.citizenshipCertificateNo">
             <label>Citizenship Certificate No</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.citizenshipCertificateNo)[0]?.value }}
+            <div class="field-value">{{ rowData?.demographics?.citizenshipCertificateNo }}
             </div>
           </div>
 
@@ -323,8 +323,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceYearsLived">
             <label>Applicant Place of Residence Years Lived</label>
-            <div class="field-value">{{
-              parseJson(rowData?.demographics?.applicantPlaceOfResidenceYearsLived)[0]?.value }}</div>
+            <div class="field-value">{{rowData?.demographics?.applicantPlaceOfResidenceYearsLived }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceDistrictOfPrevRes">
@@ -341,8 +340,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceHouseNo">
             <label>Applicant Place of Residence House No</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfResidenceHouseNo)[0]?.value
-              }}</div>
+            <div class="field-value">{{ rowData?.demographics?.applicantPlaceOfResidenceHouseNo }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceDistrict">
@@ -500,12 +498,12 @@
         <div class="personal-information">
           <div class="field-container" *ngIf="rowData?.demographics?.applicantPassportNumber">
             <label>Applicant Passport Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPassportNumber)[0]?.value }}</div>
+            <div class="field-value">{{ rowData?.demographics?.applicantPassportNumber }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.applicantPassportFileNumber">
             <label>Applicant Passport Filenumber</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPassportFileNumber)[0]?.value }}
+            <div class="field-value">{{ rowData?.demographics?.applicantPassportFileNumber }}
             </div>
           </div>
 
@@ -615,8 +613,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.spouseMarriageCertificateNumber">
             <label>Spouse Marriage Certificate Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseMarriageCertificateNumber)[0]?.value
-              }}</div>
+            <div class="field-value">{{ rowData?.demographics?.spouseMarriageCertificateNumber }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.numberOfOtherSpouses">
@@ -673,8 +670,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoMarriageCertificateNumber">
             <label>Spouse Two Marriage Certificate Number</label>
-            <div class="field-value">{{
-              parseJson(rowData?.demographics?.spouseTwoMarriageCertificateNumber)[0]?.value }}</div>
+            <div class="field-value">{{rowData?.demographics?.spouseTwoMarriageCertificateNumber }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeSurname">
@@ -732,8 +728,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeMarriageCertificateNumber">
             <label>Spouse Three Marriage Certificate Number</label>
-            <div class="field-value">{{
-              parseJson(rowData?.demographics?.spouseThreeMarriageCertificateNumber)[0]?.value }}</div>
+            <div class="field-value">{{rowData?.demographics?.spouseThreeMarriageCertificateNumber }}</div>
           </div>
         </div>
       </div>
@@ -790,7 +785,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.fatherIDDocumentNo">
             <label>Father Id Document No</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherIDDocumentNo)[0]?.value }}</div>
+            <div class="field-value">{{ rowData?.demographics?.fatherIDDocumentNo }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.fatherCitizenshipType">
@@ -800,8 +795,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.fatherCitizenCertificateNumber">
             <label>Father Citizen Certificate Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherCitizenCertificateNumber)[0]?.value
-              }}</div>
+            <div class="field-value">{{ rowData?.demographics?.fatherCitizenCertificateNumber }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.fatherIndigenousCommunityTribe">
@@ -881,7 +875,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfResidenceHouseNo">
             <label>Father Place of Residence Houseno</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfResidenceHouseNo)[0]?.value }}
+            <div class="field-value">{{ rowData?.demographics?.fatherPlaceOfResidenceHouseNo }}
             </div>
           </div>
 
@@ -986,7 +980,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.motherIDDocumentNo">
             <label>Mother Id Document No</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherIDDocumentNo)[0]?.value }}</div>
+            <div class="field-value">{{ rowData?.demographics?.motherIDDocumentNo }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.motherCitizenshipType">
@@ -996,8 +990,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.motherCitizenCertificateNumber">
             <label>Mother Citizen Certificate Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherCitizenCertificateNumber)[0]?.value
-              }}</div>
+            <div class="field-value">{{ rowData?.demographics?.motherCitizenCertificateNumber }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.motherIndigenousCommunityTribe">
@@ -1077,7 +1070,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfResidenceHouseNo">
             <label>Mother Place of Residence Houseno</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfResidenceHouseNo)[0]?.value }}
+            <div class="field-value">{{ rowData?.demographics?.motherPlaceOfResidenceHouseNo }}
             </div>
           </div>
 
