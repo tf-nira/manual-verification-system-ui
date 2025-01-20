@@ -24,10 +24,13 @@
         <select
           id="selectedService"
           [(ngModel)]="selectedService"
+          (change)="onServiceChange($event)"
           class="search-input"
         >
           <option value="" disabled selected>Select a Service</option>
-          <option *ngFor="let service of services" [value]="service">{{ service }}</option>
+          <option *ngFor="let service of servicesWithTypes" [value]="service.value">
+            {{ service.label }}
+          </option>
         </select>
       </div>
 
@@ -40,7 +43,9 @@
           class="search-input"
         >
           <option value="" disabled selected>Select a Service Type</option>
-          <option *ngFor="let serviceType of serviceTypes" [value]="serviceType">{{ serviceType }}</option>
+          <option *ngFor="let serviceType of filteredServiceTypes" [value]="serviceType.value">
+            {{ serviceType.label }}
+          </option>
         </select>
       </div>
 

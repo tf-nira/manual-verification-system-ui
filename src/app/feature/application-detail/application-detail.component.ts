@@ -216,6 +216,7 @@ export class ApplicationDetailComponent implements OnInit {
   // docTitles = ['Title 1', 'Title 2', 'Title 3'];
   applicantName = 'Steve Smith'
   pdfUrl: any;
+  formattedDate: string | ' ' = ' ';
 
   constructor(private router: Router, private dataService: DataStorageService,
     private sanitizer: DomSanitizer, private snackBar: MatSnackBar
@@ -223,10 +224,13 @@ export class ApplicationDetailComponent implements OnInit {
 
   ngOnInit() {
     const state = history.state;
+    console.log(state.rowData)
+    //fetch the created date and save it in to display in the ui
+    // Format the date on component initialization
+    this.formattedDate = new Date(state.rowData.crDTimes).toISOString().split('T')[0];
 
     this.role = state.role || '';
     this.rowData = state.data || {};
-    console.log(this.rowData.applicationId);
     this.selectedRow = state.rowData || {};
     this.photoBase64 = this.rowData?.biometricAttributes?.ApplicantPhoto?.trim() || '';
 
