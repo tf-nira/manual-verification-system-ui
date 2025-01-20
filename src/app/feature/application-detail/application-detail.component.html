@@ -1444,6 +1444,7 @@
             Records
           </button>
           <button class="tab-button" [class.active]="activeTab === 'documents'" (click)="setActiveTab('documents')">
+            <img src="assets/images/document_section_icon.png" alt="Back" class="icon" />
             <i class="icon-documents"></i> 
             Documents
           </button>
@@ -1553,38 +1554,35 @@
 
         <div class="tab-content" *ngIf="activeTab === 'documents'">
           <!-- Documents Section -->
-          <div class="documents-section">
-            <p *ngIf="documents.length === 0">No documents available.</p>
-            <div *ngFor="let document of documents; let i = index">
-              <!-- Section Header -->
-              <div class="section-header" (click)="toggleSection(i)">
-                <h4>{{ getDocumentTitle(document.category) || 'Unknown Category' }}</h4>
-                <i class="fas" [ngClass]="isSectionExpanded[i] ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-              </div>
-
-              <!-- Document Items -->
-              <div class="document-items" *ngIf="isSectionExpanded[i]">
-                <div class="document-item">
-                  <span><i class="fas fa-file-alt"></i> {{ document.title || 'Untitled Document' }}</span>
-                  <button class="view-button" [disabled]="!document.file" (click)="viewDocument(document)">
-                    <p *ngIf="!pdfUrl">PDF not available</p>
-                    <i class="fas fa-external-link-alt"></i> View
-                  </button>
-                </div>
-                <!-- <div class="document-item">
-                  <span>{{ getDocumentTitle(document.category) || 'No File Uploaded' }}</span>
-                </div> -->
+            <div *ngIf="documents.length === 0" class="no-documents">
+              No documents available.
+            </div>
+          
+            <div *ngFor="let document of documents">
+              <!-- Document Row -->
+              <div class="document-row">
+                <span class="category-name">{{ getDocumentTitle(document.category) || 'Unknown Category' }}</span>
+                <button
+                  class="view-button"
+                  [disabled]="!document.file"
+                  (click)="viewDocument(document)"
+                >
+                  <i class="fas fa-external-link-alt"></i>
+                  View
+                </button>
               </div>
             </div>
-
-            <button [ngClass]="{
-              'document-upload': role === 'MVS_DISTRICT_OFFICER',
-              'hidden': role !== 'MVS_DISTRICT_OFFICER'
-            }" (click)="openDocumentUploadwModal()">
+          
+            <!-- Upload Button -->
+            <button
+              class="document-upload"
+              *ngIf="role === 'MVS_DISTRICT_OFFICER'"
+              (click)="openDocumentUploadwModal()"
+            >
+              <img src="assets/images/upload_document_icon.png" alt="Back" class="icon" />
+              <i class="icon-documents"></i>
               {{ constants.UPLOAD_DCOUMENTS }}
             </button>
-
-          </div>
         </div>
 
 
