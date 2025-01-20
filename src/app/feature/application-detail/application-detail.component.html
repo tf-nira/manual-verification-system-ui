@@ -11,43 +11,34 @@
           <i class="fas fa-toggle-on"></i>
         </button>
       </div>
-      <div class="navigation-content">
+      <div class="detail-content">
         <div class="info-item">
-          <span class="label" style="display: block;">ID</span>
-          <span class="value">{{ applicationId || 'N/A' }}</span>
+          <div class="detail-label">ID</div>
+          <div class="detail-value">{{ applicationId || 'N/A' }}</div>
         </div>
         <div class="info-item">
-          <span class="label">Status</span>
-          <span class="value">{{'Pending' }}</span>
+          <div class="detail-label">Status</div>
+          <div class="detail-value">{{'Pending' }}</div>
         </div>
         <div class="info-item">
-          <span class="label">Service</span>
-          <span class="value">{{ service || 'By Birth' }}</span>
+          <div class="detail-label">Service</div>
+          <div class="detail-value">{{ service || 'By Birth' }}</div>
         </div>
         <div class="info-item">
-          <span class="label">Service Type</span>
-          <span class="value">{{ serviceType || 'Section ABC' }}</span>
+          <div class="detail-label">Service Type</div>
+          <div class="detail-value">{{ serviceType || 'Section ABC' }}</div>
         </div>
       </div>
-      <!-- <div class="navigation-content">
-        <div class="info-item" *ngFor="let section of sections">
-          <button class="nav-button" (click)="scrollToSection(section.id)">
-            {{ section.label }}
-          </button>
-        </div>
-      </div> -->
       <div class="navigation-content">
-        <div *ngFor="let section of sections" class="accordion">
-          <div class="accordion-header" (click)="toggleRightSection(section.id)">
-            <span class="section-title">{{ section.label }}</span>
+        <div *ngFor="let section of sections" class="part">
+          <div class="part-header" (click)="toggleRightSection(section.id)">
+            <span>{{ section.label }}</span>
           </div>
-          <div class="accordion-content" *ngIf="section.open">
-            <div *ngFor="let subSection of section.subSections" class="subsection-item">
-              <span class="subsection-title" (click)="scrollToSection(subSection.id)">
-                {{ subSection.label }}
-              </span>
-            </div>
-          </div>
+          <ul *ngIf="section.open">
+            <li *ngFor="let subSection of section.subSections" (click)="scrollToSection(subSection.id)">
+              {{ subSection.label }}
+            </li>
+          </ul>
         </div>
       </div>
 
@@ -1470,11 +1461,16 @@
                   <span [class]="isEscalationExpanded('officer') ? 'expanded' : 'collapsed'"></span>
                 </button>
                 <div *ngIf="isEscalationExpanded('officer')" class="escalation-content">
-                  <p><strong>Level:</strong> {{ selectedRow.officerEscDetails.level || 'N/A' }}</p>
-                  <p><strong>Category:</strong> {{ selectedRow.officerEscDetails.category || 'N/A' }}</p>
-                  <p><strong>Comment:</strong> {{ selectedRow.officerEscDetails.comment || 'N/A' }}</p>
-                  <p><strong>Escalated By:</strong> {{ selectedRow.officerEscDetails.escBy || 'N/A' }}</p>
-                  <p><strong>Escalation Time:</strong> {{ selectedRow.officerEscDetails.escDTimes || 'N/A' }}</p>
+                  <div class="detail-label">Level</div>
+                  <div class="detail-value">{{ selectedRow.officerEscDetails.level || 'N/A' }}</div>
+                  <div class="detail-label">Category</div>
+                  <div class="detail-value">{{ selectedRow.officerEscDetails.category || 'N/A' }}</div>
+                  <div class="detail-label">Comment</div>
+                  <div class="detail-value">{{ selectedRow.officerEscDetails.comment || 'N/A' }}</div>
+                  <div class="detail-label">Escalated By</div>
+                  <div class="detail-value">{{ selectedRow.officerEscDetails.escBy || 'N/A' }}</div>
+                  <div class="detail-label">Escalation Time</div>
+                  <div class="detail-value">{{ selectedRow.officerEscDetails.escDTimes || 'N/A' }}</div>
                 </div>
               </div>
 
@@ -1485,11 +1481,16 @@
                   <span [class]="isEscalationExpanded('supervisor') ? 'expanded' : 'collapsed'"></span>
                 </button>
                 <div *ngIf="isEscalationExpanded('supervisor')" class="escalation-content">
-                  <p><strong>Level:</strong> {{ selectedRow.supervisorEscDetails.level || 'N/A' }}</p>
-                  <p><strong>Category:</strong> {{ selectedRow.supervisorEscDetails.category || 'N/A' }}</p>
-                  <p><strong>Comment:</strong> {{ selectedRow.supervisorEscDetails.comment || 'N/A' }}</p>
-                  <p><strong>Escalated By:</strong> {{ selectedRow.supervisorEscDetails.escBy || 'N/A' }}</p>
-                  <p><strong>Escalation Time:</strong> {{ selectedRow.supervisorEscDetails.escDTimes || 'N/A' }}</p>
+                  <div class="detail-label">Level</div>
+                  <div class="detail-value">{{ selectedRow.supervisorEscDetails.level || 'N/A' }}</div>
+                  <div class="detail-label">Category</div>
+                  <div class="detail-value">{{ selectedRow.supervisorEscDetails.category || 'N/A' }}</div>
+                  <div class="detail-label">Comment</div>
+                  <div class="detail-value">{{ selectedRow.supervisorEscDetails.comment || 'N/A' }}</div>
+                  <div class="detail-label">Escalated By</div>
+                  <div class="detail-value">{{ selectedRow.supervisorEscDetails.escBy || 'N/A' }}</div>
+                  <div class="detail-label">Escalation Time</div>
+                  <div class="detail-value">{{ selectedRow.supervisorEscDetails.escDTimes || 'N/A' }}</div>
                 </div>
               </div>
 
@@ -1499,12 +1500,17 @@
                   Legal Escalation Details
                   <span [class]="isEscalationExpanded('legal') ? 'expanded' : 'collapsed'"></span>
                 </button>
-                <div *ngIf="isEscalationExpanded('legal')" class="escalation-content">
-                  <p><strong>Level:</strong> {{ selectedRow.legalEscDetails.level || 'N/A' }}</p>
-                  <p><strong>Category:</strong> {{ selectedRow.legalEscDetails.category || 'N/A' }}</p>
-                  <p><strong>Comment:</strong> {{ selectedRow.legalEscDetails.comment || 'N/A' }}</p>
-                  <p><strong>Escalated By:</strong> {{ selectedRow.legalEscDetails.escBy || 'N/A' }}</p>
-                  <p><strong>Escalation Time:</strong> {{ selectedRow.legalEscDetails.escDTimes || 'N/A' }}</p>
+                <div *ngIf="isEscalationExpanded('legal')" class="escalation-content">\
+                  <div class="detail-label">Level</div>
+                  <div class="detail-value">{{ selectedRow.legalEscDetails.level || 'N/A' }}</div>
+                  <div class="detail-label">Category</div>
+                  <div class="detail-value">{{ selectedRow.legalEscDetails.category || 'N/A' }}</div>
+                  <div class="detail-label">Comment</div>
+                  <div class="detail-value">{{ selectedRow.legalEscDetails.comment || 'N/A' }}</div>
+                  <div class="detail-label">Escalated By</div>
+                  <div class="detail-value">{{ selectedRow.legalEscDetails.escBy || 'N/A' }}</div>
+                  <div class="detail-label">Escalation Time</div>
+                  <div class="detail-value">{{ selectedRow.legalEscDetails.escDTimes || 'N/A' }}</div>
                 </div>
               </div>
             </div>
