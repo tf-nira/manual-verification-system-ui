@@ -28,6 +28,10 @@
           <div class="detail-label">Service Type</div>
           <div class="detail-value">{{ serviceType || 'Section ABC' }}</div>
         </div>
+        <div class="info-item">
+          <div class="detail-label">Created Date:</div>
+          <div class="detail-value">{{ formattedDate }}</div>
+        </div>
       </div>
       <div class="navigation-content">
         <div *ngFor="let section of sections" class="part">
