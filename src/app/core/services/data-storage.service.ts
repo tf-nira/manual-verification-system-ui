@@ -64,11 +64,7 @@ export class DataStorageService {
       'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
     });
 
-    const filterArray = filters.map((filter: any) => ({
-      columnName: filter.columnName,
-      value: filter.value,
-      type: filter.type,
-    }));
+    const filterArray = filters;
 
     const sortArray = sort.map((sortObj: any) => ({
       sortField: sortObj.sortField,

@@ -57,6 +57,7 @@ export const API_CONST_ASSIGNED_OFFICER_ID = 'assignedOfficerId';
 export const API_CONST_USER_ID = 'userId';
 export const API_CONST_EQUALS = 'equals';
 export const API_CONST_CONTAINS = 'contains';
+export const API_CONST_BETWEEN = 'between';
 export const API_CONST_STATUS = 'status';
 export const API_CONST_FROM_DATE = 'fromDate';
 export const API_CONST_TO_DATE = 'toDate';

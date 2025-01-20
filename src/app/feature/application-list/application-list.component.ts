@@ -34,6 +34,7 @@ import {
   API_CONST_ASSIGNED_OFFICER_ID,
   API_CONST_USER_ID,
   API_CONST_EQUALS,
+  API_CONST_BETWEEN,
   API_CONST_REG_ID,
   API_CONST_CONTAINS,
   API_CONST_STATUS,
@@ -72,7 +73,37 @@ export class ApplicationListComponent implements OnInit {
 
   selectedService: string = '';
   selectedServiceType: string = '';
-  filteredServiceTypes: { value: string; label: string }[] = []; // Holds the filtered service types
+  filteredServiceTypes: { value: string; label: string }[] = [
+    { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
+    { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
+    { value: 'By Naturalization', label: 'Registration of Citizens by Naturalization' },
+    { value: 'By Registration', label: 'Registration of Citizens by Registration' },
+    { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' },
+    { value: 'By Birth /Descent', label: 'Registration of Child Citizens by birth' },
+    { value: 'By Birth /Descent', label: 'Registration of Foundlings' },
+    { value: 'Renewal', label: 'Renewal of a card' },
+    { value: 'Replacement', label: 'Replacement of a card' },
+    { value: 'Add Name', label: 'Adding a Name' },
+    { value: 'Remove Name', label: 'Removing a name' },
+    { value: 'Change Order of Names', label: 'Change of Order of Names' },
+    { value: 'Complete Name Change', label: 'Complete Change of Name' },
+    { value: 'Change DOB', label: 'Change of Data of Birth' },
+    { value: 'Change DOB > 4 years', label: 'Change of Date of Birth > 4 years' },
+    { value: 'Change Residence Adult', label: 'Change in place of Residence of Adult' },
+    { value: 'Change Residence Child', label: 'Change in Place of Residence of Child' },
+    { value: 'Change Birth Place Adult', label: 'Change in place of Birth of Adult' },
+    { value: 'Change Birth Place Child', label: 'Change in Place of Birth of Child' },
+    { value: 'Correct Origin Adult', label: 'Correction in place of Origin of Adult' },
+    { value: 'Correct Origin Child', label: 'Correction in Place of Origin of Child' },
+    { value: 'Change Citizenship Type', label: 'Change in citizenship type' },
+    { value: 'Change Polling Station', label: 'Change in polling station' },
+    { value: 'Add Spouse', label: 'Add a spouse' },
+    { value: 'Remove Spouse', label: 'Remove a spouse' },
+    { value: 'Change Father Details', label: 'Change the details of the father' },
+    { value: 'Change Mother Details', label: 'Change the details of the mother' },
+    { value: 'Correct NIN Error', label: 'Correction of error regarding NIN' }
+  ]; // Holds the filtered service types
+
   selectedApplicationStatus: string = '';
   fromDate: string = '';
   toDate: string = '';
@@ -84,14 +115,6 @@ export class ApplicationListComponent implements OnInit {
   uniqueServices: string[] = [];
   uniqueServiceTypes: string[] = [];
   uniqueApplicationStatuses: string[] = [];
-
-  // services = [
-  //   { value: 'NEW', label: 'New registrations' },
-  //   { value: 'UPDATE', label: 'Change of Particulars' },
-  //   { value: 'RENEWAL', label: 'Renewal of card' },
-  //   { value: 'LOST', label: 'Lost/ Replacement of card' }
-  // ];
-  // serviceTypes = ['By Birth /Descent', 'By Registration', 'Citizenship under the Article 9','Dual Citizenship','By Naturalization'];
   
   servicesWithTypes = [
     {
@@ -329,14 +352,14 @@ export class ApplicationListComponent implements OnInit {
 
   search() {
     const userId = localStorage.getItem(API_CONST_USER_ID) || '';
-    let filters: { value: string; columnName: string; type: string }[] = [
+    let filters: { value?: string; fromValue?: string; toValue?: string; columnName: string; type: string }[] = [
       {
         value: userId,
         columnName: API_CONST_ASSIGNED_OFFICER_ID,
         type: API_CONST_EQUALS,
       },
     ];
-
+  
     // Helper function to add filters safely
     const addFilter = (
       value: string | undefined,
@@ -347,23 +370,28 @@ export class ApplicationListComponent implements OnInit {
         filters = filters.concat({ value: value.trim(), columnName, type });
       }
     };
-
+  
     // Add filters for optional parameters
     addFilter(this.searchText, API_CONST_REG_ID, API_CONST_CONTAINS);
     addFilter(this.selectedService, API_CONST_SERVICE, API_CONST_EQUALS);
-    addFilter(
-      this.selectedServiceType,
-      API_CONST_SERVICE_TYPE,
-      API_CONST_EQUALS
-    );
-    addFilter(
-      this.selectedApplicationStatus,
-      API_CONST_STATUS,
-      API_CONST_EQUALS
-    );
-    addFilter(this.fromDate, API_CONST_FROM_DATE, API_CONST_EQUALS);
-    addFilter(this.toDate, API_CONST_TO_DATE, API_CONST_EQUALS);
+    addFilter(this.selectedServiceType, API_CONST_SERVICE_TYPE, API_CONST_EQUALS);
+    addFilter(this.selectedApplicationStatus, API_CONST_STATUS, API_CONST_EQUALS);
 
+    // Add "between" filter for dates
+    const fromValue = new Date(this.fromDate).toISOString().replace('Z', '').replace(/\.\d+$/, '.000000');
+    const date = new Date(this.toDate);
+    date.setHours(23, 59, 59, 999); // Set time to the last moment of the day
+    const toValue = date.toISOString().replace('Z', '').replace(/\.\d+$/, '.999999');
+    
+    if (this.fromDate && this.toDate) {
+      filters = filters.concat({
+        fromValue: fromValue,
+        toValue: toValue,
+        columnName: API_CONST_CREATED_DATE,
+        type: API_CONST_BETWEEN,
+      });
+    }
+  
     const sort = [
       {
         sortField: this.sortColumn === API_CONST_APPLICATION_ID ? API_CONST_REG_ID : this.sortColumn || API_CONST_CREATED_DATE,
@@ -374,11 +402,11 @@ export class ApplicationListComponent implements OnInit {
       pageStart: this.currentPage,
       pageFetch: this.pageSize,
     };
+  
     this.dataService.fetchApplicationList(filters, sort, pagination).subscribe(
       (appResponse: any) => {
         if (appResponse && appResponse.response && appResponse.response.data) {
           this.data = appResponse.response.data;
-          this.data.forEach((application: any) => {});
         } else {
           this.data = [];
         }
@@ -387,5 +415,5 @@ export class ApplicationListComponent implements OnInit {
         console.error('Error fetching application list:', appError);
       }
     );
-  }
+  }  
 }
