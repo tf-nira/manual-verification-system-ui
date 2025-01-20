@@ -56,28 +56,24 @@
   cursor: pointer;
 }
 
+.detail-content {
+  display: flex;
+  flex-direction: column;
+}
+
 .navigation-content {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  padding-top: 10px;
 }
 
 .info-item {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 8px 0;
+  padding-top: 4px;
   border-bottom: 1px solid #eaeaea;
   font-size: 14px;
-}
-
-.label {
-  font-weight: bold;
-  color: #333;
-}
-
-.value {
-  color: #555;
 }
 
 .left-section.collapsed .navigation-content {
@@ -1264,42 +1260,45 @@ textarea {
 } */
 /* Accordion-style container for documents */
 
-.accordion {
-  border: 1px solid #ccc;
-  border-radius: 5px;
+.part {
+  margin-bottom: 10px;
 }
-.accordion-header {
-  background-color: #ccc;
-  font-weight: bold;
-  font-size: 18px;
-  color: #333;
-  cursor: pointer;
-}
-.accordion-header:hover {
-  background-color: #f0f0f0;
-}
-.accordion-content {
-  padding: 10px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.section-title {
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #333;
-}
-.subsection-item {
-  margin-left: 20px;
-  padding-left: 10px;
-  border-left: 2px solid #ddd;
-}
-.subsection-title {
+
+.part-header {
   font-size: 16px;
-  color: #555;
+  font-weight: bold;
   cursor: pointer;
+  padding: 10px;
+  background: #e9ecef;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 }
+
+.part-header:hover {
+  background: #dee2e6;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  border-top: none;
+}
+
+ul li:first-child {
+  border-top: 1px solid #ddd;
+}
+
+ul li:hover {
+  background: #f1f3f5;
+}
+
 .nav-button {
   background-color: #e7e7e7;
   border: none;
