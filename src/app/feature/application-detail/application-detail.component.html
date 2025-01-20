@@ -1693,17 +1693,17 @@
       </div>
       <div class="modal-body">
         <div class="field-container">
-          <label>Reason Category <span title="Select the reason for rejection.">*</span></label>
+          <label>Rejection Category <span title="Select the reason for rejection.">*</span></label>
           <select [(ngModel)]="rejectionCategory" class="dropdown">
-            <option value="" disabled selected>-Select Reason Category-</option>
+            <option value="" disabled selected>-Select Rejection Category-</option>
             <option value="invalid-information">Invalid Information</option>
             <option value="incomplete-documents">Incomplete Documents</option>
             <option value="other">Other</option>
           </select>
         </div>
         <div class="field-container">
-          <label for="reject-comments">Comments <span title="Comments are required."> *</span></label>
-          <textarea id="reject-comments" [(ngModel)]="rejectionComment" placeholder="Enter your comments"
+          <label for="reject-comments">Rejection Comments <span title="Comments are required."> *</span></label>
+          <textarea id="reject-comments" [(ngModel)]="rejectionComment" placeholder="Enter the Rejection comments"
             required></textarea>
         </div>
       </div>

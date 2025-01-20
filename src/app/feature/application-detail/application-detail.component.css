@@ -632,7 +632,7 @@ textarea {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 400px;
+  width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .escalateModal {
@@ -652,7 +652,7 @@ textarea {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 400px;
+  width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 /* Modal Styling */
@@ -677,7 +677,7 @@ textarea {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 400px;
+  width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in animation */
 }
@@ -874,7 +874,7 @@ textarea {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 400px;
+  width: 500px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 /* Modal header */
