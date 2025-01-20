@@ -184,6 +184,7 @@ export class ApplicationDetailComponent implements OnInit {
   personDetails: { role: string; details: { [key: string]: any } }[] = []; // Store details for Father, Mother, Guardian
   constants = {
     MVS_DISTRICT_OFFICER,
+    MVS_LEGAL_OFFICER,
     APPLICATION_ID,
     SERVICE,
     SERVICE_TYPE,
@@ -235,7 +236,8 @@ export class ApplicationDetailComponent implements OnInit {
     this.photoBase64 = this.rowData?.biometricAttributes?.ApplicantPhoto?.trim() || '';
 
     if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER) {
-      this.applicationStatus = this.rowData[APPLICANT_NAME];
+      this.applicationStatus = this.selectedRow.status;
+      console.log(this.rowData);
     }
 
     this.serviceType = this.rowData.serviceType || '';

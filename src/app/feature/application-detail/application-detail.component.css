@@ -32,10 +32,30 @@
   width: 250px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
-  padding: 5px;
+  padding: 15px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   transition: width 0.3s ease-in-out;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f9f9f9; /* Thumb color and track color */
+}
+
+.left-section::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+.left-section::-webkit-scrollbar-track {
+  background: #f9f9f9; /* Track color */
+  border-radius: 3px; /* Rounded corners for the track */
+}
+
+.left-section::-webkit-scrollbar-thumb {
+  background: #ccc; /* Thumb color */
+  border-radius: 3px; /* Rounded corners for the thumb */
+}
+
+.left-section::-webkit-scrollbar-thumb:hover {
+  background: #aaa; /* Darker color on hover */
 }
 
 .left-section.collapsed {
@@ -101,6 +121,26 @@
   padding: 20px;
   background-color: #fff;
   overflow-y: scroll; /* Ensures scrolling for content overflow */
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f9f9f9; /* Thumb color and track color */
+}
+
+.middle-section::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+.middle-section::-webkit-scrollbar-track {
+  background: #f9f9f9; /* Track color */
+  border-radius: 3px; /* Rounded corners for the track */
+}
+
+.middle-section::-webkit-scrollbar-thumb {
+  background: #ccc; /* Thumb color */
+  border-radius: 3px; /* Rounded corners for the thumb */
+}
+
+.middle-section::-webkit-scrollbar-thumb:hover {
+  background: #aaa; /* Darker color on hover */
 }
 
 .middle-section h3 {
@@ -234,9 +274,29 @@
 /* References Content */
 .references-content {
   padding: 5px;
-  overflow-y: auto; /* Enables scrolling if content overflows */
-  height: 100%; /* Ensures it occupies the full height of its parent */
-  box-sizing: border-box; /* Ensures padding is included in height calculations */
+  overflow-y: auto; 
+  height: 100%;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc #f9f9f9; /* Thumb color and track color */
+}
+
+.references-content::-webkit-scrollbar {
+  width: 6px; /* Width of the scrollbar */
+}
+
+.references-content::-webkit-scrollbar-track {
+  background: #f9f9f9; /* Track color */
+  border-radius: 3px; /* Rounded corners for the track */
+}
+
+.references-content::-webkit-scrollbar-thumb {
+  background: #ccc; /* Thumb color */
+  border-radius: 3px; /* Rounded corners for the thumb */
+}
+
+.references-content::-webkit-scrollbar-thumb:hover {
+  background: #aaa; /* Darker color on hover */
 }
 
 .nin-details-container {
@@ -287,13 +347,18 @@
   color: #fff; /* White text color */
   cursor: pointer; /* Pointer cursor on hover */
 }
+
+.icon {
+  object-fit: contain; 
+}
+
 /* Back Button */
 .back-button {
   background-color: #fff;
   color: #000;
   border: 1px solid #ccc;
   border-radius: 5px;
-  padding: 10px 20px;
+  padding: 5px 15px;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
@@ -304,11 +369,11 @@
 
 /* Approve Button */
 .action-buttons .approve {
-  background-color: #a98b80; /* Brown */
+  background-color: #946A18; /* Brown */
   color: #fff;
   border: 1px solid #5d4037; /* Darker brown */
   border-radius: 5px;
-  padding: 10px 20px;
+  padding: 5px 15px;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
@@ -319,11 +384,11 @@
 
 /* Escalate Button */
 .action-buttons .escalate {
-  background-color: #ffebc6; /* Light Yellow */
-  color: #fdc621; /* Yellow text */
-  border: 1px solid #ffc107; /* Yellow border */
+  background-color: #FFF9F5;
+  color: #BC4B09;
+  border: 1px solid #FDCFB4;
   border-radius: 5px;
-  padding: 10px 20px;
+  padding: 5px 15px;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
@@ -334,11 +399,11 @@
 
 /* Reject Button */
 .action-buttons .reject {
-  background-color: #ffe6e6; /* Light Red */
-  color: #dc3545; /* Red text */
-  border: 1px solid #dc3545; /* Red border */
+  background-color: #FDF3F4;
+  color: #B10E1C;
+  border: 1px solid #EEACB2;
   border-radius: 5px;
-  padding: 10px 20px;
+  padding: 5px 15px;
   font-size: 14px;
   font-weight: bold;
   cursor: pointer;
@@ -346,19 +411,6 @@
   align-items: center;
   gap: 8px;
 }
-
-/* Common Styling for Icons */
-.action-buttons button::before,
-.back-button::before {
-  content: ""; /* Add icon content using a library like Font Awesome or an SVG */
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  margin-right: 8px;
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-
 
 /* Right Section */
 .right-section {
@@ -457,7 +509,7 @@
 .tab-button {
   flex: 1;
   text-align: center;
-  padding: 10px 15px;
+  padding: 10px 5px;
   background: none;
   border: none;
   font-size: 14px;
@@ -465,8 +517,9 @@
   cursor: pointer;
   color: #555;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
+  gap: 3px;
 }
 
 .tab-button i {
@@ -821,20 +874,6 @@ textarea {
   cursor: pointer; /* Change cursor to pointer */
   font-size: 14px; /* Adjust font size */
   text-align: center; /* Center text */
-}
-.document-upload {
-  display: inline-block; /* Ensures the button is displayed inline */
-  width: 100%; /* Matches the width of the parent component */
-  background-color: #f4f4f4; /* Green background color */
-  color: #7b7b7b; /* White text */
-  padding: 10px 15px; /* Adjust padding for size */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Optional rounded corners */
-  cursor: pointer; /* Show pointer cursor on hover */
-  font-size: 14px; /* Adjust font size */
-  text-align: center; /* Center text */
-  transition: background-color 0.3s ease; /* Smooth hover effect */
-  font-weight: bold; /* Makes the text bold */
 }
 .hidden {
   display: none; /* Completely hides the button */
@@ -1310,82 +1349,44 @@ ul li:hover {
   text-decoration: underline;
   color: #000;
 }
-/* Document Section Styling */
+
 .documents-section {
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin-bottom: 16px;
   background-color: #f9f9f9;
-  overflow: hidden;
+  padding: 16px;
+  margin-bottom: 16px;
 }
 
-/* Section Header */
-.documents-section .section-header {
+/* No Documents Message */
+.no-documents {
+  font-size: 14px;
+  color: #666;
+  text-align: center;
+  padding: 16px;
+}
+
+/* Document Row */
+.document-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 12px 16px;
   background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+/* Category Name */
+.category-name {
+  font-size: 14px;
   font-weight: bold;
-  font-size: 14px;
-  cursor: pointer;
-  border-bottom: 1px solid #ddd;
-}
-
-.documents-section .section-header h4 {
-  font-size: 14px;
-  font-weight: bold;
-  margin: 0;
-}
-
-.documents-section .section-header .item-count {
-  font-size: 12px;
-  color: #666;
-}
-
-.documents-section .section-header i {
-  font-size: 12px;
-  color: #555;
-  transition: transform 0.3s ease;
-}
-
-/* Rotate icon when expanded */
-.documents-section.active .section-header i {
-  transform: rotate(180deg);
-}
-
-/* Document Items Container */
-.documents-section .document-items {
-  padding: 16px;
-  background-color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-/* Document Item */
-.documents-section .document-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.documents-section .document-item span {
-  font-size: 14px;
   color: #333;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.documents-section .document-item span i {
-  font-size: 14px;
-  color: #555;
 }
 
 /* View Button */
-.documents-section .view-button {
+.view-button {
   background-color: transparent;
   border: none;
   color: #007bff;
@@ -1393,22 +1394,38 @@ ul li:hover {
   cursor: pointer;
   display: flex;
   align-items: center;
-  padding: 0;
 }
 
-.documents-section .view-button i {
-  font-size: 14px;
+.view-button i {
+  margin-right: 4px;
 }
 
-.documents-section .view-button:hover {
+.view-button:hover {
   color: #0056b3;
 }
 
 /* Disabled View Button */
-.documents-section .view-button:disabled {
+.view-button:disabled {
   color: #ccc;
   cursor: not-allowed;
 }
+
+/* Upload Button */
+.document-upload {
+  display: flex;
+  align-items: center;
+  margin: 16px auto 0;
+  border: none;
+  padding: 5px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #fff;
+  color: #946A18;
+  border: 1px solid #946A18;
+}
+
 /* Section Header */
 .section-header {
   display: flex;
