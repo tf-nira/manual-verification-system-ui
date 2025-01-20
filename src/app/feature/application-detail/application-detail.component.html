@@ -16,9 +16,9 @@
           <div class="detail-label">ID</div>
           <div class="detail-value">{{ applicationId || 'N/A' }}</div>
         </div>
-        <div class="info-item">
+        <div class="info-item" *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER">
           <div class="detail-label">Status</div>
-          <div class="detail-value">{{'Pending' }}</div>
+          <div class="detail-value">{{ applicationStatus === 'INTERVIEW SCHEDULED' ? 'INTERVIEW SCHEDULED' : 'NEW' }}</div>
         </div>
         <div class="info-item">
           <div class="detail-label">Service</div>
@@ -29,7 +29,7 @@
           <div class="detail-value">{{ serviceType || 'Section ABC' }}</div>
         </div>
         <div class="info-item">
-          <div class="detail-label">Created Date:</div>
+          <div class="detail-label">Created Date</div>
           <div class="detail-value">{{ formattedDate }}</div>
         </div>
       </div>
@@ -1433,14 +1433,19 @@
       <div class="references-content">
         <div class="tabs">
           <button class="tab-button" [class.active]="activeTab === 'history'" (click)="setActiveTab('history')">
-            <i class="icon-history"></i> History
+            <img src="assets/images/history_section_icon.png" alt="Back" class="icon" />
+            <i class="icon-history"></i> 
+            History
           </button>
           <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'By Birth /Descent'"
             class="tab-button" [class.active]="activeTab === 'records'" (click)="setActiveTab('records')">
-            <i class="icon-records"></i> Records
+            <img src="assets/images/records_section_icon.png" alt="Back" class="icon" />
+            <i class="icon-records"></i> 
+            Records
           </button>
           <button class="tab-button" [class.active]="activeTab === 'documents'" (click)="setActiveTab('documents')">
-            <i class="icon-documents"></i> Documents
+            <i class="icon-documents"></i> 
+            Documents
           </button>
         </div>
 
@@ -1593,20 +1598,26 @@
     <!-- Footer -->
     <div class="footer">
       <!-- Back Button -->
-      <button class="back-button" (click)="goBack()">{{ constants.BACK }}</button>
+      <button class="back-button" (click)="goBack()">
+        <img src="assets/images/back_icon.png" alt="Back" class="icon" />
+        {{ constants.BACK }}
+      </button>
 
       <!-- Action Buttons -->
       <div class="action-buttons">
         <button class="approve" (click)="openApprovalModal()">
+          <img src="assets/images/approve_icon.png" alt="Back" class="icon" />
           <i class="fas fa-check-circle"></i>
           {{ constants.APPROVE }}
         </button>
         <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR'"
           (click)="openEscalateModal()">
+          <img src="assets/images/escalate_icon.png" alt="Back" class="icon" />
           <i class="fas fa-exclamation-triangle"></i>
           {{ constants.ESCALATE }}
         </button>
         <button class="reject" (click)="openRejectModal()">
+          <img src="assets/images/reject_icon.png" alt="Back" class="icon" />
           <i class="fas fa-times-circle"></i>
           {{ constants.REJECT }}
         </button>
