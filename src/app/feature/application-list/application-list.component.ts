@@ -125,9 +125,7 @@ export class ApplicationListComponent implements OnInit {
         { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
         { value: 'By Naturalization', label: 'Registration of Citizens by Naturalization' },
         { value: 'By Registration', label: 'Registration of Citizens by Registration' },
-        { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' },
-        { value: 'By Birth /Descent', label: 'Registration of Child Citizens by birth' },
-        { value: 'By Birth /Descent', label: 'Registration of Foundlings' }
+        { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' }
       ]
     },
     {
