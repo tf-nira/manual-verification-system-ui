@@ -330,6 +330,16 @@ export class ApplicationDetailComponent implements OnInit {
     this.expandedSections[section] = !this.expandedSections[section];
   }
   checkPersonDetails() {
+    const allowedFields = [
+      'NIN',
+      'Surname',
+      'GivenName',
+      'DateOfBirth',
+      'IndigenousCommunityTribe',
+      'Clan',
+      'NIN_AIN'     //added for guardian
+    ];
+    const allowedFieldsLowerCase = allowedFields.map((field) => field.toLowerCase());
     const roles = ['father', 'mother', 'guardian']; // Define roles to check
     console.log(this.rowData.demographics)
     this.personDetails = roles
@@ -343,7 +353,10 @@ export class ApplicationDetailComponent implements OnInit {
           const personData = Object.keys(this.rowData.demographics)
             .filter((key) => key.startsWith(role)) // Match keys starting with the role (e.g., father)
             .reduce((acc: { [key: string]: any }, key) => {
+              const field = key.replace(role, '');
+              if (allowedFieldsLowerCase.includes(field.toLowerCase())) {    //only adding specified fields in records of father, mother, guardian
               acc[key] = this.rowData.demographics[key]; // Add key-value pair to the accumulator
+              }
               return acc;
             }, {}); // Initialize acc as an empty object
 
@@ -715,8 +728,49 @@ export class ApplicationDetailComponent implements OnInit {
     }
   }
 
+  isValidDocumentList(documents: any[]): boolean {
+    const categoryMap = new Map<string, Set<string>>();
+  
+    for (const doc of documents) {
+      if (!doc.category || !doc.title) {
+        // Skip documents without category or title (optional based on requirements)
+        continue;
+      }
+  
+      if (!categoryMap.has(doc.category)) {
+        // Add a new category with an empty set of titles
+        categoryMap.set(doc.category, new Set());
+      }
+  
+      const titleSet = categoryMap.get(doc.category)!;
+  
+      if (titleSet.has(doc.title)) {
+        // Duplicate title found in the same category
+        return false;
+      }
+  
+      // Add the title to the set for this category
+      titleSet.add(doc.title);
+    }
+  
+    return true; // All documents are valid
+  }
+  
+
+
   // Confirm and approve action
   confirmAndUpload() {
+    // Validate document list before proceeding
+  if (!this.isValidDocumentList(this.additionalDocuments)) {
+    this.snackBar.open('Warning: Multiple uploads of the same document are restricted.', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['center-snackbar'],
+    });
+    return; // Abort upload
+  }
+
     const payload: {
       id: string;
       version: string;
