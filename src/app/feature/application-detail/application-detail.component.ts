@@ -56,8 +56,6 @@ export class ApplicationDetailComponent implements OnInit {
     proofOfBirth: 'Proof of Birth',
     proofOfOtherSupportingdocumentIssuedbyGovt: 'Proof of Other Supporting Document',
     proofOfOtherSupportingdocuments: 'Proof of Other Supporting Documents',
-    applicantProofOfSignature: 'Applicant Proof of Signature',
-    introducerProofOfSignature: 'Introducer Proof of Signature',
     proofOfRegistration: 'Proof of Registration',
     proofOfAdoption: 'Proof of Adoption',
     // proofOfChangeOfParticulars: 'Proof of Change of Particulars',
