@@ -1,7 +1,6 @@
 import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, makeStateKey, PLATFORM_ID, TransferState } from '@angular/core';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
