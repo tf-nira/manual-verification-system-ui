@@ -9,24 +9,23 @@ const CONFIG_KEY = makeStateKey<{ [key: string]: any }>('app-config');
   providedIn: 'root',
 })
 export class ConfigService {
-  private config: { [key: string]: any } = {};
+  private config: any;
 
   constructor(private http: HttpClient) {}
 
   async loadConfig(): Promise<void> {
 
       try {
-        const data = await this.http.get<{ [key: string]: any }>('./assets/config.json').toPromise();
+        const data = await this.http.get('./assets/config.json').toPromise();
         console.log(data);
-        this.config = data || {};
+        this.config = data;
       } catch (error) {
         console.error('Failed to load config:', error);
       }
-    // }
     console.log(this.config);
   }
 
-  getConfig(): { [key: string]: any } {
+  getConfig() {
     return this.config;
   }
   
