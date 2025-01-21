@@ -376,12 +376,12 @@ export class ApplicationListComponent implements OnInit {
     addFilter(this.selectedApplicationStatus, API_CONST_STATUS, API_CONST_EQUALS);
 
     // Add "between" filter for dates
-    const fromValue = new Date(this.fromDate).toISOString().replace('Z', '').replace(/\.\d+$/, '.000000');
-    const date = new Date(this.toDate);
-    date.setHours(23, 59, 59, 999); // Set time to the last moment of the day
-    const toValue = date.toISOString().replace('Z', '').replace(/\.\d+$/, '.999999');
-    
     if (this.fromDate && this.toDate) {
+      const fromValue = new Date(this.fromDate).toISOString().replace('Z', '').replace(/\.\d+$/, '.000000');
+      const date = new Date(this.toDate);
+      date.setHours(23, 59, 59, 999);
+      const toValue = date.toISOString().replace('Z', '').replace(/\.\d+$/, '.999999');
+
       filters = filters.concat({
         fromValue: fromValue,
         toValue: toValue,
