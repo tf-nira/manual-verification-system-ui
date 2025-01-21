@@ -40,7 +40,10 @@ export class HeaderComponent {
     sessionStorage.clear();
     alert('You have been logged out.');
     // Redirect to the login page
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => {
+      window.location.reload();
+    });
+
   }
   clearAuthToken(): void {
     document.cookie = `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
