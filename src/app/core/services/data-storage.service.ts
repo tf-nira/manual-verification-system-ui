@@ -26,25 +26,11 @@ export class DataStorageService {
     private httpClient: HttpClient,
     private configService: ConfigService
   ) {
-    // configService.loadConfig().then((config) => {
-    //   this.BASE_URL = config["BASE_URL"];
-    //   this.MVS_URL = config["MVS_URL"];
-    //   console.log(this.BASE_URL);
-    //   console.log(this.MVS_URL);
-    // });
     this.BASE_URL = configService.getConfig()['BASE_URL'];
     this.MVS_URL = configService.getConfig()['MVS_URL'];
   }
 
   userLogin(userName: string, password: string) {
-    // if (!this.BASE_URL) {
-    //   console.log("BASE URL is null");
-    //   this.BASE_URL = this.configService.getConfig()["BASE_URL"];
-    // }
-    // if (!this.MVS_URL) {
-    //   console.log("MVS URL is null");
-    //   this.MVS_URL = this.configService.getConfig()["MVS_URL"];
-    // }
 
     const url = this.BASE_URL + this.MVS_URL + appConstants.APPEND_URL.auth;
 
@@ -53,8 +39,6 @@ export class DataStorageService {
       password: password,
     };
     const obj = new RequestModel(req);
-    console.log(url);
-    console.log(obj);
     return this.httpClient.post(url, obj);
   }
 
@@ -67,8 +51,6 @@ export class DataStorageService {
       this.BASE_URL + this.MVS_URL +
       appConstants.APPEND_URL.applications +
       appConstants.APPEND_URL.search;
-
-    console.log(url);
 
     const token = localStorage.getItem('authToken');
     // document.cookie = `Authorization=${token}; path=/; SameSite=None; Secure; Domain=api-internal.niradev.idencode.link`;
