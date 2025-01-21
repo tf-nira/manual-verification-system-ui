@@ -16,17 +16,19 @@ export class ConfigService {
 
   async loadConfig(): Promise<void> {
 
-    if (this.transferState.hasKey(CONFIG_KEY)) {
-      this.config = this.transferState.get(CONFIG_KEY, {});
-    } else if (isPlatformServer(this.platformId)) {
+    // if (this.transferState.hasKey(CONFIG_KEY)) {
+    //   this.config = this.transferState.get(CONFIG_KEY, {});
+    //   console.log(this.config);
+    // } else if (isPlatformServer(this.platformId)) {
       try {
         const data = await this.http.get<{ [key: string]: any }>('./assets/config.json').toPromise();
-        this.transferState.set(CONFIG_KEY, data || {});
+        console.log(data);
+        // this.transferState.set(CONFIG_KEY, data || {});
         this.config = data || {};
       } catch (error) {
         console.error('Failed to load config:', error);
       }
-    }
+    // }
     console.log(this.config);
   }
 
