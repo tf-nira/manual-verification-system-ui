@@ -58,8 +58,6 @@ export class LoginComponent implements OnInit {
           localStorage.setItem('userId', userId || '');
           localStorage.setItem('name', name || '');
 
-          document.cookie = `Authorization=${response.response.token}; path=/; SameSite=None; Secure; Domain=api-internal.niradev.idencode.link`;
-
           const role = this.fetchRole(decoded);
           localStorage.setItem('role', role || '');
 

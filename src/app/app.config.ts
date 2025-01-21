@@ -7,12 +7,11 @@ import { ConfigService } from './core/services/config.service';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
-function initializeApp(configService: ConfigService): () => Promise<void> {
+const initializeApp = (configService: ConfigService) => {
   return () => configService.loadConfig();
 }
 
 export const appConfig: ApplicationConfig = {
-  // providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideRouter(routes), provideClientHydration()]
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
