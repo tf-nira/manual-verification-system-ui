@@ -39,8 +39,6 @@ export class DataStorageService {
       password: password,
     };
     const obj = new RequestModel(req);
-    console.log(url);
-    console.log(obj);
     return this.httpClient.post(url, obj);
   }
 

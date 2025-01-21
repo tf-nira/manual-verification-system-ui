@@ -14,12 +14,10 @@ export class ConfigService {
 
       try {
         const data = await this.http.get('./assets/config.json').toPromise();
-        console.log(data);
         this.config = data || {};
       } catch (error) {
         console.error('Failed to load config:', error);
       }
-    console.log(this.config);
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('config_url', JSON.stringify(this.config));
     }
