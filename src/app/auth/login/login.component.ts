@@ -6,6 +6,7 @@ import { ROLE_DATA_MAP } from '../../shared/application-data';
 import { DataStorageService } from '../../core/services/data-storage.service';
 // import * as jwt from 'jsonwebtoken';
 import { jwtDecode } from 'jwt-decode';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import {
   HttpClient,
@@ -31,13 +32,21 @@ export class LoginComponent implements OnInit {
   // private dataService = inject(DataStorageService);
   constructor(
     private router: Router,
-    private dataService: DataStorageService
+    private dataService: DataStorageService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit(): void {
     //`
   }
-
+  openForgotPasswordPopup() {
+    this.snackBar.open('Please contact the administrator to retrieve or reset your password.', 'Close', {
+      duration: 4000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['center-snackbar'],
+    });
+  }
   onSubmit() {
     console.log('login submitted for user:', this.username);
 
