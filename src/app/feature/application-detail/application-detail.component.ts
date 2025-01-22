@@ -170,7 +170,7 @@ export class ApplicationDetailComponent implements OnInit {
 
   // Added: State variables for left and right section collapse
   isLeftCollapsed: boolean = false;
-  isRightCollapsed: boolean = false;
+  isRightCollapsed: boolean = true;
   isEditable: boolean = false;
   selectedRow: any = {};
   documents: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
@@ -279,10 +279,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.isPhotoError = true;
     console.error('Image failed to load:', this.photoBase64);
   }
-  toggleSection(index: number): void {
-    // Toggle the state of the clicked section
-    this.isSectionExpanded[index] = !this.isSectionExpanded[index];
-  }
+  
   toggleRightSection(sectionId: string): void {
     this.sections = this.sections.map((section) =>
       section.id === sectionId ? { ...section, open: !section.open } : section

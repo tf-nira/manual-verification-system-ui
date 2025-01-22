@@ -420,6 +420,7 @@
   overflow: hidden; /* Prevent content overflow */
   height: 100%; /* Ensure the section takes full height */
   position: relative;
+  transition: width 0.3s ease-in-out;
 }
 
 .right-section.collapsed {
@@ -451,7 +452,7 @@
   color: #151515;
   cursor: pointer;
   font-size: 14px; /* Appropriate button size */
-  padding: 5px 10px; /* Adjust padding for a compact button */
+  padding: 0px 00px; /* Adjust padding for a compact button */
 }
 
 .right-section.collapsed .section-header {
