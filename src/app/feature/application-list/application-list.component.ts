@@ -81,7 +81,7 @@ export class ApplicationListComponent implements OnInit {
   filteredServiceTypes: { value: string; label: string }[] = [
     { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
     { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
-    { value: 'By Naturalization', label: 'Registration of Citizens by Naturalization' },
+    { value: 'By Naturalisation', label: 'Registration of Citizens by Naturalisation' },
     { value: 'By Registration', label: 'Registration of Citizens by Registration' },
     { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' },
     { value: 'By Birth /Descent', label: 'Registration of Child Citizens by birth' },
@@ -128,7 +128,7 @@ export class ApplicationListComponent implements OnInit {
       serviceTypes: [
         { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
         { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
-        { value: 'By Naturalization', label: 'Registration of Citizens by Naturalization' },
+        { value: 'By Naturalisation', label: 'Registration of Citizens by Naturalisation' },
         { value: 'By Registration', label: 'Registration of Citizens by Registration' },
         { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' }
       ]
@@ -173,7 +173,12 @@ export class ApplicationListComponent implements OnInit {
         { value: 'Change Mother Details', label: 'Change the details of the mother' },
         { value: 'Correct NIN Error', label: 'Correction of error regarding NIN' }
       ]
-    }
+    },
+    {
+      value: 'FIRSTID',
+      label: 'GetFirst ID',
+      serviceTypes: []
+    },
   ];
   
   
