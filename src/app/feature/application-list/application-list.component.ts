@@ -269,17 +269,6 @@ export class ApplicationListComponent implements OnInit {
     const selectedService = this.servicesWithTypes.find(service => service.value === selectedValue);
     this.filteredServiceTypes = selectedService ? selectedService.serviceTypes : [];
   }
-  togglePanel() {
-    this.isPanelExpanded = !this.isPanelExpanded;
-  }
-
-  toggleEscalation(section: string): void {
-    this.expandedSections[section] = !this.expandedSections[section];
-  }
-  
-  isEscalationExpanded(section: string): boolean {
-    return this.expandedSections[section] || false;
-  }
 
   get totalPages(): number {
     return Math.ceil(this.totalRecords / this.pageSize) || 0;
@@ -332,11 +321,6 @@ export class ApplicationListComponent implements OnInit {
     this.selectedApplicationStatus = '';
     this.fromDate = '';
     this.toDate = '';
-  }
-
-  selectRow(row: any) {
-    this.selectedRow = row;
-    this.isPanelExpanded = true;
   }
 
   onRowClick(event: MouseEvent, rowData: any) {
