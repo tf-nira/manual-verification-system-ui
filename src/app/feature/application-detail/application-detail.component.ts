@@ -122,7 +122,7 @@ export class ApplicationDetailComponent implements OnInit {
       open: false,
       subSections: [
         { id: 'personal-info-section', label: 'Personal Information' },
-        { id: 'place-of-residence-section', label: 'Place Of Residenc' },
+        { id: 'place-of-residence-section', label: 'Place Of Residence' },
         { id: 'foundling-section', label: 'Foundling Check' },
         { id: 'place-of-birth-section', label: 'Place Of Birth' },
         { id: 'place-of-origin-section', label: 'Place of Origin' },
