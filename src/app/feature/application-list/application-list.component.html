@@ -61,48 +61,48 @@
           <option *ngFor="let status of applicationStatuses" [value]="status">{{ status }}</option>
         </select>
       </div>
-  
-      <!-- Date Range Filter -->
-      <div class="date-filter">
-        <div class="input-group">
-          <label for="fromDate">{{ constants.FROM_DATE }}</label>
-          <input
-            type="date"
-            id="fromDate"
-            [(ngModel)]="fromDate"
-            class="date-filter-input"
-            [readonly]="isFiltersCollapsed"
-          />
+    </div>
+
+    <div class="search-box">
+      <div class="search-and-filters" *ngIf="!isFiltersCollapsed">
+        <!-- Date Range Filter -->
+        <div class="date-filter">
+          <div class="input-group">
+            <label for="fromDate">{{ constants.FROM_DATE }}</label>
+            <input
+              type="date"
+              id="fromDate"
+              [(ngModel)]="fromDate"
+              class="date-filter-input"
+              [readonly]="isFiltersCollapsed"
+            />
+          </div>
+          <div class="input-group">
+            <label for="toDate">{{ constants.TO_DATE }}</label>
+            <input
+              type="date"
+              id="toDate"
+              [(ngModel)]="toDate"
+              class="date-filter-input"
+              [readonly]="isFiltersCollapsed"
+            />
+          </div>
         </div>
-        <div class="input-group">
-          <label for="toDate">{{ constants.TO_DATE }}</label>
-          <input
-            type="date"
-            id="toDate"
-            [(ngModel)]="toDate"
-            class="date-filter-input"
-            [readonly]="isFiltersCollapsed"
-          />
-        </div>
+      </div>
+
+      <div class="seach-and-filter-buttons">
+        <button (click)="clearFilters()" class="clear-filters-btn">
+          {{ constants.CLEAR_FILTERS }}
+        </button>
+        <button (click)="search()" class="clear-filters-btn">
+          {{ constants.SEARCH }}
+        </button>
+        <button (click)="toggleFilters()" class="clear-filters-btn">
+          {{ isFiltersCollapsed ? 'Filters' : 'Hide Filters' }}
+        </button>
       </div>
     </div>
 
-
-    <div class="seach-and-filter-buttons">
-      
-      <hr>
-      
-      <button (click)="clearFilters()" class="clear-filters-btn">
-        {{ constants.CLEAR_FILTERS }}
-      </button>
-      <button (click)="search()" class="clear-filters-btn">
-        {{ constants.SEARCH }}
-      </button>
-      <button (click)="toggleFilters()" class="clear-filters-btn">
-        {{ isFiltersCollapsed ? 'Filters' : 'Hide Filters' }}
-      </button>
-    
-    </div>
   </div>
   
     <!-- Main Content: Table and Right Panel -->

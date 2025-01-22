@@ -380,7 +380,7 @@ export class ApplicationListComponent implements OnInit {
       const fromValue = new Date(this.fromDate).toISOString().replace('Z', '').replace(/\.\d+$/, '.000000');
       const date = new Date(this.toDate);
       date.setHours(23, 59, 59, 999);
-      const toValue = date.toISOString().replace('Z', '').replace(/\.\d+$/, '.999999');
+      const toValue = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}.999999`;
 
       filters = filters.concat({
         fromValue: fromValue,
