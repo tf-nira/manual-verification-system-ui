@@ -768,7 +768,7 @@ export class ApplicationDetailComponent implements OnInit {
       verticalPosition: 'top',
       panelClass: ['center-snackbar'],
     });
-    return; // Abort upload
+    return; 
   }
 
     const payload: {

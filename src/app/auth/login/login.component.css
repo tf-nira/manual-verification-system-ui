@@ -118,3 +118,19 @@ input[type="password"] {
 .confirm-btn:hover {
   background-color: #a01e2b;
 }
+
+.forgot-password {
+  margin-top: 10px; /* Adjust spacing */
+  text-align: right; /* Align to the right if needed */
+}
+
+.forgot-password a {
+  font-size: 12px; /* Decrease font size */
+  color: #007bff; /* Change color if desired */
+  text-decoration: none; /* Remove underline */
+}
+
+.forgot-password a:hover {
+  text-decoration: underline; /* Add underline on hover for better UX */
+  color: #0056b3; /* Darker shade on hover */
+}
