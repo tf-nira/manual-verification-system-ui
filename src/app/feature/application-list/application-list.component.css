@@ -17,12 +17,19 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for better visuals */
 }
 
+.search-box {
+  display: flex; /* Enables flexbox layout */
+  justify-content: space-between; /* Ensures space between the two sections */
+  align-items: center; /* Aligns items vertically */
+  gap: 1rem; /* Adds space between the sections, if necessary */
+}
+
 /* Search Bar */
 .search-and-filters {
   display: flex;
   align-items: center; /* Vertically align items */
   gap: 0.7rem; /* Add space between elements */
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   /* margin-top: 2rem; */
 }
 
