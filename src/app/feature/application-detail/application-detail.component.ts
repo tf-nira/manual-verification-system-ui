@@ -454,6 +454,7 @@ export class ApplicationDetailComponent implements OnInit {
           { value: 'Second register/application exists (May or may not have a NIN, stop listed)',  default: false},
           { value: 'Poorly scanned documents to enable decision',  default: false},
           { value: 'Fraudulent/Altered /doctored documents ',  default: false},
+          { value: 'Other',  default: false}
         ]
         break;
       case 'COP':
@@ -468,6 +469,7 @@ export class ApplicationDetailComponent implements OnInit {
           { value: 'Payment lower than statutory fees', default: false },
           { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false },
           { value: 'An existing record is stop listed', default: false },
+          { value: 'Other',  default: false}
         ]
     }
   }
