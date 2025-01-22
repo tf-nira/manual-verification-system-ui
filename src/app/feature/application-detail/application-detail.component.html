@@ -8,10 +8,10 @@
       <div class="section-header">
         <h3>Navigation</h3>
         <button class="toggle-btn" (click)="toggleLeft()">
-          <i class="fas fa-toggle-on"></i>
+          <img src="assets/images/expand_collapse_icon.png" alt="Expand/Collapse" class="icon" />
         </button>
       </div>
-      <div class="detail-content">
+      <div class="detail-content" *ngIf="!isLeftCollapsed">
         <div class="info-item">
           <div class="detail-label">ID</div>
           <div class="detail-value">{{ applicationId || 'N/A' }}</div>
@@ -33,7 +33,7 @@
           <div class="detail-value">{{ formattedDate }}</div>
         </div>
       </div>
-      <div class="navigation-content">
+      <div class="navigation-content" *ngIf="!isLeftCollapsed">
         <div *ngFor="let section of sections" class="part">
           <div class="part-header" (click)="toggleRightSection(section.id)">
             <span>{{ section.label }}</span>
@@ -45,9 +45,6 @@
           </ul>
         </div>
       </div>
-
-
-
     </div>
 
 
@@ -1425,12 +1422,10 @@
 
     <!-- Right Section -->
     <div class="right-section" [class.collapsed]="isRightCollapsed">
-      <div class="section-header">
-        <h3>References</h3>
-        <button class="toggle-btn" (click)="toggleRight()">
-          <i class="fas fa-toggle-on"></i> </button>
-      </div>
-      <div class="references-content">
+      <button class="toggle-btn" (click)="toggleRight()">
+        <img src="assets/images/expand_collapse_icon.png" alt="Expand/Collapse" class="icon" />
+      </button>
+      <div class="references-content" *ngIf="!isRightCollapsed">
         <div class="tabs">
           <button class="tab-button" [class.active]="activeTab === 'history'" (click)="setActiveTab('history')">
             <img src="assets/images/history_section_icon.png" alt="Back" class="icon" />
@@ -1584,10 +1579,6 @@
               {{ constants.UPLOAD_DCOUMENTS }}
             </button>
         </div>
-
-
-
-
       </div>
     </div>
 
