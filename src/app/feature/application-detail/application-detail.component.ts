@@ -379,7 +379,17 @@ export class ApplicationDetailComponent implements OnInit {
     this.dataService
       .changeStatus(applicationId, status, comment, rejectionCategory, selectedOfficerLevel)
       .subscribe(
-        (response) => {
+        (response : any) => {
+          if (response?.errors?.length > 0) {
+            // Extract the first error message from the API response
+            const errorMessage = response.errors[0].message;
+            this.snackBar.open(errorMessage, 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: ['center-snackbar'],
+            });
+          } else {
           let statusMsg = '';
           if(status == API_CONST_REJECT) statusMsg = 'Application REJECTED successfully.';
           else statusMsg = `Application ${status}D successfully.`
@@ -391,6 +401,7 @@ export class ApplicationDetailComponent implements OnInit {
           });
           
           this.router.navigate(['/application-list'], {state: { role: this.role }});
+        }
         },
         (error) => {
           console.error('Error updating status:', error);
