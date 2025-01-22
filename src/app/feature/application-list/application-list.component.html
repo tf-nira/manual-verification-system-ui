@@ -147,7 +147,7 @@
                 <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
                 <td>{{ row[constants.API_CONST_CREATED_DATE] }}</td>
                 <td *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER">
-                  {{ row[constants.API_CONST_STATUS] === 'INTERVIEW SCHEDULED' ? 'INTERVIEW SCHEDULED' : 'NEW' }}
+                  {{ row[constants.API_CONST_STATUS] === 'INTERVIEW SCHEDULED' ? 'Interview Scheduled' : 'Pending' }}
                 </td>
               </tr>
             </tbody>

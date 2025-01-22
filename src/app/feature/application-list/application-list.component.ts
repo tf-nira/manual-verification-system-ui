@@ -42,9 +42,10 @@ import {
   API_CONST_TO_DATE,
   MVS_LEGAL_OFFICER,
   API_CONST_STAGE,
-  API_CONST_NEW,
+  API_CONST_PENDING,
   API_CONST_ASSIGNED_TO_DISTRICT_OFFICER,
   API_CONST_ASSIGNED_TO_LEGAL_OFFICER,
+  API_CONST_INTERVIEW_SCHEDULED,
 } from '../../shared/constants';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
@@ -176,7 +177,7 @@ export class ApplicationListComponent implements OnInit {
   ];
   
   
-  applicationStatuses = ['NEW', 'INTERVIEW SCHEDULED'];
+  applicationStatuses = ['Pending', 'Interview Scheduled'];
 
   constants = {
     SEARCH,
@@ -378,11 +379,11 @@ export class ApplicationListComponent implements OnInit {
     addFilter(this.selectedService, API_CONST_SERVICE, API_CONST_EQUALS);
     addFilter(this.selectedServiceType, API_CONST_SERVICE_TYPE, API_CONST_EQUALS);
     
-    if (this.selectedApplicationStatus == API_CONST_NEW) {
+    if (this.selectedApplicationStatus == API_CONST_PENDING) {
       if (this.role == MVS_DISTRICT_OFFICER) addFilter(API_CONST_ASSIGNED_TO_DISTRICT_OFFICER, API_CONST_STAGE, API_CONST_EQUALS);
       else if (this.role == MVS_LEGAL_OFFICER) addFilter(API_CONST_ASSIGNED_TO_LEGAL_OFFICER, API_CONST_STAGE, API_CONST_EQUALS);
     }
-    else addFilter(this.selectedApplicationStatus, API_CONST_STAGE, API_CONST_EQUALS);
+    else if (this.selectedApplicationStatus == 'Interview Scheduled') addFilter(API_CONST_INTERVIEW_SCHEDULED, API_CONST_STAGE, API_CONST_EQUALS);
 
     // Add "between" filter for dates
     if (this.fromDate && this.toDate) {
