@@ -1675,9 +1675,9 @@
         <div class="field-container">
           <label>Escalation Category <span title="Select the escalation category.">ℹ️</span></label>
           <select [(ngModel)]="escalationCategory" class="dropdown">
-            <option *ngFor="let option of rejectionCategories" [value]="option.value" [selected]="option.default">
-              {{ option.value }}
-            </option>
+            <option value="invalid-information">Invalid Information</option>
+            <option value="incomplete-documents">Incomplete Documents</option>
+            <option value="other">Other</option>
           </select>
         </div>
 
@@ -1708,10 +1708,9 @@
         <div class="field-container">
           <label>Rejection Category <span title="Select the reason for rejection.">*</span></label>
           <select [(ngModel)]="rejectionCategory" class="dropdown">
-            <option value="" disabled selected>-Select Rejection Category-</option>
-            <option value="invalid-information">Invalid Information</option>
-            <option value="incomplete-documents">Incomplete Documents</option>
-            <option value="other">Other</option>
+            <option *ngFor="let option of rejectionCategories" [value]="option.value" [selected]="option.default">
+              {{ option.value }}
+            </option>
           </select>
         </div>
         <div class="field-container">

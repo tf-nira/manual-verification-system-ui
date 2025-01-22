@@ -730,7 +730,7 @@ textarea {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
-  width: 500px;
+  width: 550px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   animation: fadeIn 0.3s ease-in-out; /* Smooth fade-in animation */
 }
@@ -779,7 +779,7 @@ textarea {
 }
 
 .rejectModal .modal-body .dropdown {
-  width: 95%;
+  width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -789,7 +789,7 @@ textarea {
 }
 
 .rejectModal .modal-body textarea {
-  width: 90%;
+  width: 95%;
   height: 80px;
   padding: 10px;
   border: 1px solid #ccc;
