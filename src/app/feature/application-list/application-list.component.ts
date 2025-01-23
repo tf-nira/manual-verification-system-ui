@@ -49,6 +49,7 @@ import {
 } from '../../shared/constants';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
+import { FILTERED_SERVICE_TYPES, SERVICES_WITH_TYPES } from '../../shared/constants';
 
 @Component({
   selector: 'app-application-list',
@@ -78,36 +79,7 @@ export class ApplicationListComponent implements OnInit {
 
   selectedService: string = '';
   selectedServiceType: string = '';
-  filteredServiceTypes: { value: string; label: string }[] = [
-    { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
-    { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
-    { value: 'By Naturalisation', label: 'Registration of Citizens by Naturalisation' },
-    { value: 'By Registration', label: 'Registration of Citizens by Registration' },
-    { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' },
-    { value: 'By Birth /Descent', label: 'Registration of Child Citizens by birth' },
-    { value: 'By Birth /Descent', label: 'Registration of Foundlings' },
-    { value: 'Renewal', label: 'Renewal of a card' },
-    { value: 'Replacement', label: 'Replacement of a card' },
-    { value: 'Add Name', label: 'Adding a Name' },
-    { value: 'Remove Name', label: 'Removing a name' },
-    { value: 'Change Order of Names', label: 'Change of Order of Names' },
-    { value: 'Complete Name Change', label: 'Complete Change of Name' },
-    { value: 'Change DOB', label: 'Change of Data of Birth' },
-    { value: 'Change DOB > 4 years', label: 'Change of Date of Birth > 4 years' },
-    { value: 'Change Residence Adult', label: 'Change in place of Residence of Adult' },
-    { value: 'Change Residence Child', label: 'Change in Place of Residence of Child' },
-    { value: 'Change Birth Place Adult', label: 'Change in place of Birth of Adult' },
-    { value: 'Change Birth Place Child', label: 'Change in Place of Birth of Child' },
-    { value: 'Correct Origin Adult', label: 'Correction in place of Origin of Adult' },
-    { value: 'Correct Origin Child', label: 'Correction in Place of Origin of Child' },
-    { value: 'Change Citizenship Type', label: 'Change in citizenship type' },
-    { value: 'Change Polling Station', label: 'Change in polling station' },
-    { value: 'Add Spouse', label: 'Add a spouse' },
-    { value: 'Remove Spouse', label: 'Remove a spouse' },
-    { value: 'Change Father Details', label: 'Change the details of the father' },
-    { value: 'Change Mother Details', label: 'Change the details of the mother' },
-    { value: 'Correct NIN Error', label: 'Correction of error regarding NIN' }
-  ]; // Holds the filtered service types
+  filteredServiceTypes= FILTERED_SERVICE_TYPES; // Holds the filtered service types
 
   selectedApplicationStatus: string = '';
   fromDate: string = '';
@@ -121,65 +93,7 @@ export class ApplicationListComponent implements OnInit {
   uniqueServiceTypes: string[] = [];
   uniqueApplicationStatuses: string[] = [];
   
-  servicesWithTypes = [
-    {
-      value: 'NEW',
-      label: 'New registrations',
-      serviceTypes: [
-        { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
-        { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
-        { value: 'By Naturalisation', label: 'Registration of Citizens by Naturalisation' },
-        { value: 'By Registration', label: 'Registration of Citizens by Registration' },
-        { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' }
-      ]
-    },
-    {
-      value: 'RENEWAL',
-      label: 'Renewal of card',
-      serviceTypes: [
-        { value: 'Renewal', label: 'Renewal of a card' },
-        { value: 'Replacement', label: 'Replacement of a card' }
-      ]
-    },
-    {
-      value: 'LOST',
-      label: 'Lost/ Replacement of card',
-      serviceTypes: [
-        { value: 'Renewal', label: 'Renewal of a card' },
-        { value: 'Replacement', label: 'Replacement of a card' }
-      ]
-    },
-    {
-      value: 'UPDATE',
-      label: 'Change of Particulars',
-      serviceTypes: [
-        { value: 'Add Name', label: 'Adding a Name' },
-        { value: 'Remove Name', label: 'Removing a name' },
-        { value: 'Change Order of Names', label: 'Change of Order of Names' },
-        { value: 'Complete Name Change', label: 'Complete Change of Name' },
-        { value: 'Change DOB', label: 'Change of Data of Birth' },
-        { value: 'Change DOB > 4 years', label: 'Change of Date of Birth > 4 years' },
-        { value: 'Change Residence Adult', label: 'Change in place of Residence of Adult' },
-        { value: 'Change Residence Child', label: 'Change in Place of Residence of Child' },
-        { value: 'Change Birth Place Adult', label: 'Change in place of Birth of Adult' },
-        { value: 'Change Birth Place Child', label: 'Change in Place of Birth of Child' },
-        { value: 'Correct Origin Adult', label: 'Correction in place of Origin of Adult' },
-        { value: 'Correct Origin Child', label: 'Correction in Place of Origin of Child' },
-        { value: 'Change Citizenship Type', label: 'Change in citizenship type' },
-        { value: 'Change Polling Station', label: 'Change in polling station' },
-        { value: 'Add Spouse', label: 'Add a spouse' },
-        { value: 'Remove Spouse', label: 'Remove a spouse' },
-        { value: 'Change Father Details', label: 'Change the details of the father' },
-        { value: 'Change Mother Details', label: 'Change the details of the mother' },
-        { value: 'Correct NIN Error', label: 'Correction of error regarding NIN' }
-      ]
-    },
-    {
-      value: 'FIRSTID',
-      label: 'GetFirst ID',
-      serviceTypes: []
-    },
-  ];
+  servicesWithTypes = SERVICES_WITH_TYPES;
   
   
   applicationStatuses = ['Pending', 'Interview Scheduled'];

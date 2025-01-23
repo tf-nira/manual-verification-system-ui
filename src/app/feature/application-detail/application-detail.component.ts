@@ -7,6 +7,8 @@ import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uplo
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
 import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
+import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES } from '../../shared/constants';
+
 import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -42,59 +44,8 @@ export class ApplicationDetailComponent implements OnInit {
   photoBase64: string = '';
   isPhotoError = false;
   // Map document keys to readable titles
-  categoryMap: { [key: string]: string } = {
-    proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
-    proofOfAbandonment: 'Proof of Abandonment',
-    proofOfException: 'Proof of Exception',
-    // proofOfPayment: 'Proof of Payment',
-    proofOfRelationship: 'Proof of Relationship',
-    proofOfCitizenship: 'Proof of Citizenship',
-    // proofOfLegalDOcuments: 'Proof of Legal Documents',
-    proofOfIdentity: 'Proof of Identity',
-    proofOfAddress: 'Proof of Address',
-    // proofOfReplacement: 'Proof of Replacement',
-    proofOfBirth: 'Proof of Birth',
-    proofOfOtherSupportingdocumentIssuedbyGovt: 'Proof of Other Supporting Document',
-    proofOfOtherSupportingdocuments: 'Proof of Other Supporting Documents',
-    proofOfRegistration: 'Proof of Registration',
-    proofOfAdoption: 'Proof of Adoption',
-    // proofOfChangeOfParticulars: 'Proof of Change of Particulars',
-    // proofOfDeclarant: 'Proof of Declarant',
-    // proofOfLegalDeepPoll: 'Proof of Legal Deed Poll',
-    // proofOfLegalGazzette: 'Proof of Legal Gazette',
-    proofOfLegalStatutoryDeclaration: 'Proof of Statutory Declaration',
-    proofOfModificationConsent: 'Proof of Modification Consent',
-    // proofOfIntroducerSignature: 'Proof of Introducer Signature',
-    // proofOfCourtOrder: 'Proof Of Court Order'
-  };
-  titleMap: { [key: string]: string[] } = {
-    proofOfPhysicalApplicationForm: ['Physical Application Form'],
-    proofOfAbandonment: ['Police Report'],
-    proofOfException: ['Expetion Photo'],
-    proofOfPayment: ['Payment Slip'],
-    proofOfRelationship: ['LC 1 Recommendation Letter', 'Immunization Card', 'Mother National ID Card', 'Father National ID Card', 'Guardian introduction letter', 'Guardian National ID Card'],
-    proofOfCitizenship: ['LC 1 Recommendation Letter', 'Notification Of Birth Record', 'Passport Document', 'Mother National ID Card', 'Certificate of Dual Citizenship', 'Father National ID Card', 'Relative National ID Card', 'Guardian National ID Card', 'Birth Certificate', 'Tax Document', 'Previous Immigration records', 'National Id', 'Previous passports of self, parents, or grandparents', 'Copies of birth certificates of self parents or grandparents', 'Naturalisation Certificate of self parents', 'Certificate of Citizenship by Naturalization', 'Certificate of Citizenship by Registration'],
-    proofOfLegalDOcuments: [],
-    proofOfIdentity: ['Mother National ID Card', 'Father National ID Card', 'Passport Document', 'Relative National ID Card', 'Guardian National ID Card', 'Photo identification cards issued by the Government', 'Medical card issued by the State Govt', 'Voter Identification card', 'Driving licence of the applicant', 'Expired Card'
-      ],
-    proofOfAddress: ['Birth Document', 'Passport Document', 'LC 1 Recommendation Letter', 'Mother National ID Card', 'Certificate of Relationship', 'Guardian introduction letter', 'Birth Certificate', 'Certificate of Citizenship by Naturalization', 'Address Of Residence Diaspora', 'Guardian National ID Card'],
-    proofOfReplacement: ['Police Letter', 'Damaged Card', 'CID Report'],
-    proofOfBirth: ['Immunization Card', 'Notification Of Birth Record', 'Birth Certificate'],
-    proofOfOtherSupportingdocumentIssuedbyGovt: ['Court Report', 'Welfare and Family', 'Passport Document', 'Voter Card', 'Driving Permit', 'Care Order', 'Probation report', 'Birth Certificate', 'Academic Documents', 'Marriage certificate or Divorce Decree', 'Certified copy of DNA test results', 'Court Order', 'Parent National ID'],
-    proofOfOtherSupportingdocuments: ['Previous Immigration records', 'Baptism Card', 'Any other relevant Documents', 'Certificate of Marriage'],
-    applicantProofOfSignature: [],
-    introducerProofOfSignature: [],
-    proofOfRegistration: [],
-    proofOfAdoption: ['Police Report'],
-    proofOfChangeOfParticulars: [],
-    proofOfDeclarant: ['Declarant National ID Card'],
-    proofOfLegalDeepPoll: ['Deed Poll'],
-    proofOfLegalGazzette: ['Gazzette'],
-    proofOfLegalStatutoryDeclaration: [],
-    proofOfModificationConsent: ['Modification Consent Form'],
-    proofOfIntroducerSignature: ['Introducer Signature'],
-    proofOfCourtOrder: ['Court Order']
-  };
+  categoryMap = CATEGORY_MAP;
+  titleMap = TITLE_MAP;
   selectedTab: string = 'demographic'; // Default to 'demographic'
   escalateOption: boolean = false;
   showApprovalModal: boolean = false;
@@ -200,7 +151,7 @@ export class ApplicationDetailComponent implements OnInit {
     UPLOAD_DCOUMENTS: 'Upload Documents',
     APPLICANT_NAME
   }
-
+  
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
   // Create an array of objects mapping keys to titles
@@ -212,8 +163,6 @@ export class ApplicationDetailComponent implements OnInit {
     key,
     title: value,
   }));
-  // docTitles = ['Title 1', 'Title 2', 'Title 3'];
-  applicantName = 'Steve Smith'
   pdfUrl: any;
   formattedDate: string | ' ' = ' ';
 
@@ -245,7 +194,6 @@ export class ApplicationDetailComponent implements OnInit {
     this.commentMVSSupervisor = this.rowData[ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] || '';
 
     this.checkPersonDetails();
-    console.log(this.personDetails)
     this.setDropdownOptions();
     this.setRejectionCategories();
 
@@ -328,13 +276,13 @@ export class ApplicationDetailComponent implements OnInit {
   }
   checkPersonDetails() {
     const allowedFields = [
-      'NIN',
       'Surname',
       'GivenName',
       'DateOfBirth',
+      'NIN_AIN',//added for guardian
+      'NIN',
       'IndigenousCommunityTribe',
-      'Clan',
-      'NIN_AIN'     //added for guardian
+      'Clan'
     ];
     const allowedFieldsLowerCase = allowedFields.map((field) => field.toLowerCase());
     const roles = ['father', 'mother', 'guardian']; // Define roles to check
@@ -356,8 +304,18 @@ export class ApplicationDetailComponent implements OnInit {
               }
               return acc;
             }, {}); // Initialize acc as an empty object
-
-          return { role, details: personData };
+             // Sort personData according to allowedFields order
+        const sortedPersonData = Object.keys(personData)
+        .sort((a, b) => {
+          const fieldA = a.replace(role, '').toLowerCase();
+          const fieldB = b.replace(role, '').toLowerCase();
+          return allowedFieldsLowerCase.indexOf(fieldA) - allowedFieldsLowerCase.indexOf(fieldB);
+        })
+        .reduce((acc: { [key: string]: any }, key) => {
+          acc[key] = personData[key];
+          return acc;
+        }, {});
+          return { role, details: sortedPersonData  };
         }
         return null;
       })
@@ -442,32 +400,10 @@ export class ApplicationDetailComponent implements OnInit {
   setRejectionCategories() {
     switch(this.service) {
       case 'NEW':
-        this.rejectionCategories = [
-          { value: 'Rejected due to evidence of non citizenship',  default: false},
-          { value: 'Insufficient supporting documents to determine citizenship',  default: false},
-          { value: 'Documents provided have inconsistent information',  default: false},
-          { value: 'Documents not in required format ',  default: false},
-          { value: 'Unsatisfactory CV Interview at Point of Registration ',  default: false},
-          { value: 'Second register/application exists (May or may not have a NIN, stop listed)',  default: false},
-          { value: 'Poorly scanned documents to enable decision',  default: false},
-          { value: 'Fraudulent/Altered /doctored documents ',  default: false},
-          { value: 'Other',  default: false}
-        ]
+        this.rejectionCategories = NEW_REJECTION_CATEGORIES;
         break;
       case 'COP':
-        this.rejectionCategories = [
-          { value: 'Documents provided have inconsistent information', default: false },
-          { value: 'Insufficient supporting documents', default: false },
-          { value: 'Documents not in required format (i.e SD exists but not registered)', default: false },
-          { value: 'Poorly scanned documents to enable decision', default: false },
-          { value: 'Fraudulent/Altered /doctored documents ', default: false },
-          { value: 'No payment receipt attached', default: false },
-          { value: 'Payments used on previous unrelated application', default: false },
-          { value: 'Payment lower than statutory fees', default: false },
-          { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false },
-          { value: 'An existing record is stop listed', default: false },
-          { value: 'Other',  default: false}
-        ]
+        this.rejectionCategories = COP_REJECTION_CATEGORIES;
     }
   }
 
