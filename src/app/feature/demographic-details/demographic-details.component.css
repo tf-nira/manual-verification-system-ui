@@ -107,6 +107,14 @@ h2 {
   border-bottom: 1px solid #ddd;
   padding-bottom: 5px;
 }
+.personal-info{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Adjust this to control the number of columns */
+  gap: 10px; /* Spacing between field containers */
+  padding: 10px;
+  
+  border-radius: 8px;
+}
 .field {
   display: flex;
   justify-content: space-between;

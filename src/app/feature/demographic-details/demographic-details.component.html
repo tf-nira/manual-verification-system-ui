@@ -29,6 +29,7 @@
     <div *ngIf="sectionsData.length > 0">
       <div *ngFor="let section of sectionsData" [id]="section.id" class="section">
         <h2>{{ section.label }}</h2>
+      <div class="personal-info">
         <div *ngFor="let key of objectKeys(section.data)" class="field">
           <div class="label">{{ formatKey(key) }}</div>
           <div class="value">
@@ -45,6 +46,7 @@
             </span>
           </div>
         </div>
+      </div>
       </div>
     </div>
     <div *ngIf="sectionsData.length === 0">

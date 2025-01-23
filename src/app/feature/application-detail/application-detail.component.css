@@ -178,8 +178,8 @@
 
 /* Personal Information Section */
 .personal-information {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Adjust this to control the number of columns */
   gap: 10px; /* Spacing between field containers */
   padding: 10px;
   background: #f9fafb; /* Light background for better contrast */
@@ -421,6 +421,7 @@
   height: 100%; /* Ensure the section takes full height */
   position: relative;
   transition: width 0.3s ease-in-out;
+  padding: 5px;
 }
 
 .right-section.collapsed {

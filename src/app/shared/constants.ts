@@ -72,3 +72,178 @@ export const API_CONST_SUCCESS = 'success';
 export const API_CONST_APPROVE = 'APPROVE';
 export const API_CONST_ESCALATE = 'ESCALATE';
 export const API_CONST_REJECT = 'REJECT';
+
+// Map document keys to readable titles
+export const CATEGORY_MAP: { [key: string]: string } = {
+    proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
+    proofOfAbandonment: 'Proof of Abandonment',
+    proofOfException: 'Proof of Exception',
+    // proofOfPayment: 'Proof of Payment',
+    proofOfRelationship: 'Proof of Relationship',
+    proofOfCitizenship: 'Proof of Citizenship',
+    // proofOfLegalDOcuments: 'Proof of Legal Documents',
+    proofOfIdentity: 'Proof of Identity',
+    proofOfAddress: 'Proof of Address',
+    // proofOfReplacement: 'Proof of Replacement',
+    proofOfBirth: 'Proof of Birth',
+    proofOfOtherSupportingdocumentIssuedbyGovt: 'Proof of Other Supporting Document',
+    proofOfOtherSupportingdocuments: 'Proof of Other Supporting Documents',
+    proofOfRegistration: 'Proof of Registration',
+    proofOfAdoption: 'Proof of Adoption',
+    // proofOfChangeOfParticulars: 'Proof of Change of Particulars',
+    // proofOfDeclarant: 'Proof of Declarant',
+    // proofOfLegalDeepPoll: 'Proof of Legal Deed Poll',
+    // proofOfLegalGazzette: 'Proof of Legal Gazette',
+    proofOfLegalStatutoryDeclaration: 'Proof of Statutory Declaration',
+    proofOfModificationConsent: 'Proof of Modification Consent',
+    // proofOfIntroducerSignature: 'Proof of Introducer Signature',
+    // proofOfCourtOrder: 'Proof Of Court Order'
+  };
+
+  export const TITLE_MAP: { [key: string]: string[] } = {
+    proofOfPhysicalApplicationForm: ['Physical Application Form'],
+    proofOfAbandonment: ['Police Report'],
+    proofOfException: ['Expetion Photo'],
+    proofOfPayment: ['Payment Slip'],
+    proofOfRelationship: ['LC 1 Recommendation Letter', 'Immunization Card', 'Mother National ID Card', 'Father National ID Card', 'Guardian introduction letter', 'Guardian National ID Card'],
+    proofOfCitizenship: ['LC 1 Recommendation Letter', 'Notification Of Birth Record', 'Passport Document', 'Mother National ID Card', 'Certificate of Dual Citizenship', 'Father National ID Card', 'Relative National ID Card', 'Guardian National ID Card', 'Birth Certificate', 'Tax Document', 'Previous Immigration records', 'National Id', 'Previous passports of self, parents, or grandparents', 'Copies of birth certificates of self parents or grandparents', 'Naturalisation Certificate of self parents', 'Certificate of Citizenship by Naturalization', 'Certificate of Citizenship by Registration'],
+    proofOfLegalDOcuments: [],
+    proofOfIdentity: ['Mother National ID Card', 'Father National ID Card', 'Passport Document', 'Relative National ID Card', 'Guardian National ID Card', 'Photo identification cards issued by the Government', 'Medical card issued by the State Govt', 'Voter Identification card', 'Driving licence of the applicant', 'Expired Card'
+      ],
+    proofOfAddress: ['Birth Document', 'Passport Document', 'LC 1 Recommendation Letter', 'Mother National ID Card', 'Certificate of Relationship', 'Guardian introduction letter', 'Birth Certificate', 'Certificate of Citizenship by Naturalization', 'Address Of Residence Diaspora', 'Guardian National ID Card'],
+    proofOfReplacement: ['Police Letter', 'Damaged Card', 'CID Report'],
+    proofOfBirth: ['Immunization Card', 'Notification Of Birth Record', 'Birth Certificate'],
+    proofOfOtherSupportingdocumentIssuedbyGovt: ['Court Report', 'Welfare and Family', 'Passport Document', 'Voter Card', 'Driving Permit', 'Care Order', 'Probation report', 'Birth Certificate', 'Academic Documents', 'Marriage certificate or Divorce Decree', 'Certified copy of DNA test results', 'Court Order', 'Parent National ID'],
+    proofOfOtherSupportingdocuments: ['Previous Immigration records', 'Baptism Card', 'Any other relevant Documents', 'Certificate of Marriage'],
+    applicantProofOfSignature: [],
+    introducerProofOfSignature: [],
+    proofOfRegistration: [],
+    proofOfAdoption: ['Police Report'],
+    proofOfChangeOfParticulars: [],
+    proofOfDeclarant: ['Declarant National ID Card'],
+    proofOfLegalDeepPoll: ['Deed Poll'],
+    proofOfLegalGazzette: ['Gazzette'],
+    proofOfLegalStatutoryDeclaration: [],
+    proofOfModificationConsent: ['Modification Consent Form'],
+    proofOfIntroducerSignature: ['Introducer Signature'],
+    proofOfCourtOrder: ['Court Order']
+  };
+
+  export const NEW_REJECTION_CATEGORIES = [
+    { value: 'Rejected due to evidence of non citizenship',  default: false},
+    { value: 'Insufficient supporting documents to determine citizenship',  default: false},
+    { value: 'Documents provided have inconsistent information',  default: false},
+    { value: 'Documents not in required format ',  default: false},
+    { value: 'Unsatisfactory CV Interview at Point of Registration ',  default: false},
+    { value: 'Second register/application exists (May or may not have a NIN, stop listed)',  default: false},
+    { value: 'Poorly scanned documents to enable decision',  default: false},
+    { value: 'Fraudulent/Altered /doctored documents ',  default: false},
+    { value: 'Other',  default: false}
+  ];
+
+  export const COP_REJECTION_CATEGORIES = [
+    { value: 'Documents provided have inconsistent information', default: false },
+    { value: 'Insufficient supporting documents', default: false },
+    { value: 'Documents not in required format (i.e SD exists but not registered)', default: false },
+    { value: 'Poorly scanned documents to enable decision', default: false },
+    { value: 'Fraudulent/Altered /doctored documents ', default: false },
+    { value: 'No payment receipt attached', default: false },
+    { value: 'Payments used on previous unrelated application', default: false },
+    { value: 'Payment lower than statutory fees', default: false },
+    { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false },
+    { value: 'An existing record is stop listed', default: false },
+    { value: 'Other',  default: false}
+  ];
+
+  export const FILTERED_SERVICE_TYPES: { value: string; label: string }[] = [
+    { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
+    { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
+    { value: 'By Naturalisation', label: 'Registration of Citizens by Naturalisation' },
+    { value: 'By Registration', label: 'Registration of Citizens by Registration' },
+    { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' },
+    { value: 'By Birth /Descent', label: 'Registration of Child Citizens by birth' },
+    { value: 'By Birth /Descent', label: 'Registration of Foundlings' },
+    { value: 'Renewal', label: 'Renewal of a card' },
+    { value: 'Replacement', label: 'Replacement of a card' },
+    { value: 'Add Name', label: 'Adding a Name' },
+    { value: 'Remove Name', label: 'Removing a name' },
+    { value: 'Change Order of Names', label: 'Change of Order of Names' },
+    { value: 'Complete Name Change', label: 'Complete Change of Name' },
+    { value: 'Change DOB', label: 'Change of Data of Birth' },
+    { value: 'Change DOB > 4 years', label: 'Change of Date of Birth > 4 years' },
+    { value: 'Change Residence Adult', label: 'Change in place of Residence of Adult' },
+    { value: 'Change Residence Child', label: 'Change in Place of Residence of Child' },
+    { value: 'Change Birth Place Adult', label: 'Change in place of Birth of Adult' },
+    { value: 'Change Birth Place Child', label: 'Change in Place of Birth of Child' },
+    { value: 'Correct Origin Adult', label: 'Correction in place of Origin of Adult' },
+    { value: 'Correct Origin Child', label: 'Correction in Place of Origin of Child' },
+    { value: 'Change Citizenship Type', label: 'Change in citizenship type' },
+    { value: 'Change Polling Station', label: 'Change in polling station' },
+    { value: 'Add Spouse', label: 'Add a spouse' },
+    { value: 'Remove Spouse', label: 'Remove a spouse' },
+    { value: 'Change Father Details', label: 'Change the details of the father' },
+    { value: 'Change Mother Details', label: 'Change the details of the mother' },
+    { value: 'Correct NIN Error', label: 'Correction of error regarding NIN' }
+  ]; // Holds the filtered service types
+
+  export const SERVICES_WITH_TYPES = [
+    {
+      value: 'NEW',
+      label: 'New registrations',
+      serviceTypes: [
+        { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
+        { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
+        { value: 'By Naturalisation', label: 'Registration of Citizens by Naturalisation' },
+        { value: 'By Registration', label: 'Registration of Citizens by Registration' },
+        { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' }
+      ]
+    },
+    {
+      value: 'RENEWAL',
+      label: 'Renewal of card',
+      serviceTypes: [
+        { value: 'Renewal', label: 'Renewal of a card' },
+        { value: 'Replacement', label: 'Replacement of a card' }
+      ]
+    },
+    {
+      value: 'LOST',
+      label: 'Lost/ Replacement of card',
+      serviceTypes: [
+        { value: 'Renewal', label: 'Renewal of a card' },
+        { value: 'Replacement', label: 'Replacement of a card' }
+      ]
+    },
+    {
+      value: 'UPDATE',
+      label: 'Change of Particulars',
+      serviceTypes: [
+        { value: 'Add Name', label: 'Adding a Name' },
+        { value: 'Remove Name', label: 'Removing a name' },
+        { value: 'Change Order of Names', label: 'Change of Order of Names' },
+        { value: 'Complete Name Change', label: 'Complete Change of Name' },
+        { value: 'Change DOB', label: 'Change of Data of Birth' },
+        { value: 'Change DOB > 4 years', label: 'Change of Date of Birth > 4 years' },
+        { value: 'Change Residence Adult', label: 'Change in place of Residence of Adult' },
+        { value: 'Change Residence Child', label: 'Change in Place of Residence of Child' },
+        { value: 'Change Birth Place Adult', label: 'Change in place of Birth of Adult' },
+        { value: 'Change Birth Place Child', label: 'Change in Place of Birth of Child' },
+        { value: 'Correct Origin Adult', label: 'Correction in place of Origin of Adult' },
+        { value: 'Correct Origin Child', label: 'Correction in Place of Origin of Child' },
+        { value: 'Change Citizenship Type', label: 'Change in citizenship type' },
+        { value: 'Change Polling Station', label: 'Change in polling station' },
+        { value: 'Add Spouse', label: 'Add a spouse' },
+        { value: 'Remove Spouse', label: 'Remove a spouse' },
+        { value: 'Change Father Details', label: 'Change the details of the father' },
+        { value: 'Change Mother Details', label: 'Change the details of the mother' },
+        { value: 'Correct NIN Error', label: 'Correction of error regarding NIN' }
+      ]
+    },
+    {
+      value: 'FIRSTID',
+      label: 'GetFirst ID',
+      serviceTypes: [
+        { value: 'GetFirst ID', label: 'GetFirst ID' }
+      ]
+    },
+  ];
