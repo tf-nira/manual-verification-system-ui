@@ -155,6 +155,45 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     { value: 'Other',  default: false}
   ];
 
+  
+  export const NEW_ESCALATION_CATEGORIES = [
+    { value: 'Suspected Non Citizen',  default: false},
+    { value: 'Supporting documents look suspicious/forged/Altered',  default: false},
+    { value: 'Inconsistent information on tribe of mother',  default: false},
+    { value: 'Inconsistent information on clan of mother',  default: false},
+    { value: 'Inconsistent information on tribe of father',  default: false},
+    { value: 'Inconsistent information on clan of father',  default: false},
+    { value: 'Inconsistent information on place of origin-Father',  default: false},
+    { value: 'Inconsistent information on place of origin-Mother',  default: false},
+    { value: 'Inconsistent information on place of origin-Blood Relative',  default: false},
+    { value: 'Wrong citizenship category/Type',  default: false},
+    { value: 'Applicant’s citizenship is stoplisted/blocked',  default: false},
+    { value: 'Father/Mother is too young',  default: false},
+    { value: 'Grandparents are too young',  default: false},
+    { value: 'Different DOB/Age of mother on mother’s individual application',  default: false},
+    { value: 'Different DOB/Age of father on father’s individual application',  default: false},
+    { value: 'Different DOB/Age of blood relative on blood relative individual application',  default: false},
+    { value: 'Attempting double registration',  default: false},
+    { value: 'NIN has already been used to identify more than 20 people',  default: false},
+    { value: 'Indigenous community not listed under Schedule 3',  default: false},
+    { value: 'Missing Documentation',  default: false},
+    { value: 'Insufficient Documentation',  default: false},
+    { value: 'NIN has already been used to identify more than 20 people',  default: false}
+];
+
+
+export const RENEWAL_ESCALATION_CATEGORIES = [
+  { value: 'Suspected Non Citizen',  default: false},
+  { value: 'Supporting documents look suspicious/forged/Altered',  default: false},
+  { value: 'Wrong citizenship category/Type',  default: false},
+  { value: 'Applicant’s citizenship is stoplisted/blocked',  default: false},
+  { value: 'Father is too young',  default: false},
+  { value: 'Mother is too young',  default: false},
+  { value: 'Additional Renewal application',  default: false},
+  { value: 'Names are inconsistent with original application',  default: false},
+  { value: 'Insufficient Documentation',  default: false}
+];
+
   export const FILTERED_SERVICE_TYPES: { value: string; label: string }[] = [
     { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
     { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },

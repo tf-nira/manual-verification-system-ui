@@ -7,7 +7,9 @@ import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uplo
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
 import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
-import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES } from '../../shared/constants';
+import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
+  NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES
+ } from '../../shared/constants';
 
 import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
@@ -112,6 +114,7 @@ export class ApplicationDetailComponent implements OnInit {
   commentMVSSupervisor: string = '';
   dropdownOptions: { value: string; label: string; default: boolean }[] = [];
   rejectionCategories: { value: string; default: boolean }[] = [];
+  escalationCategories: { value: string; default: boolean }[] = [];
   selectedOfficerLevel: string = '';
   escalationCategory: string = '';
   escalationComment: string = '';
@@ -196,6 +199,7 @@ export class ApplicationDetailComponent implements OnInit {
     this.checkPersonDetails();
     this.setDropdownOptions();
     this.setRejectionCategories();
+    this.setEscalationCategories();
 
     // Check if the rowData contains documents and process them
     if (this.rowData?.documents) {
@@ -406,7 +410,15 @@ export class ApplicationDetailComponent implements OnInit {
         this.rejectionCategories = COP_REJECTION_CATEGORIES;
     }
   }
-
+  setEscalationCategories() {
+    switch(this.service) {
+      case 'NEW':
+        this.escalationCategories = NEW_ESCALATION_CATEGORIES;
+        break;
+      case 'RENEWAL':
+        this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
+    }
+  }
   objectKeys(obj: any): string[] {
     return Object.keys(obj || {});
   }
