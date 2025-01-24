@@ -8,7 +8,7 @@ import { HeaderComponent } from "../../shared/components/header/header.component
 import { Router } from '@angular/router';
 import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
-  NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES
+  NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP
  } from '../../shared/constants';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -158,14 +158,16 @@ export class ApplicationDetailComponent implements OnInit {
   // Sample Data
   districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
   // Create an array of objects mapping keys to titles
-  docCategories = Object.entries(this.categoryMap).map(([key, value]) => ({
-    key,
-    title: value,
-  }));
-  docTitles = Object.entries(this.titleMap).map(([key, value]) => ({
-    key,
-    title: value,
-  }));
+  // docCategories = Object.entries(this.categoryMap).map(([key, value]) => ({
+  //   key,
+  //   title: value,
+  // }));
+  // docTitles = Object.entries(this.titleMap).map(([key, value]) => ({
+  //   key,
+  //   title: value,
+  // }));
+  docCategories : { key: string; title: string }[] = [];
+docTitles:any;
   pdfUrl: any;
   formattedDate: string | ' ' = ' ';
 
@@ -200,7 +202,6 @@ export class ApplicationDetailComponent implements OnInit {
     this.setDropdownOptions();
     this.setRejectionCategories();
     this.setEscalationCategories();
-
     // Check if the rowData contains documents and process them
     if (this.rowData?.documents) {
       this.processDocuments();
@@ -208,7 +209,27 @@ export class ApplicationDetailComponent implements OnInit {
       console.log('No documents found in the API response.');
     }
     this.isSectionExpanded = this.documents.map(() => false);
+    this.updateCategoriesAndTitles();
   }
+  // Update the docCategories and docTitles based on selectedService and selectedServiceType
+updateCategoriesAndTitles() {
+  const categories = SERVICE_CATEGORY_MAP[this.service]?.[this.serviceType] || [];
+  this.docCategories = categories.map(key => ({
+    key,
+    title: CATEGORY_MAP[key]
+  }));
+}
+
+updateTitles(document: any) {
+  console.log("Current document state:", document);
+
+  const categoryKey = document.category;
+  console.log("this.service"+this.service)
+  console.log("this.serviceType"+this.serviceType)
+  console.log("categoryKey"+categoryKey)
+  this.docTitles = SERVICE_TITLE_MAP[this.service]?.[this.serviceType]?.[categoryKey] || [];
+  console.log("doc titles"+this.docTitles)
+}
   convertBase64ToPdfUrl(base64: string): SafeResourceUrl {
     // Decode Base64 string to a byte array
     const byteCharacters = atob(base64.split(',')[1] || base64);

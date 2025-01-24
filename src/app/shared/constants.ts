@@ -128,7 +128,136 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfIntroducerSignature: ['Introducer Signature'],
     proofOfCourtOrder: ['Court Order']
   };
+  // Define the mappings for categories and titles based on service and service type
+export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } } = {
+  NEW: {
+    'By Birth /Descent': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
+        'proofOfAbandonment'],
+    'Citizenship under the Article 9': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
+        'proofOfAbandonment', 'proofOfLegalStatutoryDeclaration'],
+    'By Naturalisation': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
+        'proofOfAbandonment'],
+    'By Registration': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
+    'Dual Citizenship': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
+        'proofOfAbandonment']
+  },
+  RENEWAL: {
+    Renewal: ['proofOfCitizenship', 'proofOfAddress'],
+    Replacement: ['']
+  },
+  LOST: {
+    Renewal: ['proofOfPhysicalApplicationForm'],
+    Replacement: ['proofOfAbandonment']
+  },
+  UPDATE: {
+    'Add Name': ['proofOfException'],
+    'Remove Name': ['proofOfAbandonment'],
+    'Change Order of Names': ['proofOfPhysicalApplicationForm'],
+    'Complete Name Change': ['proofOfException'],
+    'Change DOB': ['proofOfAbandonment'],
+    'Change DOB > 4 years': ['proofOfException'],
+    'Change Residence Adult': ['proofOfPhysicalApplicationForm'],
+    'Change Residence Child': ['proofOfAbandonment'],
+    'Change Birth Place Adult': ['proofOfException'],
+    'Change Birth Place Child': ['proofOfAbandonment'],
+    'Correct Origin Adult': ['proofOfPhysicalApplicationForm'],
+    'Correct Origin Child': ['proofOfAbandonment'],
+    'Change Citizenship Type': ['proofOfException'],
+    'Change Polling Station': ['proofOfAbandonment'],
+    'Add Spouse': ['proofOfException'],
+    'Remove Spouse': ['proofOfAbandonment'],
+    'Change Father Details': ['proofOfPhysicalApplicationForm'],
+    'Change Mother Details': ['proofOfAbandonment'],
+    'Correct NIN Error': ['proofOfException']
+  },
+  FIRSTID: {
+    'GetFirst ID': ['proofOfRegistration', 'proofOfOtherSupportingdocumentIssuedbyGovt', 
+      'proofOfOtherSupportingdocuments']
+  }
+};
 
+export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string]: string[] } } } = {
+  NEW: {
+    'By Birth /Descent': {
+      proofOfCitizenship: ['National ID of Parents/ Blood Relatives'],
+      proofOfAddress: ['Local Council Letter'],
+      proofOfBirth:['Birth Certificate'],
+      proofOfOtherSupportingdocumentIssuedbyGovt:['Passport','Voters Card', 'Driving Permit'],
+      proofOfOtherSupportingdocuments:['Baptism Card'],
+      proofOfAbandonment:['Police Report']
+    },
+    'Citizenship under the Article 9': {
+      proofOfCitizenship: ['Previous Passports Details','Naturalisation Certificate','Birth Certificates'],
+      proofOfAddress: ['N/A'],
+      proofOfBirth:['Birth Certificate'],
+      proofOfOtherSupportingdocumentIssuedbyGovt:['N/A'],
+      proofOfOtherSupportingdocuments:['Previous immigration records'],
+      proofOfLegalStatutoryDeclaration:['Statutory Declaration']
+    },
+    'By Naturalisation': {
+      proofOfCitizenship: ['Certificate of Naturalisation'],
+      proofOfAddress: ['N/A'],
+      proofOfBirth:['Birth Certificate'],
+      proofOfOtherSupportingdocumentIssuedbyGovt:['Passport'],
+      proofOfOtherSupportingdocuments:['N/A']
+    },
+    'By Registration': {
+      proofOfCitizenship: ['Certificate of Registration'],
+      proofOfAddress: ['N/A'],
+      proofOfBirth:['Birth Certificate'],
+      proofOfOtherSupportingdocumentIssuedbyGovt:['Passport'],
+      proofOfOtherSupportingdocuments:['N/A']
+    },
+    'Dual Citizenship': {
+      proofOfCitizenship: ['Certificate of Dual Citizenship'],
+      proofOfAddress: ['Local Council Letter'],
+      proofOfBirth:['Birth Certificate'],
+      proofOfOtherSupportingdocumentIssuedbyGovt:['Passport/s', 'Voters Card','Driving Permit'],
+      proofOfOtherSupportingdocuments:['Baptism Card']
+    }
+  },
+  RENEWAL: {
+    Renewal: {
+      proofOfAddress: ['Physical Application Form'],
+      proofOfCitizenship:['Local Council Letter']
+    },
+    Replacement: {
+    }
+  },
+  LOST: {
+    Renewal: {
+      proofOfPhysicalApplicationForm: ['Physical Application Form']
+    },
+    Replacement: {
+      proofOfAbandonment: ['Police Report']
+    }
+  },
+  UPDATE: {
+    'Add Name': {
+      proofOfException: ['Exception Photo']
+    },
+    'Remove Name': {
+      proofOfAbandonment: ['Police Report']
+    },
+    'Change Order of Names': {
+      proofOfPhysicalApplicationForm: ['Physical Application Form']
+    }
+  },
+  FIRSTID: {
+    'GetFirst ID': {
+      proofOfRegistration: ['National Identification Number of applicant'],
+      proofOfOtherSupportingdocumentIssuedbyGovt: ['National ID of parent','Birth Certificate',
+        'Academic Documents','Passport','Voters Card','Driving Permit'],
+      proofOfOtherSupportingdocuments: ['Baptism Card ','Any other relevant Documents']
+
+    }
+  }
+};
   export const NEW_REJECTION_CATEGORIES = [
     { value: 'Rejected due to evidence of non citizenship',  default: false},
     { value: 'Insufficient supporting documents to determine citizenship',  default: false},
