@@ -421,19 +421,19 @@ getTitlesForDocument(document: any): string[] {
 
   setRejectionCategories() {
     switch(this.service) {
-      case 'NEW':
+      case 'New registrations':
         this.rejectionCategories = NEW_REJECTION_CATEGORIES;
         break;
-      case 'COP':
+      case 'Change of Particulars':
         this.rejectionCategories = COP_REJECTION_CATEGORIES;
     }
   }
   setEscalationCategories() {
     switch(this.service) {
-      case 'NEW':
+      case 'New registrations':
         this.escalationCategories = NEW_ESCALATION_CATEGORIES;
         break;
-      case 'RENEWAL':
+      case 'Renewal of card':
         this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
     }
   }
