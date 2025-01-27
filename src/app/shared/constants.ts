@@ -72,7 +72,8 @@ export const API_CONST_SUCCESS = 'success';
 export const API_CONST_APPROVE = 'APPROVE';
 export const API_CONST_ESCALATE = 'ESCALATE';
 export const API_CONST_REJECT = 'REJECT';
-
+//max indiviadual file size that can be uploaded 2mb
+export const MAX_DOC_SIZE = 2 * 1024 * 1024;
 // Map document keys to readable titles
 export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
@@ -130,31 +131,31 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   };
   // Define the mappings for categories and titles based on service and service type
 export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } } = {
-  NEW: {
-    'By Birth /Descent': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+  'New registrations': {
+    'Registration of citizens by birth': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
         'proofOfAbandonment'],
     'Citizenship under the Article 9': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
         'proofOfAbandonment', 'proofOfLegalStatutoryDeclaration'],
-    'By Naturalisation': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+    'Registration of Citizens by Naturalisation': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
         'proofOfAbandonment'],
-    'By Registration': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+    'Registration of Citizens by Registration': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
-    'Dual Citizenship': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+    'Registration of Dual Citizens': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
         'proofOfAbandonment']
   },
-  RENEWAL: {
-    Renewal: ['proofOfCitizenship', 'proofOfAddress'],
-    Replacement: ['']
+  'Renewal of card': {
+    'Renewal of card': ['proofOfCitizenship', 'proofOfAddress'],
+    'Replacement of a card': ['']
   },
-  LOST: {
-    Renewal: ['proofOfPhysicalApplicationForm'],
-    Replacement: ['proofOfAbandonment']
+  'Lost/ Replacement of card': {
+    'Renewal of a card': ['proofOfPhysicalApplicationForm'],
+    'Replacement of a card': ['proofOfAbandonment']
   },
-  UPDATE: {
+  'Change of Particulars': {
     'Add Name': ['proofOfException'],
     'Remove Name': ['proofOfAbandonment'],
     'Change Order of Names': ['proofOfPhysicalApplicationForm'],
@@ -175,15 +176,15 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Change Mother Details': ['proofOfAbandonment'],
     'Correct NIN Error': ['proofOfException']
   },
-  FIRSTID: {
+  'GetFirst ID': {
     'GetFirst ID': ['proofOfRegistration', 'proofOfOtherSupportingdocumentIssuedbyGovt', 
       'proofOfOtherSupportingdocuments']
   }
 };
 
 export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string]: string[] } } } = {
-  NEW: {
-    'By Birth /Descent': {
+  'New registrations': {
+    'Registration of citizens by birth': {
       proofOfCitizenship: ['National ID of Parents/ Blood Relatives'],
       proofOfAddress: ['Local Council Letter'],
       proofOfBirth:['Birth Certificate'],
@@ -199,21 +200,21 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfOtherSupportingdocuments:['Previous immigration records'],
       proofOfLegalStatutoryDeclaration:['Statutory Declaration']
     },
-    'By Naturalisation': {
+    'Registration of Citizens by Naturalisation': {
       proofOfCitizenship: ['Certificate of Naturalisation'],
       proofOfAddress: ['N/A'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Passport'],
       proofOfOtherSupportingdocuments:['N/A']
     },
-    'By Registration': {
+    'Registration of Citizens by Registration': {
       proofOfCitizenship: ['Certificate of Registration'],
       proofOfAddress: ['N/A'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Passport'],
       proofOfOtherSupportingdocuments:['N/A']
     },
-    'Dual Citizenship': {
+    'Registration of Dual Citizens': {
       proofOfCitizenship: ['Certificate of Dual Citizenship'],
       proofOfAddress: ['Local Council Letter'],
       proofOfBirth:['Birth Certificate'],
@@ -221,23 +222,23 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfOtherSupportingdocuments:['Baptism Card']
     }
   },
-  RENEWAL: {
-    Renewal: {
+  'Renewal of card': {
+    'Renewal of a card': {
       proofOfAddress: ['Physical Application Form'],
       proofOfCitizenship:['Local Council Letter']
     },
-    Replacement: {
+    'Replacement of a card': {
     }
   },
-  LOST: {
-    Renewal: {
+  'Lost/ Replacement of card': {
+    'Renewal of a card': {
       proofOfPhysicalApplicationForm: ['Physical Application Form']
     },
-    Replacement: {
+    'Replacement of a card': {
       proofOfAbandonment: ['Police Report']
     }
   },
-  UPDATE: {
+  'Change of Particulars': {
     'Add Name': {
       proofOfException: ['Exception Photo']
     },
@@ -248,7 +249,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfPhysicalApplicationForm: ['Physical Application Form']
     }
   },
-  FIRSTID: {
+  'GetFirst ID': {
     'GetFirst ID': {
       proofOfRegistration: ['National Identification Number of applicant'],
       proofOfOtherSupportingdocumentIssuedbyGovt: ['National ID of parent','Birth Certificate',
@@ -324,15 +325,15 @@ export const RENEWAL_ESCALATION_CATEGORIES = [
 ];
 
   export const FILTERED_SERVICE_TYPES: { value: string; label: string }[] = [
-    { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
+    { value: 'Registration of citizens by birth', label: 'Registration of citizens by birth' },
     { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
-    { value: 'By Naturalisation', label: 'Registration of Citizens by Naturalisation' },
-    { value: 'By Registration', label: 'Registration of Citizens by Registration' },
-    { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' },
-    { value: 'By Birth /Descent', label: 'Registration of Child Citizens by birth' },
-    { value: 'By Birth /Descent', label: 'Registration of Foundlings' },
-    { value: 'Renewal', label: 'Renewal of a card' },
-    { value: 'Replacement', label: 'Replacement of a card' },
+    { value: 'Registration of Citizens by Naturalisation', label: 'Registration of Citizens by Naturalisation' },
+    { value: 'Registration of Citizens by Registration', label: 'Registration of Citizens by Registration' },
+    { value: 'Registration of Dual Citizens', label: 'Registration of Dual Citizens' },
+    { value: 'Registration of citizens by birth', label: 'Registration of Child Citizens by birth' },
+    { value: 'Registration of citizens by birth', label: 'Registration of Foundlings' },
+    { value: 'Renewal of a card', label: 'Renewal of a card' },
+    { value: 'Replacement of a card', label: 'Replacement of a card' },
     { value: 'Add Name', label: 'Adding a Name' },
     { value: 'Remove Name', label: 'Removing a name' },
     { value: 'Change Order of Names', label: 'Change of Order of Names' },
@@ -356,34 +357,34 @@ export const RENEWAL_ESCALATION_CATEGORIES = [
 
   export const SERVICES_WITH_TYPES = [
     {
-      value: 'NEW',
+      value: 'New registrations',
       label: 'New registrations',
       serviceTypes: [
-        { value: 'By Birth /Descent', label: 'Registration of citizens by birth' },
+        { value: 'Registration of citizens by birth', label: 'Registration of citizens by birth' },
         { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
-        { value: 'By Naturalisation', label: 'Registration of Citizens by Naturalisation' },
-        { value: 'By Registration', label: 'Registration of Citizens by Registration' },
-        { value: 'Dual Citizenship', label: 'Registration of Dual Citizens' }
+        { value: 'Registration of Citizens by Naturalisation', label: 'Registration of Citizens by Naturalisation' },
+        { value: 'Registration of Citizens by Registration', label: 'Registration of Citizens by Registration' },
+        { value: 'Registration of Dual Citizens', label: 'Registration of Dual Citizens' }
       ]
     },
     {
-      value: 'RENEWAL',
+      value: 'Renewal of card',
       label: 'Renewal of card',
       serviceTypes: [
-        { value: 'Renewal', label: 'Renewal of a card' },
-        { value: 'Replacement', label: 'Replacement of a card' }
+        { value: 'Renewal of a card', label: 'Renewal of a card' },
+        { value: 'Replacement of a card', label: 'Replacement of a card' }
       ]
     },
     {
-      value: 'LOST',
+      value: 'Lost/ Replacement of card',
       label: 'Lost/ Replacement of card',
       serviceTypes: [
-        { value: 'Renewal', label: 'Renewal of a card' },
-        { value: 'Replacement', label: 'Replacement of a card' }
+        { value: 'Renewal of a card', label: 'Renewal of a card' },
+        { value: 'Replacement of a card', label: 'Replacement of a card' }
       ]
     },
     {
-      value: 'UPDATE',
+      value: 'Change of Particulars',
       label: 'Change of Particulars',
       serviceTypes: [
         { value: 'Add Name', label: 'Adding a Name' },
@@ -408,7 +409,7 @@ export const RENEWAL_ESCALATION_CATEGORIES = [
       ]
     },
     {
-      value: 'FIRSTID',
+      value: 'GetFirst ID',
       label: 'GetFirst ID',
       serviceTypes: [
         { value: 'GetFirst ID', label: 'GetFirst ID' }
