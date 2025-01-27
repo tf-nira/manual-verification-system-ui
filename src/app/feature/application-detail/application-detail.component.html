@@ -1498,7 +1498,7 @@
                   Legal Escalation Details
                   <span [class]="isEscalationExpanded('legal') ? 'expanded' : 'collapsed'"></span>
                 </button>
-                <div *ngIf="isEscalationExpanded('legal')" class="escalation-content">\
+                <div *ngIf="isEscalationExpanded('legal')" class="escalation-content">
                   <div class="detail-label">Level</div>
                   <div class="detail-value">{{ selectedRow.legalEscDetails.level || 'N/A' }}</div>
                   <div class="detail-label">Category</div>
@@ -1666,9 +1666,9 @@
         <div class="field-container">
           <label>Escalation Category <span title="Select the escalation category.">ℹ️</span></label>
           <select [(ngModel)]="escalationCategory" class="dropdown">
-            <option value="invalid-information">Invalid Information</option>
-            <option value="incomplete-documents">Incomplete Documents</option>
-            <option value="other">Other</option>
+            <option *ngFor="let option of escalationCategories" [value]="option.value" [selected]="option.default">
+              {{ option.value }}
+            </option>
           </select>
         </div>
 
@@ -1785,7 +1785,7 @@
 
             <select class="dropdown" [(ngModel)]="document.title" required>
               <option value="" disabled selected>Title *</option>
-              <option *ngFor="let title of titleMap[document.category]" [value]="title">
+              <option *ngFor="let title of getTitlesForDocument(document)" [value]="title">
                 {{ title }}
               </option>
             </select>
