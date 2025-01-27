@@ -72,7 +72,8 @@ export const API_CONST_SUCCESS = 'success';
 export const API_CONST_APPROVE = 'APPROVE';
 export const API_CONST_ESCALATE = 'ESCALATE';
 export const API_CONST_REJECT = 'REJECT';
-
+//max indiviadual file size that can be uploaded 2mb
+export const MAX_DOC_SIZE = 2 * 1024 * 1024;
 // Map document keys to readable titles
 export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',

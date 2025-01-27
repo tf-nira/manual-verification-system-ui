@@ -8,7 +8,8 @@ import { HeaderComponent } from "../../shared/components/header/header.component
 import { Router } from '@angular/router';
 import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS } from '../../shared/constants';
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
-  NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP
+  NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP,
+  MAX_DOC_SIZE
  } from '../../shared/constants';
 
 import { HttpClientModule } from '@angular/common/http';
@@ -744,6 +745,18 @@ getTitlesForDocument(document: any): string[] {
       panelClass: ['center-snackbar'],
     });
     return; 
+  }
+  // Check file size for each document
+  for (const doc of this.additionalDocuments) {
+    if (doc.file instanceof File && doc.file.size > MAX_DOC_SIZE) { // 2 MB = 2 * 1024 * 1024 bytes
+      this.snackBar.open(`File size for '${doc.fileName}' exceeds 2 MB. Please upload a smaller file.`, 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+      return; // Stop further execution if any file is too large
+    }
   }
 
     const payload: {
