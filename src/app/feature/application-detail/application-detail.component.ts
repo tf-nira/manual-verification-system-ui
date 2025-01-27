@@ -220,16 +220,12 @@ updateCategoriesAndTitles() {
   }));
 }
 
-updateTitles(document: any) {
-  console.log("Current document state:", document);
 
+getTitlesForDocument(document: any): string[] {
   const categoryKey = document.category;
-  console.log("this.service"+this.service)
-  console.log("this.serviceType"+this.serviceType)
-  console.log("categoryKey"+categoryKey)
-  this.docTitles = SERVICE_TITLE_MAP[this.service]?.[this.serviceType]?.[categoryKey] || [];
-  console.log("doc titles"+this.docTitles)
+  return SERVICE_TITLE_MAP[this.service]?.[this.serviceType]?.[categoryKey] || [];
 }
+
   convertBase64ToPdfUrl(base64: string): SafeResourceUrl {
     // Decode Base64 string to a byte array
     const byteCharacters = atob(base64.split(',')[1] || base64);

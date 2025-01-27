@@ -1775,7 +1775,7 @@
           </div>
 
           <div *ngFor="let document of additionalDocuments; let i = index" class="table-row">
-            <select class="dropdown" [(ngModel)]="document.category" (change)="updateTitles(document)" required>
+            <select class="dropdown" [(ngModel)]="document.category" required>
               <option value="" disabled selected>Category *</option>
               <option *ngFor="let category of docCategories" [value]="category.key">
                 {{ category.title }}
@@ -1785,7 +1785,7 @@
 
             <select class="dropdown" [(ngModel)]="document.title" required>
               <option value="" disabled selected>Title *</option>
-              <option *ngFor="let title of docTitles" [value]="title">
+              <option *ngFor="let title of getTitlesForDocument(document)" [value]="title">
                 {{ title }}
               </option>
             </select>
