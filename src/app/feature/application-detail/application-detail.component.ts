@@ -109,6 +109,7 @@ export class ApplicationDetailComponent implements OnInit {
   activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
   serviceType: string = '';
+  statusComment: string = '';    //to store CVS rejection comment.
   approvalComment: string = '';
   applicationId: string = '';
   commentMVSOfficer: string = '';
@@ -180,8 +181,14 @@ docTitles:any;
     const state = history.state;
     console.log(state.rowData)
     //fetch the created date and save it in to display in the ui
-    // Format the date on component initialization
-    this.formattedDate = new Date(state.rowData.crDTimes).toISOString().split('T')[0];
+    const date = new Date(state.rowData.crDTimes);
+    this.formattedDate = new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    })
+      .format(date)
+      .replace(/\//g, '-'); 
 
     this.role = state.role || '';
     this.rowData = state.data || {};
@@ -196,6 +203,7 @@ docTitles:any;
     this.serviceType = this.rowData.serviceType || '';
     this.applicationId = this.rowData.applicationId || '';
     this.service = this.rowData.service || '';
+    this.statusComment = this.rowData.statusComment || '';
     this.commentMVSOfficer = this.rowData[ESCALATION_COMMENT_FROM_MVS_OFFICER] || '';
     this.commentMVSSupervisor = this.rowData[ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] || '';
 

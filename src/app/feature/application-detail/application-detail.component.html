@@ -1432,7 +1432,7 @@
             <i class="icon-history"></i> 
             History
           </button>
-          <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'By Birth /Descent'"
+          <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'Registration of citizens by birth'"
             class="tab-button" [class.active]="activeTab === 'records'" (click)="setActiveTab('records')">
             <img src="assets/images/records_section_icon.png" alt="Back" class="icon" />
             <i class="icon-records"></i> 
@@ -1450,6 +1450,10 @@
           <div class="details-container">
             <h3>Details for Application ID: {{ this.rowData.applicationId}}</h3>
 
+            <div *ngIf="statusComment" class="info-item">
+              <div class="detail-label">CVS rejection reason</div>
+              <div class="detail-value">{{ statusComment }}</div>
+            </div>
 
             <div *ngIf="selectedRow">
               <!-- Officer Escalation Details -->
@@ -1468,7 +1472,7 @@
                   <div class="detail-label">Escalated By</div>
                   <div class="detail-value">{{ selectedRow.officerEscDetails.escBy || 'N/A' }}</div>
                   <div class="detail-label">Escalation Time</div>
-                  <div class="detail-value">{{ selectedRow.officerEscDetails.escDTimes || 'N/A' }}</div>
+                  <div class="detail-value">{{ selectedRow.officerEscDetails.escDTimes | date: 'dd-MM-yyyy HH:mm:ss'  || 'N/A' }}</div>
                 </div>
               </div>
 
@@ -1488,7 +1492,7 @@
                   <div class="detail-label">Escalated By</div>
                   <div class="detail-value">{{ selectedRow.supervisorEscDetails.escBy || 'N/A' }}</div>
                   <div class="detail-label">Escalation Time</div>
-                  <div class="detail-value">{{ selectedRow.supervisorEscDetails.escDTimes || 'N/A' }}</div>
+                  <div class="detail-value">{{ selectedRow.supervisorEscDetails.escDTimes | date: 'dd-MM-yyyy HH:mm:ss' || 'N/A' }}</div>
                 </div>
               </div>
 
@@ -1508,7 +1512,7 @@
                   <div class="detail-label">Escalated By</div>
                   <div class="detail-value">{{ selectedRow.legalEscDetails.escBy || 'N/A' }}</div>
                   <div class="detail-label">Escalation Time</div>
-                  <div class="detail-value">{{ selectedRow.legalEscDetails.escDTimes || 'N/A' }}</div>
+                  <div class="detail-value">{{ selectedRow.legalEscDetails.escDTimes | date: 'dd-MM-yyyy HH:mm:ss' || 'N/A' }}</div>
                 </div>
               </div>
             </div>
