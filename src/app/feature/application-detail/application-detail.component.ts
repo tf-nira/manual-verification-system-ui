@@ -11,6 +11,7 @@ import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGO
   NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP,
   MAX_DOC_SIZE
  } from '../../shared/constants';
+ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
@@ -33,14 +34,16 @@ type DocumentPayload = {
     FormsModule,
     DocumentsUploadedComponent,
     HeaderComponent,
+    MatProgressSpinnerModule,
     HttpClientModule
+
   ],
   templateUrl: './application-detail.component.html',
   styleUrl: './application-detail.component.css'
 })
 
 export class ApplicationDetailComponent implements OnInit {
-
+  isLoading = false;
   demographicData: any;
   isChecked = false;
   role: string = '';
@@ -63,6 +66,7 @@ export class ApplicationDetailComponent implements OnInit {
     content: '',
     districtOffice: ''
   };
+  relativeDocumentList: any[] = [];
   currentDocument = {
     category: '',
     title: '',
@@ -862,25 +866,27 @@ getTitlesForDocument(document: any): string[] {
   }
   showDemographicData(registrationId: string) {
     console.log("showDemographicData" + registrationId);
+    this.isLoading = true;
     this.dataService.fetchDemographicData(registrationId).subscribe(
       (response: any) => {
         console.log("response:: malay :: " + JSON.stringify(response))
         if (response?.response?.status === 'ACTIVATED') {
           this.demographicData = response.response.identity; // Pass identity data to child
-          // Create a new window and navigate to 'demographic-details' route
-          const newWindow = window.open(`/demographic-details`, '_blank', 'width=800,height=600');
-
+          this.relativeDocumentList = response.response.documents;
+         // **Create a new tab and navigate to 'demographic-details' route**
+        const newTab = window.open(`/demographic-details`, '_blank');
           // Use localStorage to pass data to the new window
-          if (newWindow) {
+          if (newTab) {
             localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
-          }
+            localStorage.setItem('documentData', JSON.stringify(this.relativeDocumentList)); 
+          }this.isLoading = false; 
         } else {
           this.snackBar.open('Failed to fetch demographic data from id repo', 'Close', {
             duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
-          });
+          }); this.isLoading = false; 
         }
       },
       (error) => {
@@ -891,6 +897,7 @@ getTitlesForDocument(document: any): string[] {
           verticalPosition: 'top',
           panelClass: ['center-snackbar'],
         });
+        this.isLoading = false;
       }
     );
   }

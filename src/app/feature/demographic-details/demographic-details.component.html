@@ -1,57 +1,92 @@
 <div class="container">
   <!-- Header Section -->
   <app-header [role]="role"></app-header>
-<div class="layout">
-  <!-- Navigation Toggle Button -->
-  <div class="left-section" [class.collapsed]="isLeftCollapsed">
-  <!-- Left Navigation Panel -->
-  <div class="section-header">
-    <h3>Navigation</h3>
-    <button class="toggle-btn" (click)="toggleLeft()">
-      <i class="fas fa-toggle-on"></i>
-    </button>
-  </div>
-    <div class="part" *ngFor="let part of parts; let i = index">
-      <div class="part-header" (click)="togglePart(i)">
-        <span>{{ part.label }}</span>
+  <div class="layout">
+    <!-- Navigation Toggle Button -->
+    <div class="left-section" [class.collapsed]="isLeftCollapsed">
+      <!-- Left Navigation Panel -->
+      <div class="section-header">
+        <h3>Navigation</h3>
+        <button class="toggle-btn" (click)="toggleLeft()">
+          <i class="fas fa-toggle-on"></i>
+        </button>
       </div>
-      <ul *ngIf="expandedParts[i]">
-        <li *ngFor="let section of part.sections" (click)="scrollToSection(section.id)">
-          {{ section.label }}
-        </li>
-      </ul>
+      <div class="part" *ngFor="let part of parts; let i = index">
+        <div class="part-header" (click)="togglePart(i)">
+          <span>{{ part.label }}</span>
+        </div>
+        <ul *ngIf="expandedParts[i]">
+          <li *ngFor="let section of part.sections" (click)="scrollToSection(section.id)">
+            {{ section.label }}
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
 
-  <!-- Main Content Area -->
-  <div class="content">
-    <h1>Demographic Details</h1>
-    <div *ngIf="sectionsData.length > 0">
-      <div *ngFor="let section of sectionsData" [id]="section.id" class="section">
-        <h2>{{ section.label }}</h2>
-      <div class="personal-info">
-        <div *ngFor="let key of objectKeys(section.data)" class="field">
-          <div class="label">{{ formatKey(key) }}</div>
-          <div class="value">
-            <span *ngIf="isArray(section.data[key])">
-              <span *ngFor="let item of section.data[key]">
-                {{ item?.value || 'N/A' }}
-              </span>
-            </span>
-            <span *ngIf="!isArray(section.data[key]) && !isObject(section.data[key])">
-              {{ section.data[key] || 'N/A' }}
-            </span>
-            <span *ngIf="isObject(section.data[key])">
-              <pre>{{ section.data[key] | json }}</pre>
-            </span>
+    <!-- Main Content Area -->
+    <div class="content">
+      <h1>Demographic Details</h1>
+      <div *ngIf="sectionsData.length > 0">
+        <div *ngFor="let section of sectionsData" [id]="section.id" class="section">
+          <h2>{{ section.label }}</h2>
+          <div class="personal-info">
+            <div *ngFor="let key of objectKeys(section.data)" class="field">
+              <div class="label">{{ formatKey(key) }}</div>
+              <div class="value">
+                <span *ngIf="isArray(section.data[key])">
+                  <span *ngFor="let item of section.data[key]">
+                    {{ item?.value || 'N/A' }}
+                  </span>
+                </span>
+                <span *ngIf="!isArray(section.data[key]) && !isObject(section.data[key])">
+                  {{ section.data[key] || 'N/A' }}
+                </span>
+                <span *ngIf="isObject(section.data[key])">
+                  <pre>{{ section.data[key] | json }}</pre>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+      <div *ngIf="sectionsData.length === 0">
+        <p>No demographic data available.</p>
       </div>
     </div>
-    <div *ngIf="sectionsData.length === 0">
-      <p>No demographic data available.</p>
+
+    <!-- Right Section -->
+    <div class="right-section" >
+      <div class="section-header">
+        <h3>Documents</h3>
+        <button class="toggle-btn" (click)="toggleLeft()">
+          <i class="fas fa-toggle-on"></i>
+        </button>
+      </div>
+
+
+    <div class="tab-content" >
+      <!-- Documents Section -->
+        <div *ngIf="documents?.length === 0" class="no-documents">
+          No documents available.
+        </div>
+      
+        <div *ngFor="let document of documents">
+          <!-- Document Row -->
+          <div class="document-row">
+            <span class="category-name">{{ getDocumentTitle(document.category) || 'Unknown Category' }}</span>
+            <button
+              class="view-button"
+              [disabled]="!document.file"
+              (click)="viewDocument(document)"
+            >
+              <i class="fas fa-external-link-alt"></i>
+              View
+            </button>
+          </div>
+        </div>
+      
+        
     </div>
   </div>
-</div>
+  </div>
 </div>
