@@ -238,23 +238,30 @@ export class DemographicDetailsComponent implements OnInit{
     }
   }
   // Process the documents data into the required structure
-  processDocuments(documentsJson: any) {
-    console.log("inside processDocuments")
+processDocuments(documentsJson: any) {
+  console.log("inside processDocuments");
 
-    this.documents = Object.keys(documentsJson).map((key) => {
+  this.documents = Object.keys(documentsJson)
+    .map((key) => {
       const base64Pdf = documentsJson[key]?.trim();
+      const title = this.getDocumentTitle(key);
+      if (title === "Unknown Document") {
+        // Skip adding this document by returning null
+        return null;
+      }
       return {
         category: key, // Use the key as the category
-        title: this.getDocumentTitle(key), // Map keys to human-readable titles
+        title: title, // Map keys to human-readable titles
         fileName: `${key}.pdf`, // Generate a filename dynamically
         file: base64Pdf ? this.convertBase64ToPdfUrl(base64Pdf) : null, // Convert Base64 to a SafeResourceUrl
       };
-    });
-  }
+    })
+    .filter((document): document is Exclude<typeof document, null> => document !== null); // Type guard to filter out null values
+}
 
-  getDocumentTitle(key: string): string {
-    return this.categoryMap[key] || 'Unknown Document';
-  }
+getDocumentTitle(key: string): string {
+  return this.categoryMap[key] || 'Unknown Document';
+}
 
   viewDocument(document: { file: File | SafeResourceUrl | null }): void {
     if (document.file) {
@@ -306,13 +313,23 @@ export class DemographicDetailsComponent implements OnInit{
   }
 
   
-    convertBase64ToPdfUrl(base64: string): SafeResourceUrl {
-      // Decode Base64 string to a byte array
-      const byteCharacters = atob(base64.split(',')[1] || base64);
+  convertBase64ToPdfUrl(base64: string): SafeResourceUrl {
+    try {
+      // Ensure base64 data is clean
+      const base64Data = base64.includes(',') ? base64.split(',')[1] : base64;
+  
+      if (!base64Data) {
+        throw new Error("Invalid Base64 data");
+      }
+  
+      // Decode Base64 safely
+      const byteCharacters = atob(base64Data.trim());
       const byteNumbers = new Array(byteCharacters.length);
+      
       for (let i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);
       }
+      
       const byteArray = new Uint8Array(byteNumbers);
   
       // Create a Blob from the byte array
@@ -323,7 +340,12 @@ export class DemographicDetailsComponent implements OnInit{
   
       // Use Angular's DomSanitizer to sanitize the URL
       return this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrl);
+    } catch (error) {
+      console.error("Error converting Base64 to PDF:", error);
+      return this.sanitizer.bypassSecurityTrustResourceUrl(''); // Return an empty safe URL
     }
+  }
+  
 
 
   /**
