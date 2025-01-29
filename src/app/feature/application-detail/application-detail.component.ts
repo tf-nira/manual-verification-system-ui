@@ -63,6 +63,7 @@ export class ApplicationDetailComponent implements OnInit {
     content: '',
     districtOffice: ''
   };
+  relativeDocumentList: any[] = [];
   currentDocument = {
     category: '',
     title: '',
@@ -867,12 +868,14 @@ getTitlesForDocument(document: any): string[] {
         console.log("response:: malay :: " + JSON.stringify(response))
         if (response?.response?.status === 'ACTIVATED') {
           this.demographicData = response.response.identity; // Pass identity data to child
+          this.relativeDocumentList = response.response.documents;
           // Create a new window and navigate to 'demographic-details' route
           const newWindow = window.open(`/demographic-details`, '_blank', 'width=800,height=600');
 
           // Use localStorage to pass data to the new window
           if (newWindow) {
             localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
+            localStorage.setItem('documentData', JSON.stringify(this.relativeDocumentList)); 
           }
         } else {
           this.snackBar.open('Failed to fetch demographic data from id repo', 'Close', {

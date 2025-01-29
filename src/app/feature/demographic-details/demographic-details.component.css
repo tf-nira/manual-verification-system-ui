@@ -30,7 +30,7 @@
 }
 
 .navigation-panel h3 {
-  font-size: 18px;
+  font-size: 16px;
   margin-bottom: 20px;
   color: #333;
 }
@@ -212,6 +212,10 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: space-between; /* Keep heading and toggle aligned */
+  padding: 10px;
+  color: #151515;
+  background-color: #f5f5f5; /* Ensure consistent background */
+  border-bottom: 1px solid #ddd; /* Add separation from content */
 }
 
 .left-section.collapsed .section-header {
@@ -246,4 +250,72 @@ h2 {
   font-size: 13px;
   white-space: pre-wrap;
   word-wrap: break-word;
+}
+
+.right-section {
+  overflow-y: auto; /* Independent vertical scrolling */
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+/* Right Section */
+.right-section {
+    width: 250px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    transition: width 0.3s ease-in-out;
+    margin-top: 5rem;
+    right: 0;  /* Aligns to the right edge */
+}
+
+
+.right-section.collapsed {
+  width: 50px; /* Reduced width when collapsed */
+}
+
+.right-section .section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  color: #151515;
+  background-color: #f5f5f5; /* Ensure consistent background */
+  border-bottom: 1px solid #ddd; /* Add separation from content */
+}
+
+.right-section .section-header h3 {
+  margin: 0;
+  font-size: 16px; /* Standardized font size for heading */
+}
+
+.right-section.collapsed .section-header h3 {
+  display: none; /* Hide heading when collapsed */
+}
+
+.right-section .toggle-btn {
+  background-color: transparent;
+  border: none;
+  color: #151515;
+  cursor: pointer;
+  font-size: 14px; /* Appropriate button size */
+  padding: 0px 00px; /* Adjust padding for a compact button */
+}
+
+.right-section.collapsed .section-header {
+  justify-content: center; /* Center the toggle button */
+}
+
+.references-content {
+  padding: 5px;
+}
+
+.right-section.collapsed .references-content {
+  display: none; /* Hide content when collapsed */
+}
+
+.right-section:not(.collapsed) .references-content {
+  display: block; /* Show content when not collapsed */
 }

@@ -1432,7 +1432,7 @@
             <i class="icon-history"></i> 
             History
           </button>
-          <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'Registration of citizens by birth'"
+          <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'By Birth /Descent'"
             class="tab-button" [class.active]="activeTab === 'records'" (click)="setActiveTab('records')">
             <img src="assets/images/records_section_icon.png" alt="Back" class="icon" />
             <i class="icon-records"></i> 

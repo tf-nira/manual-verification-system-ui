@@ -1,6 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../../shared/components/header/header.component";
+import { CATEGORY_MAP} from '../../shared/constants';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-demographic-details',
   standalone: true,
@@ -15,6 +18,8 @@ export class DemographicDetailsComponent implements OnInit{
   sectionsData: any[] = []; // Organized data for UI
   expandedParts: boolean[] = []; // Track expanded state for parts
   isLeftCollapsed: boolean = false;
+  
+  isRightCollapsed: boolean = true;
   // Define navigation parts and sections
   parts = [
     {
@@ -192,11 +197,25 @@ export class DemographicDetailsComponent implements OnInit{
     }
   ];
   role: string = '';
+  relativeDocumentList: any[] = [];
+  categoryMap = CATEGORY_MAP;
+  documents: {
+    category: string; // Use the key as the category
+    title: any; // Map keys to human-readable titles
+    fileName: string; // Generate a filename dynamically
+    file: any;
+  }[] = []; // Initialize as an empty array instead of undefined
+  pdfUrl: any;
+  constructor(
+      private sanitizer: DomSanitizer, private snackBar: MatSnackBar
+    ) { }
   
   ngOnInit(): void {
     const state = history.state;
     this.role = state.role || '';
     const data = localStorage.getItem('demographicData');
+    const documentData = localStorage.getItem('documentData');
+
     if (data) {
       this.demographicData = JSON.parse(data);
       this.organizeDataIntoSections();
@@ -205,7 +224,108 @@ export class DemographicDetailsComponent implements OnInit{
     } else {
       console.error('No demographic data found in localStorage');
     }
+    if (documentData) {
+      this.relativeDocumentList = JSON.parse(documentData); // Retrieve and parse the list
+      // Convert the array to an object where category is the key and value is the value
+      const documentsJson = this.relativeDocumentList.reduce((acc, doc) => {
+        acc[doc.category] = doc.value;
+        return acc;
+      }, {} as { [key: string]: string });
+      console.log("documentsJson"+JSON.stringify(documentsJson))
+      this.processDocuments(documentsJson);
+    } else {
+      console.error('No doc data found in relative data');
+    }
   }
+  // Process the documents data into the required structure
+  processDocuments(documentsJson: any) {
+    console.log("inside processDocuments")
+
+    this.documents = Object.keys(documentsJson).map((key) => {
+      const base64Pdf = documentsJson[key]?.trim();
+      return {
+        category: key, // Use the key as the category
+        title: this.getDocumentTitle(key), // Map keys to human-readable titles
+        fileName: `${key}.pdf`, // Generate a filename dynamically
+        file: base64Pdf ? this.convertBase64ToPdfUrl(base64Pdf) : null, // Convert Base64 to a SafeResourceUrl
+      };
+    });
+  }
+
+  getDocumentTitle(key: string): string {
+    return this.categoryMap[key] || 'Unknown Document';
+  }
+
+  viewDocument(document: { file: File | SafeResourceUrl | null }): void {
+    if (document.file) {
+      const sanitizedUrl = this.sanitizer.sanitize(4, document.file); // Sanitizes the SafeResourceUrl
+      if (!sanitizedUrl) {
+        this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
+        return;
+      }
+
+      // Open a new window and inject sanitized HTML
+      const newWindow = window.open('', '_blank');
+      if (newWindow) {
+        newWindow.document.write(`
+            <html>
+              <head>
+                <title>${document.file || 'Document'}</title>
+              </head>
+              <body style="margin: 0;">
+                <iframe
+                  src="${sanitizedUrl}"
+                  width="100%"
+                  height="100%"
+                  style="border: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"
+                ></iframe>
+              </body>
+            </html>
+          `);
+      } else {
+        this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
+      }
+    } else {
+      this.snackBar.open('Document is not available.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+    }
+  }
+
+  
+    convertBase64ToPdfUrl(base64: string): SafeResourceUrl {
+      // Decode Base64 string to a byte array
+      const byteCharacters = atob(base64.split(',')[1] || base64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+  
+      // Create a Blob from the byte array
+      const blob = new Blob([byteArray], { type: 'application/pdf' });
+  
+      // Create a safe object URL for the Blob
+      this.pdfUrl = URL.createObjectURL(blob);
+  
+      // Use Angular's DomSanitizer to sanitize the URL
+      return this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrl);
+    }
+
+
   /**
    * Organize data into sections for the UI.
    */
@@ -250,7 +370,6 @@ export class DemographicDetailsComponent implements OnInit{
       sectionElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
-
 
   /**
    * Helper function to format keys into readable labels
