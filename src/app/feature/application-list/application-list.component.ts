@@ -76,7 +76,8 @@ export class ApplicationListComponent implements OnInit {
   fields: string[] = [];
   data: any[] = [];
   searchText: string = '';
-
+  minToDate: string = '';
+  fromDateMax: string = '';
   selectedService: string = '';
   selectedServiceType: string = '';
   filteredServiceTypes= FILTERED_SERVICE_TYPES; // Holds the filtered service types
@@ -196,6 +197,13 @@ export class ApplicationListComponent implements OnInit {
     }
   }
 
+  updateMinToDate() {
+    this.minToDate = this.fromDate;
+  }
+
+  updateMaxFromDate() {
+    this.fromDateMax = this.toDate;
+  }
   jumpToPage(pageInput: number) {
     const newPage = pageInput - 1; // Convert 1-based input to 0-based index
     if (newPage >= 0 && newPage < this.totalPages) {
@@ -235,6 +243,8 @@ export class ApplicationListComponent implements OnInit {
     this.selectedApplicationStatus = '';
     this.fromDate = '';
     this.toDate = '';
+    this.fromDateMax ='';
+    this.minToDate = '';
   }
 
   onRowClick(event: MouseEvent, rowData: any) {
