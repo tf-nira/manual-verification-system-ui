@@ -107,7 +107,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfException: ['Expetion Photo'],
     proofOfPayment: ['Payment Slip'],
     proofOfRelationship: ['LC 1 Recommendation Letter', 'Immunization Card', 'Mother National ID Card', 'Father National ID Card', 'Guardian introduction letter', 'Guardian National ID Card'],
-    proofOfCitizenship: ['LC 1 Recommendation Letter', 'Notification Of Birth Record', 'Passport Document', 'Mother National ID Card', 'Certificate of Dual Citizenship', 'Father National ID Card', 'Relative National ID Card', 'Guardian National ID Card', 'Birth Certificate', 'Tax Document', 'Previous Immigration records', 'National Id', 'Previous passports of self, parents, or grandparents', 'Copies of birth certificates of self parents or grandparents', 'Naturalisation Certificate of self parents', 'Certificate of Citizenship by Naturalization', 'Certificate of Citizenship by Registration'],
+    proofOfCitizenship: ['LC 1 Recommendation Letter', 'Notification Of Birth Record', 'Passport Document', 'Mother National ID Card', 'Certificate of Dual Citizenship', 'Father National ID Card', 'Relative National ID Card', 'Guardian National ID Card', 'Birth Certificate', 'Tax Document', 'Previous Immigration records', 'National Id', 'Previous passports of self, parents, or grandparents', 'Copies of birth certificates of self parents or grandparents', 'Naturalization Certificate of self parents', 'Certificate of Citizenship by Naturalization', 'Certificate of Citizenship by Registration'],
     proofOfLegalDOcuments: [],
     proofOfIdentity: ['Mother National ID Card', 'Father National ID Card', 'Passport Document', 'Relative National ID Card', 'Guardian National ID Card', 'Photo identification cards issued by the Government', 'Medical card issued by the State Govt', 'Voter Identification card', 'Driving licence of the applicant', 'Expired Card'
       ],
@@ -138,7 +138,7 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Citizenship under the Article 9': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
         'proofOfAbandonment', 'proofOfLegalStatutoryDeclaration'],
-    'Registration of Citizens by Naturalisation': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+    'Registration of Citizens by Naturalization': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
         'proofOfAbandonment'],
     'Registration of Citizens by Registration': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
@@ -193,15 +193,15 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfAbandonment:['Police Report']
     },
     'Citizenship under the Article 9': {
-      proofOfCitizenship: ['Previous Passports Details','Naturalisation Certificate','Birth Certificates'],
+      proofOfCitizenship: ['Previous Passports Details','Naturalization Certificate','Birth Certificates'],
       proofOfAddress: ['N/A'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['N/A'],
       proofOfOtherSupportingdocuments:['Previous immigration records'],
       proofOfLegalStatutoryDeclaration:['Statutory Declaration']
     },
-    'Registration of Citizens by Naturalisation': {
-      proofOfCitizenship: ['Certificate of Naturalisation'],
+    'Registration of Citizens by Naturalization': {
+      proofOfCitizenship: ['Certificate of Naturalization'],
       proofOfAddress: ['N/A'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Passport'],
@@ -307,8 +307,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     { value: 'NIN has already been used to identify more than 20 people',  default: false},
     { value: 'Indigenous community not listed under Schedule 3',  default: false},
     { value: 'Missing Documentation',  default: false},
-    { value: 'Insufficient Documentation',  default: false},
-    { value: 'NIN has already been used to identify more than 20 people',  default: false}
+    { value: 'Insufficient Documentation',  default: false}
 ];
 
 
@@ -327,7 +326,7 @@ export const RENEWAL_ESCALATION_CATEGORIES = [
   export const FILTERED_SERVICE_TYPES: { value: string; label: string }[] = [
     { value: 'Registration of citizens by birth', label: 'Registration of citizens by birth' },
     { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
-    { value: 'Registration of Citizens by Naturalisation', label: 'Registration of Citizens by Naturalisation' },
+    { value: 'Registration of Citizens by Naturalization', label: 'Registration of Citizens by Naturalization' },
     { value: 'Registration of Citizens by Registration', label: 'Registration of Citizens by Registration' },
     { value: 'Registration of Dual Citizens', label: 'Registration of Dual Citizens' },
     { value: 'Registration of citizens by birth', label: 'Registration of Child Citizens by birth' },
@@ -362,7 +361,7 @@ export const RENEWAL_ESCALATION_CATEGORIES = [
       serviceTypes: [
         { value: 'Registration of citizens by birth', label: 'Registration of citizens by birth' },
         { value: 'Citizenship under the Article 9', label: 'Citizenship under the Article 9' },
-        { value: 'Registration of Citizens by Naturalisation', label: 'Registration of Citizens by Naturalisation' },
+        { value: 'Registration of Citizens by Naturalization', label: 'Registration of Citizens by Naturalization' },
         { value: 'Registration of Citizens by Registration', label: 'Registration of Citizens by Registration' },
         { value: 'Registration of Dual Citizens', label: 'Registration of Dual Citizens' }
       ]

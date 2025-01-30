@@ -73,6 +73,8 @@
               type="date"
               id="fromDate"
               [(ngModel)]="fromDate"
+              (ngModelChange)="updateMinToDate()"
+              [max]="fromDateMax"
               class="date-filter-input"
               [readonly]="isFiltersCollapsed"
             />
@@ -83,6 +85,8 @@
               type="date"
               id="toDate"
               [(ngModel)]="toDate"
+              (ngModelChange)="updateMaxFromDate()"
+              [min]="minToDate"
               class="date-filter-input"
               [readonly]="isFiltersCollapsed"
             />
