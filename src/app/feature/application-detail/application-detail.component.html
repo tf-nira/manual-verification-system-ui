@@ -1623,7 +1623,7 @@
             History
           </button>
           <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'By Birth /Descent'"
-            class="tab-button" [class.active]="activeTab === 'records'" (click)="setActiveTab('records')">
+            class="tab-button" [class.active]="activeTab === 'records'" (click)="handleRecordsClick()">
             <img src="assets/images/records_section_icon.png" alt="Back" class="icon" />
             <i class="icon-records"></i> 
             Records
@@ -1715,33 +1715,40 @@
         <!-- Records Content -->
         <div class="tab-content" *ngIf="activeTab === 'records'">
           <!-- <div class="scrollable-container"> -->
-            <!-- Check if there are person details -->
-            <ng-container *ngIf="personDetails.length > 0; else noData">
-              <div *ngFor="let person of personDetails">
-                <h4>{{ person.role | titlecase }} Details</h4>
-                <div *ngFor="let key of objectKeys(person.details)">
+          <!-- Check if there are person details -->
+          <ng-container *ngIf="personDetails.length > 0; else noData">
+            <div *ngFor="let person of personDetails">
+              <h4>{{ person.role | titlecase }} Details</h4>
+              <!-- Check if demographicData exists and then iterate through allowedFields -->
+              <ng-container *ngIf="demographicData; else noDemographicData">
+                <div *ngFor="let field of allowedFields">
                   <!-- Extract meaningful data -->
-                  <ng-container *ngIf="extractValue(person.details[key])">
+                  <ng-container *ngIf="demographicData[field]">
                     <!-- <p>{{ formatKey(key) }}: {{ extractValue(person.details[key]) }}</p> -->
-                    <div class="detail-label">{{ formatKey(key) }}</div>
-                    <div class="detail-value">{{ extractValue(person.details[key]) }}</div>
+                    <ng-container *ngIf="extractValue(demographicData[field])">
+                      <div class="detail-label">{{ formatKey(field) }}</div>
+                      <div class="detail-value">{{ extractJsonValue(demographicData[field]) }}</div>
+                    </ng-container>
                   </ng-container>
                 </div>
-                <button
-                  (click)="showDemographicData(person.role === 'guardian' ? person.details['guardianNIN_AIN'] : person.details[person.role + 'NIN'])">
+                <button (click)="displayCachedData()">
                   Open
                 </button>
-              </div>
-            </ng-container>
-            <ng-template #noData>
-              <p>No NIN data found for Father, Mother, or Guardian.</p>
-            </ng-template>
-            <!-- **Processing icon** -->
-            <div *ngIf="isLoading" class="loading-icon">
-              <mat-spinner diameter="50"></mat-spinner>
+              </ng-container>
+              <ng-template #noDemographicData>
+                <p>No demographic data available for {{ person.role | titlecase }}.</p>
+              </ng-template>
             </div>
-            <!-- </div> -->
-            </div>
+          </ng-container>
+          <ng-template #noData>
+            <p>No NIN data found for Father, Mother, or Guardian.</p>
+          </ng-template>
+          <!-- **Processing icon** -->
+          <div *ngIf="isLoading" class="loading-icon">
+            <mat-spinner diameter="50"></mat-spinner>
+          </div>
+          <!-- </div> -->
+        </div>
 
 
         <div class="tab-content" *ngIf="activeTab === 'documents'">

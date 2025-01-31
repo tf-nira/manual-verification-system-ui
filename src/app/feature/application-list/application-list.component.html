@@ -87,6 +87,7 @@
               [(ngModel)]="toDate"
               (ngModelChange)="updateMaxFromDate()"
               [min]="minToDate"
+              [max]="today"
               class="date-filter-input"
               [readonly]="isFiltersCollapsed"
             />

@@ -16,6 +16,7 @@ import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGO
 import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { error } from 'node:console';
 type DocumentPayload = {
   [key: string]: {
     document: number[];
@@ -66,6 +67,15 @@ export class ApplicationDetailComponent implements OnInit {
     content: '',
     districtOffice: ''
   };
+  allowedFields = [
+    'surname',
+    'givenName',
+    'gender',
+    'dateOfBirth',
+    'NIN',
+    'applicantPlaceOfOriginIndigenousCommunityTribe',
+    'applicantPlaceOfOriginClan'
+  ];
   relativeDocumentList: any[] = [];
   currentDocument = {
     category: '',
@@ -176,6 +186,7 @@ export class ApplicationDetailComponent implements OnInit {
 docTitles:any;
   pdfUrl: any;
   formattedDate: string | ' ' = ' ';
+  cachedDemographicsData: any;
 
   constructor(private router: Router, private dataService: DataStorageService,
     private sanitizer: DomSanitizer, private snackBar: MatSnackBar
@@ -864,22 +875,18 @@ getTitlesForDocument(document: any): string[] {
       return null;
     }
   }
-  showDemographicData(registrationId: string) {
+  fetchDemographicData(registrationId: string) {
     console.log("showDemographicData" + registrationId);
     this.isLoading = true;
     this.dataService.fetchDemographicData(registrationId).subscribe(
       (response: any) => {
         console.log("response:: malay :: " + JSON.stringify(response))
         if (response?.response?.status === 'ACTIVATED') {
+          this.cachedDemographicsData = response; // Cache the response
           this.demographicData = response.response.identity; // Pass identity data to child
           this.relativeDocumentList = response.response.documents;
-         // **Create a new tab and navigate to 'demographic-details' route**
-        const newTab = window.open(`/demographic-details`, '_blank');
-          // Use localStorage to pass data to the new window
-          if (newTab) {
-            localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
-            localStorage.setItem('documentData', JSON.stringify(this.relativeDocumentList)); 
-          }this.isLoading = false; 
+          this.isLoading = false; 
+          console.log(this.demographicData);
         } else {
           this.snackBar.open('Failed to fetch demographic data from id repo', 'Close', {
             duration: 3000,
@@ -944,6 +951,65 @@ getTitlesForDocument(document: any): string[] {
 
     return data; // Return plain value if none of the above conditions match
   }
+
+  handleRecordsClick(): void {
+    this.setActiveTab('records');
+    const roles = ['guardian', 'father', 'mother'];
+    console.log("persondetails   "+JSON.stringify(this.personDetails));
+    roles.forEach(role => {
+      const person = this.personDetails.find(person => person.role === role);
+      if (person) {
+        console.log("person    "+JSON.stringify(person));
+        const demographicData = person.details['guardianNIN_AIN'] || person.details[person.role + 'NIN'];
+        console.log("demographic  "+ demographicData)
+        if (!this.cachedDemographicsData) {
+          this.fetchDemographicData(demographicData);
+        } else {
+          this.getCachedData();
+        }
+      }
+    });
+  }
+  getCachedData() {
+    if (this.cachedDemographicsData?.response?.status === 'ACTIVATED') {
+      this.demographicData = this.cachedDemographicsData.response.identity;
+      this.relativeDocumentList = this.cachedDemographicsData.response.documents;
+    } else {
+      console.log("Error fetching cached data!")
+    }
+  }
+
+
+  displayCachedData() {
+    if (this.cachedDemographicsData?.response?.status === 'ACTIVATED') {
+      this.demographicData = this.cachedDemographicsData.response.identity;
+      this.relativeDocumentList = this.cachedDemographicsData.response.documents;
+      const newTab = window.open(`/demographic-details`, '_blank');
+      if (newTab) {
+        localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
+        localStorage.setItem('documentData', JSON.stringify(this.relativeDocumentList));
+      }
+    } else {
+      const person = this.personDetails.find(person => person.role === 'guardian');
+      if (person) {
+        const demographicData = person.details['guardianNIN_AIN'] || person.details[person.role + 'NIN'];
+        this.fetchDemographicData(demographicData);
+      }
+    }
+  }
+  extractJsonValue(data: any): string {
+    if (typeof data === 'string') {
+      return data;
+    }
+    if (Array.isArray(data) && data.length > 0 && data[0].value) {
+      return data[0].value;
+    }
+    if (data && typeof data === 'object' && 'value' in data) {
+      return data.value;
+    }
+    return '';
+  }
+  
 
 }
 

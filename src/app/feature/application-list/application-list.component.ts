@@ -76,12 +76,12 @@ export class ApplicationListComponent implements OnInit {
   fields: string[] = [];
   data: any[] = [];
   searchText: string = '';
-  minToDate: string = '';
-  fromDateMax: string = '';
   selectedService: string = '';
   selectedServiceType: string = '';
   filteredServiceTypes= FILTERED_SERVICE_TYPES; // Holds the filtered service types
-
+  today: string = new Date().toISOString().split('T')[0];
+  minToDate: string = '';
+  fromDateMax: string = this.today;
   selectedApplicationStatus: string = '';
   fromDate: string = '';
   toDate: string = '';
@@ -202,8 +202,9 @@ export class ApplicationListComponent implements OnInit {
   }
 
   updateMaxFromDate() {
-    this.fromDateMax = this.toDate;
+    this.fromDateMax = this.toDate < this.today ? this.toDate : this.today;
   }
+  
   jumpToPage(pageInput: number) {
     const newPage = pageInput - 1; // Convert 1-based input to 0-based index
     if (newPage >= 0 && newPage < this.totalPages) {
