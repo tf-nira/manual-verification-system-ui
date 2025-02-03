@@ -69,30 +69,38 @@
         <div class="date-filter">
           <div class="input-group">
             <label for="fromDate">{{ constants.FROM_DATE }}</label>
-            <input
-              type="date"
-              id="fromDate"
-              [(ngModel)]="fromDate"
-              (ngModelChange)="updateMinToDate()"
-              [max]="fromDateMax"
-              class="date-filter-input"
-              [readonly]="isFiltersCollapsed"
-            />
+            <mat-form-field appearance="outline" class="small-datepicker">
+              <input
+                matInput
+                [matDatepicker]="fromPicker"
+                [(ngModel)]="fromDate"
+                (ngModelChange)="updateMinToDate()"
+                [max]="fromDateMax"
+                placeholder="DD/MM/YYYY"
+              />
+              <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+              <mat-datepicker #fromPicker></mat-datepicker>
+            </mat-form-field>
           </div>
+        
           <div class="input-group">
             <label for="toDate">{{ constants.TO_DATE }}</label>
-            <input
-              type="date"
-              id="toDate"
-              [(ngModel)]="toDate"
-              (ngModelChange)="updateMaxFromDate()"
-              [min]="minToDate"
-              [max]="today"
-              class="date-filter-input"
-              [readonly]="isFiltersCollapsed"
-            />
+            <mat-form-field appearance="outline" class="small-datepicker">
+              <input
+                matInput
+                [matDatepicker]="toPicker"
+                [(ngModel)]="toDate"
+                (ngModelChange)="updateMaxFromDate()"
+                [min]="minToDate"
+                [max]="fromDateMax"
+                placeholder="DD/MM/YYYY"
+              />
+              <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+              <mat-datepicker #toPicker></mat-datepicker>
+            </mat-form-field>
           </div>
         </div>
+        
       </div>
 
       <div class="seach-and-filter-buttons">
