@@ -136,7 +136,7 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
         'proofOfAbandonment'],
     'Citizenship under the Article 9': ['proofOfCitizenship', 'proofOfBirth',
-       'proofOfOtherSupportingdocumentIssuedbyGovt','proofOfAbandonment', 'proofOfLegalStatutoryDeclaration'],
+      'proofOfOtherSupportingdocuments','proofOfAbandonment', 'proofOfLegalStatutoryDeclaration'],
     'Registration of Citizens by Naturalization': ['proofOfCitizenship', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt','proofOfAbandonment'],
     'Registration of Citizens by Registration': ['proofOfCitizenship', 'proofOfBirth',
@@ -369,15 +369,14 @@ export const RENEWAL_ESCALATION_CATEGORIES = [
       label: 'Renewal of card',
       serviceTypes: [
         { value: 'Renewal of a card', label: 'Renewal of a card' },
-        { value: 'Replacement of a card', label: 'Replacement of a card' }
       ]
     },
     {
       value: 'Lost/ Replacement of card',
       label: 'Lost/ Replacement of card',
       serviceTypes: [
-        { value: 'Renewal of a card', label: 'Renewal of a card' },
-        { value: 'Replacement of a card', label: 'Replacement of a card' }
+        { value: 'Lost of Card', label: 'Lost of Card' },
+        { value: 'Damaged of Card', label: 'Damaged of Card' }
       ]
     },
     {

@@ -4,6 +4,10 @@ import { Router } from '@angular/router';
 import { ROLE_FIELDS_MAP } from '../../shared/role-fields';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FormsModule } from '@angular/forms';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule, MAT_DATE_LOCALE, MAT_DATE_FORMATS  } from '@angular/material/core';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import {
   APPLICATION_ID,
   APPLICATION_STATUS,
@@ -50,12 +54,29 @@ import {
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
 import { FILTERED_SERVICE_TYPES, SERVICES_WITH_TYPES } from '../../shared/constants';
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',  
+  },
+  display: {
+    dateInput: 'DD/MM/YYYY', 
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  }
+};
 
 @Component({
   selector: 'app-application-list',
   standalone: true,
-  providers: [DataStorageService, ConfigService],
-  imports: [NgFor, NgIf, HeaderComponent, FormsModule, CommonModule],
+  providers: [DataStorageService, ConfigService,
+    { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },  
+    { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }  
+  ],
+  imports: [NgFor, NgIf, HeaderComponent, FormsModule, CommonModule, MatNativeDateModule,
+    MatDatepickerModule, MatFormFieldModule,   
+    MatInputModule   
+  ],
   templateUrl: './application-list.component.html',
   styleUrl: './application-list.component.css',
 })
@@ -79,12 +100,14 @@ export class ApplicationListComponent implements OnInit {
   selectedService: string = '';
   selectedServiceType: string = '';
   filteredServiceTypes= FILTERED_SERVICE_TYPES; // Holds the filtered service types
-  today: string = new Date().toISOString().split('T')[0];
-  minToDate: string = '';
-  fromDateMax: string = this.today;
+  
   selectedApplicationStatus: string = '';
-  fromDate: string = '';
-  toDate: string = '';
+  fromDate: Date | null = null;
+  toDate: Date | null = null;
+  //today: string = new Date().toISOString().split('T')[0];
+  minToDate: Date | null = null;
+  fromDateMax: Date = new Date(); // Default max date is today
+  toDateInputType: string = 'text';  // Start as text to prevent pre-filling
 
   isPanelExpanded = false;
   selectedRow: any = null;
@@ -198,12 +221,24 @@ export class ApplicationListComponent implements OnInit {
   }
 
   updateMinToDate() {
-    this.minToDate = this.fromDate;
+    if (this.fromDate) {
+      this.minToDate = this.fromDate; 
+      if (this.toDate && this.toDate < this.fromDate) {
+        this.toDate = null; 
+      }
+    } else {
+      this.minToDate = null; 
+    }
   }
 
   updateMaxFromDate() {
-    this.fromDateMax = this.toDate < this.today ? this.toDate : this.today;
+    if (this.toDate) {
+      this.fromDateMax = this.toDate < this.fromDateMax ? this.toDate : this.fromDateMax;
+    } else {
+      this.fromDateMax = new Date(); 
+    }
   }
+    
   
   jumpToPage(pageInput: number) {
     const newPage = pageInput - 1; // Convert 1-based input to 0-based index
@@ -242,10 +277,10 @@ export class ApplicationListComponent implements OnInit {
     this.selectedService = '';
     this.selectedServiceType = '';
     this.selectedApplicationStatus = '';
-    this.fromDate = '';
-    this.toDate = '';
-    this.fromDateMax ='';
-    this.minToDate = '';
+    this.fromDate = null;
+    this.toDate = null;
+    this.minToDate = null;
+    this.fromDateMax = new Date();
   }
 
   onRowClick(event: MouseEvent, rowData: any) {
