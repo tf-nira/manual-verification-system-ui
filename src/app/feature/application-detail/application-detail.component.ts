@@ -728,59 +728,72 @@ getTitlesForDocument(document: any): string[] {
   }
 
   isValidDocumentList(documents: any[]): boolean {
-    const categoryMap = new Map<string, Set<string>>();
+    const seenTitles = new Set();
+    const seenCategories = new Set();
   
     for (const doc of documents) {
-      if (!doc.category || !doc.title) {
-        // Skip documents without category or title (optional based on requirements)
-        continue;
+      if (!doc.title || !doc.category) {
+        continue; //edge case - no doc entry
       }
   
-      if (!categoryMap.has(doc.category)) {
-        // Add a new category with an empty set of titles
-        categoryMap.set(doc.category, new Set());
+      // Check if title already exists
+      if (seenTitles.has(doc.title)) {
+        return false; // Duplicate title found
       }
+      seenTitles.add(doc.title);
   
-      const titleSet = categoryMap.get(doc.category)!;
-  
-      if (titleSet.has(doc.title)) {
-        // Duplicate title found in the same category
-        return false;
+      // Check if category already exists
+      if (seenCategories.has(doc.category)) {
+        return false; // Duplicate category found
       }
-  
-      // Add the title to the set for this category
-      titleSet.add(doc.title);
+      seenCategories.add(doc.category);
     }
   
-    return true; // All documents are valid
+    return true; // No duplicates found
   }
+  
   
 
 
   // Confirm and approve action
   confirmAndUpload() {
-    // Validate document list before proceeding
-  if (!this.isValidDocumentList(this.additionalDocuments)) {
-    this.snackBar.open('Warning: Multiple uploads of the same document are restricted.', 'Close', {
-      duration: 3000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      panelClass: ['center-snackbar'],
-    });
-    return; 
-  }
-  // Check file size for each document
-  for (const doc of this.additionalDocuments) {
-    if (doc.file instanceof File && doc.file.size > MAX_DOC_SIZE) { // 2 MB = 2 * 1024 * 1024 bytes
-      this.snackBar.open(`File size for '${doc.fileName}' exceeds 2 MB. Please upload a smaller file.`, 'Close', {
+    // Check if document list is empty or contains only invalid (null) documents
+    const hasValidDocument = this.additionalDocuments?.some(
+      (doc) => doc.file && doc.fileName && doc.category
+    );
+
+    if (!hasValidDocument) {
+      this.snackBar.open('No valid document selected. Please upload at least one valid document.', 'Close', {
         duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'top',
         panelClass: ['center-snackbar'],
       });
-      return; // Stop further execution if any file is too large
+      return;
     }
-  }
+
+    // Validate document list before proceeding
+    if (!this.isValidDocumentList(this.additionalDocuments)) {
+      this.snackBar.open('Warning: Multiple uploads of the same document are restricted.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+      return;
+    }
+    // Check file size for each document
+    for (const doc of this.additionalDocuments) {
+      if (doc.file instanceof File && doc.file.size > MAX_DOC_SIZE) { // 2 MB = 2 * 1024 * 1024 bytes
+        this.snackBar.open(`File size for '${doc.fileName}' exceeds 2 MB. Please upload a smaller file.`, 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
+        return; 
+      }
+    }
 
     const payload: {
       id: string;
@@ -837,12 +850,13 @@ getTitlesForDocument(document: any): string[] {
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
           });
-          this.router.navigate(['/application-list'], {
-            state: {
-              role: this.role, 
-              data: this.rowData 
-            }
-          });
+          this.closeDocumentUploadModal();
+          // this.router.navigate(['/application-list'], {
+          //   state: {
+          //     role: this.role, 
+          //     data: this.rowData 
+          //   }
+          // });
 
         } else {
           this.snackBar.open('Failed to upload documents. Please try again.', 'Close', {
