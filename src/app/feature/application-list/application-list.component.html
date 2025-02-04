@@ -40,7 +40,9 @@
         <select
           id="selectedServiceType"
           [(ngModel)]="selectedServiceType"
+          (change)="onServiceTypeChange($event)"
           class="search-input"
+          [disabled]="!selectedService"
         >
           <option value="" disabled selected>Select a Service Type</option>
           <option *ngFor="let serviceType of filteredServiceTypes" [value]="serviceType.value">
@@ -48,6 +50,7 @@
           </option>
         </select>
       </div>
+
 
       <!-- Application Status -->
       <div class="input-group" *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER">
@@ -61,8 +64,37 @@
           <option *ngFor="let status of applicationStatuses" [value]="status">{{ status }}</option>
         </select>
       </div>
+      <!-- Age Group Multi-Select Dropdown -->
+      <div class="input-group" *ngIf="selectedServiceType !== 'Registration of Citizens by Registration'
+            && selectedServiceType !== 'Registration of Citizens by Naturalization'">
+        <label for="ageGroupDropdown">Select Age Group</label>
+        <div class="custom-multi-select">
+          <!-- Dropdown Trigger -->
+          <div id="ageGroupDropdown" class="dropdown-toggle" (click)="toggleDropdown()">
+            Select Age Group
+          </div>
+      
+          <!-- Dropdown Options -->
+          <div class="dropdown-options" *ngIf="dropdownOpen">
+            <label *ngFor="let age of ageGroups">
+              <input type="checkbox" [value]="age" (change)="toggleSelection(age)" 
+                     [checked]="selectedAgeGroups.includes(age)" />
+              {{ age }}
+            </label>
+          </div>
+        </div>
+      </div>
+      
+      
+    <!--Foundling-->
+    <div class="input-group checkbox-container" *ngIf="selectedServiceType === 'Registration of citizens by birth'">
+      <label for="foundlingCheckbox">Foundling</label>
+      <input type="checkbox" id="foundlingCheckbox" [(ngModel)]="foundling"  class="checkbox-input"/>
+    
     </div>
-
+    </div>
+    
+    
     <div class="search-box">
       <div class="search-and-filters" *ngIf="!isFiltersCollapsed">
         <!-- Date Range Filter -->
@@ -102,7 +134,7 @@
         </div>
         
       </div>
-
+      
       <div class="seach-and-filter-buttons">
         <button (click)="clearFilters()" class="clear-filters-btn">
           {{ constants.CLEAR_FILTERS }}
@@ -115,7 +147,7 @@
         </button>
       </div>
     </div>
-
+    
   </div>
   
     <!-- Main Content: Table and Right Panel -->

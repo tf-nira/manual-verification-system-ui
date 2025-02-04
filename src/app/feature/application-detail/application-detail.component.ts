@@ -124,6 +124,7 @@ export class ApplicationDetailComponent implements OnInit {
   service: string = '';
   serviceType: string = '';
   statusComment: string = '';    //to store CVS rejection comment.
+  enrollmentOfficerComment: string =''; ////to store enrollment officer comment.
   approvalComment: string = '';
   applicationId: string = '';
   commentMVSOfficer: string = '';
@@ -137,7 +138,8 @@ export class ApplicationDetailComponent implements OnInit {
   rejectionCategory: string = '';
   rejectionComment: string = '';
   isSectionExpanded: boolean[] = []; // Tracks expanded/collapsed states for each section
-
+  ageGroup: string ='';
+  foundling: string = '';
   // Added: State variables for left and right section collapse
   isLeftCollapsed: boolean = false;
   isRightCollapsed: boolean = true;
@@ -214,14 +216,15 @@ docTitles:any;
       this.applicationStatus = this.selectedRow.status;
       console.log(this.rowData);
     }
-
     this.serviceType = this.rowData.serviceType || '';
     this.applicationId = this.rowData.applicationId || '';
     this.service = this.rowData.service || '';
     this.statusComment = this.rowData.statusComment || '';
+    this.enrollmentOfficerComment = this.rowData.demographics?.enrollmentOfficerComment?.[0]?.value || '';
     this.commentMVSOfficer = this.rowData[ESCALATION_COMMENT_FROM_MVS_OFFICER] || '';
     this.commentMVSSupervisor = this.rowData[ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] || '';
-
+    this.ageGroup = this.rowData.ageGroup || '';
+    this.foundling = this.rowData.foundLink || '';
     this.checkPersonDetails();
     this.setDropdownOptions();
     this.setRejectionCategories();
@@ -237,17 +240,42 @@ docTitles:any;
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
 updateCategoriesAndTitles() {
-  const categories = SERVICE_CATEGORY_MAP[this.service]?.[this.serviceType] || [];
-  this.docCategories = categories.map(key => ({
-    key,
-    title: CATEGORY_MAP[key]
-  }));
+  if(this.ageGroup === 'MINOR'){
+    const categories = SERVICE_CATEGORY_MAP[this.service]?.['Registration of child citizen'] || [];
+    this.docCategories = categories.map(key => ({
+      key,
+      title: CATEGORY_MAP[key]
+    }));
+  }
+  else if(this.foundling === 'Y'){
+    const categories = SERVICE_CATEGORY_MAP[this.service]?.['Registration of foundlings'] || [];
+    this.docCategories = categories.map(key => ({
+      key,
+      title: CATEGORY_MAP[key]
+    }));
+  }
+  else{
+    const categories = SERVICE_CATEGORY_MAP[this.service]?.[this.serviceType] || [];
+    this.docCategories = categories.map(key => ({
+      key,
+      title: CATEGORY_MAP[key]
+    }));
+  }
 }
 
 
 getTitlesForDocument(document: any): string[] {
   const categoryKey = document.category;
-  return SERVICE_TITLE_MAP[this.service]?.[this.serviceType]?.[categoryKey] || [];
+  if(this.ageGroup === 'MINOR'){
+    return SERVICE_TITLE_MAP[this.service]?.['Registration of child citizen']?.[categoryKey] || [];
+  }
+  else if(this.foundling === 'Y'){
+    return SERVICE_TITLE_MAP[this.service]?.['Registration of foundlings']?.[categoryKey] || [];
+  }
+  else{
+    return SERVICE_TITLE_MAP[this.service]?.[this.serviceType]?.[categoryKey] || [];
+  }
+  
 }
 
   convertBase64ToPdfUrl(base64: string): SafeResourceUrl {
