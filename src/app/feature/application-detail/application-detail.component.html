@@ -1640,6 +1640,11 @@
           <div class="details-container">
             <h3>Details for Application ID: {{ this.rowData.applicationId}}</h3>
 
+            <div *ngIf="enrollmentOfficerComment" class="info-item">
+              <div class="detail-label">Enrollment Officer Comment</div>
+              <div class="detail-value">{{ enrollmentOfficerComment }}</div>
+            </div>
+
             <div *ngIf="statusComment" class="info-item">
               <div class="detail-label">CVS rejection reason</div>
               <div class="detail-value">{{ statusComment }}</div>

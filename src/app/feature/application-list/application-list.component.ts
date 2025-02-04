@@ -50,6 +50,9 @@ import {
   API_CONST_ASSIGNED_TO_DISTRICT_OFFICER,
   API_CONST_ASSIGNED_TO_LEGAL_OFFICER,
   API_CONST_INTERVIEW_SCHEDULED,
+  API_CONST_FOUNDLINK,
+  API_CONST_IN,
+  API_CONST_AGE_GROUP
 } from '../../shared/constants';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
@@ -99,6 +102,8 @@ export class ApplicationListComponent implements OnInit {
   searchText: string = '';
   selectedService: string = '';
   selectedServiceType: string = '';
+  foundling?: boolean | null; 
+  dropdownOpen: boolean = false;
   filteredServiceTypes= FILTERED_SERVICE_TYPES; // Holds the filtered service types
   
   selectedApplicationStatus: string = '';
@@ -119,7 +124,8 @@ export class ApplicationListComponent implements OnInit {
   
   servicesWithTypes = SERVICES_WITH_TYPES;
   
-  
+  ageGroups: string[] = ['INFANT', 'MINOR', 'ADULT']; 
+  selectedAgeGroups: string[] = []; 
   applicationStatuses = ['Pending', 'Interview Scheduled'];
 
   constants = {
@@ -167,7 +173,20 @@ export class ApplicationListComponent implements OnInit {
     this.fields = ROLE_FIELDS_MAP[this.role];
     this.fetchApplicationList(localStorage.getItem(API_CONST_USER_ID) || '');
   }
+   // Toggle dropdown visibility
+   toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
 
+  // Toggle selection of options
+  toggleSelection(age: string) {
+    if (this.selectedAgeGroups.includes(age)) {
+      this.selectedAgeGroups = this.selectedAgeGroups.filter(item => item !== age);
+    } else {
+      this.selectedAgeGroups.push(age);
+    }
+    console.log("this.selectedAgeGroups "+this.selectedAgeGroups)
+  }
   fetchApplicationList(userId: string) {
     //filters, sort should come from ui
     const filters = [
@@ -204,9 +223,24 @@ export class ApplicationListComponent implements OnInit {
   }
   onServiceChange(event: Event): void {
     const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedService = selectedValue; 
+    this.selectedServiceType = '';
+    if (selectedValue) {
     const selectedService = this.servicesWithTypes.find(service => service.value === selectedValue);
+    
     this.filteredServiceTypes = selectedService ? selectedService.serviceTypes : [];
+  } else {// Clear service types if no service is selected
+    this.filteredServiceTypes = [];
   }
+  }
+
+  onServiceTypeChange(event: Event): void {
+    if(this.selectedServiceType !== 'BY_BIRTH_SERVICE_TYPE'){
+      this.foundling = null;
+    }
+  }
+
+ 
 
   get totalPages(): number {
     return Math.ceil(this.totalRecords / this.pageSize) || 0;
@@ -281,6 +315,8 @@ export class ApplicationListComponent implements OnInit {
     this.toDate = null;
     this.minToDate = null;
     this.fromDateMax = new Date();
+    this.foundling=null;
+    this.ageGroups=[];
   }
 
   onRowClick(event: MouseEvent, rowData: any) {
@@ -304,7 +340,7 @@ export class ApplicationListComponent implements OnInit {
 
   search() {
     const userId = localStorage.getItem(API_CONST_USER_ID) || '';
-    let filters: { value?: string; fromValue?: string; toValue?: string; columnName: string; type: string }[] = [
+    let filters: { value?: string; values?: string[] ; fromValue?: string; toValue?: string; columnName: string; type: string }[] = [
       {
         value: userId,
         columnName: API_CONST_ASSIGNED_OFFICER_ID,
@@ -314,11 +350,15 @@ export class ApplicationListComponent implements OnInit {
   
     // Helper function to add filters safely
     const addFilter = (
-      value: string | undefined,
+      value: string | string[] | undefined,
       columnName: string,
       type: string
     ) => {
-      if (value?.trim()) {
+      if (Array.isArray(value) && value.length > 0
+        && value.filter(v => v !== null && v !== undefined && v !== '').length > 0) {
+        filters = filters.concat({ values: value, columnName, type });
+      } else if (typeof value === "string" && value.trim()) {
+        // If value is a single string
         filters = filters.concat({ value: value.trim(), columnName, type });
       }
     };
@@ -327,7 +367,11 @@ export class ApplicationListComponent implements OnInit {
     addFilter(this.searchText, API_CONST_REG_ID, API_CONST_CONTAINS);
     addFilter(this.selectedService, API_CONST_SERVICE, API_CONST_EQUALS);
     addFilter(this.selectedServiceType, API_CONST_SERVICE_TYPE, API_CONST_EQUALS);
-    
+    addFilter(this.selectedAgeGroups, API_CONST_AGE_GROUP, API_CONST_IN);
+    if (this.foundling !== null && this.foundling !== undefined) {
+    const foundlingValue = this.foundling ? "Y" : "N";
+    addFilter(foundlingValue, API_CONST_FOUNDLINK, API_CONST_EQUALS);
+    }
     if (this.selectedApplicationStatus == API_CONST_PENDING) {
       if (this.role == MVS_DISTRICT_OFFICER) addFilter(API_CONST_ASSIGNED_TO_DISTRICT_OFFICER, API_CONST_STAGE, API_CONST_EQUALS);
       else if (this.role == MVS_LEGAL_OFFICER) addFilter(API_CONST_ASSIGNED_TO_LEGAL_OFFICER, API_CONST_STAGE, API_CONST_EQUALS);

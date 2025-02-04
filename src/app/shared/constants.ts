@@ -21,7 +21,7 @@ export const ESCALATE: string = 'Escalate';
 export const SCHEDULE_INTERVIEW: string = 'Schedule Interview';
 export const UPLOAD_DCOUMENTS: string = 'Upload Documents';
 export const APPLICANT_NAME: string = 'Applicant Name';
-
+export const BY_BIRTH_SERVICE_TYPE = 'Registration of citizens by birth'
 // roles
 export const MVS_OFFICER: string = 'MVS_OFFICER';
 export const MVS_SUPERVISOR: string = 'MVS_SUPERVISOR';
@@ -49,6 +49,8 @@ export const API_CONST_APPLICATION_ID: string = 'applicationId';
 export const API_CONST_REG_ID = 'regId';
 export const API_CONST_SERVICE: string = 'service';
 export const API_CONST_SERVICE_TYPE: string = 'serviceType';
+export const API_CONST_AGE_GROUP: string = 'ageGroup';
+export const API_CONST_FOUNDLINK: string = 'foundLink';
 export const API_CONST_CREATED_DATE: string = 'crDTimes';
 export const API_CONST_CATEGORY = 'category';
 export const API_CONST_COMMENT = 'comment';
@@ -56,6 +58,7 @@ export const API_CONST_ESCALATION_DATE = 'escDTimes';
 export const API_CONST_ASSIGNED_OFFICER_ID = 'assignedOfficerId';
 export const API_CONST_USER_ID = 'userId';
 export const API_CONST_EQUALS = 'equals';
+export const API_CONST_IN = 'in';
 export const API_CONST_CONTAINS = 'contains';
 export const API_CONST_BETWEEN = 'between';
 export const API_CONST_STATUS = 'status';
@@ -133,17 +136,19 @@ export const CATEGORY_MAP: { [key: string]: string } = {
 export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } } = {
   'New registrations': {
     'Registration of citizens by birth': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
-       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
-        'proofOfAbandonment'],
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
     'Citizenship under the Article 9': ['proofOfCitizenship', 'proofOfBirth',
-      'proofOfOtherSupportingdocuments','proofOfAbandonment', 'proofOfLegalStatutoryDeclaration'],
+      'proofOfOtherSupportingdocuments', 'proofOfLegalStatutoryDeclaration'],
     'Registration of Citizens by Naturalization': ['proofOfCitizenship', 'proofOfBirth',
-       'proofOfOtherSupportingdocumentIssuedbyGovt','proofOfAbandonment'],
+       'proofOfOtherSupportingdocumentIssuedbyGovt'],
     'Registration of Citizens by Registration': ['proofOfCitizenship', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt'],
     'Registration of Dual Citizens': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
-       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments',
-        'proofOfAbandonment']
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
+    'Registration of child citizen': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
+    'Registration of foundlings': ['proofOfAbandonment', 'proofOfAddress', 'proofOfBirth',
+          'proofOfOtherSupportingdocumentIssuedbyGovt']
   },
   'Renewal of card': {
     'Renewal of card': ['proofOfCitizenship', 'proofOfAddress'],
@@ -187,30 +192,23 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfAddress: ['Local Council Letter'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Passport','Voters Card', 'Driving Permit'],
-      proofOfOtherSupportingdocuments:['Baptism Card'],
-      proofOfAbandonment:['Police Report']
+      proofOfOtherSupportingdocuments:['Baptism Card']
     },
     'Citizenship under the Article 9': {
       proofOfCitizenship: ['Previous Passports Details','Naturalization Certificate','Birth Certificates'],
-      proofOfAddress: ['N/A'],
       proofOfBirth:['Birth Certificate'],
-      proofOfOtherSupportingdocumentIssuedbyGovt:['N/A'],
       proofOfOtherSupportingdocuments:['Previous immigration records'],
       proofOfLegalStatutoryDeclaration:['Statutory Declaration']
     },
     'Registration of Citizens by Naturalization': {
       proofOfCitizenship: ['Certificate of Naturalization'],
-      proofOfAddress: ['N/A'],
       proofOfBirth:['Birth Certificate'],
-      proofOfOtherSupportingdocumentIssuedbyGovt:['Passport'],
-      proofOfOtherSupportingdocuments:['N/A']
+      proofOfOtherSupportingdocumentIssuedbyGovt:['Passport']
     },
     'Registration of Citizens by Registration': {
       proofOfCitizenship: ['Certificate of Registration'],
-      proofOfAddress: ['N/A'],
       proofOfBirth:['Birth Certificate'],
-      proofOfOtherSupportingdocumentIssuedbyGovt:['Passport'],
-      proofOfOtherSupportingdocuments:['N/A']
+      proofOfOtherSupportingdocumentIssuedbyGovt:['Passport']
     },
     'Registration of Dual Citizens': {
       proofOfCitizenship: ['Certificate of Dual Citizenship'],
@@ -218,6 +216,19 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Passport/s', 'Voters Card','Driving Permit'],
       proofOfOtherSupportingdocuments:['Baptism Card']
+    },
+    'Registration of child citizen': {
+      proofOfCitizenship: ['National ID of Parents/ Blood Relatives'],
+      proofOfAddress: ['Local Council Letter'],
+      proofOfBirth:['Birth Certificate'],
+      proofOfOtherSupportingdocumentIssuedbyGovt:['Passport'],
+      proofOfOtherSupportingdocuments:['Baptism Card']
+    },
+    'Registration of foundlings': {
+      proofOfAbandonment: ['Police Report'],
+      proofOfAddress: ['Local Council Letter'],
+      proofOfBirth:['Birth Certificate'],
+      proofOfOtherSupportingdocumentIssuedbyGovt:['Care order', 'Probation report','Welfare and family court reports']
     }
   },
   'Renewal of card': {

@@ -73,6 +73,19 @@
   color: #333;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
+.checkbox-container {
+  display: flex;
+  align-items: center; /* Ensures vertical alignment */
+  gap: 8px; /* Adds space between checkbox and label */
+}
+
+.checkbox-input {
+  width: 16px; /* Set proper width */
+  height: 16px; /* Set proper height */
+  margin: 0; /* Reset margin to align properly */
+  cursor: pointer;
+}
+
 
 .search-input:hover {
   border-color: #0056b3;
@@ -491,4 +504,58 @@ th.sortable {
   color: #4b5563; /* Medium gray for values */
   line-height: 1.5; /* Improved readability */
   margin-bottom: 8px;
+}
+.custom-multi-select {
+  position: relative;
+  width: 200px;
+}
+
+.dropdown-toggle {
+  padding: 8px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  background-color: #ffffff;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.dropdown-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.dropdown-options label {
+  display: block;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.dropdown-options input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.foundling-group {
+  /* width: 100%; */
+  /* height: 1.5rem; */
+  padding: 8px;
+  margin-right: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  outline: none;
+  background-color: #ffffff;
+  color: #333;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  
+  
 }
