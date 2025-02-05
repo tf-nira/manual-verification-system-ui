@@ -1640,7 +1640,7 @@
           <div class="details-container">
             <h3>Details for Application ID: {{ this.rowData.applicationId}}</h3>
 
-            <div *ngIf="enrollmentOfficerComment" class="info-item">
+            <div *ngIf="enrollmentOfficerComment && enrollmentOfficerComment.trim()" class="info-item">
               <div class="detail-label">Enrollment Officer Comment</div>
               <div class="detail-value">{{ enrollmentOfficerComment }}</div>
             </div>

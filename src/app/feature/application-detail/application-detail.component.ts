@@ -220,7 +220,16 @@ docTitles:any;
     this.applicationId = this.rowData.applicationId || '';
     this.service = this.rowData.service || '';
     this.statusComment = this.rowData.statusComment || '';
-    this.enrollmentOfficerComment = this.rowData.demographics?.enrollmentOfficerComment?.[0]?.value || '';
+    this.enrollmentOfficerComment = (() => {
+      const rawComment = this.rowData?.demographics?.enrollmentOfficerComment;
+      if (!rawComment) return ''; // Handles null, undefined, or empty cases
+      try {
+        return JSON.parse(rawComment)?.[0]?.value || '';
+      } catch (error) {
+        console.error('Error parsing enrollmentOfficerComment:', error);
+        return '';
+      }
+    })();
     this.commentMVSOfficer = this.rowData[ESCALATION_COMMENT_FROM_MVS_OFFICER] || '';
     this.commentMVSSupervisor = this.rowData[ESCALATION_COMMENT_FROM_MVS_SUPERVISOR] || '';
     this.ageGroup = this.rowData.ageGroup || '';

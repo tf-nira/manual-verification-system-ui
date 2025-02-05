@@ -316,7 +316,7 @@ export class ApplicationListComponent implements OnInit {
     this.minToDate = null;
     this.fromDateMax = new Date();
     this.foundling=null;
-    this.ageGroups=[];
+    this.selectedAgeGroups=[];
   }
 
   onRowClick(event: MouseEvent, rowData: any) {
