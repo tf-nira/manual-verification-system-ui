@@ -151,7 +151,7 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
           'proofOfOtherSupportingdocumentIssuedbyGovt']
   },
   'Renewal of card': {
-    'Renewal of card': ['proofOfCitizenship', 'proofOfAddress'],
+    'Renewal of a card': ['proofOfCitizenship', 'proofOfAddress'],
     'Replacement of a card': ['']
   },
   'Lost/ Replacement of card': {

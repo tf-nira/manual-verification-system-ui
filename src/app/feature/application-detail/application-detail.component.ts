@@ -249,19 +249,21 @@ docTitles:any;
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
 updateCategoriesAndTitles() {
-  if(this.ageGroup === 'MINOR'){
-    const categories = SERVICE_CATEGORY_MAP[this.service]?.['Registration of child citizen'] || [];
-    this.docCategories = categories.map(key => ({
-      key,
-      title: CATEGORY_MAP[key]
-    }));
-  }
-  else if(this.foundling === 'Y'){
+  if(this.foundling === 'Y'){
     const categories = SERVICE_CATEGORY_MAP[this.service]?.['Registration of foundlings'] || [];
     this.docCategories = categories.map(key => ({
       key,
       title: CATEGORY_MAP[key]
     }));
+    return;
+  }
+  else if(this.ageGroup === 'MINOR'){
+    const categories = SERVICE_CATEGORY_MAP[this.service]?.['Registration of child citizen'] || [];
+    this.docCategories = categories.map(key => ({
+      key,
+      title: CATEGORY_MAP[key]
+    }));
+    return;
   }
   else{
     const categories = SERVICE_CATEGORY_MAP[this.service]?.[this.serviceType] || [];
