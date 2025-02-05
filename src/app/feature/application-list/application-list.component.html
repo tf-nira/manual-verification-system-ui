@@ -65,8 +65,9 @@
         </select>
       </div>
       <!-- Age Group Multi-Select Dropdown -->
-      <div class="input-group" *ngIf="selectedServiceType !== 'Registration of Citizens by Registration'
-            && selectedServiceType !== 'Registration of Citizens by Naturalization'">
+      <div class="input-group" *ngIf="selectedServiceType === 'Registration of citizens by birth'
+            || selectedServiceType === 'Citizenship under the Article 9' 
+            || selectedServiceType === 'Registration of Dual Citizens' " > 
         <label for="ageGroupDropdown">Select Age Group</label>
         <div class="custom-multi-select">
           <!-- Dropdown Trigger -->
