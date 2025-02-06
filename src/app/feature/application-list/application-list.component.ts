@@ -57,6 +57,7 @@ import {
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
 import { FILTERED_SERVICE_TYPES, SERVICES_WITH_TYPES } from '../../shared/constants';
+
 export const MY_DATE_FORMATS = {
   parse: {
     dateInput: 'DD/MM/YYYY',  
@@ -94,7 +95,7 @@ export class ApplicationListComponent implements OnInit {
 
   // Sorting state
   sortColumn: string = '';
-  sortDirection: 'asc' | 'desc' = 'asc';
+  sortDirection: 'asc' | 'desc' = 'desc';
 
   role: string = '';
   fields: string[] = [];
@@ -408,6 +409,7 @@ export class ApplicationListComponent implements OnInit {
       (appResponse: any) => {
         if (appResponse && appResponse.response && appResponse.response.data) {
           this.data = appResponse.response.data;
+          this.totalRecords = appResponse.response.totalRecord || 0;
         } else {
           this.data = [];
         }

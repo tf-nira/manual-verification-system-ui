@@ -280,6 +280,20 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     { value: 'Other',  default: false}
   ];
 
+  export const RENEWAL_REJECTION_CATEGORIES = [
+    { value: 'Documents provided have inconsistent information', default: false},
+    { value: 'Insufficient supporting documents ', default: false},
+    { value: 'Documents not in required format (i.e SD exists but not registered)', default: false},
+    { value: 'Poorly scanned documents to enable decision', default: false},
+    { value: 'Fraudulent/Altered /doctored documents', default: false},
+    { value: 'No payment receipt attached', default: false},
+    { value: 'Payments used on previous unrelated application', default: false},
+    { value: 'Payment lower than statutory fees', default: false},
+    { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false},
+    { value: 'An existing record is stop listed', default: false},
+    { value: 'Other ( Free Text)', default: false}
+  ];
+
   export const COP_REJECTION_CATEGORIES = [
     { value: 'Documents provided have inconsistent information', default: false },
     { value: 'Insufficient supporting documents', default: false },
