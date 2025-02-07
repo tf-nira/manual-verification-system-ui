@@ -141,7 +141,7 @@ export class ApplicationDetailComponent implements OnInit {
   ageGroup: string ='';
   foundling: string = '';
   // Added: State variables for left and right section collapse
-  isLeftCollapsed: boolean = false;
+  isLeftCollapsed: boolean = true;
   isRightCollapsed: boolean = true;
   isEditable: boolean = false;
   selectedRow: any = {};
