@@ -233,8 +233,8 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
   },
   'Renewal of card': {
     'Renewal of a card': {
-      proofOfAddress: ['Physical Application Form'],
-      proofOfCitizenship:['Local Council Letter']
+      proofOfAddress: ['Local Council Letter'],
+      proofOfCitizenship:['National ID of Parents/ Blood Relatives']
     },
     'Replacement of a card': {
     }
