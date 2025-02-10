@@ -400,8 +400,7 @@ export const RENEWAL_ESCALATION_CATEGORIES = [
       value: 'Lost/ Replacement of card',
       label: 'Lost/ Replacement of card',
       serviceTypes: [
-        { value: 'Lost of Card', label: 'Lost of Card' },
-        { value: 'Damaged of Card', label: 'Damaged of Card' }
+        { value: 'Lost/ Replacement of card', label: 'Lost/ Replacement of card' }
       ]
     },
     {
