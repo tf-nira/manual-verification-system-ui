@@ -308,6 +308,31 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     { value: 'Other',  default: false}
   ];
 
+  export const GETFIRSTID_REJECTION_CATEGORIES = [
+    { value: 'Documents provided have inconsistent information', default: false },
+    { value: 'Insufficient supporting documents', default: false },
+    { value: 'Documents not in required format (i.e SD exists but not registered)', default: false },
+    { value: 'Poorly scanned documents to enable decision', default: false },
+    { value: 'Fraudulent/Altered /doctored documents ', default: false },
+    { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false },
+    { value: 'An existing record is stop listed', default: false },
+    { value: 'Other',  default: false}
+  ];
+
+  export const LR_REJECTION_CATEGORIES = [
+    { value: 'Documents provided have inconsistent information', default: false },
+    { value: 'Insufficient supporting documents', default: false },
+    { value: 'Documents not in required format (i.e SD exists but not registered)', default: false },
+    { value: 'Poorly scanned documents to enable decision', default: false },
+    { value: 'Fraudulent/Altered /doctored documents ', default: false },
+    { value: 'No payment receipt attached', default: false },
+    { value: 'Payments used on previous unrelated application', default: false },
+    { value: 'Payment lower than statutory fees', default: false },
+    { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false },
+    { value: 'An existing record is stop listed', default: false },
+    { value: 'Other',  default: false}
+  ];
+
   
   export const NEW_ESCALATION_CATEGORIES = [
     { value: 'Suspected Non Citizen',  default: false},
@@ -333,6 +358,30 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     { value: 'Insufficient Documentation',  default: false}
 ];
 
+export const NEW_ESCALATION_CATEGORIES_FOR_OFFICER = [
+  { value: 'Suspected Non Citizen',  default: false},
+  { value: 'Supporting documents look suspicious/forged/Altered',  default: false},
+  { value: 'Inconsistent information on tribe of mother',  default: false},
+  { value: 'Inconsistent information on clan of mother',  default: false},
+  { value: 'Inconsistent information on tribe of father',  default: false},
+  { value: 'Inconsistent information on clan of father',  default: false},
+  { value: 'Inconsistent information on place of origin-Father',  default: false},
+  { value: 'Inconsistent information on place of origin-Mother',  default: false},
+  { value: 'Inconsistent information on place of origin-Blood Relative',  default: false},
+  { value: 'Wrong citizenship category/Type',  default: false},
+  { value: 'Applicant’s citizenship is stoplisted/blocked',  default: false},
+  { value: 'Father/Mother is too young',  default: false},
+  { value: 'Grandparents are too young',  default: false},
+  { value: 'Different DOB/Age of mother on mother’s individual application',  default: false},
+  { value: 'Different DOB/Age of father on father’s individual application',  default: false},
+  { value: 'Different DOB/Age of blood relative on blood relative individual application',  default: false},
+  { value: 'Attempting double registration',  default: false},
+  { value: 'NIN has already been used to identify more than 20 people',  default: false},
+  { value: 'Indigenous community not listed under Schedule 3',  default: false},
+  { value: 'Missing Documentation',  default: false},
+  { value: 'Insufficient Documentation',  default: false}
+];
+
 
 export const RENEWAL_ESCALATION_CATEGORIES = [
   { value: 'Suspected Non Citizen',  default: false},
@@ -343,7 +392,46 @@ export const RENEWAL_ESCALATION_CATEGORIES = [
   { value: 'Mother is too young',  default: false},
   { value: 'Additional Renewal application',  default: false},
   { value: 'Names are inconsistent with original application',  default: false},
+  { value: 'Insufficient Documentation',  default: false},
+  { value: 'Missing Documentation',  default: false}
+];
+
+export const RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER = [
+  { value: 'Suspected Non Citizen',  default: false},
+  { value: 'Supporting documents look suspicious/forged/Altered',  default: false},
+  { value: 'Wrong citizenship category/Type',  default: false},
+  { value: 'Applicant’s citizenship is stoplisted/blocked',  default: false},
+  { value: 'Father is too young',  default: false},
+  { value: 'Mother is too young',  default: false},
+  { value: 'Additional Renewal application',  default: false},
+  { value: 'Names are inconsistent with original application',  default: false},
   { value: 'Insufficient Documentation',  default: false}
+];
+
+export const GETFIRSTID_ESCALATION_CATEGORIES = [
+  { value: 'Suspected Non Citizen',  default: false},
+  { value: 'Supporting documents look suspicious/forged/Altered',  default: false},
+  { value: 'Unsatisfactory Evidence of intended changes',  default: false},
+  { value: 'Unauthorized Second Register Entry',  default: false},
+  { value: 'Submission of falsified documents',  default: false},
+  { value: 'Insufficient supporting Documents',  default: false}
+];
+export const LR_ESCALATION_CATEGORIES = [
+  { value: 'Suspected Non Citizen',  default: false},
+  { value: 'Supporting documents look suspicious/forged/Altered',  default: false},
+  { value: 'Unsatisfactory Evidence of intended changes',  default: false},
+  { value: 'Unauthorized Second Register Entry',  default: false},
+  { value: 'Submission of falsified documents',  default: false},
+  { value: 'Insufficient supporting Documents',  default: false}
+];
+
+export const COP_ESCALATION_CATEGORIES = [
+  { value: 'Suspected Non Citizen',  default: false},
+  { value: 'Supporting documents look suspicious/forged/Altered',  default: false},
+  { value: 'Unsatisfactory Evidence of intended changes',  default: false},
+  { value: 'Unauthorized Second Register Entry',  default: false},
+  { value: 'Submission of falsified documents',  default: false},
+  { value: 'Insufficient supporting Documents',  default: false}
 ];
 
   export const FILTERED_SERVICE_TYPES: { value: string; label: string }[] = [
