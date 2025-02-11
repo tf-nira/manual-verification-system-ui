@@ -115,7 +115,7 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'father-details-section', label: 'Fathers Details' },
         { id: 'mother-details-section', label: 'Mother Details' },
         { id: 'intoducer-details-section', label: 'Blood Relatives/Introducer Details' },
-        { id: 'childrent-details-section', label: 'Particulars of Applicants Children' },
+        { id: 'children-details-section', label: 'Particulars of Applicants Children' },
         { id: 'declarant-details-section', label: 'Declarants Details' }
       ],
     },];
@@ -512,13 +512,13 @@ getTitlesForDocument(document: any): string[] {
         else this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
         break;
         case 'GetFirst ID':
-          this.rejectionCategories = GETFIRSTID_ESCALATION_CATEGORIES;
+          this.escalationCategories = GETFIRSTID_ESCALATION_CATEGORIES;
           break;
         case 'Lost/ Replacement of card':
-          this.rejectionCategories = LR_ESCALATION_CATEGORIES;
+          this.escalationCategories = LR_ESCALATION_CATEGORIES;
           break;
         case 'Change of Particulars':
-          this.rejectionCategories = COP_ESCALATION_CATEGORIES;
+          this.escalationCategories = COP_ESCALATION_CATEGORIES;
           break;
     }
   }
@@ -1085,7 +1085,16 @@ getTitlesForDocument(document: any): string[] {
     }
     return '';
   }
-  
+  hasSectionDataForNavigation(sectionId: string): boolean {
+    const sectionElement = document.getElementById(sectionId);
+    return !!(sectionElement && sectionElement.offsetHeight > 0);
+  }
+  getVisibleSections() {
+    return this.sections.filter(section =>
+      section.subSections.some(sub => this.hasSectionDataForNavigation(sub.id))
+    );
+  }
+    
 
 }
 

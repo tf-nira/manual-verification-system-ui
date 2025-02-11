@@ -5,9 +5,10 @@ import { ROLE_FIELDS_MAP } from '../../shared/role-fields';
 import { HeaderComponent } from '../../shared/components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MAT_DATE_LOCALE, MAT_DATE_FORMATS  } from '@angular/material/core';
+import { MatNativeDateModule, MAT_DATE_LOCALE, MAT_DATE_FORMATS, DateAdapter  } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MY_DATE_FORMATS } from '../../shared/date-format';
 import {
   APPLICATION_ID,
   APPLICATION_STATUS,
@@ -57,23 +58,13 @@ import {
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
 import { FILTERED_SERVICE_TYPES, SERVICES_WITH_TYPES } from '../../shared/constants';
-
-export const MY_DATE_FORMATS = {
-  parse: {
-    dateInput: 'DD/MM/YYYY',  
-  },
-  display: {
-    dateInput: 'DD/MM/YYYY', 
-    monthYearLabel: 'MMM YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'MMMM YYYY',
-  }
-};
+import { CustomDateAdapter } from '../../shared/custom-date-adapter';
 
 @Component({
   selector: 'app-application-list',
   standalone: true,
   providers: [DataStorageService, ConfigService,
+    { provide: DateAdapter, useClass: CustomDateAdapter }, 
     { provide: MAT_DATE_LOCALE, useValue: 'en-GB' },  
     { provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS }  
   ],
@@ -172,10 +163,53 @@ export class ApplicationListComponent implements OnInit {
     this.temp = this.currentPage + 1;
     this.role = history.state.role;
     this.fields = ROLE_FIELDS_MAP[this.role];
-    this.fetchApplicationList(localStorage.getItem(API_CONST_USER_ID) || '');
+    // Checking if filters are saved in localStorage
+    const savedFilters = localStorage.getItem('applicationListFilters');
+    if (savedFilters) {
+      const filters = JSON.parse(savedFilters);
+
+      // Apply filters only if they have valid values
+      if (filters.searchText?.trim()) {
+        this.searchText = filters.searchText;
+      }
+      if (filters.selectedService) {
+        this.selectedService = filters.selectedService;
+      }
+      if (filters.selectedServiceType) {
+        this.selectedServiceType = filters.selectedServiceType;
+      }
+      if (filters.selectedApplicationStatus) {
+        this.selectedApplicationStatus = filters.selectedApplicationStatus;
+      }
+      if (filters.fromDate) {
+        this.fromDate = new Date(filters.fromDate);
+      }
+      if (filters.toDate) {
+        this.toDate = new Date(filters.toDate);
+      }
+      if (filters.foundling !== null && filters.foundling !== undefined) {
+        this.foundling = filters.foundling;
+      }
+      if (Array.isArray(filters.selectedAgeGroups) && filters.selectedAgeGroups.length > 0) {
+        this.selectedAgeGroups = filters.selectedAgeGroups;
+      }
+      if (typeof filters.currentPage === 'number' && filters.currentPage >= 0) {
+        this.currentPage = filters.currentPage;
+      }
+      if (filters.sortColumn) {
+        this.sortColumn = filters.sortColumn;
+      }
+      if (filters.sortDirection) {
+        this.sortDirection = filters.sortDirection;
+      }
+      this.search();
+      localStorage.removeItem('applicationListFilters');
+    } else {
+      this.fetchApplicationList(localStorage.getItem(API_CONST_USER_ID) || '');
+    }
   }
-   // Toggle dropdown visibility
-   toggleDropdown() {
+  // Toggle dropdown visibility
+  toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
 
@@ -323,6 +357,26 @@ export class ApplicationListComponent implements OnInit {
   onRowClick(event: MouseEvent, rowData: any) {
     event.stopPropagation();
 
+    //saving the current filter state.
+    const filterState = {
+      searchText: this.searchText,
+      selectedService: this.selectedService,
+      selectedServiceType: this.selectedServiceType,
+      selectedApplicationStatus: this.selectedApplicationStatus,
+      fromDate: this.fromDate,
+      toDate: this.toDate,
+      foundling: this.foundling,
+      selectedAgeGroups: this.selectedAgeGroups,
+      currentPage: this.currentPage,
+      sortColumn: this.sortColumn,
+      sortDirection: this.sortDirection
+    };
+
+    //removing null, empty values from filter
+    const cleanedFilterState = this.cleanFilterState(filterState);
+    localStorage.setItem('applicationListFilters', JSON.stringify(cleanedFilterState));
+
+
     // get application details api
     const applicationId = rowData[this.constants.API_CONST_APPLICATION_ID];
     this.dataService.getApplicationDetails(applicationId).subscribe(
@@ -339,6 +393,21 @@ export class ApplicationListComponent implements OnInit {
     );
   }
 
+  cleanFilterState(filterState: any) {
+    return Object.keys(filterState).reduce((acc, key) => {
+      const value = filterState[key];
+      if (
+        value !== null &&
+        value !== undefined &&
+        (typeof value !== 'string' || value.trim() !== '') &&
+        (!Array.isArray(value) || value.length > 0)
+      ) {
+        acc[key] = value;
+      }
+      return acc;
+    }, {} as any);
+  }
+  
   search() {
     const userId = localStorage.getItem(API_CONST_USER_ID) || '';
     let filters: { value?: string; values?: string[] ; fromValue?: string; toValue?: string; columnName: string; type: string }[] = [

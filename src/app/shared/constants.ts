@@ -91,7 +91,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     // proofOfReplacement: 'Proof of Replacement',
     proofOfBirth: 'Proof of Event of Birth',
     proofOfOtherSupportingdocumentIssuedbyGovt: 'Other Supporting Documents Issued by Government',
-    proofOfOtherSupportingdocuments: 'Other Supporting Documents',
+    proofOfOtherSupportingDocuments: 'Other Supporting Documents',
     proofOfRegistration: 'Proof of Registration',
     proofOfAdoption: 'Proof of Adoption',
     // proofOfChangeOfParticulars: 'Proof of Change of Particulars',
