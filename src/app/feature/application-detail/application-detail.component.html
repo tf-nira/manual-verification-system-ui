@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="navigation-content" *ngIf="!isLeftCollapsed">
-        <div *ngFor="let section of sections" class="part">
+        <!-- <div *ngFor="let section of sections" class="part">
           <div class="part-header" (click)="toggleRightSection(section.id)">
             <span>{{ section.label }}</span>
           </div>
@@ -43,7 +43,22 @@
               {{ subSection.label }}
             </li>
           </ul>
+        </div> -->
+
+        <div class="navigation-content" *ngIf="!isLeftCollapsed">
+          <div *ngFor="let section of getVisibleSections()">
+            <h3>{{ section.label }}</h3>
+            <ul>
+              <ng-container *ngFor="let subSection of section.subSections">
+                <li *ngIf="hasSectionDataForNavigation(subSection.id)" (click)="scrollToSection(subSection.id)">
+                  {{ subSection.label }}
+                </li>
+              </ng-container>
+            </ul>
+          </div>
         </div>
+        
+
       </div>
     </div>
 
