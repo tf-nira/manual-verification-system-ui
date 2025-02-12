@@ -107,7 +107,6 @@
 }
 
 .date-filter input {
-  padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
@@ -558,4 +557,34 @@ th.sortable {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
   
   
+}
+/* Wrapper to control the overall size */
+.date-filter-wrapper {
+  transform: scale(0.75);  /* Reduce the overall size */
+  transform-origin: top left;  /* Keep alignment to the top left */
+  margin: 0;  /* Remove any extra spacing */
+  padding: 0; /* Remove padding */
+}
+
+/* Optional: Adjust spacing inside date pickers */
+.date-filter .input-group {
+  margin: 0;
+  padding: 0;
+  gap: 4px; /* Control spacing between label and input */
+}
+
+.date-filter label {
+  font-size: 16px;  /* Reduce label size */
+  margin-bottom: 2px;
+}
+
+.small-datepicker {
+  width: 160px;  /* Adjust width if needed */
+  height: 32px;  /* Adjust height */
+  font-size: 12px;
+}
+
+.small-datepicker input {
+  height: 28px;      /* Reduce input height */
+  font-size: 16px;   /* Adjust font size */
 }
