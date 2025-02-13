@@ -73,7 +73,7 @@ import { CustomDateAdapter } from '../../shared/custom-date-adapter';
     MatInputModule   
   ],
   templateUrl: './application-list.component.html',
-  styleUrl: './application-list.component.css',
+  styleUrl: './application-list.component.css'
 })
 export class ApplicationListComponent implements OnInit {
   //pagination

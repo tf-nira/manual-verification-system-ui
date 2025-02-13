@@ -99,6 +99,7 @@
     <div class="search-box">
       <div class="search-and-filters" *ngIf="!isFiltersCollapsed">
         <!-- Date Range Filter -->
+        <div class="date-filter-wrapper">
         <div class="date-filter">
           <div class="input-group">
             <label for="fromDate">{{ constants.FROM_DATE }}</label>
@@ -133,7 +134,7 @@
             </mat-form-field>
           </div>
         </div>
-        
+        </div>
       </div>
       
       <div class="seach-and-filter-buttons">
