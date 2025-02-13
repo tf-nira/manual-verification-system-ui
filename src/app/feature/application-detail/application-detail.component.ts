@@ -83,6 +83,29 @@ export class ApplicationDetailComponent implements OnInit {
     fileName: '',
     file: null as File | null // Allow both File and null
   };
+  sectionsCop = [
+    {
+      id: 'copServices',
+      label: 'COP Services',
+      open: true,
+      subSections: [
+        { id: 'addingName', label: 'Adding a Name' },
+        { id: 'removingName', label: 'Removing a Name' },
+        { id: 'changeOrderOfNames', label: 'Change Order of Names' },
+        { id: 'completeChangeofName', label: 'Complete Change of Name' },
+        { id: 'changeOfDateOfBirth', label: 'Change of date of birth' },
+        { id: 'changeInPlaceOfResidence', label: 'Change in place of Residence' },
+        { id: 'changeInPlaceOfBirth', label: 'Change in place of Birth' },
+        { id: 'changeInPlaceOfOrigin', label: 'Change in place of Origin' },
+        { id: 'changeInCitizenshipType', label: 'Change in Citizenship Type' },
+        { id: 'addSpouse', label: 'Adding a Spouse' },
+        { id: 'removeSpouse', label: 'Removing a Spouse' },
+        { id: 'changeDetailsOfFather', label: 'Change the Details of Father' },
+        { id: 'changeDetailsOfMother', label: 'Change the Details of Mother' },
+        { id: 'correctionOfErrorRegardingNin', label: 'Correction of error regarding NIN' },
+      ]
+    }
+  ];
   sections = [
     {
       id: 'partA',
@@ -370,17 +393,35 @@ getTitlesForDocument(document: any): string[] {
       'Clan'
     ];
     const allowedFieldsLowerCase = allowedFields.map((field) => field.toLowerCase());
-    const roles = ['father', 'mother', 'guardian']; // Define roles to check
+    let roles;
+    if(this.service === 'Change of Particulars') roles = ['NIN'];
+    else roles = ['father', 'mother', 'guardian'];
     console.log(this.rowData.demographics)
     this.personDetails = roles
       .map((role) => {
-        const ninKey = role === 'guardian' ? `${role}NIN_AIN` : `${role}NIN`;
+        let ninKey;
+        if(this.service === 'Change of Particulars') ninKey = role;
+        else ninKey = role === 'guardian' ? `${role}NIN_AIN` : `${role}NIN`;
         console.log("for rolw:" + role)
         console.log("checking" + this.rowData.demographics[ninKey])
         if (this.rowData.demographics[ninKey]) {
           console.log(this.rowData.demographics[ninKey] + "exist")
           // If NIN exists for the person, collect all details related to the role
-          const personData = Object.keys(this.rowData.demographics)
+          let personData;
+          if (this.service === 'Change of Particulars') {
+            personData = Object.keys(this.rowData.demographics).reduce(
+              (acc: { [key: string]: any }, key) => {
+                // Check if the field (case-insensitive) is in the allowed list
+                if (allowedFieldsLowerCase.includes(key.toLowerCase())) {
+                  acc[key] = this.rowData.demographics[key]; // Add key-value pair to the accumulator
+                }
+                return acc;
+              },
+              {}
+            );
+          }
+          else {
+            personData = Object.keys(this.rowData.demographics)
             .filter((key) => key.startsWith(role)) // Match keys starting with the role (e.g., father)
             .reduce((acc: { [key: string]: any }, key) => {
               const field = key.replace(role, '');
@@ -388,8 +429,9 @@ getTitlesForDocument(document: any): string[] {
               acc[key] = this.rowData.demographics[key]; // Add key-value pair to the accumulator
               }
               return acc;
-            }, {}); // Initialize acc as an empty object
-             // Sort personData according to allowedFields order
+            }, {});
+          }
+          
         const sortedPersonData = Object.keys(personData)
         .sort((a, b) => {
           const fieldA = a.replace(role, '').toLowerCase();
@@ -1030,13 +1072,16 @@ getTitlesForDocument(document: any): string[] {
 
   handleRecordsClick(): void {
     this.setActiveTab('records');
-    const roles = ['guardian', 'father', 'mother'];
+    let roles;
+    if(this.service === 'Change of Particulars') roles = ['NIN'];
+    else roles = ['father', 'mother', 'guardian'];
+
     console.log("persondetails   "+JSON.stringify(this.personDetails));
     roles.forEach(role => {
       const person = this.personDetails.find(person => person.role === role);
       if (person) {
         console.log("person    "+JSON.stringify(person));
-        const demographicData = person.details['guardianNIN_AIN'] || person.details[person.role + 'NIN'];
+        const demographicData = person.details['guardianNIN_AIN'] || person.details[person.role + 'NIN'] || person.details['NIN'];
         console.log("demographic  "+ demographicData)
         if (!this.cachedDemographicsData) {
           this.fetchDemographicData(demographicData);
@@ -1094,7 +1139,26 @@ getTitlesForDocument(document: any): string[] {
       section.subSections.some(sub => this.hasSectionDataForNavigation(sub.id))
     );
   }
-    
+  getVisibleSectionsCop() {
+    // return this.sectionsCop.filter(section => 
+    //   section.subSections.some(sub => 
+    //     this.rowData.demographics[sub.id] === 'Y'
+    //   )
+    // );
+    return this.sectionsCop
+        .map(section => {
+            // Filter subsections based on the Y value in demographics
+            const visibleSubSections = section.subSections.filter(subSection =>
+                this.rowData.demographics[subSection.id] === 'Y'
+            );
+
+            // Return the section only if it has visible subsections
+            return visibleSubSections.length > 0
+                ? { ...section, subSections: visibleSubSections }
+                : null;
+        })
+        .filter(section => section !== null);
+  }
 
 }
 

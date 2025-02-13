@@ -33,33 +33,31 @@
           <div class="detail-value">{{ formattedDate }}</div>
         </div>
       </div>
-      <div class="navigation-content" *ngIf="!isLeftCollapsed">
-        <!-- <div *ngFor="let section of sections" class="part">
-          <div class="part-header" (click)="toggleRightSection(section.id)">
-            <span>{{ section.label }}</span>
-          </div>
+
+      <div class="navigation-content" *ngIf="!isLeftCollapsed && service ===  'Change of Particulars'">
+        <div *ngFor="let section of getVisibleSectionsCop()" class="part">  
+          <h3>{{ section.label }}</h3>
           <ul *ngIf="section.open">
-            <li *ngFor="let subSection of section.subSections" (click)="scrollToSection(subSection.id)">
+            <li *ngFor="let subSection of section.subSections">
               {{ subSection.label }}
             </li>
           </ul>
-        </div> -->
-
-        <div class="navigation-content" *ngIf="!isLeftCollapsed">
-          <div *ngFor="let section of getVisibleSections()">
-            <h3>{{ section.label }}</h3>
-            <ul>
-              <ng-container *ngFor="let subSection of section.subSections">
-                <li *ngIf="hasSectionDataForNavigation(subSection.id)" (click)="scrollToSection(subSection.id)">
-                  {{ subSection.label }}
-                </li>
-              </ng-container>
-            </ul>
-          </div>
         </div>
-        
-
       </div>
+
+      <div class="navigation-content" *ngIf="!isLeftCollapsed && service !== 'Change of Particulars'">
+        <div *ngFor="let section of getVisibleSections()">
+          <h3>{{ section.label }}</h3>
+          <ul>
+            <ng-container *ngFor="let subSection of section.subSections">
+              <li *ngIf="hasSectionDataForNavigation(subSection.id)" (click)="scrollToSection(subSection.id)">
+                {{ subSection.label }}
+              </li>
+            </ng-container>
+          </ul>
+        </div>
+      </div>
+      
     </div>
 
 
@@ -1637,7 +1635,7 @@
             <i class="icon-history"></i> 
             History
           </button>
-          <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'By Birth /Descent'"
+          <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'By Birth /Descent' || service === 'Change of Particulars'"
             class="tab-button" [class.active]="activeTab === 'records'" (click)="handleRecordsClick()">
             <img src="assets/images/records_section_icon.png" alt="Back" class="icon" />
             <i class="icon-records"></i> 
