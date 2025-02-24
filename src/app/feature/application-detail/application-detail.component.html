@@ -311,7 +311,7 @@
               }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantForeignResidenceAddress">
+          <div class="field-container" *ngIf="hasValidField(parseJson(rowData?.demographics?.applicantForeignResidenceAddress))">
             <label>Applicant Foreign Residence Address</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantForeignResidenceAddress)[0]?.value
               }}</div>
@@ -346,7 +346,7 @@
               }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceStreet">
+          <div class="field-container" *ngIf="hasValidField(parseJson(rowData?.demographics?.applicantPlaceOfResidenceStreet))">
             <label>Applicant Place of Residence Street</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfResidenceStreet)[0]?.value
               }}</div>
@@ -357,13 +357,13 @@
             <div class="field-value">{{rowData?.demographics?.applicantPlaceOfResidenceYearsLived }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceDistrictOfPrevRes">
+          <div class="field-container" *ngIf="hasValidField(parseJson(rowData?.demographics?.applicantPlaceOfResidenceDistrictOfPrevRes))">
             <label>District of Previous Residence</label>
             <div class="field-value">{{
               parseJson(rowData?.demographics?.applicantPlaceOfResidenceDistrictOfPrevRes)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidencePostalAddress">
+          <div class="field-container" *ngIf="hasValidField(parseJson(rowData?.demographics?.applicantPlaceOfResidencePostalAddress))">
             <label>Applicant Place of Residence Postal Address</label>
             <div class="field-value">{{
               parseJson(rowData?.demographics?.applicantPlaceOfResidencePostalAddress)[0]?.value }}</div>

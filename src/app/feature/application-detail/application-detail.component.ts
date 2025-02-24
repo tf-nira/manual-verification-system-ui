@@ -1034,13 +1034,41 @@ getTitlesForDocument(document: any): string[] {
       .replace(/([A-Z])/g, ' $1') // Add space before uppercase letters
       .replace(/^./, str => str.toUpperCase()); // Capitalize the first letter
   }
+
   hasSectionData(keys: string[]): boolean {
     if (!this.rowData?.demographics) {
       return false;
     }
-    return keys.some(key => this.rowData.demographics[key]);
+    return keys.some(key => {
+      const value = this.rowData.demographics[key];
+      if (Array.isArray(value)) {
+        return value.some(item => {
+          const isItemNonEmpty = item && typeof item.value === 'string' && item.value.trim().length > 0;
+          return isItemNonEmpty;
+        });
+      }
+  
+      if (typeof value === 'string') {
+        try {
+          const parsed = JSON.parse(value);
+  
+          if (Array.isArray(parsed)) {
+            return parsed.some(item => 
+              item && typeof item.value === 'string' && item.value.trim().length > 0
+            );
+          }
+        } catch (err) {
+          console.log('DEBUG: Failed to parse JSON, fallback to string check');
+        }
+        
+        return value.trim().length > 0;
+      }
+  
+      const isValueNonNull = value != null;
+      return isValueNonNull;
+    });
   }
-
+  
   extractValue(data: any): string | null {
     if (!data) {
       return null; // Skip null or undefined values
@@ -1159,6 +1187,8 @@ getTitlesForDocument(document: any): string[] {
         })
         .filter(section => section !== null);
   }
-
+  hasValidField(field: any): boolean {
+    return field && Array.isArray(field) && field.length > 0 && field[0]?.value?.trim();
+  }
 }
 
