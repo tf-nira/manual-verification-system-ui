@@ -76,6 +76,8 @@ export class ApplicationDetailComponent implements OnInit {
     'applicantPlaceOfOriginIndigenousCommunityTribe',
     'applicantPlaceOfOriginClan'
   ];
+  relativeDocumentListByRole: Record<string, any[]> = {}; 
+  demographicDataByRole: Record<string, Record<string, any>> = {};
   relativeDocumentList: any[] = [];
   currentDocument = {
     category: '',
@@ -212,7 +214,7 @@ export class ApplicationDetailComponent implements OnInit {
 docTitles:any;
   pdfUrl: any;
   formattedDate: string | ' ' = ' ';
-  cachedDemographicsData: any;
+  cachedDemographicsData: Record<string, any> = {}; 
 
   constructor(private router: Router, private dataService: DataStorageService,
     private sanitizer: DomSanitizer, private snackBar: MatSnackBar
@@ -220,7 +222,6 @@ docTitles:any;
 
   ngOnInit() {
     const state = history.state;
-    console.log(state.rowData)
     //fetch the created date and save it in to display in the ui
     const date = new Date(state.rowData.crDTimes);
     this.formattedDate = new Intl.DateTimeFormat('en-GB', {
@@ -238,7 +239,6 @@ docTitles:any;
 
     if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER) {
       this.applicationStatus = this.selectedRow.status;
-      console.log(this.rowData);
     }
     this.serviceType = this.rowData.serviceType || '';
     this.applicationId = this.rowData.applicationId || '';
@@ -322,10 +322,8 @@ getTitlesForDocument(document: any): string[] {
     }
     const byteArray = new Uint8Array(byteNumbers);
 
-    // Create a Blob from the byte array
     const blob = new Blob([byteArray], { type: 'application/pdf' });
 
-    // Create a safe object URL for the Blob
     this.pdfUrl = URL.createObjectURL(blob);
 
     // Use Angular's DomSanitizer to sanitize the URL
@@ -402,8 +400,6 @@ getTitlesForDocument(document: any): string[] {
         let ninKey;
         if(this.service === 'Change of Particulars') ninKey = role;
         else ninKey = role === 'guardian' ? `${role}NIN_AIN` : `${role}NIN`;
-        console.log("for rolw:" + role)
-        console.log("checking" + this.rowData.demographics[ninKey])
         if (this.rowData.demographics[ninKey]) {
           console.log(this.rowData.demographics[ninKey] + "exist")
           // If NIN exists for the person, collect all details related to the role
@@ -623,7 +619,6 @@ getTitlesForDocument(document: any): string[] {
     // Escalate logic 
     this.showEscalateModal = false;
     const comment = this.escalationComment.trim();
-    console.log(this.selectedOfficerLevel)
     this.changeApplicationStatus(API_CONST_ESCALATE, comment, this.escalationCategory, this.selectedOfficerLevel);
     this.closeEscalateModal();
   }
@@ -993,20 +988,28 @@ getTitlesForDocument(document: any): string[] {
       return null;
     }
   }
-  fetchDemographicData(registrationId: string) {
-    console.log("showDemographicData" + registrationId);
+  fetchDemographicData(registrationId: string, role: string, ) {
     this.isLoading = true;
     this.dataService.fetchDemographicData(registrationId).subscribe(
       (response: any) => {
-        console.log("response:: malay :: " + JSON.stringify(response))
         if (response?.response?.status === 'ACTIVATED') {
-          this.cachedDemographicsData = response; // Cache the response
-          this.demographicData = response.response.identity; // Pass identity data to child
-          this.relativeDocumentList = response.response.documents;
+          if (!this.cachedDemographicsData) {
+            this.cachedDemographicsData = {}; 
+          }
+          this.cachedDemographicsData[role] = response; // Cache the response
+          if (!this.demographicDataByRole) {
+            this.demographicDataByRole = {}; // Ensure it is initialized
+          }
+          this.demographicDataByRole[role] = response.response.identity;
+          if (!this.relativeDocumentListByRole) {
+            this.relativeDocumentListByRole = {}; // Ensure it is initialized
+          }
+          this.relativeDocumentListByRole[role] = response.response.documents;
+
           this.isLoading = false; 
-          console.log(this.demographicData);
         } else {
-          this.snackBar.open('Failed to fetch demographic data from id repo', 'Close', {
+          const errorMessage =`Failed to fetch demographic data for ${role} from id repo`;
+          this.snackBar.open(errorMessage, 'Close', {
             duration: 3000,
             horizontalPosition: 'center',
             verticalPosition: 'top',
@@ -1016,7 +1019,8 @@ getTitlesForDocument(document: any): string[] {
       },
       (error) => {
         console.error('Error in fetching demographic data', error);
-        this.snackBar.open('An error occurred while fetching demographic data from id repo', 'Close', {
+        const errorMessage =`An error occurred while fetching demographic data for ${role} from id repo`;
+        this.snackBar.open(errorMessage, 'Close', {
           duration: 3000,
           horizontalPosition: 'center',
           verticalPosition: 'top',
@@ -1103,36 +1107,32 @@ getTitlesForDocument(document: any): string[] {
     let roles;
     if(this.service === 'Change of Particulars') roles = ['NIN'];
     else roles = ['father', 'mother', 'guardian'];
-
-    console.log("persondetails   "+JSON.stringify(this.personDetails));
     roles.forEach(role => {
       const person = this.personDetails.find(person => person.role === role);
       if (person) {
-        console.log("person    "+JSON.stringify(person));
         const demographicData = person.details['guardianNIN_AIN'] || person.details[person.role + 'NIN'] || person.details['NIN'];
-        console.log("demographic  "+ demographicData)
-        if (!this.cachedDemographicsData) {
-          this.fetchDemographicData(demographicData);
+        if (!this.cachedDemographicsData || !this.cachedDemographicsData[role]) {
+          this.fetchDemographicData(demographicData, role);
         } else {
-          this.getCachedData();
+          this.getCachedData(role);
         }
       }
     });
   }
-  getCachedData() {
-    if (this.cachedDemographicsData?.response?.status === 'ACTIVATED') {
-      this.demographicData = this.cachedDemographicsData.response.identity;
-      this.relativeDocumentList = this.cachedDemographicsData.response.documents;
+  getCachedData(role: string) {
+    if (this.cachedDemographicsData[role]?.response?.status === 'ACTIVATED') {
+      this.demographicData = this.demographicDataByRole[role] ;
+      this.relativeDocumentList = this.relativeDocumentListByRole[role];
     } else {
       console.log("Error fetching cached data!")
     }
   }
 
 
-  displayCachedData() {
-    if (this.cachedDemographicsData?.response?.status === 'ACTIVATED') {
-      this.demographicData = this.cachedDemographicsData.response.identity;
-      this.relativeDocumentList = this.cachedDemographicsData.response.documents;
+  displayCachedData(role: string) {
+    if (this.cachedDemographicsData[role]?.response?.status === 'ACTIVATED') {
+      this.demographicData = this.cachedDemographicsData[role].response.identity;
+      this.relativeDocumentList = this.cachedDemographicsData[role].response.documents;
       const newTab = window.open(`/demographic-details`, '_blank');
       if (newTab) {
         localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
@@ -1142,7 +1142,7 @@ getTitlesForDocument(document: any): string[] {
       const person = this.personDetails.find(person => person.role === 'guardian');
       if (person) {
         const demographicData = person.details['guardianNIN_AIN'] || person.details[person.role + 'NIN'];
-        this.fetchDemographicData(demographicData);
+        this.fetchDemographicData(demographicData, role);
       }
     }
   }
@@ -1190,5 +1190,13 @@ getTitlesForDocument(document: any): string[] {
   hasValidField(field: any): boolean {
     return field && Array.isArray(field) && field.length > 0 && field[0]?.value?.trim();
   }
+  getDemographicField(role: string, field: string): any {
+    return this.demographicDataByRole?.[role]?.[field] || null;
+}
+getDemographicIdentity(role: string): any {
+  return this.demographicDataByRole?.[role] || null;
+}
+
+
 }
 

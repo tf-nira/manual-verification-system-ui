@@ -1738,18 +1738,18 @@
             <div *ngFor="let person of personDetails">
               <h4>{{ person.role | titlecase }} Details</h4>
               <!-- Check if demographicData exists and then iterate through allowedFields -->
-              <ng-container *ngIf="demographicData; else noDemographicData">
+              <ng-container *ngIf="getDemographicIdentity(person.role); else noDemographicData">
                 <div *ngFor="let field of allowedFields">
                   <!-- Extract meaningful data -->
-                  <ng-container *ngIf="demographicData[field]">
+                  <ng-container *ngIf="getDemographicField(person.role, field)">
                     <!-- <p>{{ formatKey(key) }}: {{ extractValue(person.details[key]) }}</p> -->
-                    <ng-container *ngIf="extractValue(demographicData[field])">
+                    <ng-container *ngIf="extractValue(getDemographicField(person.role, field))">
                       <div class="detail-label">{{ formatKey(field) }}</div>
-                      <div class="detail-value">{{ extractJsonValue(demographicData[field]) }}</div>
+                      <div class="detail-value">{{ extractValue(getDemographicField(person.role, field)) }}</div>
                     </ng-container>
                   </ng-container>
                 </div>
-                <button (click)="displayCachedData()">
+                <button (click)="displayCachedData(person.role)">
                   Open
                 </button>
               </ng-container>
