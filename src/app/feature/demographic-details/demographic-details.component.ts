@@ -204,8 +204,10 @@ export class DemographicDetailsComponent implements OnInit{
     title: any; // Map keys to human-readable titles
     fileName: string; // Generate a filename dynamically
     file: any;
+    format?: string | null;
   }[] = []; // Initialize as an empty array instead of undefined
   pdfUrl: any;
+  fileUrl: any;
   constructor(
       private sanitizer: DomSanitizer, private snackBar: MatSnackBar
     ) { }
@@ -231,7 +233,6 @@ export class DemographicDetailsComponent implements OnInit{
         acc[doc.category] = doc.value;
         return acc;
       }, {} as { [key: string]: string });
-      console.log("documentsJson"+JSON.stringify(documentsJson))
       this.processDocuments(documentsJson);
     } else {
       console.error('No doc data found in relative data');
@@ -239,21 +240,30 @@ export class DemographicDetailsComponent implements OnInit{
   }
   // Process the documents data into the required structure
 processDocuments(documentsJson: any) {
-  console.log("inside processDocuments");
-
+  const formatMap: Record<string, string> = {}; //doc format(pdf etc)
+  if (this.relativeDocumentList && this.relativeDocumentList.length > 0) {
+    this.relativeDocumentList.forEach(doc => {
+      if (doc.format) {
+        formatMap[doc.category] = doc.format;
+      }
+    });
+  }
   this.documents = Object.keys(documentsJson)
     .map((key) => {
-      const base64Pdf = documentsJson[key]?.trim();
+      const base64File = documentsJson[key]?.trim();
       const title = this.getDocumentTitle(key);
       if (title === "Unknown Document") {
         // Skip adding this document by returning null
         return null;
       }
+      const format = formatMap[key] ? formatMap[key].toLowerCase() : undefined;
+      
       return {
-        category: key, // Use the key as the category
-        title: title, // Map keys to human-readable titles
-        fileName: `${key}.pdf`, // Generate a filename dynamically
-        file: base64Pdf ? this.convertBase64ToPdfUrl(base64Pdf) : null, // Convert Base64 to a SafeResourceUrl
+        category: key, 
+        title: title,
+        format: format, 
+        fileName: this.getFileName(key, base64File, format), 
+        file: base64File ? this.convertBase64ToUrl(base64File, format) : null, // Convert Base64 to a SafeResourceUrl
       };
     })
     .filter((document): document is Exclude<typeof document, null> => document !== null); // Type guard to filter out null values
@@ -263,9 +273,9 @@ getDocumentTitle(key: string): string {
   return this.categoryMap[key] || 'Unknown Document';
 }
 
-  viewDocument(document: { file: File | SafeResourceUrl | null }): void {
+  viewDocument(document: { file: File | SafeResourceUrl | null, fileName?: string }): void {
     if (document.file) {
-      const sanitizedUrl = this.sanitizer.sanitize(4, document.file); // Sanitizes the SafeResourceUrl
+      const sanitizedUrl = this.sanitizer.sanitize(4, document.file); 
       if (!sanitizedUrl) {
         this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
           duration: 3000,
@@ -275,15 +285,17 @@ getDocumentTitle(key: string): string {
         });
         return;
       }
-
-      // Open a new window and inject sanitized HTML
+  
+      const fileType = document.fileName?.split('.').pop()?.toLowerCase();
+      const isImage = fileType === 'jpg' || fileType === 'jpeg' || fileType === 'png';
+      const isPdf = fileType === 'pdf';
+  
       const newWindow = window.open('', '_blank');
       if (newWindow) {
-        newWindow.document.write(`
+        if (isPdf) {
+          newWindow.document.write(`
             <html>
-              <head>
-                <title>${document.file || 'Document'}</title>
-              </head>
+              <head><title>${document.fileName || 'Document'}</title></head>
               <body style="margin: 0;">
                 <iframe
                   src="${sanitizedUrl}"
@@ -294,6 +306,37 @@ getDocumentTitle(key: string): string {
               </body>
             </html>
           `);
+        } else if (isImage) {
+          // For images, use the data URL directly if it's a base64 image
+          newWindow.document.write(`
+            <html>
+              <head>
+                <title>${document.fileName || 'Image'}</title>
+                <style>
+                  body { margin: 0; text-align: center; background-color: #f0f0f0; height: 100vh; display: flex; align-items: center; justify-content: center; }
+                  img { max-width: 100%; max-height: 100vh; object-fit: contain; display: block; }
+                  .error-message { color: red; font-family: Arial, sans-serif; }
+                </style>
+              </head>
+              <body>
+                <img
+                  src="${sanitizedUrl}"
+                  alt="Document Image"
+                  onload="console.log('Image loaded successfully.')"
+                  onerror="this.style.display='none'; document.body.innerHTML += '<div class=\\'error-message\\'>Failed to load image. Please try again.</div>'; console.error('Failed to load image:', this.src)"
+                />
+              </body>
+            </html>
+          `);
+        } else {
+          newWindow.close(); 
+          this.snackBar.open('Unsupported file type.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
+        }
       } else {
         this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
           duration: 3000,
@@ -311,17 +354,32 @@ getDocumentTitle(key: string): string {
       });
     }
   }
-
   
-  convertBase64ToPdfUrl(base64: string): SafeResourceUrl {
+  
+  convertBase64ToUrl(base64: string, format?: string | undefined): SafeResourceUrl {
     try {
-      // Ensure base64 data is clean
+    const fileType = format ? this.formatToExtension(format) : this.detectFileTypeFromContent(base64);
+    
+      if (fileType === 'jpg' && base64.includes('/9j/')) {
+        
+        const jpegMarkerIndex = base64.indexOf('/9j/');
+        
+        // main JPEG data
+        const imageData = base64.substring(jpegMarkerIndex);
+        
+        // Create a data URL for the image
+        const dataUrl = `data:image/jpeg;base64,${imageData}`;
+        
+        return this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
+      }
+      
+      // For PDF and other files
       const base64Data = base64.includes(',') ? base64.split(',')[1] : base64;
-  
+    
       if (!base64Data) {
         throw new Error("Invalid Base64 data");
       }
-  
+    
       // Decode Base64 safely
       const byteCharacters = atob(base64Data.trim());
       const byteNumbers = new Array(byteCharacters.length);
@@ -331,21 +389,22 @@ getDocumentTitle(key: string): string {
       }
       
       const byteArray = new Uint8Array(byteNumbers);
-  
-      // Create a Blob from the byte array
-      const blob = new Blob([byteArray], { type: 'application/pdf' });
-  
-      // Create a safe object URL for the Blob
-      this.pdfUrl = URL.createObjectURL(blob);
-  
-      // Use Angular's DomSanitizer to sanitize the URL
-      return this.sanitizer.bypassSecurityTrustResourceUrl(this.pdfUrl);
+      
+      let mimeType = 'application/pdf'; 
+      if (fileType === 'pdf') mimeType = 'application/pdf';
+    if (fileType === 'jpg') mimeType = 'image/jpeg';
+    if (fileType === 'png') mimeType = 'image/png';
+      
+      const blob = new Blob([byteArray], { type: mimeType });
+    
+      this.fileUrl = URL.createObjectURL(blob);
+      
+      return this.sanitizer.bypassSecurityTrustResourceUrl(this.fileUrl);
     } catch (error) {
-      console.error("Error converting Base64 to PDF:", error);
+      console.error("Error converting Base64:", error);
       return this.sanitizer.bypassSecurityTrustResourceUrl(''); // Return an empty safe URL
     }
   }
-  
 
 
   /**
@@ -416,5 +475,37 @@ getDocumentTitle(key: string): string {
   toggleLeft() {
     this.isLeftCollapsed = !this.isLeftCollapsed;
   }
-
+getFileName(key: string, base64: string, format?: string | undefined): string {
+  const fileType = format ? this.formatToExtension(format) : this.detectFileTypeFromContent(base64);
+  return `${key}.${fileType}`;
+}
+detectFileTypeFromContent(base64: string): string {
+  if (!base64) return 'unknown';
+  
+  // Check for PDF marker
+  if (base64.startsWith('JVBER')) return 'pdf';
+  
+  // Check for JPEG marker - it may be nested in the data
+  if (base64.includes('/9j/')) return 'jpg';
+  
+  // Check for PNG marker
+  if (base64.includes('iVBOR')) return 'png';
+  
+  // Default fallback
+  return 'jpg';
+}
+formatToExtension(format: string): string {
+  format = format.toLowerCase();
+  switch (format) {
+    case 'pdf':
+      return 'pdf';
+    case 'jpg':
+    case 'jpeg':
+      return 'jpg';
+    case 'png':
+      return 'png';
+    default:
+      return format.toLowerCase(); 
+  }
+}
 }
