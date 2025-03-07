@@ -400,7 +400,7 @@ getTitlesForDocument(document: any): string[] {
         let ninKey;
         if(this.service === 'Change of Particulars') ninKey = role;
         else ninKey = role === 'guardian' ? `${role}NIN_AIN` : `${role}NIN`;
-        if (this.rowData.demographics[ninKey]) {
+        if (this.rowData?.demographics?.[ninKey]) {
           console.log(this.rowData.demographics[ninKey] + "exist")
           // If NIN exists for the person, collect all details related to the role
           let personData;

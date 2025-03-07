@@ -1793,7 +1793,7 @@
             <!-- Upload Button -->
             <button
               class="document-upload"
-              *ngIf="role === 'MVS_DISTRICT_OFFICER'"
+              *ngIf="role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_LEGAL_OFFICER'"
               (click)="openDocumentUploadwModal()"
             >
               <img src="assets/images/upload_document_icon.png" alt="Back" class="icon" />
