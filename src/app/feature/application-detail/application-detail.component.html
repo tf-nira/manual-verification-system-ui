@@ -1619,6 +1619,57 @@
         </div>
       </div>
 
+      <div id="applicant-signature-section" class="section" *ngIf="rowData?.demographics?.signature">
+        <h3>Applicant's Signature</h3>
+        <div class="personal-information">
+          <div class="signature-container" *ngIf="rowData?.demographics?.signature; else noSignature">
+            <img [src]="'data:image/png;base64,' + rowData?.demographics?.signature" alt="Applicant Signature" (error)="onSignatureError()" />
+          </div>
+          <ng-template #noSignature>
+            <div class="signature-container no-signature">
+              <p>No signature available.</p>
+            </div>
+          </ng-template>
+        </div>
+      </div>
+
+      <div id="biometrics-collected-section" class="section" *ngIf="rowData?.biometricInfo">
+        <h3>Biometrics Collected</h3>
+        <div class="personal-information">
+          <!-- Fingerprints -->
+          <div class="field-container" *ngIf="rowData?.biometricInfo?.Finger || fingerprintList.length > 0">
+            <label>Fingerprints</label>
+            <div class="field-value biometrics-list">
+              <!-- Display each fingerprint as a separate item with appropriate indicator -->
+              <div *ngFor="let finger of fingerprintList" class="biometric-item">
+                <span [ngClass]="isBiometricCollected('Finger', finger) ? 'biometric-check-present' : 'biometric-check-missing'">
+                  <i [class]="isBiometricCollected('Finger', finger) ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                </span>
+                <span>{{ formatBiometricName(finger) }}</span>
+              </div>
+            </div>
+          </div>
+          <!-- Iris -->
+          <div class="field-container" *ngIf="rowData?.biometricInfo?.Iris || irisList.length > 0">
+            <label>Iris</label>
+            <div class="field-value biometrics-list">
+              <!-- Display each iris as a separate item with appropriate indicator -->
+              <div *ngFor="let iris of irisList" class="biometric-item">
+                <span [ngClass]="isBiometricCollected('Iris', iris) ? 'biometric-check-present' : 'biometric-check-missing'">
+                  <i [class]="isBiometricCollected('Iris', iris) ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                </span>
+                <span>{{ iris }}</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- No biometric data message -->
+          <div *ngIf="!rowData?.biometricInfo?.Finger && !rowData?.biometricInfo?.Iris && !rowData?.biometricInfo?.Face" class="no-biometrics">
+            <p>No biometric data available.</p>
+          </div>
+        </div>
+      </div>
+
     </div>
 
 
