@@ -1,9 +1,14 @@
 <div class="container">
   <!-- Header Component (view, role) -->
-  <app-header [view]="'List'" [role]="role"></app-header>
+  <app-header 
+    [view]="'List'"
+    [role]="role"
+    [applicationType]="applicationType"
+    (applicationTypeChange)="onApplicationTypeChange($any($event))">
+  </app-header>
 
   <!-- Search & Filters Component (role) -->
-  <div class="search-container">
+  <div class="search-container" *ngIf="applicationType === 'Assigned'">
 
     <div class="search-and-filters" *ngIf="!isFiltersCollapsed">
       <!-- Application ID -->
@@ -152,6 +157,34 @@
     
   </div>
   
+  <!-- Rejected Applications Search -->
+<div class="search-container rejected-search-container" *ngIf="applicationType === 'Rejected'">
+  <div class="rejected-search">
+    <div class="input-group" style="display: flex; flex-direction: row; align-items: flex-end;">
+      <div style="display: flex; flex-direction: column;">
+        <label for="rejectedApplicationId">Application ID</label>
+        <input type="text" id="rejectedApplicationId" [(ngModel)]="rejectedApplicationId"
+          placeholder="Enter Application ID" class="search-input" style="width: 300px;"/>
+      </div>
+      
+      <div class="rejected-search-buttons" style="margin-left: 10px; display: flex;">
+        <button (click)="search()" class="clear-filters-btn">
+          {{ constants.SEARCH }}
+        </button>
+        <button (click)="clearFilters()" class="clear-filters-btn" style="margin-left: 10px;">
+          {{ constants.CLEAR_FILTERS }}
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Only show no results message after a search has been performed -->
+  <!-- <div *ngIf="data.length === 0 && searchAttempted && rejectedApplicationId" class="no-data-message">
+    <p>No rejected application found with ID: {{ rejectedApplicationId }}</p>
+  </div> -->
+</div>
+
+
     <!-- Main Content: Table and Right Panel -->
     <div class="main-content">
       <!-- Table Section -->
@@ -176,7 +209,7 @@
                   {{ constants.CREATED_DATE }}
                   <span [class]="getSortClass(constants.API_CONST_CREATED_DATE)"></span>
                 </th>
-                <th *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER" (click)="sortData(constants.APPLICATION_STATUS)">
+                <th *ngIf="applicationType === 'Assigned' && (role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER)" (click)="sortData(constants.APPLICATION_STATUS)">
                   {{ constants.APPLICATION_STATUS }}
                   <span [class]="getSortClass(constants.APPLICATION_STATUS)"></span>
                 </th>
@@ -193,7 +226,7 @@
                 <td>{{ row[constants.API_CONST_SERVICE] }}</td>
                 <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
                 <td>{{ row[constants.API_CONST_CREATED_DATE] | date: 'dd-MM-yyyy HH:mm:ss'  }}</td>
-                <td *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER">
+                <td *ngIf="applicationType === 'Assigned' && (role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER)">
                   {{ row[constants.API_CONST_STATUS] === 'INTERVIEW SCHEDULED' ? 'Interview Scheduled' : 'Pending' }}
                 </td>
               </tr>
@@ -251,5 +284,10 @@
       &#x23ED;
       <!-- Last Page -->
     </button>
+  </div>
+  <div *ngIf="data.length === 0" class="no-data-message">
+    <p *ngIf="applicationType === 'Assigned'">No applications found matching the selected filters.</p>
+    <p *ngIf="applicationType === 'Rejected' && !rejectedApplicationId">Please enter an Application ID to search for rejected applications.</p>
+    <!-- <p *ngIf="applicationType === 'Rejected' && rejectedApplicationId && totalRecords === 0">No rejected application found with ID: {{ rejectedApplicationId }}</p> -->
   </div>
 </div>

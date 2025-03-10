@@ -61,6 +61,7 @@ export const API_CONST_EQUALS = 'equals';
 export const API_CONST_IN = 'in';
 export const API_CONST_CONTAINS = 'contains';
 export const API_CONST_BETWEEN = 'between';
+export const API_CONST_REJECTED = 'REJECTED';
 export const API_CONST_STATUS = 'status';
 export const API_CONST_STAGE = 'stage';
 export const API_CONST_PENDING = 'Pending';
