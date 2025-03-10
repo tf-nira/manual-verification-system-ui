@@ -1461,4 +1461,53 @@ ul li:hover {
   background-color: #fff;
   border-bottom: 1px solid #ddd;
 }
+.biometrics-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 
+.biometric-item {
+  display: flex;
+  align-items: center;
+}
+
+.biometric-check-present {
+  color: green;
+  margin-right: 10px;
+}
+
+.biometric-check-missing {
+  color: red;
+  margin-right: 10px;
+}
+
+/* If you don't have Font Awesome included, use these styles for basic circles */
+.biometric-check-present i::before {
+  content: "✓";
+  font-weight: bold;
+}
+
+.biometric-check-missing i::before {
+  content: "X";
+  font-weight: bold;
+}
+/* Updated Signature styles */
+.signature-container {
+  width: 100px; /* Reduced from 300px */
+  height: 40px;  /* Reduced from 150px */
+  border: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.signature-container img {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;
+}

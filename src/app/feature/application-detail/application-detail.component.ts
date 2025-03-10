@@ -143,7 +143,32 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'children-details-section', label: 'Particulars of Applicants Children' },
         { id: 'declarant-details-section', label: 'Declarants Details' }
       ],
-    },];
+    },
+    {
+      id: 'partD',
+      label: 'Part - D',
+      open: false,
+      subSections: [
+        { id: 'applicant-signature-section', label: 'Applicant\'s Signature' },
+        { id: 'biometrics-collected-section', label: 'Biometrics Collected' }, 
+      ],
+    }
+  ];
+  fingerprintList: string[] = [
+    'Left Thumb',
+    'Left IndexFinger',
+    'Left MiddleFinger',
+    'Left RingFinger',
+    'Left LittleFinger',
+    'Right Thumb',
+    'Right IndexFinger',
+    'Right MiddleFinger',
+    'Right RingFinger',
+    'Right LittleFinger'
+  ];
+  
+  irisList: string[] = ['Left', 'Right'];
+  
   expandedSections: { [key: string]: boolean } = {};
   activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
@@ -236,7 +261,6 @@ docTitles:any;
     this.rowData = state.data || {};
     this.selectedRow = state.rowData || {};
     this.photoBase64 = this.rowData?.biometricAttributes?.ApplicantPhoto?.trim() || '';
-
     if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER) {
       this.applicationStatus = this.selectedRow.status;
     }
@@ -400,7 +424,7 @@ getTitlesForDocument(document: any): string[] {
         let ninKey;
         if(this.service === 'Change of Particulars') ninKey = role;
         else ninKey = role === 'guardian' ? `${role}NIN_AIN` : `${role}NIN`;
-        if (this.rowData.demographics[ninKey]) {
+        if (this.rowData?.demographics?.[ninKey]) {
           console.log(this.rowData.demographics[ninKey] + "exist")
           // If NIN exists for the person, collect all details related to the role
           let personData;
@@ -1197,6 +1221,24 @@ getDemographicIdentity(role: string): any {
   return this.demographicDataByRole?.[role] || null;
 }
 
+// Check if a specific biometric is collected
+isBiometricCollected(type: string, value: string): boolean {
+  if (!this.rowData?.biometricInfo || !this.rowData.biometricInfo[type]) {
+    return false;
+  }
+  return this.rowData.biometricInfo[type].includes(value);
+}
+
+formatBiometricName(name: string): string {
+  name = name.replace('IndexFinger', 'Index Finger')
+             .replace('MiddleFinger', 'Middle Finger')
+             .replace('RingFinger', 'Ring Finger')
+             .replace('LittleFinger', 'Little Finger');
+  return name;
+}
+onSignatureError() {
+  console.error('Signature image failed to load');
+}
 
 }
 
