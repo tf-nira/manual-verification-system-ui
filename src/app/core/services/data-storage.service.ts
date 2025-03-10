@@ -81,6 +81,19 @@ export class DataStorageService {
     });
   }
 
+  fetchRejectedApplication(applicationId: string) {
+    const url = this.BASE_URL + this.MVS_URL + appConstants.APPEND_URL.applications+'reject/' + applicationId;
+
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
+    });
+
+    return this.httpClient.get(url, {
+      withCredentials: true,
+    });
+  }
+
   getApplicationDetails(applicationId: string) {
     const url = this.BASE_URL + this.MVS_URL + appConstants.APPEND_URL.applications + applicationId;
 

@@ -1622,7 +1622,7 @@
       <div id="applicant-signature-section" class="section" *ngIf="rowData?.demographics?.signature">
         <h3>Applicant's Signature</h3>
         <div class="personal-information">
-          <div class="signature-container" *ngIf="rowData?.demographics?.signature; else noSignature">
+          <div class="signature-container" *ngIf="!rowData?.demographics?.signature.includes('Unable to Sign'); else noSignature">
             <img [src]="'data:image/png;base64,' + rowData?.demographics?.signature" alt="Applicant Signature" (error)="onSignatureError()" />
           </div>
           <ng-template #noSignature>
@@ -1662,7 +1662,20 @@
               </div>
             </div>
           </div>
-          
+          <!-- Face -->
+          <div class="field-container">
+            <label>Face</label>
+            <div class="field-value biometrics-list">
+              <div class="biometric-item">
+                <span
+                  [ngClass]="rowData?.biometricAttributes?.ApplicantPhoto ? 'biometric-check-present' : 'biometric-check-missing'">
+                  <i [class]="rowData?.biometricAttributes?.ApplicantPhoto ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                </span>
+                <span>Face</span>
+              </div>
+            </div>
+          </div>
+
           <!-- No biometric data message -->
           <div *ngIf="!rowData?.biometricInfo?.Finger && !rowData?.biometricInfo?.Iris && !rowData?.biometricInfo?.Face" class="no-biometrics">
             <p>No biometric data available.</p>

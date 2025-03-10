@@ -8,6 +8,16 @@
   </div>
   <div class="right-section">
     <!-- Right Section -->
+     <!--Toggle button-->
+     <div class="toggle-btn-container" *ngIf="view === 'List'">
+      <button
+        class="toggle-view-button"
+        [ngClass]="{'active-rejected': applicationType === 'Rejected', 'active-assigned': applicationType === 'Assigned'}"
+        (click)="toggleApplicationView()">
+        {{applicationType === 'Assigned' ? 'Rejected Applications' : 'Assigned Applications'}}
+     </button>
+     </div>
+
     <div class="profile-container">
       <img
         src="assets/images/profile-image.png"

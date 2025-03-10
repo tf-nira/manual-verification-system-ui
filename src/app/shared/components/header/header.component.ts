@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { LOGOUT, NAME, ROLE } from '../../constants';
@@ -13,6 +13,8 @@ import { LOGOUT, NAME, ROLE } from '../../constants';
 export class HeaderComponent {
   @Input() role: string = '';
   @Input() view: string = 'List'; // Default to 'List'
+  @Input() applicationType: string ='Assigned';
+  @Output() applicationTypeChange = new EventEmitter<string>();
   userId: string = '';
   isDropdownOpen: boolean = false;
   constants = {
@@ -34,6 +36,13 @@ export class HeaderComponent {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
+  toggleApplicationView(): void {
+    const newType = this.applicationType === 'Assigned' ? 'Rejected' : 'Assigned';
+    this.applicationType = newType;
+    console.log("Emitting application type change", newType)
+    this.applicationTypeChange.emit(newType);
+  }
+
   logout(): void {
     this.clearAuthToken();
     localStorage.clear();
@@ -49,6 +58,10 @@ export class HeaderComponent {
     document.cookie = `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
   }
   getPageTitle(): string {
+    if (this.view === 'List') {
+      return this.applicationType === 'Assigned' ? 'Applications List View' : 'Rejected Applications';
+    }
+    
     const titles: { [key: string]: string } = {
       List: 'Applications List View',
       Details: 'Application Details View',

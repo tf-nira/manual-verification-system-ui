@@ -53,7 +53,8 @@ import {
   API_CONST_INTERVIEW_SCHEDULED,
   API_CONST_FOUNDLINK,
   API_CONST_IN,
-  API_CONST_AGE_GROUP
+  API_CONST_AGE_GROUP,
+  API_CONST_REJECTED
 } from '../../shared/constants';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
@@ -87,7 +88,7 @@ export class ApplicationListComponent implements OnInit {
   // Sorting state
   sortColumn: string = '';
   sortDirection: 'asc' | 'desc' = 'desc';
-
+  searchAttempted: boolean = false;
   role: string = '';
   fields: string[] = [];
   data: any[] = [];
@@ -119,7 +120,51 @@ export class ApplicationListComponent implements OnInit {
   ageGroups: string[] = ['INFANT', 'MINOR', 'ADULT']; 
   selectedAgeGroups: string[] = []; 
   applicationStatuses = ['Pending', 'Interview Scheduled'];
+  applicationType: string = 'Assigned'; // Default to 'Assigned'
+  rejectedApplicationId: string = ''; // For rejected applications search
+  // Add this method to handle application type toggle from header
+  onApplicationTypeChange(newType: string): void {
+    this.applicationType = newType;
+    this.clearFilters();
+    this.data = [];
+    this.totalRecords = 0;
+    this.searchAttempted = false;
+  }
 
+  searchRejectedApplication(): void {
+    if (!this.rejectedApplicationId.trim()) {
+      alert('Please enter an Application ID');
+      return;
+    }
+  
+    this.dataService.fetchRejectedApplication(this.rejectedApplicationId).subscribe(
+      (appResponse: any) => {
+        if (appResponse && appResponse.response) {
+          // Check if there's a valid response with applicationId
+          if (appResponse.response.applicationId) {
+            // Convert the single application object into an array for consistency
+            this.data = [appResponse.response];
+            this.totalRecords = 1;
+          } else {
+            this.data = [];
+            this.totalRecords = 0;
+            alert('No rejected application found with the given ID');
+          }
+        } else if (appResponse.errors && appResponse.errors.length) {
+          console.error('API Errors:', appResponse.errors);
+          this.data = [];
+          this.totalRecords = 0;
+          alert('Error fetching rejected application: ' + appResponse.errors[0]?.message || 'Unknown error');
+        }
+      },
+      (appError) => {
+        console.error('Error fetching rejected application:', appError);
+        this.data = [];
+        this.totalRecords = 0;
+        alert('Failed to fetch rejected application. Please try again later.');
+      }
+    );
+  }
   constants = {
     SEARCH,
     FROM_DATE,
@@ -168,6 +213,13 @@ export class ApplicationListComponent implements OnInit {
     if (savedFilters) {
       const filters = JSON.parse(savedFilters);
 
+      if (filters.applicationType) {
+        this.applicationType = filters.applicationType;
+      }
+      if (filters.rejectedApplicationId) {
+        this.rejectedApplicationId = filters.rejectedApplicationId;
+      }
+
       // Apply filters only if they have valid values
       if (filters.searchText?.trim()) {
         this.searchText = filters.searchText;
@@ -205,7 +257,15 @@ export class ApplicationListComponent implements OnInit {
       this.search();
       localStorage.removeItem('applicationListFilters');
     } else {
+      // this.fetchApplicationList(localStorage.getItem(API_CONST_USER_ID) || '');
+       
+    if (this.applicationType === 'Assigned') {
       this.fetchApplicationList(localStorage.getItem(API_CONST_USER_ID) || '');
+    } else {
+      // Don't fetch data for rejected applications until search is clicked
+      this.data = [];
+      this.totalRecords = 0;
+    }
     }
   }
   // Toggle dropdown visibility
@@ -350,8 +410,18 @@ export class ApplicationListComponent implements OnInit {
     this.toDate = null;
     this.minToDate = null;
     this.fromDateMax = new Date();
-    this.foundling=null;
-    this.selectedAgeGroups=[];
+    this.foundling = null;
+    this.selectedAgeGroups = [];
+    this.rejectedApplicationId = '';
+    // Don't reload data for rejected applications until search is clicked
+    if (this.applicationType === 'Assigned') {
+      this.search();
+    } else {
+      // Clear the data for rejected applications
+      this.data = [];
+      this.totalRecords = 0;
+    }
+    this.searchAttempted = false;
   }
 
   onRowClick(event: MouseEvent, rowData: any) {
@@ -409,6 +479,12 @@ export class ApplicationListComponent implements OnInit {
   }
   
   search() {
+    if (this.applicationType === 'Rejected') {
+      this.searchAttempted = true;
+      this.searchRejectedApplication();
+      return;
+    }
+
     const userId = localStorage.getItem(API_CONST_USER_ID) || '';
     let filters: { value?: string; values?: string[] ; fromValue?: string; toValue?: string; columnName: string; type: string }[] = [
       {
