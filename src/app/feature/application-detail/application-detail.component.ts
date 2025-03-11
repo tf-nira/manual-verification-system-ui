@@ -294,6 +294,15 @@ docTitles:any;
     }
     this.isSectionExpanded = this.documents.map(() => false);
     this.updateCategoriesAndTitles();
+
+    const storedDetails = localStorage.getItem('rejectionDetails');
+
+    if (storedDetails) {
+      const rejectionDetails = JSON.parse(storedDetails);
+      this.rejectionCategory = rejectionDetails.rejectionCategory;
+      this.rejectionComment = rejectionDetails.rejectionComment;
+    }
+
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
 updateCategoriesAndTitles() {
@@ -1238,6 +1247,9 @@ formatBiometricName(name: string): string {
 }
 onSignatureError() {
   console.error('Signature image failed to load');
+}
+ngOnDestroy() {
+  localStorage.removeItem('rejectionDetails');
 }
 
 }
