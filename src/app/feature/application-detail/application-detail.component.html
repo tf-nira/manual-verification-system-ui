@@ -1787,6 +1787,26 @@
                   <div class="detail-value">{{ selectedRow.legalEscDetails.escDTimes | date: 'dd-MM-yyyy HH:mm:ss' || 'N/A' }}</div>
                 </div>
               </div>
+
+              <!--Rejection details-->
+              <div *ngIf="rejectionCategory || rejectionComment" class="escalation-section">
+                <button class="escalation-header" (click)="toggleEscalation('rejection')">
+                  Rejection Details
+                  <span [class]="isEscalationExpanded('rejection') ? 'expanded' : 'collapsed'"></span>
+                </button>
+                <div *ngIf="isEscalationExpanded('rejection')" class="escalation-content">
+                  <div *ngIf="rejectionCategory" class="info-item">
+                    <div class="detail-label">Rejection Category</div>
+                    <div class="detail-value">{{ rejectionCategory }}</div>
+                  </div>
+                  <div *ngIf="rejectionComment" class="info-item">
+                    <div class="detail-label">Rejection Comment</div>
+                    <div class="detail-value">{{ rejectionComment }}</div>
+                  </div>
+                </div>
+              </div>
+
+
             </div>
 
             <div *ngIf="!selectedRow">
