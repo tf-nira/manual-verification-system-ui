@@ -1905,7 +1905,7 @@
           <i class="fas fa-check-circle"></i>
           {{ constants.APPROVE }}
         </button>
-        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR'"
+        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR' && role !== 'MVS_SENIOR_REGISTRATION_OFFICER'"
           (click)="openEscalateModal()">
           <img src="assets/images/escalate_icon.png" alt="Back" class="icon" />
           <i class="fas fa-exclamation-triangle"></i>
@@ -1919,7 +1919,7 @@
         <!-- Schedule Interview Btn -->
         <button [ngClass]="{
             'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') ,
-            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_EXECUTIVE_DIRECTOR' || selectedRow.status === 'INTERVIEW SCHEDULED')
+            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_EXECUTIVE_DIRECTOR' || role === 'MVS_SENIOR_REGISTRATION_OFFICER' || selectedRow.status === 'INTERVIEW SCHEDULED')
           }" (click)="openScheduleInterviewModal()">
           {{ constants.SCHEDULE_INTERVIEW }}
         </button>
