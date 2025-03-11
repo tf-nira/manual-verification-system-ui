@@ -133,7 +133,7 @@ export class DataStorageService {
     if (status === 'ESCALATE' && selectedOfficerLevel && selectedOfficerLevel.trim() !== '') {
       request.selectedOfficerLevel = selectedOfficerLevel;
     }
-    if ((status === 'REJECT' || status === 'ESCALATE') && category) {
+    if ((status === 'REJECT' || status === 'ESCALATE' || status === 'RECOMMEND_FOR_REJECTION') && category) {
       request.category = category;
     }
     const obj = new RequestModel(request);
