@@ -157,29 +157,10 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Replacement of a card': ['']
   },
   'Lost/ Replacement of card': {
-    'Renewal of a card': ['proofOfPhysicalApplicationForm'],
-    'Replacement of a card': ['proofOfAbandonment']
+    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment']
   },
   'Change of Particulars': {
-    'Add Name': ['proofOfException'],
-    'Remove Name': ['proofOfAbandonment'],
-    'Change Order of Names': ['proofOfPhysicalApplicationForm'],
-    'Complete Name Change': ['proofOfException'],
-    'Change DOB': ['proofOfAbandonment'],
-    'Change DOB > 4 years': ['proofOfException'],
-    'Change Residence Adult': ['proofOfPhysicalApplicationForm'],
-    'Change Residence Child': ['proofOfAbandonment'],
-    'Change Birth Place Adult': ['proofOfException'],
-    'Change Birth Place Child': ['proofOfAbandonment'],
-    'Correct Origin Adult': ['proofOfPhysicalApplicationForm'],
-    'Correct Origin Child': ['proofOfAbandonment'],
-    'Change Citizenship Type': ['proofOfException'],
-    'Change Polling Station': ['proofOfAbandonment'],
-    'Add Spouse': ['proofOfException'],
-    'Remove Spouse': ['proofOfAbandonment'],
-    'Change Father Details': ['proofOfPhysicalApplicationForm'],
-    'Change Mother Details': ['proofOfAbandonment'],
-    'Correct NIN Error': ['proofOfException']
+    'Change of Particulars': ['proofOfException', 'proofOfAbandonment', 'proofOfPhysicalApplicationForm']
   },
   'GetFirst ID': {
     'GetFirst ID': ['proofOfRegistration', 'proofOfOtherSupportingdocumentIssuedbyGovt', 
@@ -242,21 +223,15 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     }
   },
   'Lost/ Replacement of card': {
-    'Renewal of a card': {
-      proofOfPhysicalApplicationForm: ['Physical Application Form']
-    },
-    'Replacement of a card': {
+    'Lost/ Replacement of card': {
+      proofOfPhysicalApplicationForm: ['Physical Application Form'],
       proofOfAbandonment: ['Police Report']
     }
   },
   'Change of Particulars': {
-    'Add Name': {
-      proofOfException: ['Exception Photo']
-    },
-    'Remove Name': {
-      proofOfAbandonment: ['Police Report']
-    },
-    'Change Order of Names': {
+    'Change of Particulars': {
+      proofOfException: ['Exception Photo'],
+      proofOfAbandonment: ['Police Report'],
       proofOfPhysicalApplicationForm: ['Physical Application Form']
     }
   },

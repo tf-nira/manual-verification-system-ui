@@ -1207,11 +1207,6 @@ getTitlesForDocument(document: any): string[] {
     );
   }
   getVisibleSectionsCop() {
-    // return this.sectionsCop.filter(section => 
-    //   section.subSections.some(sub => 
-    //     this.rowData.demographics[sub.id] === 'Y'
-    //   )
-    // );
     return this.sectionsCop
         .map(section => {
             // Filter subsections based on the Y value in demographics
