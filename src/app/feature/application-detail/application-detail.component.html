@@ -1843,7 +1843,8 @@
             </div>
           </ng-container>
           <ng-template #noData>
-            <p>No NIN data found for Father, Mother, or Guardian.</p>
+            <p *ngIf="foundling !== 'Y'">No NIN data found for Father, Mother, or Guardian.</p>
+            <p *ngIf="foundling === 'Y'">No NIN data found for Declarant.</p>
           </ng-template>
           <!-- **Processing icon** -->
           <div *ngIf="isLoading" class="loading-icon">
