@@ -322,6 +322,25 @@ updateCategoriesAndTitles() {
     }));
     return;
   }
+  else if(this.service === 'Change of Particulars'){
+    const serviceTypeCop = this.getVisibleSectionsCop();
+    let categories: string[] = [];
+
+    serviceTypeCop.forEach(service => {
+      service.subSections.forEach(serviceType => {
+        const categoryList = SERVICE_CATEGORY_MAP[this.service]?.[serviceType.id] || [];
+        categories = categories.concat(categoryList);
+      });
+    });
+
+    console.log("copservice: {}", serviceTypeCop);
+    console.log("docat: {}",categories);
+
+    this.docCategories = categories.map(key => ({
+      key,
+      title: CATEGORY_MAP[key]
+    }));
+  }
   else{
     const categories = SERVICE_CATEGORY_MAP[this.service]?.[this.serviceType] || [];
     this.docCategories = categories.map(key => ({
