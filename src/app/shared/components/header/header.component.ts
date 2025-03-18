@@ -14,6 +14,7 @@ export class HeaderComponent {
   @Input() role: string = '';
   @Input() view: string = 'List'; // Default to 'List'
   @Input() applicationType: string ='Assigned';
+  @Input() hideToggle: boolean = false; 
   @Output() applicationTypeChange = new EventEmitter<string>();
   userId: string = '';
   isDropdownOpen: boolean = false;

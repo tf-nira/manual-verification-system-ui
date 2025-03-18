@@ -1268,6 +1268,12 @@ formatBiometricName(name: string): string {
 onSignatureError() {
   console.error('Signature image failed to load');
 }
+
+isRejectionDetailsPresent(): boolean {
+  const rejectionDetails = localStorage.getItem('rejectionDetails');
+  return rejectionDetails !== null && rejectionDetails !== undefined && rejectionDetails !== '';
+}
+
 ngOnDestroy() {
   localStorage.removeItem('rejectionDetails');
 }
