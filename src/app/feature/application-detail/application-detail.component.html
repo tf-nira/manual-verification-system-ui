@@ -1878,7 +1878,7 @@
             <!-- Upload Button -->
             <button
               class="document-upload"
-              *ngIf="role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_LEGAL_OFFICER'"
+              *ngIf="(role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_LEGAL_OFFICER') && !isRejectionDetailsPresent()"
               (click)="openDocumentUploadwModal()"
             >
               <img src="assets/images/upload_document_icon.png" alt="Back" class="icon" />
@@ -1900,7 +1900,7 @@
       </button>
 
       <!-- Action Buttons -->
-      <div class="action-buttons">
+      <div class="action-buttons" *ngIf="!isRejectionDetailsPresent()">
         <button class="approve" (click)="openApprovalModal()">
           <img src="assets/images/approve_icon.png" alt="Back" class="icon" />
           <i class="fas fa-check-circle"></i>
