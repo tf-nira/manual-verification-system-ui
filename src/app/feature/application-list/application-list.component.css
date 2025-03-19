@@ -588,3 +588,8 @@ th.sortable {
   height: 28px;      /* Reduce input height */
   font-size: 16px;   /* Adjust font size */
 }
+
+.no-data-message {
+  display: flex;
+  justify-content: center;
+}

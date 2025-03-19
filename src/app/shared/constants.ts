@@ -248,7 +248,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
   },
   'Change of Particulars': {
     'Change of Particulars': {
-      proofOfLegalChange: ['Notice of Intention to Change Name', 'Deed Poll Registered with URSB ', 'CID Report', 'Interpol clearance ', 'Deed Poll Registered with URSB '],
+      proofOfLegalChange: ['Notice of Intention to Change Name', 'Deed Poll Registered with URSB ', 'CID Report', 'Interpol clearance '],
       proofOfOtherSupportingdocumentIssuedbyGovt: ['Birth Certificate', 'Academic Documents', 'Passport', 'Voters Card', 'Driving Permit', 'Notification Record', 
         'Certified copy of marriage certificate', 'certified copy of decree absolute', 'Certified copy of Birth certificate issued before registration', 'DNA test results',
         'Court Order establishing parentage'],

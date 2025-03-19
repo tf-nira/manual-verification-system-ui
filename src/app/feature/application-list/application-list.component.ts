@@ -531,10 +531,13 @@ export class ApplicationListComponent implements OnInit {
 
     // Add "between" filter for dates
     if (this.fromDate && this.toDate) {
-      const fromValue = new Date(this.fromDate).toISOString().replace('Z', '').replace(/\.\d+$/, '.000000');
-      const date = new Date(this.toDate);
-      date.setHours(23, 59, 59, 999);
-      const toValue = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}T${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}:${String(date.getSeconds()).padStart(2, '0')}.999999`;
+      const from_date = new Date(this.fromDate);
+      from_date.setHours(0, 0, 0, 0);
+      const fromValue = `${from_date.getFullYear()}-${String(from_date.getMonth() + 1).padStart(2, '0')}-${String(from_date.getDate()).padStart(2, '0')}T${String(from_date.getHours()).padStart(2, '0')}:${String(from_date.getMinutes()).padStart(2, '0')}:${String(from_date.getSeconds()).padStart(2, '0')}.000000`;
+
+      const to_date = new Date(this.toDate);
+      to_date.setHours(23, 59, 59, 999);
+      const toValue = `${to_date.getFullYear()}-${String(to_date.getMonth() + 1).padStart(2, '0')}-${String(to_date.getDate()).padStart(2, '0')}T${String(to_date.getHours()).padStart(2, '0')}:${String(to_date.getMinutes()).padStart(2, '0')}:${String(to_date.getSeconds()).padStart(2, '0')}.999999`;
 
       filters = filters.concat({
         fromValue: fromValue,
@@ -562,6 +565,10 @@ export class ApplicationListComponent implements OnInit {
           this.totalRecords = appResponse.response.totalRecord || 0;
         } else {
           this.data = [];
+          if (this.currentPage > 0) this.changePage(0);
+          else {
+            this.totalRecords = 0;
+          }
         }
       },
       (appError) => {
