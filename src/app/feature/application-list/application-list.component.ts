@@ -530,14 +530,22 @@ export class ApplicationListComponent implements OnInit {
     else if (this.selectedApplicationStatus == 'Interview Scheduled') addFilter(API_CONST_INTERVIEW_SCHEDULED, API_CONST_STAGE, API_CONST_EQUALS);
 
     // Add "between" filter for dates
-    if (this.fromDate && this.toDate) {
+    let fromValue, toValue;
+    if (this.fromDate) {
       const from_date = new Date(this.fromDate);
       from_date.setHours(0, 0, 0, 0);
-      const fromValue = `${from_date.getFullYear()}-${String(from_date.getMonth() + 1).padStart(2, '0')}-${String(from_date.getDate()).padStart(2, '0')}T${String(from_date.getHours()).padStart(2, '0')}:${String(from_date.getMinutes()).padStart(2, '0')}:${String(from_date.getSeconds()).padStart(2, '0')}.000000`;
+      fromValue = `${from_date.getFullYear()}-${String(from_date.getMonth() + 1).padStart(2, '0')}-${String(from_date.getDate()).padStart(2, '0')}T${String(from_date.getHours()).padStart(2, '0')}:${String(from_date.getMinutes()).padStart(2, '0')}:${String(from_date.getSeconds()).padStart(2, '0')}.000000`;
 
-      const to_date = new Date(this.toDate);
-      to_date.setHours(23, 59, 59, 999);
-      const toValue = `${to_date.getFullYear()}-${String(to_date.getMonth() + 1).padStart(2, '0')}-${String(to_date.getDate()).padStart(2, '0')}T${String(to_date.getHours()).padStart(2, '0')}:${String(to_date.getMinutes()).padStart(2, '0')}:${String(to_date.getSeconds()).padStart(2, '0')}.999999`;
+      if (this.toDate) {
+        const to_date = new Date(this.toDate);
+        to_date.setHours(23, 59, 59, 999);
+        toValue = `${to_date.getFullYear()}-${String(to_date.getMonth() + 1).padStart(2, '0')}-${String(to_date.getDate()).padStart(2, '0')}T${String(to_date.getHours()).padStart(2, '0')}:${String(to_date.getMinutes()).padStart(2, '0')}:${String(to_date.getSeconds()).padStart(2, '0')}.999999`;
+      }
+      else {
+        const to_date = new Date();
+        to_date.setHours(23, 59, 59, 999);
+        toValue = `${to_date.getFullYear()}-${String(to_date.getMonth() + 1).padStart(2, '0')}-${String(to_date.getDate()).padStart(2, '0')}T${String(to_date.getHours()).padStart(2, '0')}:${String(to_date.getMinutes()).padStart(2, '0')}:${String(to_date.getSeconds()).padStart(2, '0')}.999999`;
+      }
 
       filters = filters.concat({
         fromValue: fromValue,
