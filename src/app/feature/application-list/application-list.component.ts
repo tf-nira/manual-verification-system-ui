@@ -356,10 +356,7 @@ export class ApplicationListComponent implements OnInit {
 
   updateMinToDate() {
     if (this.fromDate) {
-      this.minToDate = this.fromDate; 
-      if (this.toDate && this.toDate < this.fromDate) {
-        this.toDate = null; 
-      }
+      this.minToDate = this.fromDate;
     } else {
       this.minToDate = null; 
     }
@@ -367,7 +364,7 @@ export class ApplicationListComponent implements OnInit {
 
   updateMaxFromDate() {
     if (this.toDate) {
-      this.fromDateMax = this.toDate < this.fromDateMax ? this.toDate : this.fromDateMax;
+      this.fromDateMax = this.toDate;
     } else {
       this.fromDateMax = new Date(); 
     }
