@@ -1906,13 +1906,13 @@
           <i class="fas fa-check-circle"></i>
           {{ constants.APPROVE }}
         </button>
-        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR' && role !== 'MVS_SENIOR_REGISTRATION_OFFICER'"
+        <button class="escalate" *ngIf="role !== 'MVS_EXECUTIVE_DIRECTOR' && role !== 'MVS_SENIOR_REGISTRATION_OFFICER'"
           (click)="openEscalateModal()">
           <img src="assets/images/escalate_icon.png" alt="Back" class="icon" />
           <i class="fas fa-exclamation-triangle"></i>
           {{ constants.ESCALATE }}
         </button>
-        <button class="reject" (click)="openRejectModal()">
+        <button class="reject" (click)="openRejectModal()" *ngIf="role !== 'MVS_OFFICER'">
           <img src="assets/images/reject_icon.png" alt="Back" class="icon" />
           <i class="fas fa-times-circle"></i>
           {{ constants.REJECT }}

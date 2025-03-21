@@ -6,7 +6,7 @@ import { DemographicDetailsComponent } from '../demographic-details/demographic-
 import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uploaded.component';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
-import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_REJECTION } from '../../shared/constants';
+import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_APPROVAL } from '../../shared/constants';
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
   NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP,
   MAX_DOC_SIZE
@@ -541,6 +541,12 @@ getTitlesForDocument(document: any): string[] {
         ];
         this.selectedOfficerLevel = 'MVS_DISTRICT_OFFICER';
         break;
+      case 'MVS_DISTRICT_OFFICER':
+        this.dropdownOptions = [
+          { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: true}
+        ];
+        this.selectedOfficerLevel = 'MVS_LEGAL_OFFICER';
+        break;
       case 'MVS_LEGAL_OFFICER':
         this.dropdownOptions = [
           { value: 'MVS_EXECUTIVE_DIRECTOR', label: 'Executive Director', default: true }
@@ -644,6 +650,10 @@ getTitlesForDocument(document: any): string[] {
     if (this.isChecked) {
       this.showApprovalModal = false;
       const comment = this.approvalComment.trim();
+      if(this.role === 'MVS_DISTRICT_OFFICER' || this.role === 'MVS_INTERNATIONAL_OFFICER'){
+        this.changeApplicationStatus(API_CONST_RECOMMEND_FOR_APPROVAL, comment);
+        this.closeApprovalModal();
+      }
       this.changeApplicationStatus(API_CONST_APPROVE, comment);
       this.closeApprovalModal();
     }
@@ -662,11 +672,6 @@ getTitlesForDocument(document: any): string[] {
     this.showRejectModal = false;
     const rejectionCategory = this.rejectionCategory;
     const comment = this.rejectionComment.trim();
-    if(this.role === 'MVS_OFFICER'){
-      this.changeApplicationStatus(API_CONST_RECOMMEND_FOR_REJECTION, comment, rejectionCategory)
-      this.closeRejectModal();
-      return;
-    }
     this.changeApplicationStatus(API_CONST_REJECT, comment, rejectionCategory);
     this.closeRejectModal();
   }
