@@ -131,6 +131,7 @@
                 [(ngModel)]="toDate"
                 (ngModelChange)="updateMaxFromDate()"
                 [min]="minToDate"
+                [max]="maxToDate"
                 placeholder="DD/MM/YYYY"
               />
               <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>

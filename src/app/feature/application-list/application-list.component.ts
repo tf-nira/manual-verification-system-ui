@@ -105,6 +105,7 @@ export class ApplicationListComponent implements OnInit {
   //today: string = new Date().toISOString().split('T')[0];
   minToDate: Date | null = null;
   fromDateMax: Date = new Date(); // Default max date is today
+  maxToDate: Date | null = null;
   toDateInputType: string = 'text';  // Start as text to prevent pre-filling
 
   isPanelExpanded = false;
@@ -210,6 +211,7 @@ export class ApplicationListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.maxToDate = new Date();
     this.temp = this.currentPage + 1;
     this.role = history.state.role;
     this.fields = ROLE_FIELDS_MAP[this.role];
