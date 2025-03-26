@@ -133,7 +133,7 @@ export class DataStorageService {
     if (status === 'ESCALATE' && selectedOfficerLevel && selectedOfficerLevel.trim() !== '') {
       request.selectedOfficerLevel = selectedOfficerLevel;
     }
-    if ((status === 'REJECT' || status === 'ESCALATE' || status === 'RECOMMEND_FOR_REJECTION') && category) {
+    if ((status === 'REJECT' || status === 'ESCALATE') && category) {
       request.category = category;
     }
     const obj = new RequestModel(request);
@@ -212,4 +212,14 @@ export class DataStorageService {
       withCredentials: true,
     });
   }
+
+fetchDocuments(requestPayload: any): Observable<any> {
+  const url = this.BASE_URL + this.MVS_URL +
+        appConstants.APPEND_URL.applications + appConstants.APPEND_URL.fetch_documents;
+  const token = localStorage.getItem('authToken');
+  return this.httpClient.post(url, requestPayload, {
+    withCredentials: true
+  });
+}
+  
 }
