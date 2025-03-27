@@ -1,4 +1,10 @@
 export const VERSION = '1.0';
+export const fetchDocument = {
+    version: "v1",
+    id: "mosip.registration.packet.reader",
+    source: "REGISTRATION_CLIENT",
+    process: "MVS_DOC"
+}
 export const IDS = {
     login: 'mosip.mvs.user.login',
     applicationList: 'mosip.mvs.user.application.list',
@@ -12,5 +18,6 @@ export const APPEND_URL = {
     status: '/status',
     search: 'search',
     schedule_interview: '/schedule/interview',
-    upload_document: '/upload/documents'
+    upload_document: '/upload/documents',
+    fetch_documents:'fetch/document'
 }

@@ -6,7 +6,8 @@ import { DemographicDetailsComponent } from '../demographic-details/demographic-
 import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uploaded.component';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
-import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_REJECTION } from '../../shared/constants';
+import * as appConstants from '../../app.constants';
+import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_APPROVAL } from '../../shared/constants';
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
   NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP,
   MAX_DOC_SIZE
@@ -26,6 +27,17 @@ type DocumentPayload = {
   };
 };
 
+interface DocumentResponse {
+  documents: {
+    documentName: string;
+    document: string;
+    value: string;
+    type: string;
+    format: string;
+    refNumber: string | null;
+  }[];
+}
+
 @Component({
   selector: 'app-application-detail',
   standalone: true,
@@ -42,7 +54,6 @@ type DocumentPayload = {
   templateUrl: './application-detail.component.html',
   styleUrl: './application-detail.component.css'
 })
-
 export class ApplicationDetailComponent implements OnInit {
   isLoading = false;
   demographicData: any;
@@ -60,6 +71,7 @@ export class ApplicationDetailComponent implements OnInit {
   showScheduleInterviewModal: boolean = false;
   showDocumentUploadModal: boolean = false;
   showRejectModal: boolean = false;
+  uploadDocumentSucessStatus : boolean = false;
   rowData: any = {};
   applicationStatus: string = '';
   interviewDetails = {
@@ -201,6 +213,8 @@ export class ApplicationDetailComponent implements OnInit {
   additionalDocuments: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
     { category: '', title: '', fileName: '', file: null }
   ];
+
+additionalFetchedDocuments: { category: string; title: string; fileName: string; file: SafeResourceUrl | null }[] = [];
   personDetails: { role: string; details: { [key: string]: any } }[] = []; // Store details for Father, Mother, Guardian
   constants = {
     MVS_OFFICER,
@@ -302,7 +316,12 @@ docTitles:any;
       this.rejectionCategory = rejectionDetails.rejectionCategory;
       this.rejectionComment = rejectionDetails.rejectionComment;
     }
-
+    this.uploadDocumentSucessStatus = localStorage.getItem(`uploadSuccess_${this.applicationId}`) === 'true';
+    // Check if there are upload documents to fetch
+  if (this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
+    this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
+  }
+  
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
 updateCategoriesAndTitles() {
@@ -544,21 +563,52 @@ getTitlesForDocument(document: any): string[] {
         });
   }
   setDropdownOptions() {
+    let isInUganda = true;
+    try {
+      const residenceStatus = this.rowData?.demographics?.residenceStatus;
+      if (residenceStatus) {
+        const parsedStatus = typeof residenceStatus === 'string'
+          ? JSON.parse(residenceStatus)
+          : residenceStatus;
+
+        if (Array.isArray(parsedStatus) && parsedStatus.length > 0) {
+          const status = parsedStatus[0]?.value || '';
+          isInUganda = status === 'In Uganda';
+        } else if (parsedStatus?.value) {
+          isInUganda = parsedStatus.value === 'In Uganda';
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing residence status:', error);
+      isInUganda = true;
+    }
+    // Set the appropriate officer title based on residence status
+    const districtOrInternational = isInUganda
+      ? { value: 'MVS_DISTRICT_OFFICER', label: 'District', default: false }
+      : { value: 'MVS_INTERNATIONAL_OFFICER', label: 'International Officer', default: false };
+
+
     switch (this.role) {
       case 'MVS_OFFICER':
         this.dropdownOptions = [
           { value: 'MVS_SUPERVISOR', label: 'Supervisor', default: true },
-          { value: 'MVS_DISTRICT_OFFICER', label: 'District', default: false },
+          districtOrInternational,
           { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false }
         ];
         this.selectedOfficerLevel = 'MVS_SUPERVISOR';
         break;
       case 'MVS_SUPERVISOR':
         this.dropdownOptions = [
-          { value: 'MVS_DISTRICT_OFFICER', label: 'District', default: true },
+          districtOrInternational,
           { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false }
         ];
         this.selectedOfficerLevel = 'MVS_DISTRICT_OFFICER';
+        break;
+      case 'MVS_DISTRICT_OFFICER':
+        this.dropdownOptions = [
+          { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: true }
+        ];
+        this.selectedOfficerLevel = 'MVS_LEGAL_OFFICER';
         break;
       case 'MVS_LEGAL_OFFICER':
         this.dropdownOptions = [
@@ -663,6 +713,13 @@ getTitlesForDocument(document: any): string[] {
     if (this.isChecked) {
       this.showApprovalModal = false;
       const comment = this.approvalComment.trim();
+      debugger
+      if((this.role === 'MVS_DISTRICT_OFFICER' || this.role === 'MVS_INTERNATIONAL_OFFICER') && (this.uploadDocumentSucessStatus)){
+        debugger
+        this.changeApplicationStatus(API_CONST_RECOMMEND_FOR_APPROVAL, comment);
+        this.closeApprovalModal();
+        return;
+      }
       this.changeApplicationStatus(API_CONST_APPROVE, comment);
       this.closeApprovalModal();
     }
@@ -681,11 +738,6 @@ getTitlesForDocument(document: any): string[] {
     this.showRejectModal = false;
     const rejectionCategory = this.rejectionCategory;
     const comment = this.rejectionComment.trim();
-    if(this.role === 'MVS_OFFICER'){
-      this.changeApplicationStatus(API_CONST_RECOMMEND_FOR_REJECTION, comment, rejectionCategory)
-      this.closeRejectModal();
-      return;
-    }
     this.changeApplicationStatus(API_CONST_REJECT, comment, rejectionCategory);
     this.closeRejectModal();
   }
@@ -1007,6 +1059,8 @@ getTitlesForDocument(document: any): string[] {
             verticalPosition: 'top',
             panelClass: ['center-snackbar'],
           });
+          localStorage.setItem(`uploadSuccess_${this.applicationId}`, 'true');
+          this.uploadDocumentSucessStatus = true;
           this.closeDocumentUploadModal();
           // this.router.navigate(['/application-list'], {
           //   state: {
@@ -1273,6 +1327,84 @@ isRejectionDetailsPresent(): boolean {
   const rejectionDetails = localStorage.getItem('rejectionDetails');
   return rejectionDetails !== null && rejectionDetails !== undefined && rejectionDetails !== '';
 }
+
+fetchAdditionalDocuments(documentNames: string[], applicationId: string) {
+  const requestPayload = {
+    id: appConstants.fetchDocument.id,
+    version: appConstants.fetchDocument.version,
+    requesttime: new Date().toISOString(),
+    request: {
+      id: applicationId,
+      documentNames: documentNames,
+      source: appConstants.fetchDocument.source,
+      process: appConstants.fetchDocument.process
+    }
+  };
+
+  this.dataService.fetchDocuments(requestPayload).subscribe(
+    (response) => {
+      if (response && response.response && response.response.documents) {
+        // Process the document responses
+        this.processAdditionalDocuments(response.response);
+      } else {
+        console.error('No valid documents found in API response');
+      }
+    },
+    (error) => {
+      console.error('Error fetching additional documents:', error);
+      this.snackBar.open('Failed to load additional documents.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+    }
+  );
+}
+
+processAdditionalDocuments(response: DocumentResponse) {
+  this.additionalFetchedDocuments = [];
+  
+  if (response && response.documents && response.documents.length > 0) {
+    response.documents.forEach(doc => {
+      const base64Content = doc.document?.trim();
+      
+      this.additionalFetchedDocuments.push({
+        category: doc.documentName,
+        title: this.getDocumentTitle(doc.documentName) || doc.documentName,
+        fileName: `${doc.documentName}.${doc.format.toLowerCase()}`,
+        file: base64Content ? this.convertBase64ToUrl(base64Content, doc.format) : null
+      });
+    });
+  }
+}
+
+convertBase64ToUrl(base64: string, format: string): SafeResourceUrl {
+  const mimeType = this.getMimeType(format);
+  
+  // Make sure the base64 string has the correct prefix
+  const base64Data = base64.includes('base64,') ? base64 : `data:${mimeType};base64,${base64}`;
+  
+  if (mimeType === 'application/pdf') {
+    return this.convertBase64ToPdfUrl(base64Data);
+  } else {
+    // For images and other formats
+    return this.sanitizer.bypassSecurityTrustResourceUrl(base64Data);
+  }
+}
+
+getMimeType(format: string): string {
+  const formatMap: {[key: string]: string} = {
+    'PDF': 'application/pdf',
+    'PNG': 'image/png',
+    'JPG': 'image/jpeg',
+    'JPEG': 'image/jpeg',
+    'GIF': 'image/gif'
+  };
+  
+  return formatMap[format.toUpperCase()] || 'application/octet-stream';
+}
+
 
 ngOnDestroy() {
   localStorage.removeItem('rejectionDetails');

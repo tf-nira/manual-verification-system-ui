@@ -1856,36 +1856,44 @@
 
         <div class="tab-content" *ngIf="activeTab === 'documents'">
           <!-- Documents Section -->
-            <div *ngIf="documents.length === 0" class="no-documents">
-              No documents available.
-            </div>
+          <div *ngIf="documents.length === 0" class="no-documents">
+            No documents available.
+          </div>
           
-            <div *ngFor="let document of documents">
+          <div *ngFor="let document of documents">
+            <!-- Document Row -->
+            <div class="document-row">
+              <span class="category-name">{{ getDocumentTitle(document.category) || 'Unknown Category' }}</span>
+              <button class="view-button" [disabled]="!document.file" (click)="viewDocument(document)">
+                <i class="fas fa-external-link-alt"></i>
+                View
+              </button>
+            </div>
+          </div>
+          <!-- Additional Fetched Documents -->
+          <ng-container *ngIf="additionalFetchedDocuments.length > 0">
+            <h4>Newly Uploaded Documents</h4>
+            <div *ngFor="let document of additionalFetchedDocuments">
               <!-- Document Row -->
               <div class="document-row">
-                <span class="category-name">{{ getDocumentTitle(document.category) || 'Unknown Category' }}</span>
-                <button
-                  class="view-button"
-                  [disabled]="!document.file"
-                  (click)="viewDocument(document)"
-                >
+                <span class="category-name">{{ document.title || 'Unknown Document' }}</span>
+                <button class="view-button" [disabled]="!document.file" (click)="viewDocument(document)">
                   <i class="fas fa-external-link-alt"></i>
                   View
                 </button>
               </div>
             </div>
+          </ng-container>
           
-            <!-- Upload Button -->
-            <button
-              class="document-upload"
-              *ngIf="(role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_LEGAL_OFFICER') && !isRejectionDetailsPresent()"
-              (click)="openDocumentUploadwModal()"
-            >
-              <img src="assets/images/upload_document_icon.png" alt="Back" class="icon" />
-              <i class="icon-documents"></i>
-              {{ constants.UPLOAD_DCOUMENTS }}
-            </button>
-        </div>
+          <!-- Upload Button -->
+          <button class="document-upload"
+            *ngIf="(role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_LEGAL_OFFICER' || role === 'MVS_INTERNATIONAL_OFFICER') && !isRejectionDetailsPresent()"
+            (click)="openDocumentUploadwModal()">
+            <img src="assets/images/upload_document_icon.png" alt="Back" class="icon" />
+            <i class="icon-documents"></i>
+            {{ constants.UPLOAD_DCOUMENTS }}
+          </button>
+          </div>
       </div>
     </div>
 
@@ -1912,15 +1920,15 @@
           <i class="fas fa-exclamation-triangle"></i>
           {{ constants.ESCALATE }}
         </button>
-        <button class="reject" (click)="openRejectModal()">
+        <button class="reject" (click)="openRejectModal()" *ngIf="role !== 'MVS_OFFICER'">
           <img src="assets/images/reject_icon.png" alt="Back" class="icon" />
           <i class="fas fa-times-circle"></i>
           {{ constants.REJECT }}
         </button>
         <!-- Schedule Interview Btn -->
         <button [ngClass]="{
-            'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER') ,
-            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_EXECUTIVE_DIRECTOR' || role === 'MVS_SENIOR_REGISTRATION_OFFICER' || selectedRow.status === 'INTERVIEW SCHEDULED')
+            'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_EXECUTIVE_DIRECTOR' || role === 'MVS_INTERNATIONAL_OFFICER') ,
+            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_SENIOR_REGISTRATION_OFFICER' || selectedRow.status === 'INTERVIEW SCHEDULED')
           }" (click)="openScheduleInterviewModal()">
           {{ constants.SCHEDULE_INTERVIEW }}
         </button>

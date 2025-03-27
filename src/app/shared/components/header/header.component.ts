@@ -46,8 +46,21 @@ export class HeaderComponent {
 
   logout(): void {
     this.clearAuthToken();
+    // Store document upload statuses before clearing
+    const documentStatuses: Record<string, boolean> = {};
+
+    // Find all document upload status items
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith('uploadSuccess_')) {
+        documentStatuses[key] = localStorage.getItem(key) === 'true';
+      }
+    });
     localStorage.clear();
     sessionStorage.clear();
+    // Restore document upload statuses
+    Object.keys(documentStatuses).forEach(key => {
+      localStorage.setItem(key, documentStatuses[key] ? 'true' : 'false');
+    });
     alert('You have been logged out.');
     // Redirect to the login page
     this.router.navigate(['/login']).then(() => {
