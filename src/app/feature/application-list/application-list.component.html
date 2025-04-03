@@ -58,7 +58,7 @@
 
 
       <!-- Application Status -->
-      <div class="input-group" *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER">
+      <div class="input-group" *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER || role === constants.MVS_INTERNATIONAL_OFFICER">
         <label for="selectedApplicationStatus">Application Status</label>
         <select
           id="selectedApplicationStatus"
@@ -209,7 +209,7 @@
                   {{ constants.CREATED_DATE }}
                   <span [class]="getSortClass(constants.API_CONST_CREATED_DATE)"></span>
                 </th>
-                <th *ngIf="applicationType === 'Assigned' && (role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER)" (click)="sortData(constants.APPLICATION_STATUS)">
+                <th *ngIf="applicationType === 'Assigned' && (role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER || role === constants.MVS_INTERNATIONAL_OFFICER)" (click)="sortData(constants.APPLICATION_STATUS)">
                   {{ constants.APPLICATION_STATUS }}
                   <span [class]="getSortClass(constants.APPLICATION_STATUS)"></span>
                 </th>
@@ -226,7 +226,7 @@
                 <td>{{ row[constants.API_CONST_SERVICE] }}</td>
                 <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
                 <td>{{ row[constants.API_CONST_CREATED_DATE] | date: 'dd-MM-yyyy HH:mm:ss'  }}</td>
-                <td *ngIf="applicationType === 'Assigned' && (role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER)">
+                <td *ngIf="applicationType === 'Assigned' && (role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER || role === constants.MVS_INTERNATIONAL_OFFICER)">
                   {{ row[constants.API_CONST_STATUS] === 'INTERVIEW SCHEDULED' ? 'Interview Scheduled' : 'Pending' }}
                 </td>
               </tr>
