@@ -54,7 +54,8 @@ import {
   API_CONST_FOUNDLINK,
   API_CONST_IN,
   API_CONST_AGE_GROUP,
-  API_CONST_REJECTED
+  API_CONST_REJECTED,
+  MVS_INTERNATIONAL_OFFICER
 } from '../../shared/constants';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
@@ -202,6 +203,7 @@ export class ApplicationListComponent implements OnInit {
     API_CONST_USER_ID,
     API_CONST_EQUALS,
     API_CONST_STATUS,
+    MVS_INTERNATIONAL_OFFICER
   };
 
   constructor(
