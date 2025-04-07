@@ -16,7 +16,7 @@
           <div class="detail-label">ID</div>
           <div class="detail-value">{{ applicationId || 'N/A' }}</div>
         </div>
-        <div class="info-item" *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER || role === constants.MVS_INTERNATIONAL_OFFICER">
+        <div class="info-item" *ngIf="role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER || role === constants.MVS_INTERNATIONAL_OFFICER || role === constants.MVS_EXECUTIVE_DIRECTOR">
           <div class="detail-label">Status</div>
           <div class="detail-value">{{ applicationStatus === 'INTERVIEW SCHEDULED' ? 'Interview Scheduled' : 'Pending' }}</div>
         </div>
@@ -1914,7 +1914,7 @@
           <i class="fas fa-check-circle"></i>
           {{ constants.APPROVE }}
         </button>
-        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR' && role !== 'MVS_SENIOR_REGISTRATION_OFFICER'"
+        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR' && role !== 'MVS_SENIOR_REGISTRATION_OFFICER' && role !== 'MVS_INTERNATIONAL_OFFICER'"
           (click)="openEscalateModal()">
           <img src="assets/images/escalate_icon.png" alt="Back" class="icon" />
           <i class="fas fa-exclamation-triangle"></i>
