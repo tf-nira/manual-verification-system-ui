@@ -28,6 +28,7 @@ export const MVS_SUPERVISOR: string = 'MVS_SUPERVISOR';
 export const MVS_DISTRICT_OFFICER: string = 'MVS_DISTRICT_OFFICER';
 export const MVS_LEGAL_OFFICER: string = 'MVS_LEGAL_OFFICER';
 export const MVS_INTERNATIONAL_OFFICER: string = 'MVS_INTERNATIONAL_OFFICER';
+export const MVS_EXECUTIVE_DIRECTOR: string ='MVS_EXECUTIVE_DIRECTOR';
 
 // table fields
 export const APPLICATION_ID: string = 'Application ID';
