@@ -237,7 +237,7 @@
     </div>
   
 
-  <div *ngIf="totalPages > 0" class="pagination-controls">
+  <div *ngIf="(totalPages > 0) && applicationType !== 'Rejected'" class="pagination-controls">
     <button
       (click)="changePage(0)"
       [disabled]="currentPage === 0"

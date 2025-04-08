@@ -161,7 +161,7 @@ export class ApplicationDetailComponent implements OnInit {
       label: 'Part - D',
       open: false,
       subSections: [
-        { id: 'applicant-signature-section', label: 'Applicant\'s Signature' },
+        { id: 'signature-section', label: 'Signature' },
         { id: 'biometrics-collected-section', label: 'Biometrics Collected' }, 
       ],
     }
@@ -543,6 +543,7 @@ getTitlesForDocument(document: any): string[] {
           } else {
           let statusMsg = '';
           if(status == API_CONST_REJECT) statusMsg = 'Application REJECTED successfully.';
+          else if(status === API_CONST_RECOMMEND_FOR_APPROVAL) statusMsg = 'Application RECOMMENDED FOR APPROVAL successfully.';
           else statusMsg = `Application ${status}D successfully.`
           this.snackBar.open(statusMsg, 'Close', {
             duration: 3000,
