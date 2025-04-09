@@ -676,8 +676,9 @@ getTitlesForDocument(document: any): string[] {
   }
 
   goBack() {
+    const applicationType = history.state.applicationType || 'Assigned';
     this.router.navigate(['/application-list'], {
-      state: { role: this.role, data: history.state.data }
+      state: { role: this.role, data: history.state.data, applicationType: applicationType }
     });
   }
   openApprovalModal() {

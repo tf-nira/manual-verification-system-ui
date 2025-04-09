@@ -222,6 +222,12 @@ export class ApplicationListComponent implements OnInit {
     this.temp = this.currentPage + 1;
     this.role = history.state.role;
     this.fields = ROLE_FIELDS_MAP[this.role];
+
+    //checking if application type is passed from state when  navigating back.
+    if(history.state.applicationType){
+      this.applicationType = history.state.applicationType;
+    }
+
     // Checking if filters are saved in localStorage
     const savedFilters = localStorage.getItem('applicationListFilters');
     if (savedFilters) {
@@ -272,14 +278,16 @@ export class ApplicationListComponent implements OnInit {
       localStorage.removeItem('applicationListFilters');
     } else {
       // this.fetchApplicationList(localStorage.getItem(API_CONST_USER_ID) || '');
-       
-    if (this.applicationType === 'Assigned') {
-      this.fetchApplicationList(localStorage.getItem(API_CONST_USER_ID) || '');
-    } else {
-      // Don't fetch data for rejected applications until search is clicked
-      this.data = [];
-      this.totalRecords = 0;
-    }
+
+      if (this.applicationType === 'Assigned') {
+        this.fetchApplicationList(localStorage.getItem(API_CONST_USER_ID) || '');
+      } else if (this.applicationType === 'Rejected' && this.rejectedApplicationId) {
+        this.searchRejectedApplication();
+      } else {
+        // Don't fetch data for rejected applications until search is clicked
+        this.data = [];
+        this.totalRecords = 0;
+      }
     }
   }
   // Toggle dropdown visibility
@@ -450,7 +458,9 @@ export class ApplicationListComponent implements OnInit {
       selectedAgeGroups: this.selectedAgeGroups,
       currentPage: this.currentPage,
       sortColumn: this.sortColumn,
-      sortDirection: this.sortDirection
+      sortDirection: this.sortDirection,
+      applicationType: this.applicationType,
+      rejectedApplicationId: this.rejectedApplicationId
     };
 
     //removing null, empty values from filter
@@ -464,7 +474,7 @@ export class ApplicationListComponent implements OnInit {
       (response: any) => {
         // Navigate to the details page with fetched data
         this.router.navigate(['/application-detail'], {
-          state: { role: this.role, data: response.response ,rowData: rowData},
+          state: { role: this.role, data: response.response ,rowData: rowData, applicationType: this.applicationType},
         });
       },
       (error) => {
