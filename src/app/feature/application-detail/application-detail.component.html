@@ -1802,13 +1802,25 @@
                   <span [class]="isEscalationExpanded('rejection') ? 'expanded' : 'collapsed'"></span>
                 </button>
                 <div *ngIf="isEscalationExpanded('rejection')" class="escalation-content">
+                  <div *ngIf="rejectedByOfficerRole" class="info-item">
+                    <div class="detail-label">Level</div>
+                    <div class="detail-value">{{ rejectedByOfficerRole }}</div>
+                  </div>
                   <div *ngIf="rejectionCategory" class="info-item">
-                    <div class="detail-label">Rejection Category</div>
+                    <div class="detail-label">Category</div>
                     <div class="detail-value">{{ rejectionCategory }}</div>
                   </div>
                   <div *ngIf="rejectionComment" class="info-item">
-                    <div class="detail-label">Rejection Comment</div>
+                    <div class="detail-label">Comment</div>
                     <div class="detail-value">{{ rejectionComment }}</div>
+                  </div>
+                  <div *ngIf="rejectedByOfficerId" class="info-item">
+                    <div class="detail-label">Rejected By</div>
+                    <div class="detail-value">{{ rejectedByOfficerId }}</div>
+                  </div>
+                  <div *ngIf="rejectionTimeStamp" class="info-item">
+                    <div class="detail-label">Rejection Time</div>
+                    <div class="detail-value">{{ rejectionTimeStamp | date: 'dd-MM-yyyy HH:mm:ss'  || 'N/A'}}</div>
                   </div>
                 </div>
               </div>

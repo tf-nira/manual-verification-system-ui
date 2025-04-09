@@ -199,6 +199,9 @@ export class ApplicationDetailComponent implements OnInit {
   escalationComment: string = '';
   rejectionCategory: string = '';
   rejectionComment: string = '';
+  rejectedByOfficerRole: string = '';
+  rejectedByOfficerId: string = '';
+  rejectionTimeStamp!: Date;
   isSectionExpanded: boolean[] = []; // Tracks expanded/collapsed states for each section
   ageGroup: string ='';
   foundling: string = '';
@@ -315,8 +318,11 @@ docTitles:any;
 
     if (storedDetails) {
       const rejectionDetails = JSON.parse(storedDetails);
+      this.rejectedByOfficerRole = rejectionDetails.rejectedByOfficerRole;
       this.rejectionCategory = rejectionDetails.rejectionCategory;
       this.rejectionComment = rejectionDetails.rejectionComment;
+      this.rejectedByOfficerId = rejectionDetails.rejectedByOfficerId;
+      this.rejectionTimeStamp = rejectionDetails.rejectionTimeStamp;
     }
     this.uploadDocumentSucessStatus = localStorage.getItem(`uploadSuccess_${this.applicationId}`) === 'true';
     // Check if there are upload documents to fetch
