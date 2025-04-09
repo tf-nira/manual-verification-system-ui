@@ -148,8 +148,11 @@ export class ApplicationListComponent implements OnInit {
             // Convert the single application object into an array for consistency
             this.data = [appResponse.response];
             const rejectionDetails = {
+              rejectedByOfficerRole: appResponse.response.lastAssignedOfficerRole,
               rejectionCategory: appResponse.response.rejectionCategory,
-              rejectionComment: appResponse.response.rejectionComment
+              rejectionComment: appResponse.response.rejectionComment,
+              rejectedByOfficerId: appResponse.response.lastAssignedOfficerId,
+              rejectionTimeStamp: appResponse.response.lastUpdatedTimes
             };
             localStorage.setItem('rejectionDetails', JSON.stringify(rejectionDetails));
             this.totalRecords = 1;

@@ -161,7 +161,7 @@ export class ApplicationDetailComponent implements OnInit {
       label: 'Part - D',
       open: false,
       subSections: [
-        { id: 'applicant-signature-section', label: 'Applicant\'s Signature' },
+        { id: 'signature-section', label: 'Signature' },
         { id: 'biometrics-collected-section', label: 'Biometrics Collected' }, 
       ],
     }
@@ -199,6 +199,9 @@ export class ApplicationDetailComponent implements OnInit {
   escalationComment: string = '';
   rejectionCategory: string = '';
   rejectionComment: string = '';
+  rejectedByOfficerRole: string = '';
+  rejectedByOfficerId: string = '';
+  rejectionTimeStamp!: Date;
   isSectionExpanded: boolean[] = []; // Tracks expanded/collapsed states for each section
   ageGroup: string ='';
   foundling: string = '';
@@ -315,8 +318,11 @@ docTitles:any;
 
     if (storedDetails) {
       const rejectionDetails = JSON.parse(storedDetails);
+      this.rejectedByOfficerRole = rejectionDetails.rejectedByOfficerRole;
       this.rejectionCategory = rejectionDetails.rejectionCategory;
       this.rejectionComment = rejectionDetails.rejectionComment;
+      this.rejectedByOfficerId = rejectionDetails.rejectedByOfficerId;
+      this.rejectionTimeStamp = rejectionDetails.rejectionTimeStamp;
     }
     this.uploadDocumentSucessStatus = localStorage.getItem(`uploadSuccess_${this.applicationId}`) === 'true';
     // Check if there are upload documents to fetch
@@ -543,6 +549,7 @@ getTitlesForDocument(document: any): string[] {
           } else {
           let statusMsg = '';
           if(status == API_CONST_REJECT) statusMsg = 'Application REJECTED successfully.';
+          else if(status === API_CONST_RECOMMEND_FOR_APPROVAL) statusMsg = 'Application RECOMMENDED FOR APPROVAL successfully.';
           else statusMsg = `Application ${status}D successfully.`
           this.snackBar.open(statusMsg, 'Close', {
             duration: 3000,

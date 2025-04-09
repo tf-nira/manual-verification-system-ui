@@ -1610,46 +1610,53 @@
           <div class="field-container" *ngIf="rowData?.demographics?.otherDeclarantRelationship">
             <label>Other Declarant Relationship</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.otherDeclarantRelationship)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.PRN">
+          </div><div class="field-container" *ngIf="rowData?.demographics?.PRN">
             <label>Prn</label>
             <div class="field-value">{{ rowData?.demographics?.PRN }}</div>
           </div>
-        </div>
-      </div>
-
-      <div id="applicant-signature-section" class="section" *ngIf="rowData?.demographics?.signature">
-        <h3>Applicant's Signature</h3>
-        <div class="personal-information">
-          <div class="signature-container" *ngIf="!rowData?.demographics?.signature.includes('Unable to Sign'); else noSignature">
-            <img [src]="'data:image/png;base64,' + rowData?.demographics?.signature" alt="Applicant Signature" (error)="onSignatureError()" />
           </div>
-          <ng-template #noSignature>
-            <div class="signature-container no-signature">
-              <p>No signature available.</p>
-            </div>
-          </ng-template>
-        </div>
-      </div>
-
-      <div id="biometrics-collected-section" class="section" *ngIf="rowData?.biometricInfo">
-        <h3>Biometrics Collected</h3>
-        <div class="personal-information">
-          <!-- Fingerprints -->
-          <div class="field-container" *ngIf="rowData?.biometricInfo?.Finger || fingerprintList.length > 0">
-            <label>Fingerprints</label>
-            <div class="field-value biometrics-list">
-              <!-- Display each fingerprint as a separate item with appropriate indicator -->
-              <div *ngFor="let finger of fingerprintList" class="biometric-item">
-                <span [ngClass]="isBiometricCollected('Finger', finger) ? 'biometric-check-present' : 'biometric-check-missing'">
-                  <i [class]="isBiometricCollected('Finger', finger) ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
-                </span>
-                <span>{{ formatBiometricName(finger) }}</span>
+          </div>
+  
+          <div id="signature-section" class="section"
+            *ngIf="rowData?.demographics?.signature || rowData?.demographics?.introducerSignature">
+            <h3>
+              {{ rowData?.demographics?.introducerSignature ? "Introducer's Signature" : "Applicant's Signature" }}
+            </h3>
+          
+            <div class="personal-information">
+              <div class="signature-container"
+                *ngIf="(rowData?.demographics?.introducerSignature || rowData?.demographics?.signature) as signatureData">
+                <ng-container *ngIf="!signatureData.includes('Unable to Sign'); else noSignature">
+                  <img [src]="'data:image/png;base64,' + signatureData" alt="Signature" (error)="onSignatureError()" />
+                </ng-container>
               </div>
+          
+              <ng-template #noSignature>
+                <div class="signature-container no-signature">
+                  <p>Signature not provided.</p>
+                </div>
+              </ng-template>
             </div>
           </div>
-          <!-- Iris -->
+          
+          <div id="biometrics-collected-section" class="section" *ngIf="rowData?.biometricInfo">
+            <h3>Biometrics Collected</h3>
+            <div class="personal-information">
+              <!-- Fingerprints -->
+              <div class="field-container" *ngIf="rowData?.biometricInfo?.Finger || fingerprintList.length > 0">
+                <label>Fingerprints</label>
+                <div class="field-value biometrics-list">
+                  <!-- Display each fingerprint as a separate item with appropriate indicator -->
+                  <div *ngFor="let finger of fingerprintList" class="biometric-item">
+                    <span
+                      [ngClass]="isBiometricCollected('Finger', finger) ? 'biometric-check-present' : 'biometric-check-missing'">
+                      <i [class]="isBiometricCollected('Finger', finger) ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                    </span>
+                    <span>{{ formatBiometricName(finger) }}</span>
+                  </div>
+                </div>
+              </div>
+              <!-- Iris -->
           <div class="field-container" *ngIf="rowData?.biometricInfo?.Iris || irisList.length > 0">
             <label>Iris</label>
             <div class="field-value biometrics-list">
@@ -1795,13 +1802,25 @@
                   <span [class]="isEscalationExpanded('rejection') ? 'expanded' : 'collapsed'"></span>
                 </button>
                 <div *ngIf="isEscalationExpanded('rejection')" class="escalation-content">
+                  <div *ngIf="rejectedByOfficerRole" class="info-item">
+                    <div class="detail-label">Level</div>
+                    <div class="detail-value">{{ rejectedByOfficerRole }}</div>
+                  </div>
                   <div *ngIf="rejectionCategory" class="info-item">
-                    <div class="detail-label">Rejection Category</div>
+                    <div class="detail-label">Category</div>
                     <div class="detail-value">{{ rejectionCategory }}</div>
                   </div>
                   <div *ngIf="rejectionComment" class="info-item">
-                    <div class="detail-label">Rejection Comment</div>
+                    <div class="detail-label">Comment</div>
                     <div class="detail-value">{{ rejectionComment }}</div>
+                  </div>
+                  <div *ngIf="rejectedByOfficerId" class="info-item">
+                    <div class="detail-label">Rejected By</div>
+                    <div class="detail-value">{{ rejectedByOfficerId }}</div>
+                  </div>
+                  <div *ngIf="rejectionTimeStamp" class="info-item">
+                    <div class="detail-label">Rejection Time</div>
+                    <div class="detail-value">{{ rejectionTimeStamp | date: 'dd-MM-yyyy HH:mm:ss'  || 'N/A'}}</div>
                   </div>
                 </div>
               </div>
