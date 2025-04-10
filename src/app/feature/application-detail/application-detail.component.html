@@ -1624,12 +1624,11 @@
             </h3>
           
             <div class="personal-information">
-              <div class="signature-container"
-                *ngIf="(rowData?.demographics?.introducerSignature || rowData?.demographics?.signature) as signatureData">
-                <ng-container *ngIf="!signatureData.includes('Unable to Sign'); else noSignature">
+              <ng-container *ngIf="(rowData?.demographics?.introducerSignature || rowData?.demographics?.signature) as signatureData">
+                <div class="signature-container" *ngIf="!signatureData.includes('Unable to Sign'); else noSignature">
                   <img [src]="'data:image/png;base64,' + signatureData" alt="Signature" (error)="onSignatureError()" />
-                </ng-container>
-              </div>
+                </div>
+              </ng-container>
           
               <ng-template #noSignature>
                 <div class="signature-container no-signature">
