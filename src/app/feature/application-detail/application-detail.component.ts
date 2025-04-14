@@ -280,7 +280,7 @@ docTitles:any;
     this.rowData = state.data || {};
     this.selectedRow = state.rowData || {};
     this.photoBase64 = this.rowData?.biometricAttributes?.ApplicantPhoto?.trim() || '';
-    if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER || this.role === MVS_INTERNATIONAL_OFFICER) {
+    if (this.role === MVS_DISTRICT_OFFICER || this.role === MVS_LEGAL_OFFICER || this.role === MVS_INTERNATIONAL_OFFICER || this.role === MVS_EXECUTIVE_DIRECTOR) {
       this.applicationStatus = this.selectedRow.status;
     }
     this.serviceType = this.rowData.serviceType || '';
