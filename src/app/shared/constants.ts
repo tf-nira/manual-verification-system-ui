@@ -86,31 +86,33 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
     proofOfAbandonment: 'Proof of Abandonment',
     proofOfException: 'Proof of Exception',
-    // proofOfPayment: 'Proof of Payment',
+    proofOfPayment: 'Proof of Payment',
     proofOfRelationship: 'Proof of Relationship',
     proofOfCitizenship: 'Proof of Citizenship',
-    // proofOfLegalDOcuments: 'Proof of Legal Documents',
+    proofOfLegalDOcuments: 'Proof of Legal Documents',
     proofOfIdentity: 'Proof of Identity',
     proofOfAddress: 'Proof of Residence and Registration Support',
-    // proofOfReplacement: 'Proof of Replacement',
+    proofOfReplacement: 'Proof of Replacement',
     proofOfBirth: 'Proof of Event of Birth',
     proofOfOtherSupportingdocumentIssuedbyGovt: 'Other Supporting Documents Issued by Government',
-    proofOfOtherSupportingdocuments: 'Other Supporting Documents',
+    proofOfOtherSupportingDocuments: 'Other Supporting Documents',
     proofOfRegistration: 'Proof of Registration',
     proofOfAdoption: 'Proof of Adoption',
-    // proofOfChangeOfParticulars: 'Proof of Change of Particulars',
-    // proofOfDeclarant: 'Proof of Declarant',
-    // proofOfLegalDeepPoll: 'Proof of Legal Deed Poll',
-    // proofOfLegalGazzette: 'Proof of Legal Gazette',
+    proofOfChangeOfParticulars: 'Proof of Change of Particulars',
+    proofOfDeclarant: 'Proof of Declarant',
+    proofOfLegalDeepPoll: 'Proof of Legal Deed Poll',
+    proofOfLegalGazzette: 'Proof of Legal Gazette',
     proofOfLegalStatutoryDeclaration: 'Proof of Statutory Declaration',
     proofOfModificationConsent: 'Proof of Modification Consent',
-    // proofOfIntroducerSignature: 'Proof of Introducer Signature',
-    // proofOfCourtOrder: 'Proof Of Court Order',
+    proofOfIntroducerSignature: 'Proof of Introducer Signature',
+    proofOfCourtOrder: 'Proof Of Court Order',
     proofOfLegalChange: 'Proof of Legal Change',
     proofOfLegalStatementUnderOath: 'Legal Statement under Oath',
     proofOfPoliceConfirmation: 'Police Confirmation',
     proofOfResidence: 'Proof of Residence',
-    proofOfCitizenshipCertificate: 'Proof of Citizenship Certificate'
+    proofOfCitizenshipCertificate: 'Proof of Citizenship Certificate',
+    proofOfLoss: 'Proof of Loss',
+    proofOfNationalId: 'proofOfNationalId'
   };
 
   export const TITLE_MAP: { [key: string]: string[] } = {
@@ -127,7 +129,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfReplacement: ['Police Letter', 'Damaged Card', 'CID Report'],
     proofOfBirth: ['Immunization Card', 'Notification Of Birth Record', 'Birth Certificate'],
     proofOfOtherSupportingdocumentIssuedbyGovt: ['Court Report', 'Welfare and Family', 'Passport Document', 'Voter Card', 'Driving Permit', 'Care Order', 'Probation report', 'Birth Certificate', 'Academic Documents', 'Marriage certificate or Divorce Decree', 'Certified copy of DNA test results', 'Court Order', 'Parent National ID'],
-    proofOfOtherSupportingdocuments: ['Previous Immigration records', 'Baptism Card', 'Any other relevant Documents', 'Certificate of Marriage'],
+    proofOfOtherSupportingDocuments: ['Previous Immigration records', 'Baptism Card', 'Any other relevant Documents', 'Certificate of Marriage'],
     applicantProofOfSignature: [],
     introducerProofOfSignature: [],
     proofOfRegistration: [],
@@ -139,23 +141,25 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfLegalStatutoryDeclaration: [],
     proofOfModificationConsent: ['Modification Consent Form'],
     proofOfIntroducerSignature: ['Introducer Signature'],
-    proofOfCourtOrder: ['Court Order']
+    proofOfCourtOrder: ['Court Order'],
+    proofOfLoss:['Police Report'],
+    proofOfNationalId:['National Id']
   };
   // Define the mappings for categories and titles based on service and service type
 export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } } = {
   'New registrations': {
     'Registration of citizens by birth': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
-       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
     'Citizenship under the Article 9': ['proofOfCitizenship', 'proofOfBirth',
-      'proofOfOtherSupportingdocuments', 'proofOfLegalStatutoryDeclaration'],
+      'proofOfOtherSupportingDocuments', 'proofOfLegalStatutoryDeclaration'],
     'Registration of Citizens by Naturalization': ['proofOfCitizenship', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt'],
     'Registration of Citizens by Registration': ['proofOfCitizenship', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt'],
     'Registration of Dual Citizens': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
-       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
     'Registration of child citizen': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
-       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
+       'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
     'Registration of foundlings': ['proofOfAbandonment', 'proofOfAddress', 'proofOfBirth',
           'proofOfOtherSupportingdocumentIssuedbyGovt']
   },
@@ -164,17 +168,17 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Replacement of a card': ['']
   },
   'Lost/ Replacement of card': {
-    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment']
+    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss']
   },
   'Change of Particulars': {
-    'addingName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
-    'removingName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
-    'changeOrderOfNames': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
-    'completeChangeofName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
-    'changeOfDateOfBirth': ['proofOfLegalStatementUnderOath', 'proofOfPoliceConfirmation', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
+    'addingName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
+    'removingName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
+    'changeOrderOfNames': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
+    'completeChangeofName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
+    'changeOfDateOfBirth': ['proofOfLegalStatementUnderOath', 'proofOfPoliceConfirmation', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
     'changeInPlaceOfResidence': ['proofOfResidence'],
     'changeInPlaceOfBirth': ['proofOfLegalStatementUnderOath', 'proofOfOtherSupportingdocumentIssuedbyGovt'],
-    'changeInPlaceOfOrigin': ['proofOfLegalStatementUnderOath', 'proofOfPoliceConfirmation', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingdocuments'],
+    'changeInPlaceOfOrigin': ['proofOfLegalStatementUnderOath', 'proofOfPoliceConfirmation', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
     'changeInCitizenshipType': ['proofOfLegalStatementUnderOath', 'proofOfCitizenshipCertificate'],
     'addSpouse': ['proofOfLegalStatementUnderOath', 'proofOfOtherSupportingdocumentIssuedbyGovt'],
     'removeSpouse': ['proofOfLegalStatementUnderOath', 'proofOfOtherSupportingdocumentIssuedbyGovt'],
@@ -184,7 +188,7 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
   },
   'GetFirst ID': {
     'GetFirst ID': ['proofOfRegistration', 'proofOfOtherSupportingdocumentIssuedbyGovt', 
-      'proofOfOtherSupportingdocuments']
+      'proofOfOtherSupportingDocuments']
   }
 };
 
@@ -195,12 +199,12 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfAddress: ['Local Council Letter'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Passport','Voters Card', 'Driving Permit'],
-      proofOfOtherSupportingdocuments:['Baptism Card']
+      proofOfOtherSupportingDocuments:['Baptism Card']
     },
     'Citizenship under the Article 9': {
       proofOfCitizenship: ['Previous Passports Details','Naturalization Certificate','Birth Certificates'],
       proofOfBirth:['Birth Certificate'],
-      proofOfOtherSupportingdocuments:['Previous immigration records'],
+      proofOfOtherSupportingDocuments:['Previous immigration records'],
       proofOfLegalStatutoryDeclaration:['Statutory Declaration']
     },
     'Registration of Citizens by Naturalization': {
@@ -218,14 +222,14 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfAddress: ['Local Council Letter'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Passport/s', 'Voters Card','Driving Permit'],
-      proofOfOtherSupportingdocuments:['Baptism Card']
+      proofOfOtherSupportingDocuments:['Baptism Card']
     },
     'Registration of child citizen': {
       proofOfCitizenship: ['National ID of Parents/ Blood Relatives'],
       proofOfAddress: ['Local Council Letter'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Passport'],
-      proofOfOtherSupportingdocuments:['Baptism Card']
+      proofOfOtherSupportingDocuments:['Baptism Card']
     },
     'Registration of foundlings': {
       proofOfAbandonment: ['Police Report'],
@@ -245,7 +249,8 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
   'Lost/ Replacement of card': {
     'Lost/ Replacement of card': {
       proofOfPhysicalApplicationForm: ['Physical Application Form'],
-      proofOfAbandonment: ['Police Report']
+      proofOfAbandonment: ['Police Report'],
+      proofOfLoss: ['proofOfLoss']
     }
   },
   'Change of Particulars': {
@@ -254,7 +259,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfOtherSupportingdocumentIssuedbyGovt: ['Birth Certificate', 'Academic Documents', 'Passport', 'Voters Card', 'Driving Permit', 'Notification Record', 
         'Certified copy of marriage certificate', 'certified copy of decree absolute', 'Certified copy of Birth certificate issued before registration', 'DNA test results',
         'Court Order establishing parentage'],
-      proofOfOtherSupportingdocuments: ['Baptism Card', 'Any other relevant docs'],
+        proofOfOtherSupportingDocuments: ['Baptism Card', 'Any other relevant docs'],
       proofOfLegalStatementUnderOath: ['Statutory Declaration', 'Statutory Declaration by the parent'],
       proofOfPoliceConfirmation: ['CID report from place of Origin', 'CID Report'],
       proofOfResidence: ['Letter from LC 1 Chairperson'],
@@ -266,7 +271,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfRegistration: ['National Identification Number of applicant'],
       proofOfOtherSupportingdocumentIssuedbyGovt: ['National ID of parent','Birth Certificate',
         'Academic Documents','Passport','Voters Card','Driving Permit'],
-      proofOfOtherSupportingdocuments: ['Baptism Card ','Any other relevant Documents']
+        proofOfOtherSupportingDocuments: ['Baptism Card ','Any other relevant Documents']
 
     }
   }
