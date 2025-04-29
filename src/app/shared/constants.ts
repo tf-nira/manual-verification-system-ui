@@ -112,7 +112,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfResidence: 'Proof of Residence',
     proofOfCitizenshipCertificate: 'Proof of Citizenship Certificate',
     proofOfLoss: 'Proof of Loss',
-    proofOfNationalId: 'proofOfNationalId'
+    proofOfNationalId: 'Proof Of NationalId'
   };
 
   export const TITLE_MAP: { [key: string]: string[] } = {
