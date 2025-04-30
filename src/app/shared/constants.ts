@@ -83,15 +83,15 @@ export const API_CONST_RECOMMEND_FOR_APPROVAL ='RECOMMEND_FOR_APPROVAL'
 export const MAX_DOC_SIZE = 2 * 1024 * 1024;
 // Map document keys to readable titles
 export const CATEGORY_MAP: { [key: string]: string } = {
-    proofOfPhysicalApplicationForm: 'Proof of Physical Application Form',
+    proofOfPhysicalApplicationForm: 'Proof of Form-9 Renewal',
     proofOfAbandonment: 'Proof of Abandonment',
-    proofOfException: 'Proof of Exception',
+    proofOfException: 'Exception Proof',
     proofOfPayment: 'Proof of Payment',
     proofOfRelationship: 'Proof of Relationship',
     proofOfCitizenship: 'Proof of Citizenship',
     proofOfLegalDOcuments: 'Proof of Legal Documents',
     proofOfIdentity: 'Proof of Identity',
-    proofOfAddress: 'Proof of Residence and Registration Support',
+    proofOfAddress: 'Proof of Residence',
     proofOfReplacement: 'Proof of Replacement',
     proofOfBirth: 'Proof of Event of Birth',
     proofOfOtherSupportingdocumentIssuedbyGovt: 'Other Supporting Documents Issued by Government',
@@ -99,20 +99,21 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfRegistration: 'Proof of Registration',
     proofOfAdoption: 'Proof of Adoption',
     proofOfChangeOfParticulars: 'Proof of Change of Particulars',
-    proofOfDeclarant: 'Proof of Declarant',
-    proofOfLegalDeepPoll: 'Proof of Legal Deed Poll',
-    proofOfLegalGazzette: 'Proof of Legal Gazette',
-    proofOfLegalStatutoryDeclaration: 'Proof of Statutory Declaration',
-    proofOfModificationConsent: 'Proof of Modification Consent',
-    proofOfIntroducerSignature: 'Proof of Introducer Signature',
-    proofOfCourtOrder: 'Proof Of Court Order',
+    proofOfDeclarant: 'Declarant National ID',
+    proofOfLegalDeepPoll: 'Deed Poll',
+    proofOfLegalGazzette: 'Uganda Gazette',
+    proofOfLegalStatutoryDeclaration: 'Legal Statement Under Oath',
+    proofOfModificationConsent: 'Modification Consent Form',
+    proofOfIntroducerSignature: 'Introducer Signature',
+    introducerProofOfSignature :'Introducer Signature',
+    proofOfCourtOrder: 'Court Order',
     proofOfLegalChange: 'Proof of Legal Change',
     proofOfLegalStatementUnderOath: 'Legal Statement under Oath',
-    proofOfPoliceConfirmation: 'Police Confirmation',
+    proofOfPoliceConfirmation: 'Proof of Police Confirmation',
     proofOfResidence: 'Proof of Residence',
     proofOfCitizenshipCertificate: 'Proof of Citizenship Certificate',
     proofOfLoss: 'Proof of Loss',
-    proofOfNationalId: 'Proof of National Id'
+    proofOfNationalId: 'National ID'
   };
 
   export const TITLE_MAP: { [key: string]: string[] } = {
