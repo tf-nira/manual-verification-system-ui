@@ -83,7 +83,6 @@ export const API_CONST_RECOMMEND_FOR_APPROVAL ='RECOMMEND_FOR_APPROVAL'
 export const MAX_DOC_SIZE = 2 * 1024 * 1024;
 // Map document keys to readable titles
 export const CATEGORY_MAP: { [key: string]: string } = {
-    proofOfPhysicalApplicationForm: 'Proof of Form-9 Renewal',
     proofOfAbandonment: 'Proof of Abandonment',
     proofOfException: 'Exception Proof',
     proofOfPayment: 'Proof of Payment',
@@ -115,6 +114,17 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfLoss: 'Proof of Loss',
     proofOfNationalId: 'National ID'
   };
+
+  export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
+
+  export const FORM_LABELS_BY_SERVICE: {[key: string]: string} = {
+    'New registrations' : 'Proof of Form-3 New Registration',
+    'Renewal of card': 'Proof of Form-9 Renewal',
+    'Lost/ Replacement of card': 'Proof of Form-11 Replacement',
+    'Change of Particulars': 'Proof of Form-1/1A COP',
+    'GetFirst ID': 'Proof of Form-7A GetFirst ID'
+  }
+
 
   export const TITLE_MAP: { [key: string]: string[] } = {
     proofOfPhysicalApplicationForm: ['Physical Application Form'],
