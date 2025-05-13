@@ -153,7 +153,8 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'mother-details-section', label: 'Mother Details' },
         { id: 'intoducer-details-section', label: 'Blood Relatives/Introducer Details' },
         { id: 'children-details-section', label: 'Particulars of Applicants Children' },
-        { id: 'declarant-details-section', label: 'Declarants Details' }
+        { id: 'declarant-details-section', label: 'Declarants Details' },
+        { id: 'place-of-enrolmment-section', label: 'Place Of Enrollment' }
       ],
     },
     {
