@@ -1617,6 +1617,52 @@
           </div>
           </div>
   
+          <div id="place-of-enrolmment-seciton" class="section" *ngIf="hasSectionData([
+                'enrolmentCountry', 'applicantPlaceOfEnrolmentDistrict', 'applicantPlaceOfEnrolmentCounty',
+                'applicantPlaceOfEnrolmentSubCounty', 'applicantPlaceOfEnrolmentParish',
+                'applicantPlaceOfEnrolmentVillage'
+              ])">
+            <h3>Place Of Enrollment</h3>
+            <div class="personal-information">
+          
+              <div class="field-container" *ngIf="rowData?.demographics?.enrolmentCountry">
+                <label>Country</label>
+                <div class="field-value">{{ parseJson(rowData?.demographics?.enrolmentCountry)[0]?.value }}</div>
+              </div>
+          
+              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentDistrict">
+                <label>District</label>
+                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentDistrict)[0]?.value }}
+                </div>
+              </div>
+          
+              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentCounty">
+                <label>County</label>
+                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentCounty)[0]?.value }}
+                </div>
+              </div>
+          
+              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentSubCounty">
+                <label>Subcounty</label>
+                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentSubCounty)[0]?.value
+                  }}</div>
+              </div>
+          
+              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentParish">
+                <label>Parish</label>
+                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentParish)[0]?.value }}
+                </div>
+              </div>
+          
+              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentVillage">
+                <label>Village</label>
+                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentVillage)[0]?.value }}
+                </div>
+              </div>
+          
+            </div>
+          </div>
+
           <div id="signature-section" class="section"
             *ngIf="rowData?.demographics?.signature || rowData?.demographics?.introducerSignature">
             <h3>
