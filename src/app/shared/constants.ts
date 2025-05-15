@@ -112,7 +112,9 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfResidence: 'Proof of Residence',
     proofOfCitizenshipCertificate: 'Proof of Citizenship Certificate',
     proofOfLoss: 'Proof of Loss',
-    proofOfNationalId: 'National ID'
+    proofOfNationalId: 'National ID',
+    proofOfLC1Letter: 'LC 1 Letter',
+    proofOfDamaged: 'Damaged Card'
   };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
@@ -154,7 +156,9 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     proofOfIntroducerSignature: ['Introducer Signature'],
     proofOfCourtOrder: ['Court Order'],
     proofOfLoss:['Police Report'],
-    proofOfNationalId:['National Id']
+    proofOfNationalId:['National Id'],
+    proofOfLC1Letter: ['LC 1 Letter'],
+    proofOfDamaged: ['Damaged Card']
   };
   // Define the mappings for categories and titles based on service and service type
 export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } } = {
@@ -179,7 +183,7 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Replacement of a card': ['']
   },
   'Lost/ Replacement of card': {
-    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss']
+    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
   },
   'Change of Particulars': {
     'addingName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
@@ -189,7 +193,7 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'changeOfDateOfBirth': ['proofOfLegalStatementUnderOath', 'proofOfPoliceConfirmation', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
     'changeInPlaceOfResidence': ['proofOfResidence'],
     'changeInPlaceOfBirth': ['proofOfLegalStatementUnderOath', 'proofOfOtherSupportingdocumentIssuedbyGovt'],
-    'changeInPlaceOfOrigin': ['proofOfLegalStatementUnderOath', 'proofOfPoliceConfirmation', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
+    'changeInPlaceOfOrigin': ['proofOfLC1Letter','proofOfLegalStatementUnderOath', 'proofOfPoliceConfirmation', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
     'changeInCitizenshipType': ['proofOfLegalStatementUnderOath', 'proofOfCitizenshipCertificate'],
     'addSpouse': ['proofOfLegalStatementUnderOath', 'proofOfOtherSupportingdocumentIssuedbyGovt'],
     'removeSpouse': ['proofOfLegalStatementUnderOath', 'proofOfOtherSupportingdocumentIssuedbyGovt'],
@@ -260,8 +264,9 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
   'Lost/ Replacement of card': {
     'Lost/ Replacement of card': {
       proofOfPhysicalApplicationForm: ['Physical Application Form'],
-      proofOfAbandonment: ['Police Report'],
-      proofOfLoss: ['proofOfLoss']
+      proofOfLoss: ['Police Report'],
+      proofOfNationalId:['National Id'],
+      proofOfDamaged: ['Damaged Card']
     }
   },
   'Change of Particulars': {
@@ -274,6 +279,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfLegalStatementUnderOath: ['Statutory Declaration', 'Statutory Declaration by the parent'],
       proofOfPoliceConfirmation: ['CID report from place of Origin', 'CID Report'],
       proofOfResidence: ['Letter from LC 1 Chairperson'],
+      proofOfLC1Letter: ['LC 1 Letter'],
       proofOfCitizenshipCertificate: ['Certificate of Citizenship by Registration', 'Certificate of Citizenship by Naturalisation', 'Certificate of Dual Citizenship']
     }
   },
