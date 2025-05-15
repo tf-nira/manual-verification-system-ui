@@ -273,7 +273,7 @@ getDocumentTitle(key: string): string {
   return this.categoryMap[key] || 'Unknown Document';
 }
 
-  viewDocument(document: { file: File | SafeResourceUrl | null, fileName?: string }): void {
+  viewDocument(document: { file: File | SafeResourceUrl | null, fileName?: string, category?: string }): void {
     if (document.file) {
       const sanitizedUrl = this.sanitizer.sanitize(4, document.file); 
       if (!sanitizedUrl) {
@@ -290,12 +290,13 @@ getDocumentTitle(key: string): string {
       const isImage = fileType === 'jpg' || fileType === 'jpeg' || fileType === 'png';
       const isPdf = fileType === 'pdf';
   
+      const documentTitle = document.category ? this.getDocumentTitle(document.category) : 'Document'; 
       const newWindow = window.open('', '_blank');
       if (newWindow) {
         if (isPdf) {
           newWindow.document.write(`
             <html>
-              <head><title>${document.fileName || 'Document'}</title></head>
+              <head><title>${documentTitle}</title></head>
               <body style="margin: 0;">
                 <iframe
                   src="${sanitizedUrl}"
@@ -311,7 +312,7 @@ getDocumentTitle(key: string): string {
           newWindow.document.write(`
             <html>
               <head>
-                <title>${document.fileName || 'Image'}</title>
+                <title>${documentTitle}</title>
                 <style>
                   body { margin: 0; text-align: center; background-color: #f0f0f0; height: 100vh; display: flex; align-items: center; justify-content: center; }
                   img { max-width: 100%; max-height: 100vh; object-fit: contain; display: block; }

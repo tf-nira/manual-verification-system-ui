@@ -811,7 +811,7 @@ getTitlesForDocument(document: any): string[] {
       });
     }
   }
-  viewDocument(document: { file: File | SafeResourceUrl | null }): void {
+  viewDocument(document: { file: File | SafeResourceUrl | null, category?: string }): void {
     if (document.file) {
       const sanitizedUrl = this.sanitizer.sanitize(4, document.file); // Sanitizes the SafeResourceUrl
       if (!sanitizedUrl) {
@@ -824,13 +824,15 @@ getTitlesForDocument(document: any): string[] {
         return;
       }
 
+      const documentTitle = document.category ? this.getDocumentTitle(document.category) : 'Document';
+
       // Open a new window and inject sanitized HTML
       const newWindow = window.open('', '_blank');
       if (newWindow) {
         newWindow.document.write(`
             <html>
               <head>
-                <title>${document.file || 'Document'}</title>
+                <title>${documentTitle}</title>
               </head>
               <body style="margin: 0;">
                 <iframe
