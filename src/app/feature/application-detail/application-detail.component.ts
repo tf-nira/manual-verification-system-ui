@@ -182,7 +182,13 @@ export class ApplicationDetailComponent implements OnInit {
   ];
   
   irisList: string[] = ['Left', 'Right'];
-  
+  stageSpeciifcLabels: Record<string, string> = {
+    'CITIZENSHIP_VERIFICATION' : 'CVS rejection reason',
+    'BIO_DEDUPE' : 'Biometric Deduplication rejection reason'
+  };
+  extractedStageName: string = '';
+  extractedComment: string = '';
+  commentLabel: string = 'Rejection reason';
   expandedSections: { [key: string]: boolean } = {};
   activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
@@ -289,6 +295,13 @@ docTitles:any;
     this.applicationId = this.rowData.applicationId || '';
     this.service = this.rowData.service || '';
     this.statusComment = this.rowData.statusComment || '';
+    if(this.statusComment.includes('::')){
+      const parts = this.statusComment.split('::');
+      this.extractedStageName = parts[0];
+      this.extractedComment = parts[1];
+
+      this.commentLabel = this.stageSpeciifcLabels[this.extractedStageName] || 'Rejection reason';
+    }
     this.enrollmentOfficerComment = (() => {
       const rawComment = this.rowData?.demographics?.enrollmentOfficerComment;
       if (!rawComment) return ''; // Handles null, undefined, or empty cases
