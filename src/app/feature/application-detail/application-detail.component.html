@@ -1775,8 +1775,8 @@
             </div>
 
             <div *ngIf="statusComment" class="info-item">
-              <div class="detail-label">CVS rejection reason</div>
-              <div class="detail-value">{{ statusComment }}</div>
+              <div class="detail-label">{{ commentLabel }}</div>
+              <div class="detail-value">{{ extractedComment }}</div>
             </div>
 
             <div *ngIf="selectedRow">
