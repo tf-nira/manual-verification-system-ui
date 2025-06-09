@@ -85,7 +85,34 @@
         </ng-template>
 
 
-        <h3>Personal Information</h3>
+        <!-- Show Personal Information section first if service is Change of Particulars -->
+        <div *ngIf="service === constants.CHANGE_OF_PARTICULARS">
+          <h3>Personal Information</h3>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.copSurnamePrevious">
+              <label>Surname</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value }}</div>
+            </div>
+        
+            <div class="field-container" *ngIf="rowData?.demographics?.copGivenNamePrevious">
+              <label>Given Name</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value }}</div>
+            </div>
+          </div>
+        </div>
+        
+        
+        <h3>{{ service === constants.CHANGE_OF_PARTICULARS ? 'Notification of Change' : 'Personal Information' }}</h3>
+        <!-- Display COP subsections if service is Change of Particulars -->
+        <div *ngIf="service === constants.CHANGE_OF_PARTICULARS" class="cop-subsections">
+          <div *ngFor="let section of getVisibleSectionsCop()" class="cop-section">
+            <div *ngFor="let subSection of section.subSections" class="cop-subsection">
+              <div class="field-container">
+                <label>{{ subSection.label }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="personal-information">
 
           <div class="field-container" *ngIf="rowData?.demographics?.fullName">
