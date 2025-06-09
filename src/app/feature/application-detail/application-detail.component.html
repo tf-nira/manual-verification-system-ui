@@ -2216,5 +2216,50 @@
         <button class="btn add" (click)="addDocumentRow()">Add Document</button>
         <button class="btn confirm" (click)="confirmAndUpload()">Upload Documents</button>
       </div>
-    </div>
+      </div>
+      
+      <!-- Document Scanner Modal -->
+      <div id="scanModal" class="scan-modal" *ngIf="showScannerModal">
+        <div class="scan-modal-content">
+          <div class="scan-modal-header">
+            <h3>Scan Document</h3>
+            <button class="close-scan-button" (click)="closeScannerModal()">&times;</button>
+          </div>
+      
+          <div class="scanner-container">
+            <video #scannerVideo class="scanner-video" [class.hidden]="!showVideo" autoplay>
+            </video>
+      
+            <canvas #scannerCanvas class="scanner-canvas" [class.hidden]="showVideo">
+            </canvas>
+      
+            <div class="scanner-controls">
+              <button class="scan-btn capture" [class.hidden]="!showVideo" (click)="captureImage()">
+                <i class="fas fa-camera"></i>
+                Capture
+              </button>
+      
+              <button class="scan-btn retake" [class.hidden]="showVideo" (click)="retakeImage()">
+                <i class="fas fa-redo"></i>
+                Retake
+              </button>
+      
+              <button class="scan-btn save" [class.hidden]="showVideo" (click)="saveScannedDocument()">
+                <i class="fas fa-save"></i>
+                Save Document
+              </button>
+            </div>
+      
+            <div class="error-message" *ngIf="scannerError">
+              {{ scannerError }}
+            </div>
+      
+            <div class="loading-message" *ngIf="isInitializingCamera">
+              <mat-spinner diameter="30"></mat-spinner>
+              <p>Initializing camera...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
   </div>
