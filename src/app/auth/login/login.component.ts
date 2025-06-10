@@ -70,7 +70,19 @@ export class LoginComponent implements OnInit {
           const role = this.fetchRole(decoded);
           localStorage.setItem('role', role || '');
 
-          this.router.navigate(['/application-list'], { state: { role } });
+          // Store auth data in localStorage
+          localStorage.setItem('authToken', response.response.token);
+          localStorage.setItem('userId', userId || '');
+          localStorage.setItem('name', name || '');
+          localStorage.setItem('role', role || '');
+
+          sessionStorage.setItem('sessionActive', 'true');
+
+
+          this.router.navigate(['/application-list'], {
+            state: { role },
+            replaceUrl: true
+          });
         } else {
           this.showErrorMessage = true;
         }
