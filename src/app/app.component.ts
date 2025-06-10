@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet, RouterModule } from '@angular/router';
-import { ConfigService } from './core/services/config.service';
+import { RouterOutlet, RouterModule,Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,11 +11,22 @@ import { ConfigService } from './core/services/config.service';
 })
 export class AppComponent {
   title = 'MANUAL-VERIFICATION-UI';
-  // constructor(private configService: ConfigService) {}
+  constructor(private router: Router) {}
 
-  // ngOnInit(): void {
-  //   this.configService.getConfig().subscribe((config: any) => {
-  //     console.log('Loaded Config:', config);
-  //   });
-  // }
+  ngOnInit(): void {
+    // Clear session when navigating to login page
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        if (event.url === '/login' || event.url === '/') {
+          console.log('Navigating to login - clearing session');
+          sessionStorage.removeItem('sessionActive');
+        }
+      });
+
+    // Clear session on page refresh
+    window.addEventListener('beforeunload', () => {
+      sessionStorage.clear();
+    });
+  }
 }
