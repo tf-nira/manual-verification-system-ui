@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -55,6 +55,15 @@ interface DocumentResponse {
   styleUrl: './application-detail.component.css'
 })
 export class ApplicationDetailComponent implements OnInit {
+  @ViewChild('scannerVideo', { static: false }) scannerVideo!: ElementRef<HTMLVideoElement>;
+  @ViewChild('scannerCanvas', { static: false }) scannerCanvas!: ElementRef<HTMLCanvasElement>;
+
+  showScannerModal = false;
+  showVideo = true;
+  isInitializingCamera = false;
+  scannerError = '';
+  private stream: MediaStream | null = null;
+  private currentScanIndex = 0;
   isLoading = false;
   demographicData: any;
   isChecked = false;
@@ -829,6 +838,57 @@ getTitlesForDocument(document: any): string[] {
   }
   viewDocument(document: { file: File | SafeResourceUrl | null, category?: string }): void {
     if (document.file) {
+      console.log('document.file:', document.file);
+      const fileStr = document.file.toString();
+      console.log('fileStr:', fileStr);
+
+      // Check if it contains a data URL matching data url from safe url
+      const dataUrlMatch = fileStr.match(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/);
+
+      if (dataUrlMatch) {
+        const dataUrl = dataUrlMatch[0];
+        console.log('Found data URL, length:', dataUrl.length);
+
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(`
+          <html>
+            <head>
+              <title>Scanned Document</title>
+            </head>
+            <body style="margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f0f0f0;">
+              <img src="${dataUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
+            </body>
+          </html>
+        `);
+          newWindow.document.close();
+        } else {
+          this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
+        }
+        return;
+      }
+
+      // Handling File objects (scanned documents)
+      if (document.file instanceof File) {
+        const objectUrl = URL.createObjectURL(document.file);
+        const newWindow = window.open(objectUrl, '_blank');
+        if (!newWindow) {
+          this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
+        }
+        setTimeout(() => URL.revokeObjectURL(objectUrl), 30000);
+        return;
+      }
+
       const sanitizedUrl = this.sanitizer.sanitize(4, document.file); // Sanitizes the SafeResourceUrl
       if (!sanitizedUrl) {
         this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
@@ -920,8 +980,17 @@ getTitlesForDocument(document: any): string[] {
     fileInput.remove();
   }
 
-  triggerScan(index: number) {
-    // Trigger scan logic here
+  async triggerScan(index: number) {
+    this.currentScanIndex = index;
+    
+    // Check if device supports camera and  access camera
+    if (await this.isCameraSupported()) {
+      // Desktop/tablet with camera 
+      this.openScannerModal();
+    } else {
+      // Mobile device or no camera API support - fallback to file input
+      this.triggerMobileScan(index);
+    }
   }
 
   previewFile(file: File | SafeResourceUrl) {
@@ -1434,11 +1503,296 @@ getMimeType(format: string): string {
   
   return formatMap[format.toUpperCase()] || 'application/octet-stream';
 }
+  /**
+     * to check if camera is supported
+     */
+  private async isCameraSupported(): Promise<boolean> {
+    try {
+      // Check if navigator.mediaDevices exists new browsers support
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        return false;
+      }
+
+      // Check if we can enumerate devices 
+      if (navigator.mediaDevices.enumerateDevices) {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const hasVideoDevice = devices.some(device => device.kind === 'videoinput');
+        if (!hasVideoDevice) {
+          return false;
+        }
+      }
+
+      // Test if we can actually get camera permission/access
+      try {
+        const testStream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 1, height: 1 } // video request for testing
+        });
+
+        // stop the test stream
+        testStream.getTracks().forEach(track => track.stop());
+        return true;
+      } catch (permissionError) {
+        console.warn('Camera access test failed:', permissionError);
+        return false;
+      }
+
+    } catch (error) {
+      console.warn('Camera support check failed:', error);
+      return false;
+    }
+  }
 
 
-ngOnDestroy() {
-  localStorage.removeItem('rejectionDetails');
-}
+  openScannerModal() {
+    this.showScannerModal = true;
+    this.showVideo = true;
+    this.scannerError = '';
+    this.isInitializingCamera = true;
+
+    //  delay to ensure DOM is ready
+    setTimeout(() => {
+      this.initializeCamera();
+    }, 100);
+  }
+
+  closeScannerModal() {
+    this.stopCamera();
+    this.showScannerModal = false;
+    this.showVideo = true;
+    this.scannerError = '';
+    this.isInitializingCamera = false;
+  }
+  /**
+     * Initialize camera stream
+     */
+  private async initializeCamera() {
+    try {
+      this.scannerError = '';
+
+      // request camera access with preferences for back camera
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment', // Prefer back camera
+          width: { ideal: 1920, max: 1920 },
+          height: { ideal: 1080, max: 1080 }
+        }
+      });
+
+      if (this.scannerVideo?.nativeElement) {
+        this.scannerVideo.nativeElement.srcObject = this.stream;
+        this.isInitializingCamera = false;
+      }
+
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      this.isInitializingCamera = false;
+
+      let errorMessage = 'Unable to access camera. ';
+
+      if (error instanceof Error) {
+        if (error.name === 'NotAllowedError') {
+          errorMessage += 'Please allow camera permissions and try again.';
+        } else if (error.name === 'NotFoundError') {
+          errorMessage += 'No camera found on this device.';
+        } else if (error.name === 'NotSupportedError') {
+          errorMessage += 'Camera is not supported on this device.';
+        } else {
+          errorMessage += 'Please check your camera and try again.';
+        }
+      }
+
+      this.scannerError = errorMessage;
+
+
+      this.snackBar.open(errorMessage, 'Close', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+    }
+  }
+
+
+  /**
+   * Capture image from video stream
+   */
+  captureImage() {
+    const video = this.scannerVideo?.nativeElement;
+    const canvas = this.scannerCanvas?.nativeElement;
+
+    if (!video || !canvas) {
+      this.scannerError = 'Camera or canvas not available';
+      return;
+    }
+
+    if (video.videoWidth === 0 || video.videoHeight === 0) {
+      this.scannerError = 'Camera is not ready. Please wait a moment and try again.';
+      return;
+    }
+
+    try {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      // Draw current video frame to canvas
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Switch to preview mode
+        this.showVideo = false;
+        this.scannerError = '';
+      } else {
+        this.scannerError = 'Unable to capture image. Please try again.';
+      }
+    } catch (error) {
+      console.error('Error capturing image:', error);
+      this.scannerError = 'Failed to capture image. Please try again.';
+    }
+  }
+  /**
+     * Return to video mode for retaking
+     */
+  retakeImage() {
+    this.showVideo = true;
+    this.scannerError = '';
+  }
+
+  /**
+   * Save the scanned document
+   */
+  saveScannedDocument() {
+    const canvas = this.scannerCanvas?.nativeElement;
+
+    if (!canvas) {
+      this.scannerError = 'No image captured';
+      return;
+    }
+
+    try {
+      // Convert canvas to blob
+      canvas.toBlob((blob) => {
+        if (blob) {
+          if (blob.size > MAX_DOC_SIZE) {
+            this.snackBar.open('Scanned image is too large. Please try scanning again with better lighting.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: ['center-snackbar'],
+            });
+            return;
+          }
+
+          // Creating file from blob
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').substring(0, 19);
+          const fileName = `scanned_document_${timestamp}.png`;
+          const file = new File([blob], fileName, { type: 'image/png' });
+
+          // Adding to document list
+          if (this.additionalDocuments[this.currentScanIndex]) {
+            this.additionalDocuments[this.currentScanIndex].fileName = fileName;
+            this.additionalDocuments[this.currentScanIndex].file = file;
+
+            this.snackBar.open('Document scanned successfully', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: ['center-snackbar'],
+            });
+
+            // Close modal
+            this.closeScannerModal();
+          } else {
+            this.scannerError = 'Error saving document. Please try again.';
+          }
+        } else {
+          this.scannerError = 'Failed to process scanned image. Please try again.';
+        }
+      }, 'image/png', 0.8); // 0.8 quality to reduce file size
+    } catch (error) {
+      console.error('Error saving scanned document:', error);
+      this.scannerError = 'Failed to save document. Please try again.';
+    }
+  }
+
+  /**
+   * Stop camera stream and cleanup
+   */
+  private stopCamera() {
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => {
+        track.stop();
+      });
+      this.stream = null;
+    }
+  }
+
+  private triggerMobileScan(index: number) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.setAttribute('capture', 'environment'); // Use back camera
+    input.style.display = 'none';
+
+    input.onchange = (event: Event) => {
+      const inputElement = event.target as HTMLInputElement;
+      if (inputElement.files && inputElement.files.length > 0) {
+        const file = inputElement.files[0];
+
+        // Validate file size
+        if (file.size > MAX_DOC_SIZE) {
+          this.snackBar.open('File size exceeds 2 MB. Please try again.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
+          return;
+        }
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          this.snackBar.open('Please select an image file.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
+          return;
+        }
+
+        this.additionalDocuments[index].fileName = file.name;
+        this.additionalDocuments[index].file = file;
+
+        this.snackBar.open('Document captured successfully', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
+      }
+    };
+
+    input.onerror = () => {
+      this.snackBar.open('Error accessing camera. Please try again.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+    };
+
+    document.body.appendChild(input);
+    input.click();
+    input.remove();
+  }
+
+
+  ngOnDestroy() {
+    this.stopCamera();
+    localStorage.removeItem('rejectionDetails');
+  }
 
 }
 
