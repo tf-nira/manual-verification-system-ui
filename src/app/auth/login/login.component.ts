@@ -48,51 +48,47 @@ export class LoginComponent implements OnInit {
     });
   }
   onSubmit() {
-    console.log('login submitted for user:', this.username);
+  console.log('login submitted for user:', this.username);
 
-    this.dataService.userLogin(this.username, this.password).subscribe(
-      (response: any) => {
-        // Check if login was successful
-        if (
-          response &&
-          response.response &&
-          response.response.status === API_CONST_SUCCESS
-        ) {
+  this.dataService.userLogin(this.username, this.password).subscribe(
+    (response: any) => {
+      // Check if login was successful
+      if (
+        response &&
+        response.response &&
+        response.response.status === API_CONST_SUCCESS
+      ) {
 
-          const decoded = this.decodeJwt(response.response.token);
-          const userId = this.fetchPreferredUsername(decoded);
-          const name = this.fetchInitials(decoded);
+        const decoded = this.decodeJwt(response.response.token);
+        const userId = this.fetchPreferredUsername(decoded);
+        const name = this.fetchInitials(decoded);
+        const role = this.fetchRole(decoded);
 
-          localStorage.setItem('authToken', response.response.token);
-          localStorage.setItem('userId', userId || '');
-          localStorage.setItem('name', name || '');
+        // Store auth data in localStorage (removed duplicates)
+        localStorage.setItem('authToken', response.response.token);
+        localStorage.setItem('userId', userId || '');
+        localStorage.setItem('name', name || '');
+        localStorage.setItem('role', role || '');
 
-          const role = this.fetchRole(decoded);
-          localStorage.setItem('role', role || '');
+        // Create active session
+        sessionStorage.setItem('sessionActive', 'true');
 
-          // Store auth data in localStorage
-          localStorage.setItem('authToken', response.response.token);
-          localStorage.setItem('userId', userId || '');
-          localStorage.setItem('name', name || '');
-          localStorage.setItem('role', role || '');
+        console.log('Login successful, navigating to application-list');
 
-          sessionStorage.setItem('sessionActive', 'true');
-
-
-          this.router.navigate(['/application-list'], {
-            state: { role },
-            replaceUrl: true
-          });
-        } else {
-          this.showErrorMessage = true;
-        }
-      },
-      (error) => {
-        console.error('Login error:', error);
+        // Navigate WITHOUT replaceUrl to maintain browser history
+        this.router.navigate(['/application-list'], {
+          state: { role }
+        });
+      } else {
         this.showErrorMessage = true;
       }
-    );
-  }
+    },
+    (error) => {
+      console.error('Login error:', error);
+      this.showErrorMessage = true;
+    }
+  );
+}
 
   decodeJwt(token: string): any {
     return jwtDecode(token);

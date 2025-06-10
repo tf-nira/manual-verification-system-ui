@@ -23,6 +23,22 @@ export class AppComponent {
           sessionStorage.removeItem('sessionActive');
         }
       });
+    
+    // Handle browser back/forward button navigation
+    window.addEventListener('popstate', () => {
+      const currentPath = window.location.pathname;
+      console.log('Browser navigation to:', currentPath);
+      
+      // If navigating to a protected route without session, redirect to login
+      const protectedRoutes = ['/application-list', '/application-detail', '/demographic-details'];
+      if (protectedRoutes.includes(currentPath)) {
+        const sessionActive = sessionStorage.getItem('sessionActive');
+        if (!sessionActive) {
+          console.log('No active session for protected route, redirecting to login');
+          this.router.navigate(['/login']);
+        }
+      }
+    });
 
     // Clear session on page refresh
     window.addEventListener('beforeunload', () => {
