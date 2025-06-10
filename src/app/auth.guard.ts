@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
       // Clear session but keep login data for re-authentication
       sessionStorage.removeItem('sessionActive');
       
-      this.router.navigate(['/login'], { replaceUrl: true });
+      this.router.navigate(['/login']);
       return false;
     }
   }
