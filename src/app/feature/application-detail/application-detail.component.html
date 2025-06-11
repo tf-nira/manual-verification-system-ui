@@ -1866,6 +1866,27 @@
                   <div class="detail-value">{{ selectedRow.legalEscDetails.escDTimes | date: 'dd-MM-yyyy HH:mm:ss' || 'N/A' }}</div>
                 </div>
               </div>
+                <!-- District Officer Escalation Details -->
+                <div *ngIf="selectedRow.districtEscDetails" class="escalation-section">
+                  <button class="escalation-header" (click)="toggleEscalation('legal')">
+                    District Escalation Details
+                    <span [class]="isEscalationExpanded('legal') ? 'expanded' : 'collapsed'"></span>
+                  </button>
+                  <div *ngIf="isEscalationExpanded('legal')" class="escalation-content">
+                    <div class="detail-label">Level</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.level || 'N/A' }}</div>
+                    <div class="detail-label">Category</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.category || 'N/A' }}</div>
+                    <div class="detail-label">Comment</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.comment || 'N/A' }}</div>
+                    <div class="detail-label">Escalated By</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.escBy || 'N/A' }}</div>
+                    <div class="detail-label">Escalation Time</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.escDTimes | date: 'dd-MM-yyyy HH:mm:ss' || 'N/A' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <!--Rejection details-->
               <div *ngIf="rejectionCategory || rejectionComment" class="escalation-section">
