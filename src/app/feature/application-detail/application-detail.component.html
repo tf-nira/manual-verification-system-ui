@@ -98,6 +98,27 @@
               <label>Given Name</label>
               <div class="field-value">{{ parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value }}</div>
             </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copEmailPrevious">
+              <label>Email</label>
+              <div class="field-value">{{ rowData?.demographics?.copEmailPrevious }}</div>
+            </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copDateOfBirthPrevious">
+              <label>Date Of Birth</label>
+              <div class="field-value">{{ rowData?.demographics?.copDateOfBirthPrevious }}</div>
+            </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copNinPrevious">
+              <label>National ID Number(NIN)</label>
+              <div class="field-value">{{ rowData?.demographics?.copNinPrevious }}</div>
+            </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copPhonePrevious">
+              <label>Mobile Number</label>
+              <div class="field-value">{{ rowData?.demographics?.copPhonePrevious }}</div>
+            </div>
+
           </div>
         </div>
         
