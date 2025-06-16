@@ -140,7 +140,12 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfMarCert: 'Certified copy of marriage certificate',
   proofOfDecAbsolute: 'Certified copy of decree absolute',
   proofOfDNA: 'DNA test results',
-  proofOfBirthCertBeforeReg: 'Certified copy of Birth certificate issued before registration'
+  proofOfBirthCertBeforeReg: 'Certified copy of Birth certificate issued before registration',
+  proofOfLegalReport: 'Legal Report',
+  proofOfAll: 'Passport/ Voters Card/ Driving Permit/ Baptism Card/ Other',
+  proofOfMedRep: 'Medical Report',
+  proofOfBAP: 'Birth Certificate/ Acadamic Docs/ Passport',
+  proofOfBirthNotification: 'Birth Certificate / Notification Record',
 };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
