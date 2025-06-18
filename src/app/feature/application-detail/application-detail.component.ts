@@ -125,7 +125,9 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'removeSpouse', label: 'Removing a Spouse' },
         { id: 'changeDetailsOfFather', label: 'Change the Details of Father' },
         { id: 'changeDetailsOfMother', label: 'Change the Details of Mother' },
-        { id: 'correctionOfErrorRegardingNin', label: 'Correction of error regarding NIN' },
+        { id: 'addingNamesFromPreviousCertorDoc', label: 'Adding Names from birth certificate, passport/ Academic documents' },
+        { id: 'otherNameCorrections', label: 'Correction of error regarding NIN' },
+        { id: 'changeInGender', label: 'Correction of error regarding NIN' }
       ]
     }
   ];
@@ -359,7 +361,22 @@ docTitles:any;
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
 updateCategoriesAndTitles() {
-  if(this.foundling === 'Y'){
+   if(this.service === 'Change of Particulars'){
+    const serviceTypeCop = this.getVisibleSectionsCop();
+    let categories: string[] = [];
+    serviceTypeCop.forEach(service => {
+      service.subSections.forEach(serviceType => {
+        const categoryList = SERVICE_CATEGORY_MAP[this.service]?.[serviceType.id] || [];
+        categories = categories.concat(categoryList);
+      });
+    });
+    this.docCategories = categories.map(key => ({
+      key,
+      title: CATEGORY_MAP[key]
+    }));
+    return;
+  }
+  else if(this.foundling === 'Y'){
     const categories = SERVICE_CATEGORY_MAP[this.service]?.['Registration of foundlings'] || [];
     this.docCategories = categories.map(key => ({
       key,
@@ -375,25 +392,6 @@ updateCategoriesAndTitles() {
     }));
     return;
   }
-  else if(this.service === 'Change of Particulars'){
-    const serviceTypeCop = this.getVisibleSectionsCop();
-    let categories: string[] = [];
-
-    serviceTypeCop.forEach(service => {
-      service.subSections.forEach(serviceType => {
-        const categoryList = SERVICE_CATEGORY_MAP[this.service]?.[serviceType.id] || [];
-        categories = categories.concat(categoryList);
-      });
-    });
-
-    console.log("copservice: {}", serviceTypeCop);
-    console.log("docat: {}",categories);
-
-    this.docCategories = categories.map(key => ({
-      key,
-      title: CATEGORY_MAP[key]
-    }));
-  }
   else{
     const categories = SERVICE_CATEGORY_MAP[this.service]?.[this.serviceType] || [];
     this.docCategories = categories.map(key => ({
@@ -406,7 +404,22 @@ updateCategoriesAndTitles() {
 
 getTitlesForDocument(document: any): string[] {
   const categoryKey = document.category;
-  if(this.ageGroup === 'MINOR'){
+  if(this.service === 'Change of Particulars'){
+    // For Change of Particulars, we need to check all visible COP services
+    const serviceTypeCop = this.getVisibleSectionsCop();
+    let allTitles: string[] = [];
+
+    serviceTypeCop.forEach(service => {
+      service.subSections.forEach(serviceType => {
+        const titles = SERVICE_TITLE_MAP[this.service]?.[serviceType.id]?.[categoryKey] || [];
+        allTitles = allTitles.concat(titles);
+      });
+    });
+
+    // Remove duplicates and return
+    return [...new Set(allTitles)];
+  }
+  else if(this.ageGroup === 'MINOR'){
     return SERVICE_TITLE_MAP[this.service]?.['Registration of child citizen']?.[categoryKey] || [];
   }
   else if(this.foundling === 'Y'){
