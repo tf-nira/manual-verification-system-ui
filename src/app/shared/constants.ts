@@ -85,6 +85,7 @@ export const MAX_DOC_SIZE = 2 * 1024 * 1024;
 export const CHANGE_OF_PARTICULARS = 'Change of Particulars';
 // Map document keys to readable titles
 export const CATEGORY_MAP: { [key: string]: string } = {
+  proofOfPhysicalApplicationForm: 'Physical Application Form',
   proofOfAbandonment: 'Proof of Abandonment',
   proofOfException: 'Exception Proof',
   proofOfPayment: 'Proof of Payment',
