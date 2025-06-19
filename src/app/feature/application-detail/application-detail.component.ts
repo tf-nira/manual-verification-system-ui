@@ -126,8 +126,8 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'changeDetailsOfFather', label: 'Change the Details of Father' },
         { id: 'changeDetailsOfMother', label: 'Change the Details of Mother' },
         { id: 'addingNamesFromPreviousCertorDoc', label: 'Adding Names from birth certificate, passport/ Academic documents' },
-        { id: 'otherNameCorrections', label: 'Correction of error regarding NIN' },
-        { id: 'changeInGender', label: 'Correction of error regarding NIN' }
+        { id: 'otherNameCorrections', label: 'Other Name Corrections' },
+        { id: 'changeInGender', label: 'Change In Gender' }
       ]
     }
   ];
