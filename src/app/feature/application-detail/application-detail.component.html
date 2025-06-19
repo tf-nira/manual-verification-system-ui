@@ -262,7 +262,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.cardNumber">
             <label>Card Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.cardNumber)[0]?.value }}</div>
+            <div class="field-value">{{ rowData?.demographics?.cardNumber }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.UIN">
