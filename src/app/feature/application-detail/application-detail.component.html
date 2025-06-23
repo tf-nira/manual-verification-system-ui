@@ -175,12 +175,12 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.gender)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.phone">
+          <div class="field-container" *ngIf="rowData?.demographics?.phone && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Mobile Number</label>
             <div class="field-value">{{rowData?.demographics?.phone }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.email">
+          <div class="field-container" *ngIf="rowData?.demographics?.email && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Email</label>
             <div class="field-value">{{ rowData?.demographics?.email }}</div>
           </div>
@@ -190,7 +190,7 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantLivingStatus)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.CountryCode">
+          <div class="field-container" *ngIf="rowData?.demographics?.CountryCode && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Country Code</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.CountryCode)[0]?.value }}</div>
           </div>
@@ -270,7 +270,7 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.UIN)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.NIN">
+          <div class="field-container" *ngIf="rowData?.demographics?.NIN && service !== constants.CHANGE_OF_PARTICULARS">
             <label>National ID Number(NIN)</label>
             <div class="field-value">{{ rowData?.demographics?.NIN }}</div>
           </div>
