@@ -1302,19 +1302,25 @@ getTitlesForDocument(document: any): string[] {
       return null; // Skip null or undefined values
     }
 
-    if (Array.isArray(data) && data[0]?.value) {
-      return data[0].value; // Extract 'value' key from the first array item
+    if (Array.isArray(data)) {
+      if (data[0]?.value != null && typeof data[0].value === 'string' && data[0].value.trim() !== '') {
+        return data[0].value; // Extract 'value' key from the first array item
+      }
+      return null;
     }
 
-    if (typeof data === 'object' && data.value) {
-      return data.value; // Handle objects with a 'value' key
+    if (typeof data === 'object') {
+      if (data.value != null && typeof data.value === 'string' && data.value.trim() !== '') {
+        return data.value; // Handle objects with a 'value' key
+      }
+      return null;
     }
 
-    if (typeof data === 'string') {
+    if (typeof data === 'string' && data.trim() !== '') {
       try {
         // Parse JSON strings if applicable
         const parsed = JSON.parse(data);
-        if (Array.isArray(parsed) && parsed[0]?.value) {
+        if (Array.isArray(parsed) && parsed[0]?.value != null && typeof parsed[0].value === 'string' && parsed[0].value.trim() !== '') {
           return parsed[0].value; // Extract 'value' from parsed array
         }
         return data; // Return raw string if not JSON
