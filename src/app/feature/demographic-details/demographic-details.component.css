@@ -153,7 +153,7 @@ h2 {
 }
 /* Left Section */
 .left-section {
-  width: 250px;
+ width: 250px;
   background-color: #f9f9f9;
   border: 1px solid #ddd;
   padding: 15px;
@@ -161,6 +161,9 @@ h2 {
   border-radius: 5px;
   transition: width 0.3s ease-in-out;
   margin-top: 5rem;
+  
+  height: calc(100vh - 6rem); /* Set fixed height */
+  overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .left-section.collapsed {
