@@ -81,6 +81,9 @@ export const API_CONST_REJECT = 'REJECT';
 export const API_CONST_RECOMMEND_FOR_APPROVAL ='RECOMMEND_FOR_APPROVAL'
 //max indiviadual file size that can be uploaded 2mb
 export const MAX_DOC_SIZE = 2 * 1024 * 1024;
+export const SERVICE_CONST_MIGRATION = 'Migration';
+export const SERVICE_CONST_NEW_REGISTRATION = 'New Registration';
+export const SERVICE_CONST_RENEWAL = 'Renewal';
 
 export const CHANGE_OF_PARTICULARS = 'Change of Particulars';
 // Map document keys to readable titles
