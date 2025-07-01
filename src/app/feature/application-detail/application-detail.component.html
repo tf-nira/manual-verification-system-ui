@@ -646,7 +646,8 @@
        'spouseThreeGivenName', 'spouseThreeOtherNames', 'spouseThreeMaidenName', 'spouseThreePreviousName', 'spouseThreeNIN',
         'spouseThreeCitizenshipType', 
        'spouseThreePlaceOfMarriage', 'spouseThreeDateOfMarriage', 'spouseThreeTypeOfMarriage', 
-       'spouseThreeMarriageCertificateNumber'])">
+       'spouseThreeMarriageCertificateNumber', 'removeSpouseSurname', 'removeSpouseGivenName',
+        'removeSpouseDateOfMarriage'])">
 
         <h3>Spouse Details</h3>
         <div class="personal-information">
@@ -819,6 +820,22 @@
             <label>Spouse Three Marriage Certificate Number</label>
             <div class="field-value">{{rowData?.demographics?.spouseThreeMarriageCertificateNumber }}</div>
           </div>
+
+          <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseSurname">
+            <label>Surname</label>
+            <div class="field-value">{{rowData?.demographics?.removeSpouseSurname }}</div>
+          </div>
+
+          <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseGivenName">
+            <label>Given Name</label>
+            <div class="field-value">{{rowData?.demographics?.removeSpouseGivenName }}</div>
+          </div>
+
+          <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseDateOfMarriage">
+            <label>Date of Marriage</label>
+            <div class="field-value">{{rowData?.demographics?.removeSpouseDateOfMarriage }}</div>
+          </div>
+
         </div>
       </div>
 
