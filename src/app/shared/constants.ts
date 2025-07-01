@@ -150,6 +150,15 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfMedRep: 'Medical Report',
   proofOfBAP: 'Birth Certificate/ Acadamic Docs/ Passport',
   proofOfBirthNotification: 'Birth Certificate / Notification Record',
+  proofOfAppNationalID: 'National Identification Number of applicant',
+  proofOfPNationalID: 'National ID of parent',
+  proofOfFAll: 'Care order, Probation report, Welfare and family court reports',
+  proofOfPOLREP: 'Police Report',
+  proofOfNIDPBR: 'National ID of Parents/ Blood Relatives',
+  proofOfCLEI: 'Local Council Letter or Embassy information',
+  proofOfPPDetails: 'Previous Passports Details',
+  proofOfNatCert: 'Naturalisation Certificate',
+  proofOfPrevRec: 'Previous immigration records'
 };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
