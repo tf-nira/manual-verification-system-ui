@@ -716,6 +716,10 @@ getTitlesForDocument(document: any): string[] {
         case 'Change of Particulars':
           this.escalationCategories = COP_ESCALATION_CATEGORIES;
           break;
+        case 'Migration':
+        if (this.role === MVS_OFFICER) this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER;
+        else this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
+        break;
     }
   }
   objectKeys(obj: any): string[] {
