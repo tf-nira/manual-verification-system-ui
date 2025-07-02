@@ -119,6 +119,11 @@
               <div class="field-value">{{ rowData?.demographics?.copPhonePrevious }}</div>
             </div>
 
+            <div class="field-container" *ngIf="rowData?.demographics?.copCountryCodePrevious">
+              <label>Country Code</label>
+              <div class="field-value">{{ rowData?.demographics?.copCountryCodePrevious }}</div>
+            </div>
+
             <div class="field-container" *ngIf="rowData?.demographics?.copHomePhoneNumberPrevious">
               <label>Home Phone Number</label>
               <div class="field-value">{{ rowData?.demographics?.copHomePhoneNumberPrevious }}</div>
@@ -823,12 +828,12 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseSurname">
             <label>Surname</label>
-            <div class="field-value">{{rowData?.demographics?.removeSpouseSurname }}</div>
+            <div class="field-value">{{parseJson(rowData?.demographics?.removeSpouseSurname)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseGivenName">
             <label>Given Name</label>
-            <div class="field-value">{{rowData?.demographics?.removeSpouseGivenName }}</div>
+            <div class="field-value">{{parseJson(rowData?.demographics?.removeSpouseGivenName)[0]?.value}}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseDateOfMarriage">
