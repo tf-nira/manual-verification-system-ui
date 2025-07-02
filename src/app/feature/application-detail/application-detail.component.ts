@@ -1242,6 +1242,7 @@ getTitlesForDocument(document: any): string[] {
           this.relativeDocumentListByRole[role] = response.response.documents;
 
           this.isLoading = false; 
+          localStorage.setItem('serviceData', this.service);
         } else {
           const errorMessage =`Failed to fetch demographic data for ${role} from id repo`;
           this.snackBar.open(errorMessage, 'Close', {
@@ -1378,6 +1379,7 @@ getTitlesForDocument(document: any): string[] {
       if (newTab) {
         localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
         localStorage.setItem('documentData', JSON.stringify(this.relativeDocumentList));
+        localStorage.setItem('serviceData', this.service);
       }
     } else {
       const person = this.personDetails.find(person => person.role === 'guardian');
