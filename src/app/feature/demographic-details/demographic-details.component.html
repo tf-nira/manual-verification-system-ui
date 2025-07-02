@@ -11,7 +11,12 @@
           <i class="fas fa-toggle-on"></i>
         </button>
       </div>
-      <div class="part" *ngFor="let part of parts; let i = index">
+
+      <div *ngIf="dynamicParts.length === 0" class="no-sections">
+        No sections with data available.
+      </div>
+      <!-- Dynamic navigation based on available data -->
+      <div class="part" *ngFor="let part of dynamicParts; let i = index">
         <div class="part-header" (click)="togglePart(i)">
           <span>{{ part.label }}</span>
         </div>
@@ -55,7 +60,7 @@
     </div>
 
     <!-- Right Section -->
-    <div class="right-section" >
+    <div class="right-section">
       <div class="section-header">
         <h3>Documents</h3>
         <button class="toggle-btn" (click)="toggleLeft()">
@@ -64,29 +69,25 @@
       </div>
 
 
-    <div class="tab-content" >
-      <!-- Documents Section -->
+      <div class="tab-content">
+        <!-- Documents Section -->
         <div *ngIf="documents?.length === 0" class="no-documents">
           No documents available.
         </div>
-      
+
         <div *ngFor="let document of documents">
           <!-- Document Row -->
           <div class="document-row">
             <span class="category-name">{{ getDocumentTitle(document.category) || 'Unknown Category' }}</span>
-            <button
-              class="view-button"
-              [disabled]="!document.file"
-              (click)="viewDocument(document)"
-            >
+            <button class="view-button" [disabled]="!document.file" (click)="viewDocument(document)">
               <i class="fas fa-external-link-alt"></i>
               View
             </button>
           </div>
         </div>
-      
-        
+
+
+      </div>
     </div>
-  </div>
   </div>
 </div>

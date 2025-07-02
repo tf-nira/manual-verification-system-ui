@@ -20,6 +20,7 @@ export class DemographicDetailsComponent implements OnInit{
   isLeftCollapsed: boolean = false;
   
   isRightCollapsed: boolean = true;
+  dynamicParts: any[] = [];
   // Define navigation parts and sections
   parts = [
     {
@@ -221,7 +222,8 @@ export class DemographicDetailsComponent implements OnInit{
     if (data) {
       this.demographicData = JSON.parse(data);
       this.organizeDataIntoSections();
-      this.expandedParts = Array(this.parts.length).fill(false); // Initialize expanded state
+      this.createDynamicNavigation();
+      this.expandedParts = Array(this.dynamicParts.length).fill(false); // Initialize expanded state
    
     } else {
       console.error('No demographic data found in localStorage');
@@ -509,4 +511,25 @@ formatToExtension(format: string): string {
       return format.toLowerCase(); 
   }
 }
+
+createDynamicNavigation(): void {
+  const availableSectionIds = this.sectionsData.map(section => section.id);
+  
+  // Filtering the static parts to only include sections with data
+  this.dynamicParts = this.parts.map(part => {
+    const availableSections = part.sections.filter(section => 
+      availableSectionIds.includes(section.id)
+    );
+    
+    
+    if (availableSections.length > 0) {
+      return {
+        ...part,
+        sections: availableSections
+      };
+    }
+    return null;
+  }).filter(part => part !== null); 
+}
+
 }
