@@ -16,6 +16,7 @@ on:
     branches:
       - main
       - tf_nira_dev
+      - feature
 
 jobs:
   build-manual-verification-system-ui:

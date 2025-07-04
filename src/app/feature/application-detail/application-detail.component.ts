@@ -80,6 +80,7 @@ export class ApplicationDetailComponent implements OnInit {
   showEscalateModal: boolean = false;
   showScheduleInterviewModal: boolean = false;
   showDocumentUploadModal: boolean = false;
+  private isViewingDocument = false;
   showRejectModal: boolean = false;
   uploadDocumentSucessStatus : boolean = false;
   rowData: any = {};
@@ -469,17 +470,60 @@ getTitlesForDocument(document: any): string[] {
     const documents = this.rowData?.documents || {};
 
     this.documents = Object.keys(documents).map((key) => {
-      const base64Pdf = documents[key]?.trim();
+      const base64Data = documents[key]?.trim();
+      let safeUrl: SafeResourceUrl | null = null;
+
+      if (base64Data) {
+        try {
+          safeUrl = this.createSafeUrl(base64Data);
+        } catch (e) {
+          console.error(`Error processing document ${key}:`, e);
+        }
+      }
+
+      // Creating  document object with correct attributes
       return {
-        category: key, // Use the key as the category
-        title: this.getDocumentTitle(key), // Map keys to human-readable titles
-        fileName: `${key}.pdf`, // Generate a filename dynamically
-        file: base64Pdf ? this.convertBase64ToPdfUrl(base64Pdf) : null, // Convert Base64 to a SafeResourceUrl
+        category: key,
+        title: this.getDocumentTitle(key),
+        fileName: `${key}.${this.getFileExtension(base64Data || '')}`,
+        file: safeUrl, 
       };
     });
 
-    // Set the initial state of section expansion
     this.isSectionExpanded = this.documents.map(() => false);
+  }
+
+  getFileExtension(base64Data: string): string {
+    // Simple format detection based on base64 header
+    if (!base64Data) return 'pdf';
+    if (base64Data.startsWith('JVBERi0')) return 'pdf';
+    if (base64Data.startsWith('iVBORw0K')) return 'png';
+    if (base64Data.startsWith('/9j/')) return 'jpg';
+    if (base64Data.startsWith('TU0AKg')) return 'tiff';
+    return 'bin'; // generic binary extension
+  }
+
+  createSafeUrl(base64Data: string): SafeResourceUrl | null {
+    try {
+      // Handle data URLs that already include the prefix
+      if (base64Data?.startsWith('data:')) {
+        return this.sanitizer.bypassSecurityTrustResourceUrl(base64Data);
+      }
+
+      // Determine mime type
+      let mimeType = 'application/octet-stream'; // default
+      if (base64Data?.startsWith('JVBERi0')) mimeType = 'application/pdf';
+      else if (base64Data?.startsWith('iVBORw0K')) mimeType = 'image/png';
+      else if (base64Data?.startsWith('/9j/')) mimeType = 'image/jpeg';
+      else if (base64Data?.startsWith('TU0AKg')) mimeType = 'image/tiff';
+
+      // Create data URL
+      const dataUrl = `data:${mimeType};base64,${base64Data}`;
+      return this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
+    } catch (e) {
+      console.error('Error creating safe URL:', e);
+      return null;
+    }
   }
 
   getDocumentTitle(key: string): string {
@@ -860,60 +904,27 @@ getTitlesForDocument(document: any): string[] {
       });
     }
   }
-  viewDocument(document: { file: File | SafeResourceUrl | null, category?: string }): void {
-    if (document.file) {
-      console.log('document.file:', document.file);
-      const fileStr = document.file.toString();
-      console.log('fileStr:', fileStr);
 
-      // Check if it contains a data URL matching data url from safe url
-      const dataUrlMatch = fileStr.match(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/);
 
-      if (dataUrlMatch) {
-        const dataUrl = dataUrlMatch[0];
-        console.log('Found data URL, length:', dataUrl.length);
+  /**
+ * View document in a new window based on document type
+ */
+  viewDocument(docInfo: { file: File | SafeResourceUrl | null, category?: string }): void {
+    // Checking if already processing a document
+    if (this.isViewingDocument) {
+      return;
+    }
 
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(`
-          <html>
-            <head>
-              <title>Scanned Document</title>
-            </head>
-            <body style="margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f0f0f0;">
-              <img src="${dataUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
-            </body>
-          </html>
-        `);
-          newWindow.document.close();
-        } else {
-          this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: ['center-snackbar'],
-          });
-        }
-        return;
-      }
+    this.isViewingDocument = true;
 
-      // Handling File objects (scanned documents)
-      if (document.file instanceof File) {
-        const objectUrl = URL.createObjectURL(document.file);
-        const newWindow = window.open(objectUrl, '_blank');
-        if (!newWindow) {
-          this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: ['center-snackbar'],
-          });
-        }
-        setTimeout(() => URL.revokeObjectURL(objectUrl), 30000);
-        return;
-      }
+    setTimeout(() => {
+      this.isViewingDocument = false;
+    }, 1000);
 
-      const sanitizedUrl = this.sanitizer.sanitize(4, document.file); // Sanitizes the SafeResourceUrl
+    if (docInfo.file) {
+      const sanitizedUrl = this.sanitizer.sanitize(4, docInfo.file);
+
+ 
       if (!sanitizedUrl) {
         this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
           duration: 3000,
@@ -924,26 +935,97 @@ getTitlesForDocument(document: any): string[] {
         return;
       }
 
-      const documentTitle = document.category ? this.getDocumentTitle(document.category) : 'Document';
+      const documentTitle = docInfo.category ? this.getDocumentTitle(docInfo.category) : 'Document';
 
-      // Open a new window and inject sanitized HTML
-      const newWindow = window.open('', '_blank');
+      // Determine if document is an image
+      const isImage = this.isImageDocument(sanitizedUrl, docInfo.category);
+
+      // Creating a unique window name
+      const windowName = `doc_viewer_${docInfo.category || 'document'}`.replace(/[^a-zA-Z0-9]/g, '_');
+
+      // Open an empty window
+      const newWindow = window.open('about:blank', windowName);
+
       if (newWindow) {
-        newWindow.document.write(`
-            <html>
-              <head>
-                <title>${documentTitle}</title>
-              </head>
-              <body style="margin: 0;">
-                <iframe
-                  src="${sanitizedUrl}"
-                  width="100%"
-                  height="100%"
-                  style="border: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"
-                ></iframe>
-              </body>
-            </html>
-          `);
+        if (isImage) {
+          // Use img tag for images with basic zoom controls
+          newWindow.document.write(`
+          <html>
+            <head>
+              <title>${documentTitle}</title>
+              <style>
+                body, html {
+                  margin: 0;
+                  padding: 0;
+                  height: 100%;
+                  width: 100%;
+                  display: flex;
+                  flex-direction: column;
+                  background-color: #333;
+                  color: white;
+                  font-family: Arial, sans-serif;
+                }
+                .header {
+                  padding: 10px;
+                  background-color: #222;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                }
+                .content {
+                  flex: 1;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  overflow: auto;
+                }
+                img {
+                  max-width: 100%;
+                  max-height: 100%;
+                  object-fit: contain;
+                }
+              </style>
+            </head>
+            <body>
+              <div class="header">
+                <h3>${documentTitle}</h3>
+                <button onclick="window.print()">Print</button>
+              </div>
+              <div class="content">
+                <img src="${sanitizedUrl}" alt="${documentTitle}" />
+              </div>
+            </body>
+          </html>
+        `);
+        } else {
+          // Using iframe for non-image documents
+          newWindow.document.write(`
+          <html>
+            <head>
+              <title>${documentTitle}</title>
+              <style>
+                body, html {
+                  margin: 0;
+                  padding: 0;
+                  height: 100%;
+                  width: 100%;
+                  overflow: hidden;
+                }
+                iframe {
+                  width: 100%;
+                  height: 100%;
+                  border: none;
+                }
+              </style>
+            </head>
+            <body>
+              <iframe src="${sanitizedUrl}" width="100%" height="100%" frameborder="0"></iframe>
+            </body>
+          </html>
+        `);
+        }
+
+        newWindow.document.close();
       } else {
         this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
           duration: 3000,
@@ -962,7 +1044,44 @@ getTitlesForDocument(document: any): string[] {
     }
   }
 
+  /**
+   * Determines if the document is an image based on URL or category
+   */
+  isImageDocument(url: string, category?: string): boolean {
+    // Checking URL for image patterns
+    if (url.includes('data:image/') ||
+      url.match(/\.(jpg|jpeg|png|gif|bmp|webp|tiff|tif)($|\?)/i)) {
+      return true;
+    }
 
+    // Checking category name for image indicators
+    if (category) {
+      const lowerCategory = category.toLowerCase();
+      if (lowerCategory.includes('photo') ||
+        lowerCategory.includes('picture') ||
+        lowerCategory.includes('image') ||
+        lowerCategory.includes('scan')) {
+        return true;
+      }
+    }
+
+    // If the URL is data URL, check its base64 pattern
+    if (url.startsWith('data:')) {
+      // Cut the data: prefix and extract the base64 part
+      const base64Data = url.split(',')[1] || '';
+      // Check for JPEG, PNG, and other image signatures
+      if (base64Data.startsWith('/9j/') ||  // JPEG
+        base64Data.startsWith('iVBORw0K') ||  // PNG
+        base64Data.startsWith('R0lGOD') ||  // GIF
+        base64Data.startsWith('UklGR') ||  // WEBP
+        base64Data.startsWith('TU0AKg') ||  // TIFF
+        base64Data.startsWith('SUkqAA')) {  // Another TIFF signature
+        return true;
+      }
+    }
+
+    return false;
+  }
 
   // Handle file selection
   onFileSelect(event: any, index: number) {
