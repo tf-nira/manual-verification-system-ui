@@ -27,7 +27,9 @@
     "jwt-decode": "^4.0.0",
     "manual-verification-ui": "file:",
     "rxjs": "~7.8.0",
+    "tiff.js": "^1.0.0",
     "tslib": "^2.3.0",
+    "utif2": "^4.1.0",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {

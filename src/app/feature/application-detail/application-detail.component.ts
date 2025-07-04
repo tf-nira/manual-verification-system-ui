@@ -6,6 +6,7 @@ import { DemographicDetailsComponent } from '../demographic-details/demographic-
 import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uploaded.component';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
+import * as UTIF from 'utif2';
 import * as appConstants from '../../app.constants';
 import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, MVS_EXECUTIVE_DIRECTOR, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_APPROVAL, MVS_INTERNATIONAL_OFFICER } from '../../shared/constants';
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
@@ -343,8 +344,12 @@ docTitles:any;
     this.setEscalationCategories();
     // Check if the rowData contains documents and process them
     if (this.rowData?.documents) {
-      this.processDocuments();
-    } else {
+  this.processDocuments().then(() => {
+    console.log('Documents processing completed');
+  }).catch(error => {
+    console.error('Error processing documents:', error);
+  });
+}else {
       console.log('No documents found in the API response.');
     }
     this.isSectionExpanded = this.documents.map(() => false);
@@ -466,32 +471,39 @@ getTitlesForDocument(document: any): string[] {
     );
   }
   // Process the documents data into the required structure
-  processDocuments() {
-    const documents = this.rowData?.documents || {};
+async processDocuments() {
+  const documents = this.rowData?.documents || {};
+  console.log('Processing documents:', Object.keys(documents));
 
-    this.documents = Object.keys(documents).map((key) => {
-      const base64Data = documents[key]?.trim();
-      let safeUrl: SafeResourceUrl | null = null;
+  const documentPromises = Object.keys(documents).map(async (key) => {
+    const base64Data = documents[key]?.trim();
+    let safeUrl: SafeResourceUrl | null = null;
 
-      if (base64Data) {
-        try {
-          safeUrl = this.createSafeUrl(base64Data);
-        } catch (e) {
-          console.error(`Error processing document ${key}:`, e);
-        }
+    console.log(`Processing document: ${key}, data length: ${base64Data?.length || 0}`);
+    
+    if (base64Data) {
+      try {
+        safeUrl = await this.createSafeUrl(base64Data);
+        console.log(`Successfully created safe URL for: ${key}`);
+      } catch (e) {
+        console.error(`Error processing document ${key}:`, e);
       }
+    } else {
+      console.warn(`No base64 data found for document: ${key}`);
+    }
 
-      // Creating  document object with correct attributes
-      return {
-        category: key,
-        title: this.getDocumentTitle(key),
-        fileName: `${key}.${this.getFileExtension(base64Data || '')}`,
-        file: safeUrl, 
-      };
-    });
+    return {
+      category: key,
+      title: this.getDocumentTitle(key),
+      fileName: `${key}.${this.getFileExtension(base64Data || '')}`,
+      file: safeUrl, 
+    };
+  });
 
-    this.isSectionExpanded = this.documents.map(() => false);
-  }
+  this.documents = await Promise.all(documentPromises);
+  console.log(`Total documents processed: ${this.documents.length}`);
+  this.isSectionExpanded = this.documents.map(() => false);
+}
 
   getFileExtension(base64Data: string): string {
     // Simple format detection based on base64 header
@@ -503,29 +515,46 @@ getTitlesForDocument(document: any): string[] {
     return 'bin'; // generic binary extension
   }
 
-  createSafeUrl(base64Data: string): SafeResourceUrl | null {
-    try {
-      // Handle data URLs that already include the prefix
-      if (base64Data?.startsWith('data:')) {
-        return this.sanitizer.bypassSecurityTrustResourceUrl(base64Data);
-      }
-
-      // Determine mime type
-      let mimeType = 'application/octet-stream'; // default
-      if (base64Data?.startsWith('JVBERi0')) mimeType = 'application/pdf';
-      else if (base64Data?.startsWith('iVBORw0K')) mimeType = 'image/png';
-      else if (base64Data?.startsWith('/9j/')) mimeType = 'image/jpeg';
-      else if (base64Data?.startsWith('TU0AKg')) mimeType = 'image/tiff';
-
-      // Create data URL
-      const dataUrl = `data:${mimeType};base64,${base64Data}`;
-      return this.sanitizer.bypassSecurityTrustResourceUrl(dataUrl);
-    } catch (e) {
-      console.error('Error creating safe URL:', e);
-      return null;
+async createSafeUrl(base64Data: string): Promise<SafeResourceUrl | null> {
+  try {
+    if (base64Data?.startsWith('data:')) {
+      return this.sanitizer.bypassSecurityTrustResourceUrl(base64Data);
     }
-  }
 
+    let finalDataUrl = '';
+
+    if (base64Data?.startsWith('JVBERi0')) {
+      finalDataUrl = `data:application/pdf;base64,${base64Data}`;
+    } else if (base64Data?.startsWith('iVBORw0K')) {
+      finalDataUrl = `data:image/png;base64,${base64Data}`;
+    } else if (base64Data?.startsWith('/9j/')) {
+      finalDataUrl = `data:image/jpeg;base64,${base64Data}`;
+    } else if (base64Data?.startsWith('TU0AKg') || base64Data?.startsWith('SUkqAA')) {
+      // TIFF format - try conversion
+      console.log('Detected TIFF format, attempting conversion...');
+      
+      // Add a small delay to ensure UTIF is loaded
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      const convertedPng = await this.convertTiffToPng(base64Data);
+      
+      if (convertedPng) {
+        console.log('TIFF successfully converted to PNG');
+        finalDataUrl = convertedPng;
+      } else {
+        console.warn('TIFF conversion failed, using original format');
+        finalDataUrl = `data:image/tiff;base64,${base64Data}`;
+      }
+    } else {
+      finalDataUrl = `data:application/octet-stream;base64,${base64Data}`;
+    }
+
+    return this.sanitizer.bypassSecurityTrustResourceUrl(finalDataUrl);
+  } catch (e) {
+    console.error('Error creating safe URL:', e);
+    return null;
+  }
+}
   getDocumentTitle(key: string): string {
     if(key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]){
       return FORM_LABELS_BY_SERVICE[this.service];
@@ -909,47 +938,73 @@ getTitlesForDocument(document: any): string[] {
   /**
  * View document in a new window based on document type
  */
-  viewDocument(docInfo: { file: File | SafeResourceUrl | null, category?: string }): void {
-    // Checking if already processing a document
-    if (this.isViewingDocument) {
+  /**
+ * View document in a new window based on document type
+ */
+viewDocument(docInfo: { file: File | SafeResourceUrl | null, category?: string }): void {
+  // Check if already processing a document
+  if (this.isViewingDocument) {
+    return;
+  }
+
+  this.isViewingDocument = true;
+
+  setTimeout(() => {
+    this.isViewingDocument = false;
+  }, 1000);
+
+  if (docInfo.file) {
+    const sanitizedUrl = this.sanitizer.sanitize(4, docInfo.file);
+
+    if (!sanitizedUrl) {
+      this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
       return;
     }
 
-    this.isViewingDocument = true;
+    const documentTitle = docInfo.category ? this.getDocumentTitle(docInfo.category) : 'Document';
 
-    setTimeout(() => {
-      this.isViewingDocument = false;
-    }, 1000);
+    // Check if it's a TIFF image
+    const isTiff = sanitizedUrl.includes('data:image/tiff') || 
+                   (docInfo.category && this.getFileExtension(sanitizedUrl).toLowerCase() === 'tiff');
+    
+    // Determine if document is an image (including TIFF)
+    const isImage = this.isImageDocument(sanitizedUrl, docInfo.category) || isTiff;
 
-    if (docInfo.file) {
-      const sanitizedUrl = this.sanitizer.sanitize(4, docInfo.file);
+    console.log(`Viewing document: ${documentTitle}, isTiff: ${isTiff}, isImage: ${isImage}`);
 
- 
-      if (!sanitizedUrl) {
-        this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['center-snackbar'],
-        });
-        return;
-      }
+    // Create a unique window name
+    const windowName = `doc_viewer_${docInfo.category || 'document'}`.replace(/[^a-zA-Z0-9]/g, '_');
 
-      const documentTitle = docInfo.category ? this.getDocumentTitle(docInfo.category) : 'Document';
+    // Open an empty window
+    const newWindow = window.open('about:blank', windowName);
 
-      // Determine if document is an image
-      const isImage = this.isImageDocument(sanitizedUrl, docInfo.category);
+    if (newWindow) {
+      if (isImage) {
+        // For TIFF and other images
+        const imageHTML = isTiff ? 
+          `<div style="padding: 20px; text-align: center;">
+             <p style="color: orange; margin-bottom: 20px;">
+               ⚠️ TIFF images may not display properly in all browsers. 
+               If the image doesn't load, please download it to view.
+             </p>
+             <img src="${sanitizedUrl}" alt="${documentTitle}" style="max-width: 100%; max-height: 80vh;" 
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+             <div style="display: none; padding: 40px; border: 2px dashed #ccc; margin: 20px;">
+               <p>Unable to display TIFF image in browser.</p>
+               <a href="${sanitizedUrl}" download="${documentTitle}.tiff" 
+                  style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">
+                 Download TIFF File
+               </a>
+             </div>
+           </div>` :
+          `<img src="${sanitizedUrl}" alt="${documentTitle}" />`;
 
-      // Creating a unique window name
-      const windowName = `doc_viewer_${docInfo.category || 'document'}`.replace(/[^a-zA-Z0-9]/g, '_');
-
-      // Open an empty window
-      const newWindow = window.open('about:blank', windowName);
-
-      if (newWindow) {
-        if (isImage) {
-          // Use img tag for images with basic zoom controls
-          newWindow.document.write(`
+        newWindow.document.write(`
           <html>
             <head>
               <title>${documentTitle}</title>
@@ -992,14 +1047,14 @@ getTitlesForDocument(document: any): string[] {
                 <button onclick="window.print()">Print</button>
               </div>
               <div class="content">
-                <img src="${sanitizedUrl}" alt="${documentTitle}" />
+                ${imageHTML}
               </div>
             </body>
           </html>
         `);
-        } else {
-          // Using iframe for non-image documents
-          newWindow.document.write(`
+      } else {
+        // Use iframe for non-image documents
+        newWindow.document.write(`
           <html>
             <head>
               <title>${documentTitle}</title>
@@ -1023,66 +1078,67 @@ getTitlesForDocument(document: any): string[] {
             </body>
           </html>
         `);
-        }
-
-        newWindow.document.close();
-      } else {
-        this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['center-snackbar'],
-        });
       }
+
+      newWindow.document.close();
     } else {
-      this.snackBar.open('Document is not available.', 'Close', {
+      this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
         duration: 3000,
         horizontalPosition: 'center',
         verticalPosition: 'top',
         panelClass: ['center-snackbar'],
       });
     }
+  } else {
+    this.snackBar.open('Document is not available.', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['center-snackbar'],
+    });
   }
+}
 
   /**
-   * Determines if the document is an image based on URL or category
-   */
-  isImageDocument(url: string, category?: string): boolean {
-    // Checking URL for image patterns
-    if (url.includes('data:image/') ||
-      url.match(/\.(jpg|jpeg|png|gif|bmp|webp|tiff|tif)($|\?)/i)) {
-      return true;
-    }
-
-    // Checking category name for image indicators
-    if (category) {
-      const lowerCategory = category.toLowerCase();
-      if (lowerCategory.includes('photo') ||
-        lowerCategory.includes('picture') ||
-        lowerCategory.includes('image') ||
-        lowerCategory.includes('scan')) {
-        return true;
-      }
-    }
-
-    // If the URL is data URL, check its base64 pattern
-    if (url.startsWith('data:')) {
-      // Cut the data: prefix and extract the base64 part
-      const base64Data = url.split(',')[1] || '';
-      // Check for JPEG, PNG, and other image signatures
-      if (base64Data.startsWith('/9j/') ||  // JPEG
-        base64Data.startsWith('iVBORw0K') ||  // PNG
-        base64Data.startsWith('R0lGOD') ||  // GIF
-        base64Data.startsWith('UklGR') ||  // WEBP
-        base64Data.startsWith('TU0AKg') ||  // TIFF
-        base64Data.startsWith('SUkqAA')) {  // Another TIFF signature
-        return true;
-      }
-    }
-
-    return false;
+ * Determines if the document is an image based on URL or category
+ */
+isImageDocument(url: string, category?: string): boolean {
+  // Check URL for image patterns (including TIFF)
+  if (url.includes('data:image/') ||
+    url.match(/\.(jpg|jpeg|png|gif|bmp|webp|tiff|tif)($|\?)/i)) {
+    return true;
   }
 
+  // Check category name for image indicators
+  if (category) {
+    const lowerCategory = category.toLowerCase();
+    if (lowerCategory.includes('photo') ||
+      lowerCategory.includes('picture') ||
+      lowerCategory.includes('image') ||
+      lowerCategory.includes('scan')) {
+      return true;
+    }
+  }
+
+  // If the URL is data URL, check its base64 pattern
+  if (url.startsWith('data:')) {
+    // Extract the base64 part after the comma
+    const base64Data = url.split(',')[1] || '';
+    // Check for JPEG, PNG, TIFF, and other image signatures
+    if (base64Data.startsWith('/9j/') ||     // JPEG
+      base64Data.startsWith('iVBORw0K') ||   // PNG
+      base64Data.startsWith('R0lGOD') ||     // GIF
+      base64Data.startsWith('UklGR') ||      // WEBP
+      base64Data.startsWith('TU0AKg') ||     // TIFF (big-endian)
+      base64Data.startsWith('SUkqAA') ||     // TIFF (little-endian)
+      base64Data.startsWith('Qk0') ||        // BMP
+      base64Data.startsWith('iVBORw0KGgoAAAANSUhEUgAA')) { // Another PNG pattern
+      return true;
+    }
+  }
+
+  return false;
+}
   // Handle file selection
   onFileSelect(event: any, index: number) {
     const file = event.target.files[0];
@@ -1944,6 +2000,67 @@ getMimeType(format: string): string {
     this.stopCamera();
     localStorage.removeItem('rejectionDetails');
   }
+ // Simplified convertTiffToPng method without complex type checking
+async convertTiffToPng(base64Data: string): Promise<string | null> {
+  try {
+    console.log('Starting TIFF conversion...');
 
+    // Convert base64 to ArrayBuffer
+    const binaryString = atob(base64Data);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+      bytes[i] = binaryString.charCodeAt(i);
+    }
+
+    // Decode TIFF
+    const ifds = UTIF.decode(bytes.buffer);
+    if (!ifds || ifds.length === 0) {
+      console.error('No IFDs found in TIFF data');
+      return null;
+    }
+
+    // Use first image
+    const ifd = ifds[0];
+    
+    console.log('TIFF decoded, dimensions:', (ifd as any).width, 'x', (ifd as any).height);
+
+    // Decode the image data
+    UTIF.decodeImage(bytes.buffer, ifd);
+    
+    // Convert to RGBA - this is the standard approach
+    const rgba = UTIF.toRGBA8(ifd);
+    
+    // Create canvas
+    const canvas = document.createElement('canvas');
+    canvas.width = (ifd as any).width;
+    canvas.height = (ifd as any).height;
+    
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      console.error('Cannot get canvas context');
+      return null;
+    }
+
+    // Create ImageData and set the RGBA data
+    const imageData = ctx.createImageData(canvas.width, canvas.height);
+    
+    // Simple and reliable: just copy the data
+    for (let i = 0; i < rgba.length && i < imageData.data.length; i++) {
+      imageData.data[i] = rgba[i];
+    }
+
+    // Put image data on canvas
+    ctx.putImageData(imageData, 0, 0);
+
+    // Convert to PNG
+    const pngDataUrl = canvas.toDataURL('image/png');
+    console.log('TIFF converted to PNG successfully');
+    return pngDataUrl;
+    
+  } catch (error) {
+    console.error('TIFF conversion error:', error);
+    return null;
+  }
+}
 }
 
