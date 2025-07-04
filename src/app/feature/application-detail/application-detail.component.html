@@ -22,11 +22,11 @@
         </div>
         <div class="info-item">
           <div class="detail-label">Service</div>
-          <div class="detail-value">{{ service || 'By Birth' }}</div>
+          <div class="detail-value">{{ service }}</div>
         </div>
         <div class="info-item">
           <div class="detail-label">Service Type</div>
-          <div class="detail-value">{{ serviceType || 'Section ABC' }}</div>
+          <div class="detail-value">{{ serviceType }}</div>
         </div>
         <div class="info-item">
           <div class="detail-label">Created Date</div>
@@ -85,7 +85,65 @@
         </ng-template>
 
 
-        <h3>Personal Information</h3>
+        <!-- Show Personal Information section first if service is Change of Particulars -->
+        <div *ngIf="service === constants.CHANGE_OF_PARTICULARS">
+          <h3>Personal Information</h3>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.copSurnamePrevious">
+              <label>Surname</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value }}</div>
+            </div>
+        
+            <div class="field-container" *ngIf="rowData?.demographics?.copGivenNamePrevious">
+              <label>Given Name</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value }}</div>
+            </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copEmailPrevious">
+              <label>Email</label>
+              <div class="field-value">{{ rowData?.demographics?.copEmailPrevious }}</div>
+            </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copDateOfBirthPrevious">
+              <label>Date Of Birth</label>
+              <div class="field-value">{{ rowData?.demographics?.copDateOfBirthPrevious }}</div>
+            </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copNinPrevious">
+              <label>National ID Number(NIN)</label>
+              <div class="field-value">{{ rowData?.demographics?.copNinPrevious }}</div>
+            </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copPhonePrevious">
+              <label>Mobile Number</label>
+              <div class="field-value">{{ rowData?.demographics?.copPhonePrevious }}</div>
+            </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copCountryCodePrevious">
+              <label>Country Code</label>
+              <div class="field-value">{{ rowData?.demographics?.copCountryCodePrevious }}</div>
+            </div>
+
+            <div class="field-container" *ngIf="rowData?.demographics?.copHomePhoneNumberPrevious">
+              <label>Home Phone Number</label>
+              <div class="field-value">{{ rowData?.demographics?.copHomePhoneNumberPrevious }}</div>
+            </div>
+
+          </div>
+        </div>
+        
+        
+        <h3>{{ service === constants.CHANGE_OF_PARTICULARS ? 'Notification of Change' : 'Personal Information' }}</h3>
+        <!-- Display COP subsections if service is Change of Particulars -->
+        <div *ngIf="service === constants.CHANGE_OF_PARTICULARS" class="cop-subsections">
+          <div *ngFor="let section of getVisibleSectionsCop()" class="cop-section">
+            <div *ngFor="let subSection of section.subSections" class="cop-subsection">
+              <div class="field-container">
+                <label>{{ subSection.label }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="personal-information">
 
           <div class="field-container" *ngIf="rowData?.demographics?.fullName">
@@ -127,12 +185,12 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.gender)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.phone">
+          <div class="field-container" *ngIf="rowData?.demographics?.phone && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Mobile Number</label>
             <div class="field-value">{{rowData?.demographics?.phone }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.email">
+          <div class="field-container" *ngIf="rowData?.demographics?.email && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Email</label>
             <div class="field-value">{{ rowData?.demographics?.email }}</div>
           </div>
@@ -142,12 +200,12 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantLivingStatus)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.CountryCode">
+          <div class="field-container" *ngIf="rowData?.demographics?.CountryCode && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Country Code</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.CountryCode)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.homePhoneNumber">
+          <div class="field-container" *ngIf="rowData?.demographics?.homePhoneNumber && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Home Phone Number</label>
             <div class="field-value">{{ rowData?.demographics?.homePhoneNumber }}</div>
           </div>
@@ -214,7 +272,7 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.cardNumber">
             <label>Card Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.cardNumber)[0]?.value }}</div>
+            <div class="field-value">{{ rowData?.demographics?.cardNumber }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.UIN">
@@ -222,7 +280,7 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.UIN)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.NIN">
+          <div class="field-container" *ngIf="rowData?.demographics?.NIN && service !== constants.CHANGE_OF_PARTICULARS">
             <label>National ID Number(NIN)</label>
             <div class="field-value">{{ rowData?.demographics?.NIN }}</div>
           </div>
@@ -593,7 +651,8 @@
        'spouseThreeGivenName', 'spouseThreeOtherNames', 'spouseThreeMaidenName', 'spouseThreePreviousName', 'spouseThreeNIN',
         'spouseThreeCitizenshipType', 
        'spouseThreePlaceOfMarriage', 'spouseThreeDateOfMarriage', 'spouseThreeTypeOfMarriage', 
-       'spouseThreeMarriageCertificateNumber'])">
+       'spouseThreeMarriageCertificateNumber', 'removeSpouseSurname', 'removeSpouseGivenName',
+        'removeSpouseDateOfMarriage'])">
 
         <h3>Spouse Details</h3>
         <div class="personal-information">
@@ -653,7 +712,7 @@
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.numberOfOtherSpouses">
-            <label>Number of Other Spouses</label>
+            <label>Number of Spouse</label>
             <div class="field-value">{{rowData?.demographics?.numberOfOtherSpouses }}</div>
           </div>
 
@@ -766,6 +825,22 @@
             <label>Spouse Three Marriage Certificate Number</label>
             <div class="field-value">{{rowData?.demographics?.spouseThreeMarriageCertificateNumber }}</div>
           </div>
+
+          <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseSurname">
+            <label>Surname</label>
+            <div class="field-value">{{parseJson(rowData?.demographics?.removeSpouseSurname)[0]?.value }}</div>
+          </div>
+
+          <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseGivenName">
+            <label>Given Name</label>
+            <div class="field-value">{{parseJson(rowData?.demographics?.removeSpouseGivenName)[0]?.value}}</div>
+          </div>
+
+          <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseDateOfMarriage">
+            <label>Date of Marriage</label>
+            <div class="field-value">{{rowData?.demographics?.removeSpouseDateOfMarriage }}</div>
+          </div>
+
         </div>
       </div>
 
@@ -1172,132 +1247,132 @@
         <h3>Blood Relative's/Introducer Details</h3>
         <div class="personal-information">
           <div class="field-container" *ngIf="rowData?.demographics?.guardianRelationToApplicant">
-            <label>Guardian Relation To Applicant</label>
+            <label>Blood Relative's Relation To Applicant</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianRelationToApplicant)[0]?.value }}
             </div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianSurname">
-            <label>Guardian Surname</label>
+            <label>Blood Relative's Surname</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianSurname)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianGivenName">
-            <label>Guardian Given Name</label>
+            <label>Blood Relative's Given Name</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianGivenName)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianOtherNames">
-            <label>Guardian Other Names</label>
+            <label>Blood Relative's Other Names</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianOtherNames)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianOccupation">
-            <label>Guardian Occupation</label>
+            <label>Blood Relative's Occupation</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianOccupation)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianNIN_AIN">
-            <label>Guardian Nin</label>
+            <label>Blood Relative's Nin</label>
             <div class="field-value">{{rowData?.demographics?.guardianNIN_AIN}}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianIDDocumentnumber">
-            <label>Guardian Id Document Number</label>
+            <label>Blood Relative's Id Document Number</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianIDDocumentnumber)[0]?.value }}
             </div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianPassportNumber">
-            <label>Guardian Passport Number</label>
+            <label>Blood Relative's Passport Number</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianPassportNumber)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianTribe">
-            <label>Guardian Tribe</label>
+            <label>Blood Relative's Tribe</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianTribe)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianClan">
-            <label>Guardian Clan</label>
+            <label>Blood Relative's Clan</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianClan)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianCitizenshipType">
-            <label>Guardian Citizenship Type</label>
+            <label>Blood Relative's Citizenship Type</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianCitizenshipType)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianCitizenshipCertificateNumber">
-            <label>Guardian Citizenship Certificate Number</label>
+            <label>Blood Relative's Citizenship Certificate Number</label>
             <div class="field-value">{{
               parseJson(rowData?.demographics?.guardianCitizenshipCertificateNumber)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianOtherNationality">
-            <label>Guardian Other Nationality</label>
+            <label>Blood Relative's Other Nationality</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianOtherNationality)[0]?.value }}
             </div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianForeignOriginCountry">
-            <label>Guardian Foreign Origin Country</label>
+            <label>Blood Relative's Foreign Origin Country</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianForeignOriginCountry)[0]?.value }}
             </div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianForeignOriginAddress">
-            <label>Guardian Foreign Origin Address</label>
+            <label>Blood Relative's Foreign Origin Address</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianForeignOriginAddress)[0]?.value }}
             </div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardiansCountry">
-            <label>Guardians Country</label>
+            <label>Blood Relative's Country</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardiansCountry)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceDistrict">
-            <label>Guardian Residence District</label>
+            <label>Blood Relative's Residence District</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceDistrict)[0]?.value }}
             </div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceCounty">
-            <label>Guardian Residence County</label>
+            <label>Blood Relative's Residence County</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceCounty)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceSubCounty">
-            <label>Guardian Residence Subcounty</label>
+            <label>Blood Relative's Residence Subcounty</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceSubCounty)[0]?.value }}
             </div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceParish">
-            <label>Guardian Residence Parish</label>
+            <label>Blood Relative's Residence Parish</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceParish)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceVillage">
-            <label>Guardian Residence Village</label>
+            <label>Blood Relative's Residence Village</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceVillage)[0]?.value }}
             </div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceStreet">
-            <label>Guardian Residence Street</label>
+            <label>Blood Relative's Residence Street</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceStreet)[0]?.value }}</div>
           </div>
 
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianResidence">
-            <label>Guardian Residence</label>
+            <label>Blood Relative's Residence</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidence)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianDateOfBirth">
-            <label>Guardian Date of Birth</label>
+            <label>Blood Relative's Date of Birth</label>
             <div class="field-value">{{ rowData?.demographics?.guardianDateOfBirth }}</div>
           </div>
         </div>
@@ -1678,7 +1753,7 @@
           
               <ng-template #noSignature>
                 <div class="signature-container no-signature">
-                  <p>Signature not provided.</p>
+                  <p>Unable to Sign.</p>
                 </div>
               </ng-template>
             </div>
@@ -1839,6 +1914,27 @@
                   <div class="detail-value">{{ selectedRow.legalEscDetails.escDTimes | date: 'dd-MM-yyyy HH:mm:ss' || 'N/A' }}</div>
                 </div>
               </div>
+                <!-- District Officer Escalation Details -->
+                <div *ngIf="selectedRow.districtEscDetails" class="escalation-section">
+                  <button class="escalation-header" (click)="toggleEscalation('legal')">
+                    District Escalation Details
+                    <span [class]="isEscalationExpanded('legal') ? 'expanded' : 'collapsed'"></span>
+                  </button>
+                  <div *ngIf="isEscalationExpanded('legal')" class="escalation-content">
+                    <div class="detail-label">Level</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.level || 'N/A' }}</div>
+                    <div class="detail-label">Category</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.category || 'N/A' }}</div>
+                    <div class="detail-label">Comment</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.comment || 'N/A' }}</div>
+                    <div class="detail-label">Escalated By</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.escBy || 'N/A' }}</div>
+                    <div class="detail-label">Escalation Time</div>
+                    <div class="detail-value">{{ selectedRow.districtEscDetails.escDTimes | date: 'dd-MM-yyyy HH:mm:ss' || 'N/A' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               <!--Rejection details-->
               <div *ngIf="rejectionCategory || rejectionComment" class="escalation-section">
@@ -1877,7 +1973,6 @@
               <p>No row selected. Click on a row to see details.</p>
             </div>
           </div>
-        </div>
         <!-- Records Content -->
         <div class="tab-content" *ngIf="activeTab === 'records'">
           <!-- <div class="scrollable-container"> -->
@@ -1958,6 +2053,7 @@
             {{ constants.UPLOAD_DCOUMENTS }}
           </button>
           </div>
+      </div>
       </div>
     </div>
 
@@ -2189,5 +2285,50 @@
         <button class="btn add" (click)="addDocumentRow()">Add Document</button>
         <button class="btn confirm" (click)="confirmAndUpload()">Upload Documents</button>
       </div>
-    </div>
+      </div>
+      
+      <!-- Document Scanner Modal -->
+      <div id="scanModal" class="scan-modal" *ngIf="showScannerModal">
+        <div class="scan-modal-content">
+          <div class="scan-modal-header">
+            <h3>Scan Document</h3>
+            <button class="close-scan-button" (click)="closeScannerModal()">&times;</button>
+          </div>
+      
+          <div class="scanner-container">
+            <video #scannerVideo class="scanner-video" [class.hidden]="!showVideo" autoplay>
+            </video>
+      
+            <canvas #scannerCanvas class="scanner-canvas" [class.hidden]="showVideo">
+            </canvas>
+      
+            <div class="scanner-controls">
+              <button class="scan-btn capture" [class.hidden]="!showVideo" (click)="captureImage()">
+                <i class="fas fa-camera"></i>
+                Capture
+              </button>
+      
+              <button class="scan-btn retake" [class.hidden]="showVideo" (click)="retakeImage()">
+                <i class="fas fa-redo"></i>
+                Retake
+              </button>
+      
+              <button class="scan-btn save" [class.hidden]="showVideo" (click)="saveScannedDocument()">
+                <i class="fas fa-save"></i>
+                Save Document
+              </button>
+            </div>
+      
+            <div class="error-message" *ngIf="scannerError">
+              {{ scannerError }}
+            </div>
+      
+            <div class="loading-message" *ngIf="isInitializingCamera">
+              <mat-spinner diameter="30"></mat-spinner>
+              <p>Initializing camera...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
   </div>

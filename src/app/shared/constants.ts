@@ -81,41 +81,85 @@ export const API_CONST_REJECT = 'REJECT';
 export const API_CONST_RECOMMEND_FOR_APPROVAL ='RECOMMEND_FOR_APPROVAL'
 //max indiviadual file size that can be uploaded 2mb
 export const MAX_DOC_SIZE = 2 * 1024 * 1024;
+export const SERVICE_CONST_MIGRATION = 'Migration';
+export const SERVICE_CONST_NEW_REGISTRATION = 'New Registration';
+export const SERVICE_CONST_RENEWAL = 'Renewal';
+
+export const CHANGE_OF_PARTICULARS = 'Change of Particulars';
 // Map document keys to readable titles
 export const CATEGORY_MAP: { [key: string]: string } = {
-    proofOfAbandonment: 'Proof of Abandonment',
-    proofOfException: 'Exception Proof',
-    proofOfPayment: 'Proof of Payment',
-    proofOfRelationship: 'Proof of Relationship',
-    proofOfCitizenship: 'Proof of Citizenship',
-    proofOfLegalDOcuments: 'Proof of Legal Documents',
-    proofOfIdentity: 'Proof of Identity',
-    proofOfAddress: 'Proof of Residence',
-    proofOfReplacement: 'Proof of Replacement',
-    proofOfBirth: 'Proof of Event of Birth',
-    proofOfOtherSupportingdocumentIssuedbyGovt: 'Other Supporting Documents Issued by Government',
-    proofOfOtherSupportingDocuments: 'Other Supporting Documents',
-    proofOfRegistration: 'Proof of Registration',
-    proofOfAdoption: 'Proof of Adoption',
-    proofOfChangeOfParticulars: 'Proof of Change of Particulars',
-    proofOfDeclarant: 'Declarant National ID',
-    proofOfLegalDeepPoll: 'Deed Poll',
-    proofOfLegalGazzette: 'Uganda Gazette',
-    proofOfLegalStatutoryDeclaration: 'Legal Statement Under Oath',
-    proofOfModificationConsent: 'Modification Consent Form',
-    proofOfIntroducerSignature: 'Introducer Signature',
-    introducerProofOfSignature :'Introducer Signature',
-    proofOfCourtOrder: 'Court Order',
-    proofOfLegalChange: 'Proof of Legal Change',
-    proofOfLegalStatementUnderOath: 'Legal Statement under Oath',
-    proofOfPoliceConfirmation: 'Proof of Police Confirmation',
-    proofOfResidence: 'Proof of Residence',
-    proofOfCitizenshipCertificate: 'Proof of Citizenship Certificate',
-    proofOfLoss: 'Proof of Loss',
-    proofOfNationalId: 'National ID',
-    proofOfLC1Letter: 'LC 1 Letter',
-    proofOfDamaged: 'Damaged Card'
-  };
+  proofOfPhysicalApplicationForm: 'Physical Application Form',
+  proofOfAbandonment: 'Proof of Abandonment',
+  proofOfException: 'Exception Proof',
+  proofOfPayment: 'Proof of Payment',
+  proofOfRelationship: 'Proof of Relationship',
+  proofOfCitizenship: 'Proof of Citizenship',
+  proofOfLegalDOcuments: 'Proof of Legal Documents',
+  proofOfIdentity: 'Proof of Identity',
+  proofOfAddress: 'Proof of Residence',
+  proofOfReplacement: 'Proof of Replacement',
+  proofOfBirth: 'Proof of Event of Birth',
+  proofOfOtherSupportingdocumentIssuedbyGovt: 'Other Supporting Documents Issued by Government',
+  proofOfOtherSupportingDocuments: 'Other Supporting Documents',
+  proofOfRegistration: 'Proof of Registration',
+  proofOfAdoption: 'Proof of Adoption',
+  proofOfChangeOfParticulars: 'Proof of Change of Particulars',
+  proofOfDeclarant: 'Declarant National ID',
+  proofOfLegalDeepPoll: 'Deed Poll',
+  proofOfLegalGazzette: 'Uganda Gazette',
+  proofOfLegalStatutoryDeclaration: 'Legal Statement Under Oath',
+  proofOfModificationConsent: 'Modification Consent Form',
+  proofOfIntroducerSignature: 'Introducer Signature',
+  introducerProofOfSignature: 'Introducer Signature',
+  proofOfCourtOrder: 'Court Order',
+  proofOfLegalChange: 'Proof of Legal Change',
+  proofOfLegalStatementUnderOath: 'Legal Statement under Oath',
+  proofOfPoliceConfirmation: 'Proof of Police Confirmation',
+  proofOfResidence: 'Proof of Residence',
+  proofOfCitizenshipCertificate: 'Proof of Citizenship Certificate',
+  proofOfLoss: 'Proof of Loss',
+  proofOfNationalId: 'National ID',
+  proofOfLC1Letter: 'LC 1 Letter',
+  proofOfDamaged: 'Damaged Card',
+  proofOfNoticeOfIntension: 'Notice of Intention to Change Name',
+  proofOfDeedPoll: 'Deed Poll Registered with URSB',
+  proofOfCID: 'CID Report',
+  proofOfInterpol: 'Interpol clearance',
+  proofOfBirthCert: 'Birth Certificate',
+  proofOfAcademic: 'Academic Documents',
+  proofOfPassport: 'Passport',
+  proofOfVoters: 'Voters Card',
+  proofOfDriving: 'Driving Permit',
+  proofOfBaptism: 'Baptism Card',
+  proofOfOtherRelevant: 'Any other relevant docs',
+  proofOfStatutory: 'Statutory Declaration',
+  proofOfLCV: 'Letter for Citizenship Verification',
+  proofOfRecLetter: 'Recommendation Letter',
+  proofOfOtherSupporting: 'Any other supporting Documents',
+  proofOfStaDecalrationByParent: 'Statutory Declaration by the parent',
+  proofOfNotification: 'Notification Record',
+  proofOfCbyReg: 'Certificate of Citizenship by Registration',
+  proofOfCbyNat: 'Certificate of Citizenship by Naturalisation',
+  proofOfCbyDual: 'Certificate of Dual Citizenship',
+  proofOfMarCert: 'Certified copy of marriage certificate',
+  proofOfDecAbsolute: 'Certified copy of decree absolute',
+  proofOfDNA: 'DNA test results',
+  proofOfBirthCertBeforeReg: 'Certified copy of Birth certificate issued before registration',
+  proofOfLegalReport: 'Legal Report',
+  proofOfAll: 'Passport/ Voters Card/ Driving Permit/ Baptism Card/ Other',
+  proofOfMedRep: 'Medical Report',
+  proofOfBAP: 'Birth Certificate/ Acadamic Docs/ Passport',
+  proofOfBirthNotification: 'Birth Certificate / Notification Record',
+  proofOfAppNationalID: 'National Identification Number of applicant',
+  proofOfPNationalID: 'National ID of parent',
+  proofOfFAll: 'Care order, Probation report, Welfare and family court reports',
+  proofOfPOLREP: 'Police Report',
+  proofOfNIDPBR: 'National ID of Parents/ Blood Relatives',
+  proofOfCLEI: 'Local Council Letter or Embassy information',
+  proofOfPPDetails: 'Previous Passports Details',
+  proofOfNatCert: 'Naturalisation Certificate',
+  proofOfPrevRec: 'Previous immigration records'
+};
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
 
@@ -186,20 +230,22 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
   },
   'Change of Particulars': {
-    'addingName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
-    'removingName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
-    'changeOrderOfNames': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
-    'completeChangeofName': ['proofOfLegalChange', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
-    'changeOfDateOfBirth': ['proofOfLegalStatementUnderOath', 'proofOfPoliceConfirmation', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
-    'changeInPlaceOfResidence': ['proofOfResidence'],
-    'changeInPlaceOfBirth': ['proofOfLegalStatementUnderOath', 'proofOfOtherSupportingdocumentIssuedbyGovt'],
-    'changeInPlaceOfOrigin': ['proofOfLC1Letter','proofOfLegalStatementUnderOath', 'proofOfPoliceConfirmation', 'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
-    'changeInCitizenshipType': ['proofOfLegalStatementUnderOath', 'proofOfCitizenshipCertificate'],
-    'addSpouse': ['proofOfLegalStatementUnderOath', 'proofOfOtherSupportingdocumentIssuedbyGovt'],
-    'removeSpouse': ['proofOfLegalStatementUnderOath', 'proofOfOtherSupportingdocumentIssuedbyGovt'],
-    'changeDetailsOfFather': ['proofOfOtherSupportingdocumentIssuedbyGovt'],
-    'changeDetailsOfMother': ['proofOfOtherSupportingdocumentIssuedbyGovt'],
-    'correctionOfErrorRegardingNin': []
+    'addingName': ['proofOfNoticeOfIntension', 'proofOfDeedPoll', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfBaptism', 'proofOfOtherRelevant'],
+    'removingName': ['proofOfNoticeOfIntension', 'proofOfDeedPoll', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfBaptism', 'proofOfOtherRelevant'],
+    'changeOrderOfNames': ['proofOfStatutory', 'proofOfAll'],
+    'completeChangeofName': ['proofOfNoticeOfIntension', 'proofOfDeedPoll', 'proofOfCID', 'proofOfInterpol', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfBaptism', 'proofOfOtherRelevant'],
+    'changeOfDateOfBirth': ['proofOfStatutory', 'proofOfCID', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfLegalReport', 'proofOfBaptism'],
+    'changeInPlaceOfResidence': ['proofOfLC1Letter'],
+    'changeInPlaceOfBirth': ['proofOfStatutory', 'proofOfBirthNotification'],
+    'changeInPlaceOfOrigin': ['proofOfStatutory','proofOfLC1Letter', 'proofOfBirthCert', 'proofOfBaptism', 'proofOfOtherSupporting'],
+    'changeInCitizenshipType': ['proofOfStatutory', 'proofOfCbyReg', 'proofOfCbyNat', 'proofOfCbyDual'],
+    'addSpouse': ['proofOfMarCert'],
+    'removeSpouse': ['proofOfDecAbsolute'],
+    'changeDetailsOfFather': ['proofOfBirthCertBeforeReg', 'proofOfCID', 'proofOfDNA', 'proofOfCourtOrder'],
+    'changeDetailsOfMother': ['proofOfBirthCertBeforeReg', 'proofOfCID', 'proofOfDNA', 'proofOfCourtOrder'],
+    'addingNamesFromPreviousCertorDoc':['proofOfStatutory', 'proofOfBAP'],
+    'otherNameCorrections':['proofOfStatutory', 'proofOfAll'],
+    'changeInGender':['proofOfStatutory', 'proofOfMedRep', 'proofOfAll']
   },
   'GetFirst ID': {
     'GetFirst ID': ['proofOfRegistration', 'proofOfOtherSupportingdocumentIssuedbyGovt', 
@@ -270,17 +316,108 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     }
   },
   'Change of Particulars': {
-    'Change of Particulars': {
-      proofOfLegalChange: ['Notice of Intention to Change Name', 'Deed Poll Registered with URSB ', 'CID Report', 'Interpol clearance '],
-      proofOfOtherSupportingdocumentIssuedbyGovt: ['Birth Certificate', 'Academic Documents', 'Passport', 'Voters Card', 'Driving Permit', 'Notification Record', 
-        'Certified copy of marriage certificate', 'certified copy of decree absolute', 'Certified copy of Birth certificate issued before registration', 'DNA test results',
-        'Court Order establishing parentage'],
-        proofOfOtherSupportingDocuments: ['Baptism Card', 'Any other relevant docs'],
-      proofOfLegalStatementUnderOath: ['Statutory Declaration', 'Statutory Declaration by the parent'],
-      proofOfPoliceConfirmation: ['CID report from place of Origin', 'CID Report'],
-      proofOfResidence: ['Letter from LC 1 Chairperson'],
-      proofOfLC1Letter: ['LC 1 Letter'],
-      proofOfCitizenshipCertificate: ['Certificate of Citizenship by Registration', 'Certificate of Citizenship by Naturalisation', 'Certificate of Dual Citizenship']
+    // Added individual mappings for each COP service type
+    'addingName': {
+      proofOfNoticeOfIntension: ['Notice of Intention to Change Name'],
+      proofOfDeedPoll: ['Deed Poll Registered with URSB'],
+      proofOfBirthCert: ['Birth Certificate'],
+      proofOfAcademic: ['Academic Documents'],
+      proofOfPassport: ['Passport'],
+      proofOfVoters: ['Voters Card'],
+      proofOfDriving: ['Driving Permit'],
+      proofOfBaptism: ['Baptism Card'],
+      proofOfOtherRelevant: ['Any other relevant docs'],
+      
+    },
+    'removingName': {
+      proofOfNoticeOfIntension: ['Notice of Intention to Change Name'],
+      proofOfDeedPoll: ['Deed Poll Registered with URSB'],
+      proofOfBirthCert: ['Birth Certificate'],
+      proofOfAcademic: ['Academic Documents'],
+      proofOfPassport: ['Passport'],
+      proofOfVoters: ['Voters Card'],
+      proofOfDriving: ['Driving Permit'],
+      proofOfBaptism: ['Baptism Card'],
+      proofOfOtherRelevant: ['Any other relevant docs'],
+    },
+    'changeOrderOfNames': {
+      proofOfStatutory: ['Statutory Declaration'],
+      proofOfAll: ['Passport/ Voters Card/ Driving Permit/ Baptism Card/ Other'] 
+    },
+    'completeChangeofName': {
+      proofOfNoticeOfIntension: ['Notice of Intention to Change Name'],
+      proofOfDeedPoll: ['Deed Poll Registered with URSB'],
+      proofOfCID: ['CID Report'],
+      proofOfInterpol: ['Interpol clearance'],
+      proofOfBirthCert: ['Birth Certificate'],
+      proofOfAcademic: ['Academic Documents'],
+      proofOfPassport: ['Passport'],
+      proofOfVoters: ['Voters Card'],
+      proofOfDriving: ['Driving Permit'],
+      proofOfBaptism: ['Baptism Card'],
+      proofOfOtherRelevant: ['Any other relevant docs'],
+    },
+    'changeOfDateOfBirth': {
+      proofOfStatutory: ['Statutory Declaration'],
+      proofOfCID: ['CID Report'],
+      proofOfBirthCert: ['Birth Certificate'],
+      proofOfAcademic: ['Academic Documents'],
+      proofOfPassport: ['Passport'],
+      proofOfVoters: ['Voters Card'],
+      proofOfDriving: ['Driving Permit'],
+      proofOfLegalReport: ['Legal Report'],
+      proofOfBaptism: ['Baptism Card']
+    },
+    'changeInPlaceOfResidence': {
+      proofOfLC1Letter: ['Letter from LC 1 Chairperson']
+    },
+    'changeInPlaceOfBirth': {
+      proofOfStatutory: ['Statutory Declaration'],
+      proofOfBirthNotification: ['Birth Certificate / Notification Record'],
+    },
+    'changeInPlaceOfOrigin': {
+      proofOfStatutory: ['Statutory Declaration'],
+      proofOfLC1Letter: ['Letter from LC 1 Chairperson'],
+      proofOfBirthCert: ['Birth Certificate'],
+      proofOfBaptism: ['Baptism Card'],
+      proofOfOtherSupporting: ['Any other supporting Documents']
+    },
+    'changeInCitizenshipType': {
+      proofOfStatutory: ['Statutory Declaration'],
+      proofOfCbyReg: ['Certificate of Citizenship by Registration'],
+      proofOfCbyNat: ['Certificate of Citizenship by Naturalisation'],
+      proofOfCbyDual: ['Certificate of Dual Citizenship']   
+    },
+    'addSpouse': {
+      proofOfMarCert: ['Certified copy of marriage certificate']
+    },
+    'removeSpouse': {
+      proofOfDecAbsolute: ['Certified copy of decree absolute']
+    },
+    'changeDetailsOfFather': {
+      proofOfBirthCertBeforeReg: ['DNA test results'],
+      proofOfCID: ['CID Report'],
+      proofOfDNA: ['DNA test results'],
+      proofOfCourtOrder: ['Court Order']
+    },
+    'changeDetailsOfMother': {
+      proofOfBirthCertBeforeReg: ['DNA test results'],
+      proofOfCID: ['CID Report'],
+      proofOfDNA: ['DNA test results'],
+      proofOfCourtOrder: ['Court Order']
+    },
+    'addingNamesFromPreviousCertorDoc': {
+      proofOfStatutory: ['Statutory Declaration'],
+      proofOfBAP: ['Birth Certificate/ Acadamic Docs/ Passport']
+    },
+    'otherNameCorrections': {
+      proofOfStatutory: ['Statutory Declaration'],
+      proofOfAll: ['Passport/ Voters Card/ Driving Permit/ Baptism Card/ Other']
+    },
+    'changeInGender': {
+      proofOfStatutory: ['Statutory Declaration'],
+      proofOfMedRep: ['Medical Report'],
+      proofOfAll: ['Passport/ Voters Card/ Driving Permit/ Baptism Card/ Other']
     }
   },
   'GetFirst ID': {

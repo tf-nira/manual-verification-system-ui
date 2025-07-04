@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../../shared/components/header/header.component";
-import { CATEGORY_MAP} from '../../shared/constants';
+import { CATEGORY_MAP, FORM_LABELS_BY_SERVICE, PROOF_OF_PHYSICAL_APPLICATION_FORM} from '../../shared/constants';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
@@ -20,6 +20,7 @@ export class DemographicDetailsComponent implements OnInit{
   isLeftCollapsed: boolean = false;
   
   isRightCollapsed: boolean = true;
+  dynamicParts: any[] = [];
   // Define navigation parts and sections
   parts = [
     {
@@ -197,6 +198,8 @@ export class DemographicDetailsComponent implements OnInit{
     }
   ];
   role: string = '';
+  rowData: any = {};
+  service: string = '';
   relativeDocumentList: any[] = [];
   categoryMap = CATEGORY_MAP;
   documents: {
@@ -214,14 +217,23 @@ export class DemographicDetailsComponent implements OnInit{
   
   ngOnInit(): void {
     const state = history.state;
+    this.rowData = state.data || {};
     this.role = state.role || '';
+    const serviceData = localStorage.getItem('serviceData');
+    if (serviceData) {
+      this.service = serviceData || '';
+    } else {
+      this.service = this.rowData.service || '';
+    }
+    console.log("service in demographic "+ this.service)
     const data = localStorage.getItem('demographicData');
     const documentData = localStorage.getItem('documentData');
 
     if (data) {
       this.demographicData = JSON.parse(data);
       this.organizeDataIntoSections();
-      this.expandedParts = Array(this.parts.length).fill(false); // Initialize expanded state
+      this.createDynamicNavigation();
+      this.expandedParts = Array(this.dynamicParts.length).fill(false); // Initialize expanded state
    
     } else {
       console.error('No demographic data found in localStorage');
@@ -237,6 +249,11 @@ export class DemographicDetailsComponent implements OnInit{
     } else {
       console.error('No doc data found in relative data');
     }
+
+    if (serviceData) {
+    localStorage.removeItem('serviceData');
+  }
+
   }
   // Process the documents data into the required structure
 processDocuments(documentsJson: any) {
@@ -270,7 +287,13 @@ processDocuments(documentsJson: any) {
 }
 
 getDocumentTitle(key: string): string {
+  if(key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]){
+        return FORM_LABELS_BY_SERVICE[this.service];
+      }
+      else{
+
   return this.categoryMap[key] || 'Unknown Document';
+      }
 }
 
   viewDocument(document: { file: File | SafeResourceUrl | null, fileName?: string, category?: string }): void {
@@ -509,4 +532,25 @@ formatToExtension(format: string): string {
       return format.toLowerCase(); 
   }
 }
+
+createDynamicNavigation(): void {
+  const availableSectionIds = this.sectionsData.map(section => section.id);
+  
+  // Filtering the static parts to only include sections with data
+  this.dynamicParts = this.parts.map(part => {
+    const availableSections = part.sections.filter(section => 
+      availableSectionIds.includes(section.id)
+    );
+    
+    
+    if (availableSections.length > 0) {
+      return {
+        ...part,
+        sections: availableSections
+      };
+    }
+    return null;
+  }).filter(part => part !== null); 
+}
+
 }

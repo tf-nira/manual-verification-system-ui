@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,7 +10,8 @@ import * as appConstants from '../../app.constants';
 import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, MVS_EXECUTIVE_DIRECTOR, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_APPROVAL, MVS_INTERNATIONAL_OFFICER } from '../../shared/constants';
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
   NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP,
-  MAX_DOC_SIZE, FORM_LABELS_BY_SERVICE, PROOF_OF_PHYSICAL_APPLICATION_FORM
+  MAX_DOC_SIZE, FORM_LABELS_BY_SERVICE, PROOF_OF_PHYSICAL_APPLICATION_FORM, CHANGE_OF_PARTICULARS,
+  SERVICE_CONST_MIGRATION,SERVICE_CONST_NEW_REGISTRATION,SERVICE_CONST_RENEWAL
  } from '../../shared/constants';
  import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -55,6 +56,15 @@ interface DocumentResponse {
   styleUrl: './application-detail.component.css'
 })
 export class ApplicationDetailComponent implements OnInit {
+  @ViewChild('scannerVideo', { static: false }) scannerVideo!: ElementRef<HTMLVideoElement>;
+  @ViewChild('scannerCanvas', { static: false }) scannerCanvas!: ElementRef<HTMLCanvasElement>;
+
+  showScannerModal = false;
+  showVideo = true;
+  isInitializingCamera = false;
+  scannerError = '';
+  private stream: MediaStream | null = null;
+  private currentScanIndex = 0;
   isLoading = false;
   demographicData: any;
   isChecked = false;
@@ -117,7 +127,9 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'removeSpouse', label: 'Removing a Spouse' },
         { id: 'changeDetailsOfFather', label: 'Change the Details of Father' },
         { id: 'changeDetailsOfMother', label: 'Change the Details of Mother' },
-        { id: 'correctionOfErrorRegardingNin', label: 'Correction of error regarding NIN' },
+        { id: 'addingNamesFromPreviousCertorDoc', label: 'Adding Names from birth certificate, passport/ Academic documents' },
+        { id: 'otherNameCorrections', label: 'Other Name Corrections' },
+        { id: 'changeInGender', label: 'Change In Gender' }
       ]
     }
   ];
@@ -182,6 +194,7 @@ export class ApplicationDetailComponent implements OnInit {
   ];
   
   irisList: string[] = ['Left', 'Right'];
+
   stageSpeciifcLabels: Record<string, string> = {
     'CITIZENSHIP_VERIFICATION' : 'CVS rejection reason',
     'BIO_DEDUPE' : 'Biometric Deduplication rejection reason'
@@ -189,6 +202,7 @@ export class ApplicationDetailComponent implements OnInit {
   extractedStageName: string = '';
   extractedComment: string = '';
   commentLabel: string = 'Rejection reason';
+
   expandedSections: { [key: string]: boolean } = {};
   activeTab: string = 'history'; // Default tab is 'history'
   service: string = '';
@@ -248,7 +262,11 @@ additionalFetchedDocuments: { category: string; title: string; fileName: string;
     SCHEDULE_INTERVIEW,
     UPLOAD_DCOUMENTS: 'Upload Documents',
     APPLICANT_NAME,
-    MVS_INTERNATIONAL_OFFICER
+    MVS_INTERNATIONAL_OFFICER,
+    CHANGE_OF_PARTICULARS,
+    SERVICE_CONST_MIGRATION,
+    SERVICE_CONST_NEW_REGISTRATION,
+    SERVICE_CONST_RENEWAL
   }
   
   // Sample Data
@@ -294,6 +312,9 @@ docTitles:any;
     this.serviceType = this.rowData.serviceType || '';
     this.applicationId = this.rowData.applicationId || '';
     this.service = this.rowData.service || '';
+    if (this.service === this.constants.SERVICE_CONST_MIGRATION && this.rowData?.demographics?.userService === this.constants.SERVICE_CONST_NEW_REGISTRATION) {
+      this.rowData.demographics.userService = this.constants.SERVICE_CONST_RENEWAL;
+    }
     this.statusComment = this.rowData.statusComment || '';
     if(this.statusComment.includes('::')){
       const parts = this.statusComment.split('::');
@@ -348,7 +369,22 @@ docTitles:any;
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
 updateCategoriesAndTitles() {
-  if(this.foundling === 'Y'){
+   if(this.service === 'Change of Particulars'){
+    const serviceTypeCop = this.getVisibleSectionsCop();
+    let categories: string[] = [];
+    serviceTypeCop.forEach(service => {
+      service.subSections.forEach(serviceType => {
+        const categoryList = SERVICE_CATEGORY_MAP[this.service]?.[serviceType.id] || [];
+        categories = categories.concat(categoryList);
+      });
+    });
+    this.docCategories = categories.map(key => ({
+      key,
+      title: CATEGORY_MAP[key]
+    }));
+    return;
+  }
+  else if(this.foundling === 'Y'){
     const categories = SERVICE_CATEGORY_MAP[this.service]?.['Registration of foundlings'] || [];
     this.docCategories = categories.map(key => ({
       key,
@@ -364,25 +400,6 @@ updateCategoriesAndTitles() {
     }));
     return;
   }
-  else if(this.service === 'Change of Particulars'){
-    const serviceTypeCop = this.getVisibleSectionsCop();
-    let categories: string[] = [];
-
-    serviceTypeCop.forEach(service => {
-      service.subSections.forEach(serviceType => {
-        const categoryList = SERVICE_CATEGORY_MAP[this.service]?.[serviceType.id] || [];
-        categories = categories.concat(categoryList);
-      });
-    });
-
-    console.log("copservice: {}", serviceTypeCop);
-    console.log("docat: {}",categories);
-
-    this.docCategories = categories.map(key => ({
-      key,
-      title: CATEGORY_MAP[key]
-    }));
-  }
   else{
     const categories = SERVICE_CATEGORY_MAP[this.service]?.[this.serviceType] || [];
     this.docCategories = categories.map(key => ({
@@ -395,7 +412,22 @@ updateCategoriesAndTitles() {
 
 getTitlesForDocument(document: any): string[] {
   const categoryKey = document.category;
-  if(this.ageGroup === 'MINOR'){
+  if(this.service === 'Change of Particulars'){
+    // For Change of Particulars, we need to check all visible COP services
+    const serviceTypeCop = this.getVisibleSectionsCop();
+    let allTitles: string[] = [];
+
+    serviceTypeCop.forEach(service => {
+      service.subSections.forEach(serviceType => {
+        const titles = SERVICE_TITLE_MAP[this.service]?.[serviceType.id]?.[categoryKey] || [];
+        allTitles = allTitles.concat(titles);
+      });
+    });
+
+    // Remove duplicates and return
+    return [...new Set(allTitles)];
+  }
+  else if(this.ageGroup === 'MINOR'){
     return SERVICE_TITLE_MAP[this.service]?.['Registration of child citizen']?.[categoryKey] || [];
   }
   else if(this.foundling === 'Y'){
@@ -728,6 +760,10 @@ getTitlesForDocument(document: any): string[] {
         case 'Change of Particulars':
           this.escalationCategories = COP_ESCALATION_CATEGORIES;
           break;
+        case 'Migration':
+        if (this.role === MVS_OFFICER) this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER;
+        else this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
+        break;
     }
   }
   objectKeys(obj: any): string[] {
@@ -869,6 +905,7 @@ getTitlesForDocument(document: any): string[] {
     }
   }
 
+
   /**
  * View document in a new window based on document type
  */
@@ -886,6 +923,8 @@ getTitlesForDocument(document: any): string[] {
 
     if (docInfo.file) {
       const sanitizedUrl = this.sanitizer.sanitize(4, docInfo.file);
+
+ 
       if (!sanitizedUrl) {
         this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
           duration: 3000,
@@ -1084,8 +1123,17 @@ getTitlesForDocument(document: any): string[] {
     fileInput.remove();
   }
 
-  triggerScan(index: number) {
-    // Trigger scan logic here
+  async triggerScan(index: number) {
+    this.currentScanIndex = index;
+    
+    // Check if device supports camera and  access camera
+    if (await this.isCameraSupported()) {
+      // Desktop/tablet with camera 
+      this.openScannerModal();
+    } else {
+      // Mobile device or no camera API support - fallback to file input
+      this.triggerMobileScan(index);
+    }
   }
 
   previewFile(file: File | SafeResourceUrl) {
@@ -1313,6 +1361,7 @@ getTitlesForDocument(document: any): string[] {
           this.relativeDocumentListByRole[role] = response.response.documents;
 
           this.isLoading = false; 
+          localStorage.setItem('serviceData', this.service);
         } else {
           const errorMessage =`Failed to fetch demographic data for ${role} from id repo`;
           this.snackBar.open(errorMessage, 'Close', {
@@ -1384,19 +1433,25 @@ getTitlesForDocument(document: any): string[] {
       return null; // Skip null or undefined values
     }
 
-    if (Array.isArray(data) && data[0]?.value) {
-      return data[0].value; // Extract 'value' key from the first array item
+    if (Array.isArray(data)) {
+      if (data[0]?.value != null && typeof data[0].value === 'string' && data[0].value.trim() !== '') {
+        return data[0].value; // Extract 'value' key from the first array item
+      }
+      return null;
     }
 
-    if (typeof data === 'object' && data.value) {
-      return data.value; // Handle objects with a 'value' key
+    if (typeof data === 'object') {
+      if (data.value != null && typeof data.value === 'string' && data.value.trim() !== '') {
+        return data.value; // Handle objects with a 'value' key
+      }
+      return null;
     }
 
-    if (typeof data === 'string') {
+    if (typeof data === 'string' && data.trim() !== '') {
       try {
         // Parse JSON strings if applicable
         const parsed = JSON.parse(data);
-        if (Array.isArray(parsed) && parsed[0]?.value) {
+        if (Array.isArray(parsed) && parsed[0]?.value != null && typeof parsed[0].value === 'string' && parsed[0].value.trim() !== '') {
           return parsed[0].value; // Extract 'value' from parsed array
         }
         return data; // Return raw string if not JSON
@@ -1443,6 +1498,7 @@ getTitlesForDocument(document: any): string[] {
       if (newTab) {
         localStorage.setItem('demographicData', JSON.stringify(this.demographicData));
         localStorage.setItem('documentData', JSON.stringify(this.relativeDocumentList));
+        localStorage.setItem('serviceData', this.service);
       }
     } else {
       const person = this.personDetails.find(person => person.role === 'guardian');
@@ -1598,11 +1654,296 @@ getMimeType(format: string): string {
   
   return formatMap[format.toUpperCase()] || 'application/octet-stream';
 }
+  /**
+     * to check if camera is supported
+     */
+  private async isCameraSupported(): Promise<boolean> {
+    try {
+      // Check if navigator.mediaDevices exists new browsers support
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        return false;
+      }
+
+      // Check if we can enumerate devices 
+      if (navigator.mediaDevices.enumerateDevices) {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const hasVideoDevice = devices.some(device => device.kind === 'videoinput');
+        if (!hasVideoDevice) {
+          return false;
+        }
+      }
+
+      // Test if we can actually get camera permission/access
+      try {
+        const testStream = await navigator.mediaDevices.getUserMedia({
+          video: { width: 1, height: 1 } // video request for testing
+        });
+
+        // stop the test stream
+        testStream.getTracks().forEach(track => track.stop());
+        return true;
+      } catch (permissionError) {
+        console.warn('Camera access test failed:', permissionError);
+        return false;
+      }
+
+    } catch (error) {
+      console.warn('Camera support check failed:', error);
+      return false;
+    }
+  }
 
 
-ngOnDestroy() {
-  localStorage.removeItem('rejectionDetails');
-}
+  openScannerModal() {
+    this.showScannerModal = true;
+    this.showVideo = true;
+    this.scannerError = '';
+    this.isInitializingCamera = true;
+
+    //  delay to ensure DOM is ready
+    setTimeout(() => {
+      this.initializeCamera();
+    }, 100);
+  }
+
+  closeScannerModal() {
+    this.stopCamera();
+    this.showScannerModal = false;
+    this.showVideo = true;
+    this.scannerError = '';
+    this.isInitializingCamera = false;
+  }
+  /**
+     * Initialize camera stream
+     */
+  private async initializeCamera() {
+    try {
+      this.scannerError = '';
+
+      // request camera access with preferences for back camera
+      this.stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: 'environment', // Prefer back camera
+          width: { ideal: 1920, max: 1920 },
+          height: { ideal: 1080, max: 1080 }
+        }
+      });
+
+      if (this.scannerVideo?.nativeElement) {
+        this.scannerVideo.nativeElement.srcObject = this.stream;
+        this.isInitializingCamera = false;
+      }
+
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      this.isInitializingCamera = false;
+
+      let errorMessage = 'Unable to access camera. ';
+
+      if (error instanceof Error) {
+        if (error.name === 'NotAllowedError') {
+          errorMessage += 'Please allow camera permissions and try again.';
+        } else if (error.name === 'NotFoundError') {
+          errorMessage += 'No camera found on this device.';
+        } else if (error.name === 'NotSupportedError') {
+          errorMessage += 'Camera is not supported on this device.';
+        } else {
+          errorMessage += 'Please check your camera and try again.';
+        }
+      }
+
+      this.scannerError = errorMessage;
+
+
+      this.snackBar.open(errorMessage, 'Close', {
+        duration: 5000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+    }
+  }
+
+
+  /**
+   * Capture image from video stream
+   */
+  captureImage() {
+    const video = this.scannerVideo?.nativeElement;
+    const canvas = this.scannerCanvas?.nativeElement;
+
+    if (!video || !canvas) {
+      this.scannerError = 'Camera or canvas not available';
+      return;
+    }
+
+    if (video.videoWidth === 0 || video.videoHeight === 0) {
+      this.scannerError = 'Camera is not ready. Please wait a moment and try again.';
+      return;
+    }
+
+    try {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      // Draw current video frame to canvas
+      const ctx = canvas.getContext('2d');
+      if (ctx) {
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // Switch to preview mode
+        this.showVideo = false;
+        this.scannerError = '';
+      } else {
+        this.scannerError = 'Unable to capture image. Please try again.';
+      }
+    } catch (error) {
+      console.error('Error capturing image:', error);
+      this.scannerError = 'Failed to capture image. Please try again.';
+    }
+  }
+  /**
+     * Return to video mode for retaking
+     */
+  retakeImage() {
+    this.showVideo = true;
+    this.scannerError = '';
+  }
+
+  /**
+   * Save the scanned document
+   */
+  saveScannedDocument() {
+    const canvas = this.scannerCanvas?.nativeElement;
+
+    if (!canvas) {
+      this.scannerError = 'No image captured';
+      return;
+    }
+
+    try {
+      // Convert canvas to blob
+      canvas.toBlob((blob) => {
+        if (blob) {
+          if (blob.size > MAX_DOC_SIZE) {
+            this.snackBar.open('Scanned image is too large. Please try scanning again with better lighting.', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: ['center-snackbar'],
+            });
+            return;
+          }
+
+          // Creating file from blob
+          const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').substring(0, 19);
+          const fileName = `scanned_document_${timestamp}.png`;
+          const file = new File([blob], fileName, { type: 'image/png' });
+
+          // Adding to document list
+          if (this.additionalDocuments[this.currentScanIndex]) {
+            this.additionalDocuments[this.currentScanIndex].fileName = fileName;
+            this.additionalDocuments[this.currentScanIndex].file = file;
+
+            this.snackBar.open('Document scanned successfully', 'Close', {
+              duration: 3000,
+              horizontalPosition: 'center',
+              verticalPosition: 'top',
+              panelClass: ['center-snackbar'],
+            });
+
+            // Close modal
+            this.closeScannerModal();
+          } else {
+            this.scannerError = 'Error saving document. Please try again.';
+          }
+        } else {
+          this.scannerError = 'Failed to process scanned image. Please try again.';
+        }
+      }, 'image/png', 0.8); // 0.8 quality to reduce file size
+    } catch (error) {
+      console.error('Error saving scanned document:', error);
+      this.scannerError = 'Failed to save document. Please try again.';
+    }
+  }
+
+  /**
+   * Stop camera stream and cleanup
+   */
+  private stopCamera() {
+    if (this.stream) {
+      this.stream.getTracks().forEach(track => {
+        track.stop();
+      });
+      this.stream = null;
+    }
+  }
+
+  private triggerMobileScan(index: number) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.setAttribute('capture', 'environment'); // Use back camera
+    input.style.display = 'none';
+
+    input.onchange = (event: Event) => {
+      const inputElement = event.target as HTMLInputElement;
+      if (inputElement.files && inputElement.files.length > 0) {
+        const file = inputElement.files[0];
+
+        // Validate file size
+        if (file.size > MAX_DOC_SIZE) {
+          this.snackBar.open('File size exceeds 2 MB. Please try again.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
+          return;
+        }
+
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          this.snackBar.open('Please select an image file.', 'Close', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['center-snackbar'],
+          });
+          return;
+        }
+
+        this.additionalDocuments[index].fileName = file.name;
+        this.additionalDocuments[index].file = file;
+
+        this.snackBar.open('Document captured successfully', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
+      }
+    };
+
+    input.onerror = () => {
+      this.snackBar.open('Error accessing camera. Please try again.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+    };
+
+    document.body.appendChild(input);
+    input.click();
+    input.remove();
+  }
+
+
+  ngOnDestroy() {
+    this.stopCamera();
+    localStorage.removeItem('rejectionDetails');
+  }
 
 }
 
