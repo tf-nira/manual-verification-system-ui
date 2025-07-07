@@ -58,7 +58,7 @@ interface DocumentResponse {
 export class ApplicationDetailComponent implements OnInit {
   @ViewChild('scannerVideo', { static: false }) scannerVideo!: ElementRef<HTMLVideoElement>;
   @ViewChild('scannerCanvas', { static: false }) scannerCanvas!: ElementRef<HTMLCanvasElement>;
-
+  private objectUrls: string[] = [];
   showScannerModal = false;
   showVideo = true;
   isInitializingCamera = false;
@@ -469,21 +469,79 @@ getTitlesForDocument(document: any): string[] {
     const documents = this.rowData?.documents || {};
 
     this.documents = Object.keys(documents).map((key) => {
-      const base64Pdf = documents[key]?.trim();
+      const base64Data = documents[key]?.trim();
+      let safeUrl: SafeResourceUrl | null = null;
+
+      if (base64Data) {
+        // Detect file type based on base64 header
+        if (base64Data.startsWith('JVBERi0')) {
+          // PDF file
+          safeUrl = this.convertBase64ToPdfUrl(base64Data);
+        } else if (base64Data.startsWith('TU0AKg') || base64Data.startsWith('SUkqAA')) {
+          // TIFF file - create download blob
+          console.log('TIFF detected for:', key);
+          safeUrl = this.createTiffDownloadUrl(base64Data);
+        } else if (base64Data.startsWith('iVBORw0K')) {
+          // PNG file
+          safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64,${base64Data}`);
+        } else if (base64Data.startsWith('/9j/')) {
+          // JPEG file
+          safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/jpeg;base64,${base64Data}`);
+        } else {
+          // Unknown format - treat as PDF (fallback)
+          safeUrl = this.convertBase64ToPdfUrl(base64Data);
+        }
+      }
+
       return {
-        category: key, // Use the key as the category
-        title: this.getDocumentTitle(key), // Map keys to human-readable titles
-        fileName: `${key}.pdf`, // Generate a filename dynamically
-        file: base64Pdf ? this.convertBase64ToPdfUrl(base64Pdf) : null, // Convert Base64 to a SafeResourceUrl
+        category: key,
+        title: this.getDocumentTitle(key),
+        fileName: `${key}.${this.getFileExtension(base64Data || '')}`,
+        file: safeUrl,
       };
     });
 
-    // Set the initial state of section expansion
     this.isSectionExpanded = this.documents.map(() => false);
   }
 
+
+  private createTiffDownloadUrl(base64Data: string): SafeResourceUrl {
+    try {
+      const binaryString = atob(base64Data);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      const blob = new Blob([bytes], { type: 'image/tiff' });
+      const blobUrl = URL.createObjectURL(blob);
+
+      // Store for cleanup
+      this.storeObjectUrlForCleanup(blobUrl);
+
+      // Return special marker for TIFF files
+      return this.sanitizer.bypassSecurityTrustResourceUrl(`tiff-download:${blobUrl}`);
+    } catch (error) {
+      console.error('Error creating TIFF blob:', error);
+      // Fallback to data URL
+      return this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/tiff;base64,${base64Data}`);
+    }
+  }
+
+  private getFileExtension(base64Data: string): string {
+    if (!base64Data) return 'pdf';
+    if (base64Data.startsWith('JVBERi0')) return 'pdf';
+    if (base64Data.startsWith('iVBORw0K')) return 'png';
+    if (base64Data.startsWith('/9j/')) return 'jpg';
+    if (base64Data.startsWith('TU0AKg') || base64Data.startsWith('SUkqAA')) return 'tiff';
+    return 'pdf'; // Default fallback
+  }
+
+  private storeObjectUrlForCleanup(url: string) {
+    this.objectUrls.push(url);
+  }
   getDocumentTitle(key: string): string {
-    if(key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]){
+    if (key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
       return FORM_LABELS_BY_SERVICE[this.service];
     }
     return this.categoryMap[key] || 'Unknown Document';
@@ -860,44 +918,32 @@ getTitlesForDocument(document: any): string[] {
       });
     }
   }
+  
   viewDocument(document: { file: File | SafeResourceUrl | null, category?: string }): void {
     if (document.file) {
-      console.log('document.file:', document.file);
-      const fileStr = document.file.toString();
-      console.log('fileStr:', fileStr);
+      console.log('Viewing document:', document.category);
 
-      // Check if it contains a data URL matching data url from safe url
-      const dataUrlMatch = fileStr.match(/data:image\/[^;]+;base64,[A-Za-z0-9+/=]+/);
-
-      if (dataUrlMatch) {
-        const dataUrl = dataUrlMatch[0];
-        console.log('Found data URL, length:', dataUrl.length);
-
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(`
-          <html>
-            <head>
-              <title>Scanned Document</title>
-            </head>
-            <body style="margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f0f0f0;">
-              <img src="${dataUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;" />
-            </body>
-          </html>
-        `);
-          newWindow.document.close();
-        } else {
-          this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
-            duration: 3000,
-            horizontalPosition: 'center',
-            verticalPosition: 'top',
-            panelClass: ['center-snackbar'],
-          });
-        }
+      const sanitizedUrl = this.sanitizer.sanitize(4, document.file);
+      if (!sanitizedUrl) {
+        this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
+          duration: 3000,
+          horizontalPosition: 'center',
+          verticalPosition: 'top',
+          panelClass: ['center-snackbar'],
+        });
         return;
       }
 
-      // Handling File objects (scanned documents)
+      const documentTitle = document.category ? this.getDocumentTitle(document.category) : 'Document';
+
+      // Check if this is a TIFF download URL
+      if (sanitizedUrl.startsWith('tiff-download:')) {
+        const blobUrl = sanitizedUrl.replace('tiff-download:', '');
+        this.openTiffViewer(documentTitle, blobUrl);
+        return;
+      }
+
+      // Handle scanned documents (File objects)
       if (document.file instanceof File) {
         const objectUrl = URL.createObjectURL(document.file);
         const newWindow = window.open(objectUrl, '_blank');
@@ -913,37 +959,34 @@ getTitlesForDocument(document: any): string[] {
         return;
       }
 
-      const sanitizedUrl = this.sanitizer.sanitize(4, document.file); // Sanitizes the SafeResourceUrl
-      if (!sanitizedUrl) {
-        this.snackBar.open('Invalid or unsafe URL for the document.', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'top',
-          panelClass: ['center-snackbar'],
-        });
-        return;
-      }
-
-      const documentTitle = document.category ? this.getDocumentTitle(document.category) : 'Document';
-
-      // Open a new window and inject sanitized HTML
+      // Handle other document types (PDF, images)
       const newWindow = window.open('', '_blank');
       if (newWindow) {
         newWindow.document.write(`
-            <html>
-              <head>
-                <title>${documentTitle}</title>
-              </head>
-              <body style="margin: 0;">
-                <iframe
-                  src="${sanitizedUrl}"
-                  width="100%"
-                  height="100%"
-                  style="border: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"
-                ></iframe>
-              </body>
-            </html>
-          `);
+        <html>
+          <head>
+            <title>${documentTitle}</title>
+            <style>
+              body, html {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+              }
+              iframe {
+                width: 100%;
+                height: 100%;
+                border: none;
+              }
+            </style>
+          </head>
+          <body>
+            <iframe src="${sanitizedUrl}" width="100%" height="100%" frameborder="0"></iframe>
+          </body>
+        </html>
+      `);
+        newWindow.document.close();
       } else {
         this.snackBar.open('Unable to open a new window. Please check your browser settings.', 'Close', {
           duration: 3000,
@@ -962,7 +1005,113 @@ getTitlesForDocument(document: any): string[] {
     }
   }
 
+  private openTiffViewer(documentTitle: string, blobUrl: string): void {
+    const windowName = `tiff_viewer_${documentTitle}`.replace(/[^a-zA-Z0-9]/g, '_');
+    const newWindow = window.open('about:blank', windowName);
 
+    if (newWindow) {
+      newWindow.document.write(`
+      <html>
+        <head>
+          <title>${documentTitle}</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              background: #f5f5f5;
+              margin: 0;
+              padding: 40px;
+              text-align: center;
+            }
+            .container {
+              background: white;
+              max-width: 500px;
+              margin: 0 auto;
+              padding: 30px;
+              border-radius: 8px;
+              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            h1 {
+              color: #333;
+              margin-bottom: 20px;
+              font-size: 24px;
+            }
+            .message {
+              color: #666;
+              margin-bottom: 30px;
+              font-size: 16px;
+              line-height: 1.5;
+            }
+            .download-btn {
+              background: #007bff;
+              color: white;
+              padding: 12px 24px;
+              text-decoration: none;
+              border-radius: 4px;
+              display: inline-block;
+              font-size: 16px;
+              margin: 20px 0;
+            }
+            .download-btn:hover {
+              background: #0056b3;
+              text-decoration: none;
+              color: white;
+            }
+            .file-info {
+              background: #f8f9fa;
+              padding: 15px;
+              border-radius: 4px;
+              margin: 20px 0;
+              color: #666;
+              font-size: 14px;
+            }
+            .help-text {
+              color: #888;
+              font-size: 14px;
+              margin-top: 20px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>📄 ${documentTitle}</h1>
+            
+            <div class="message">
+              This is a TIFF image file. TIFF files may not display properly in web browsers, so we've prepared it for download.
+            </div>
+
+            <a href="${blobUrl}" download="${documentTitle}.tiff" class="download-btn">
+              📥 Download TIFF File
+            </a>
+
+            <div class="file-info">
+              <strong>File:</strong> ${documentTitle}.tiff
+            </div>
+
+            <div class="help-text">
+              You can open TIFF files with most image viewers, Microsoft Office, or photo editing software.
+            </div>
+          </div>
+        </body>
+      </html>
+    `);
+      newWindow.document.close();
+    } else {
+      // Fallback: direct download if popup is blocked
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `${documentTitle}.tiff`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      this.snackBar.open('TIFF file download started. Please check your downloads folder.', 'Close', {
+        duration: 4000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+    }
+  }
 
   // Handle file selection
   onFileSelect(event: any, index: number) {
@@ -1824,6 +1973,10 @@ getMimeType(format: string): string {
   ngOnDestroy() {
     this.stopCamera();
     localStorage.removeItem('rejectionDetails');
+     this.objectUrls.forEach(url => {
+    URL.revokeObjectURL(url);
+  });
+  this.objectUrls = [];
   }
 
 }
