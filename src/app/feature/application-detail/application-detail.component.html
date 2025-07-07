@@ -38,14 +38,14 @@
         <div *ngFor="let section of getVisibleSectionsCop()" class="part">  
           <h3>{{ section.label }}</h3>
           <ul *ngIf="section.open">
-            <li *ngFor="let subSection of section.subSections">
+            <li *ngFor="let subSection of section.subSections" (click)="scrollToSection(subSection.id)">
               {{ subSection.label }}
             </li>
           </ul>
         </div>
       </div>
 
-      <div class="navigation-content" *ngIf="!isLeftCollapsed && service !== 'Change of Particulars'">
+      <div class="navigation-content" *ngIf="!isLeftCollapsed ">
         <div *ngFor="let section of getVisibleSections()">
           <h3>{{ section.label }}</h3>
           <ul>
@@ -121,7 +121,7 @@
 
             <div class="field-container" *ngIf="rowData?.demographics?.copCountryCodePrevious">
               <label>Country Code</label>
-              <div class="field-value">{{ rowData?.demographics?.copCountryCodePrevious }}</div>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.copCountryCodePrevious)[0]?.value }}</div>
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copHomePhoneNumberPrevious">
@@ -137,7 +137,7 @@
         <!-- Display COP subsections if service is Change of Particulars -->
         <div *ngIf="service === constants.CHANGE_OF_PARTICULARS" class="cop-subsections">
           <div *ngFor="let section of getVisibleSectionsCop()" class="cop-section">
-            <div *ngFor="let subSection of section.subSections" class="cop-subsection">
+            <div *ngFor="let subSection of section.subSections" class="cop-subsection" [id]="subSection.id">
               <div class="field-container">
                 <label>{{ subSection.label }}</label>
               </div>
@@ -268,6 +268,11 @@
           <div class="field-container" *ngIf="rowData?.demographics?.userService">
             <label>User Service</label>
             <div class="field-value">{{ rowData?.demographics?.userService }}</div>
+          </div>
+
+          <div class="field-container" *ngIf="rowData?.demographics?.dualCitizenshipCertificateNumber">
+            <label>Dual Citizenship Certificate Number</label>
+            <div class="field-value">{{ parseJson(rowData?.demographics?.dualCitizenshipCertificateNumber )[0]?.value}}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.cardNumber">
@@ -985,7 +990,7 @@
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfResidenceHouseNo">
-            <label>Father Place of Residence Houseno</label>
+            <label>Father Place of Residence House No.</label>
             <div class="field-value">{{ rowData?.demographics?.fatherPlaceOfResidenceHouseNo }}
             </div>
           </div>
@@ -1180,7 +1185,7 @@
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfResidenceHouseNo">
-            <label>Mother Place of Residence Houseno</label>
+            <label>Mother Place of Residence House No.</label>
             <div class="field-value">{{ rowData?.demographics?.motherPlaceOfResidenceHouseNo }}
             </div>
           </div>
