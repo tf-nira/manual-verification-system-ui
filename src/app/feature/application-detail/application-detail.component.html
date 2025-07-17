@@ -2224,9 +2224,9 @@
           <label for="districtOffice">District Office*</label>
           <select id="districtOffice" [(ngModel)]="interviewDetails.districtOffice" required>
             <option value="" disabled selected>Select District Office*</option>
-            <option *ngFor="let office of districtOffices" [value]="office">
-              {{ office }}
-            </option>
+           <option [value]="districtOfficeName" *ngIf="districtOfficeName">
+                {{ districtOfficeName }}
+          </option>
           </select>
         </div>
         <div class="field-container">

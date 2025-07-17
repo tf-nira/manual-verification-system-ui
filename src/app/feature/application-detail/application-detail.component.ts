@@ -269,7 +269,7 @@ additionalFetchedDocuments: { category: string; title: string; fileName: string;
   }
   
   // Sample Data
-  districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
+  //Offices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
   // Create an array of objects mapping keys to titles
   // docCategories = Object.entries(this.categoryMap).map(([key, value]) => ({
   //   key,
@@ -284,6 +284,8 @@ docTitles:any;
   pdfUrl: any;
   formattedDate: string | ' ' = ' ';
   cachedDemographicsData: Record<string, any> = {}; 
+  districtOfficeName!: string;
+  districtOfficeId!: number;
 
   constructor(private router: Router, private dataService: DataStorageService,
     private sanitizer: DomSanitizer, private snackBar: MatSnackBar
@@ -365,6 +367,11 @@ docTitles:any;
     this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
   }
   
+  this.districtOfficeName = localStorage.getItem('districtOfficeName') || '';
+  console.log("Districtoffice name " +this.districtOfficeName);
+  this.districtOfficeId = parseInt(localStorage.getItem('districtOfficeId') || '0', 10);
+
+
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
 updateCategoriesAndTitles() {

@@ -64,6 +64,10 @@ export class LoginComponent implements OnInit {
         const name = this.fetchInitials(decoded);
         const role = this.fetchRole(decoded);
 
+        if (response.response.districtOfficeDetails) {
+          localStorage.setItem('districtOfficeId', response.response.districtOfficeDetails.district_office_code.toString());
+          localStorage.setItem('districtOfficeName', response.response.districtOfficeDetails.district_office_name);
+        }
         // Store auth data in localStorage (removed duplicates)
         localStorage.setItem('authToken', response.response.token);
         localStorage.setItem('userId', userId || '');
