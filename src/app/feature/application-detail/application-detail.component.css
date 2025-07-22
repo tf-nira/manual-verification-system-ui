@@ -1688,3 +1688,178 @@ ul li:hover {
     justify-content: center;
   }
 }
+
+/* FIXED: Custom dropdown styles for escalation modal */
+.custom-dropdown {
+  position: relative;
+  width: 100%;
+}
+
+.dropdown-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  min-height: 20px;
+  transition: border-color 0.2s ease;
+  /* FIXED: Match the height and styling of regular dropdown */
+  height: 40px;
+  font-size: 14px;
+}
+
+.dropdown-toggle:hover {
+  border-color: #999;
+}
+
+.dropdown-toggle.open {
+  border-color: #007bff;
+  /* REMOVED: Don't change border radius when open to prevent layout shift */
+}
+
+.selected-text {
+  flex: 1;
+  text-align: left;
+  color: #333;
+  font-size: 14px;
+}
+
+/* FIXED: CSS Arrow to match native dropdown */
+.dropdown-arrow-css {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid #666;
+  transition: transform 0.2s ease;
+  margin-left: 8px;
+}
+
+.dropdown-toggle.open .dropdown-arrow-css {
+  transform: rotate(180deg);
+}
+
+/* FIXED: Dropdown menu positioning to prevent modal expansion */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  max-height: 150px; /* FIXED: Limited height */
+  overflow-y: auto;
+  z-index: 10000; /* FIXED: Very high z-index to overlay above modal */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  /* FIXED: Prevent modal expansion */
+  margin-top: 0;
+}
+
+.dropdown-item {
+  padding: 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin: 0;
+  width: 100%;
+  font-size: 14px;
+}
+
+.checkbox-label:hover {
+  background-color: #f8f9fa;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+.checkbox-text {
+  flex: 1;
+  color: #333;
+}
+
+/* FIXED: Modal specific adjustments to prevent expansion */
+.escalateModal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.escalateModal .modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 500px;
+  /* FIXED: Set fixed height to prevent expansion */
+  max-height: 80vh;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: visible; /* FIXED: Allow dropdown to overflow */
+}
+
+.escalateModal .modal-body {
+  /* FIXED: Add overflow handling if needed */
+  max-height: calc(80vh - 120px); /* Account for header and footer */
+  overflow-y: auto;
+}
+
+/* FIXED: Ensure dropdown appears above modal content */
+.escalateModal .custom-dropdown {
+  z-index: 10001;
+}
+
+.escalateModal .dropdown-menu {
+  z-index: 10002;
+}
+
+/* Field container adjustments */
+.field-container {
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.field-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dropdown-menu {
+    max-height: 120px;
+  }
+  
+  .checkbox-label {
+    padding: 10px 12px;
+  }
+  
+  .selected-text {
+    font-size: 13px;
+  }
+}
+

@@ -215,8 +215,10 @@ export class ApplicationDetailComponent implements OnInit {
   dropdownOptions: { value: string; label: string; default: boolean }[] = [];
   rejectionCategories: { value: string; default: boolean }[] = [];
   escalationCategories: { value: string; default: boolean }[] = [];
+  selectedEscalationCategories: string[] = [];
+  isEscalationDropdownOpen: boolean = false;
   selectedOfficerLevel: string = '';
-  escalationCategory: string = '';
+  //escalationCategory: string = '';
   escalationComment: string = '';
   rejectionCategory: string = '';
   rejectionComment: string = '';
@@ -807,6 +809,9 @@ getTitlesForDocument(document: any): string[] {
 
   closeEscalateModal() {
     this.showEscalateModal = false;
+    this.selectedEscalationCategories = [];
+    this.isEscalationDropdownOpen = false;
+    this.escalationComment = '';
   }
 
   openScheduleInterviewModal() {
@@ -854,7 +859,8 @@ getTitlesForDocument(document: any): string[] {
     // Escalate logic 
     this.showEscalateModal = false;
     const comment = this.escalationComment.trim();
-    this.changeApplicationStatus(API_CONST_ESCALATE, comment, this.escalationCategory, this.selectedOfficerLevel);
+    const categoriesString = this.selectedEscalationCategories.join(', ');
+    this.changeApplicationStatus(API_CONST_ESCALATE, comment, categoriesString, this.selectedOfficerLevel);
     this.closeEscalateModal();
   }
 
@@ -1974,6 +1980,49 @@ getMimeType(format: string): string {
     document.body.appendChild(input);
     input.click();
     input.remove();
+  }
+
+  /**
+   * Toggle the custom dropdown visibility
+   */
+  toggleEscalationDropdown(): void {
+    this.isEscalationDropdownOpen = !this.isEscalationDropdownOpen;
+  }
+
+  /**
+   * Check if an escalation category is selected
+   */
+  isEscalationSelected(value: string): boolean {
+    return this.selectedEscalationCategories.includes(value);
+  }
+
+  /**
+   * Handle checkbox changes for escalation categories
+   */
+  onEscalationChange(value: string, event: any): void {
+    if (event.target.checked) {
+      if (!this.selectedEscalationCategories.includes(value)) {
+        this.selectedEscalationCategories.push(value);
+      }
+    } else {
+      const index = this.selectedEscalationCategories.indexOf(value);
+      if (index > -1) {
+        this.selectedEscalationCategories.splice(index, 1);
+      }
+    }
+  }
+
+  /**
+   * Get display text for selected escalation categories
+   */
+  getSelectedEscalationText(): string {
+    if (this.selectedEscalationCategories.length === 0) {
+      return 'Select escalation categories';
+    } else if (this.selectedEscalationCategories.length === 1) {
+      return this.selectedEscalationCategories[0];
+    } else {
+      return `${this.selectedEscalationCategories.length} categories selected`;
+    }
   }
 
 
