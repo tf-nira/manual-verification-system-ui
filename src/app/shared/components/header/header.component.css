@@ -301,3 +301,24 @@
 .logoutModal .modal-footer .btn.yes:hover {
   background-color: #5da86e;
 }
+
+.toggle-view-dropdown {
+  padding: 5px 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+  background: #fff;
+}
+
+.toggle-view-dropdown.active-rejected {
+  border-color: #e35448;
+  color: #e43c2e;
+  background: #fff8f7;
+}
+
+.toggle-view-dropdown.active-assigned {
+  border-color: #28a745;
+  color: #249c2f;
+  background: #f6fef7;
+}

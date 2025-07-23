@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { LOGOUT, NAME, ROLE } from '../../constants';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css'],
 })
@@ -38,11 +39,11 @@ export class HeaderComponent {
     this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  toggleApplicationView(): void {
-    const newType = this.applicationType === 'Assigned' ? 'Rejected' : 'Assigned';
+  toggleApplicationView(event: Event): void {
+    const newType = (event.target as HTMLSelectElement).value;
     this.applicationType = newType;
-    console.log("Emitting application type change", newType)
-    this.applicationTypeChange.emit(newType);
+    console.log("Emitting application type change", this.applicationType)
+    this.applicationTypeChange.emit(this.applicationType);
   }
 
   openLogoutModal() {
