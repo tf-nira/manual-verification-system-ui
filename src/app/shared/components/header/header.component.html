@@ -36,8 +36,23 @@
         src="assets/images/logout-icon.png"
         alt="Logout Icon"
         class="logout-icon"
-        (click)="logout()"
+        (click)="openLogoutModal()"
       />
+    </div>
+  </div>
+
+  <div class="logoutModal" *ngIf="showLogoutModal">
+    <div class="modal-content">
+
+      <button class="close-button" (click)="closeLogoutModal()">×</button>
+      <div class="modal-header">
+        <h3>Are you sure you want to logout?</h3>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn no" (click)="closeLogoutModal()"> No </button>
+        <button class="btn yes" (click)="logout()"> Yes </button>
+      </div>
     </div>
   </div>
 </div>

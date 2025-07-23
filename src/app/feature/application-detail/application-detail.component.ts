@@ -81,6 +81,8 @@ export class ApplicationDetailComponent implements OnInit {
   showScheduleInterviewModal: boolean = false;
   showDocumentUploadModal: boolean = false;
   showRejectModal: boolean = false;
+  showConfirmationModal: boolean = false;
+  userAction: String = "";
   uploadDocumentSucessStatus : boolean = false;
   rowData: any = {};
   applicationStatus: string = '';
@@ -809,9 +811,6 @@ getTitlesForDocument(document: any): string[] {
 
   closeEscalateModal() {
     this.showEscalateModal = false;
-    this.selectedEscalationCategories = [];
-    this.isEscalationDropdownOpen = false;
-    this.escalationComment = '';
   }
 
   openScheduleInterviewModal() {
@@ -839,6 +838,46 @@ getTitlesForDocument(document: any): string[] {
   closeApprovalModal() {
     this.showApprovalModal = false;
   }
+
+  openConfirmationModal(action: String) {
+    this.userAction = action;
+
+    switch(action) {
+      case "APPROVE" :
+        this.closeApprovalModal();
+        break;
+      case "REJECT" :
+        this.closeRejectModal();
+        break;
+      case "ESCALATE" :
+        this.closeEscalateModal();
+        break;
+    }
+    
+    this.showConfirmationModal = true;
+  }
+
+  closeConfirmationModal() {
+    this.showConfirmationModal = false;
+    this.selectedEscalationCategories = [];
+    this.isEscalationDropdownOpen = false;
+    this.escalationComment = '';
+  }
+
+  confirmAction() {
+    switch(this.userAction) {
+      case "APPROVE":
+        this.approveApplication();
+        break;
+      case "REJECT":
+        this.rejectApplication();
+        break;
+      case "ESCALATE":
+        this.escalateApplication();
+        break;
+    }
+  }
+
   approveApplication() {
     // Approval logic
     if (this.isChecked) {
@@ -857,11 +896,11 @@ getTitlesForDocument(document: any): string[] {
   }
   escalateApplication() {
     // Escalate logic 
-    this.showEscalateModal = false;
+    this.showConfirmationModal = false;
     const comment = this.escalationComment.trim();
     const categoriesString = this.selectedEscalationCategories.join(', ');
     this.changeApplicationStatus(API_CONST_ESCALATE, comment, categoriesString, this.selectedOfficerLevel);
-    this.closeEscalateModal();
+    this.closeConfirmationModal();
   }
 
   rejectApplication() {

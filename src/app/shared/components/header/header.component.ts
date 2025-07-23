@@ -23,6 +23,7 @@ export class HeaderComponent {
     ROLE,
     LOGOUT,
   };
+  showLogoutModal: boolean = false;
 
   constructor(private router: Router) {}
   get fetchRole(): string {
@@ -42,6 +43,14 @@ export class HeaderComponent {
     this.applicationType = newType;
     console.log("Emitting application type change", newType)
     this.applicationTypeChange.emit(newType);
+  }
+
+  openLogoutModal() {
+    this.showLogoutModal = true;
+  }
+
+  closeLogoutModal() {
+    this.showLogoutModal = false;
   }
 
   logout(): void {
