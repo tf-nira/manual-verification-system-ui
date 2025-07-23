@@ -84,6 +84,8 @@ export class ApplicationDetailComponent implements OnInit {
   showConfirmationModal: boolean = false;
   userAction: String = "";
   uploadDocumentSucessStatus : boolean = false;
+  isOthersSelected: boolean = false;
+  othersText: string = '';
   rowData: any = {};
   applicationStatus: string = '';
   interviewDetails = {
@@ -811,6 +813,11 @@ getTitlesForDocument(document: any): string[] {
 
   closeEscalateModal() {
     this.showEscalateModal = false;
+    this.selectedEscalationCategories = [];
+    this.isEscalationDropdownOpen = false;
+    this.escalationComment = '';
+    this.isOthersSelected = false;
+    this.othersText = '';
   }
 
   openScheduleInterviewModal() {
@@ -2058,12 +2065,49 @@ getMimeType(format: string): string {
     if (this.selectedEscalationCategories.length === 0) {
       return 'Select escalation categories';
     } else if (this.selectedEscalationCategories.length === 1) {
+      const category = this.selectedEscalationCategories[0];
+      if (category.startsWith('Others: ')) {
+        return category.substring(8); // removing others prefix from display
+      }
       return this.selectedEscalationCategories[0];
     } else {
       return `${this.selectedEscalationCategories.length} categories selected`;
     }
   }
 
+  onOthersChange(event: any): void {
+    this.isOthersSelected = event.target.checked;
+    if (this.isOthersSelected) {
+      if (!this.selectedEscalationCategories.includes('Others')) {
+        this.selectedEscalationCategories = this.selectedEscalationCategories.filter(
+          category => category !== 'Others' && !category.startsWith('Others:')
+        );
+        this.selectedEscalationCategories.push('Others');
+      }
+    } else {
+      this.selectedEscalationCategories = this.selectedEscalationCategories.filter(
+        category => category !== 'Others' && !category.startsWith('Others:')
+      );
+      this.othersText = '';
+    }
+  }
+
+  onOthersTextChange(): void {
+    if (this.isOthersSelected && this.othersText.trim()) {
+      this.selectedEscalationCategories = this.selectedEscalationCategories.filter(
+        category => category !== 'Others' && !category.startsWith('Others:')
+      );
+      this.selectedEscalationCategories.push(`Others: ${this.othersText.trim()}`);
+    } else if (this.isOthersSelected && !this.othersText.trim()) {
+      this.selectedEscalationCategories = this.selectedEscalationCategories.filter(
+        category => !category.startsWith('Others:')
+      );
+
+      if (!this.selectedEscalationCategories.includes('Others')) {
+        this.selectedEscalationCategories.push('Others');
+      }
+    }
+  }
 
   ngOnDestroy() {
     this.stopCamera();

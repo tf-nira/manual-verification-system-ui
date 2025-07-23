@@ -2180,10 +2180,34 @@
                   </span>
                 </label>
               </div>
+
+              <div class="dropdown-item">
+                <label class="checkbox-label">
+                  <input
+                    type="checkbox"
+                    value="Others"
+                    [checked]="isOthersSelected"
+                    (change)="onOthersChange($event)"
+                  />
+                  <span class="checkbox-text">
+                    Others
+                  </span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
-
+        <div class="field-container" *ngIf="isOthersSelected">
+                <label for="others-text"> Please Specify Other Reason:</label>
+                <input
+                  id="others-text"
+                  type="text"
+                  [(ngModel)]="othersText"
+                  placeholder="Enter Escalation Category"
+                  class="others-input"
+                  (blur)="onOthersTextChange()"
+                />
+              </div>
         <div class="field-container">
           <label for="escalate-comments">Comments <span title="Comments are required."> *</span></label>
           <textarea id="escalate-comments" [(ngModel)]="escalationComment" placeholder="Enter your comments"
