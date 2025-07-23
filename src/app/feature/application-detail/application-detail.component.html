@@ -2147,21 +2147,15 @@
       <div class="modal-body">
         <div class="field-container">
           <label>Change Officer Level <span title="Select the officer level to escalate to.">ℹ️</span></label>
-          <select [(ngModel)]="selectedOfficerLevel" class="dropdown">
-            <option *ngFor="let option of dropdownOptions" [value]="option.value" [selected]="option.default">
-              {{ option.label }}
-            </option>
-          </select>
+          <div class="select-wrapper">
+            <select [(ngModel)]="selectedOfficerLevel" class="dropdown-with-custom-arrow">
+              <option *ngFor="let option of dropdownOptions" [value]="option.value" [selected]="option.default">
+                {{ option.label }}
+              </option>
+            </select>
+            <span class="dropdown-arrow-css"></span>
+          </div>
         </div>
-
-        <!-- <div class="field-container">
-          <label>Escalation Category <span title="Select the escalation category.">ℹ️</span></label>
-          <select [(ngModel)]="escalationCategory" class="dropdown">
-            <option *ngFor="let option of escalationCategories" [value]="option.value" [selected]="option.default">
-              {{ option.value }}
-            </option>
-          </select>
-        </div> -->
 
         <div class="field-container">
           <label>Escalation Category <span title="Select the escalation category.">ℹ️</span></label>
@@ -2179,7 +2173,7 @@
                     type="checkbox"  
                     [value]="option.value"
                     [checked]="isEscalationSelected(option.value)"
-                    (change)="onEscalationChange(option.value, $event)"                  
+                    (change)="onEscalationChange(option.value, $event)"
                   />
                   <span class="checkbox-text">
                     {{ option.value }}

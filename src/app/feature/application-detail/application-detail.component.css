@@ -1792,6 +1792,7 @@ ul li:hover {
 .checkbox-text {
   flex: 1;
   color: #333;
+  font-weight: normal;
 }
 
 /* FIXED: Modal specific adjustments to prevent expansion */
@@ -1844,7 +1845,6 @@ ul li:hover {
 .field-container label {
   display: block;
   margin-bottom: 5px;
-  font-weight: 500;
   color: #333;
 }
 
@@ -1861,5 +1861,56 @@ ul li:hover {
   .selected-text {
     font-size: 13px;
   }
+}
+
+/* Wrapper for the select and custom arrow */
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+/* Hide the native dropdown arrow and style the select */
+.dropdown-with-custom-arrow {
+  width: 100%;
+  height: 40px;
+  padding: 8px 30px 8px 12px; /* Add right padding for custom arrow */
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  
+  /* Hide native arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  /* Remove default arrow in IE */
+  &::-ms-expand {
+    display: none;
+  }
+}
+
+.dropdown-with-custom-arrow:hover {
+  border-color: #999;
+}
+
+.dropdown-with-custom-arrow:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Position the custom arrow */
+.select-wrapper .dropdown-arrow-css {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  pointer-events: none; /* Allow clicks to pass through to select */
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid #666;
 }
 
