@@ -768,7 +768,7 @@ getTitlesForDocument(document: any): string[] {
       case 'GetFirst ID':
         this.rejectionCategories = GETFIRSTID_REJECTION_CATEGORIES;
         break;
-      case 'Lost/ Replacement of card':
+      case 'Replacement of card':
         this.rejectionCategories = LR_REJECTION_CATEGORIES;
         break;
     }
@@ -786,7 +786,7 @@ getTitlesForDocument(document: any): string[] {
         case 'GetFirst ID':
           this.escalationCategories = GETFIRSTID_ESCALATION_CATEGORIES;
           break;
-        case 'Lost/ Replacement of card':
+        case 'Replacement of card':
           this.escalationCategories = LR_ESCALATION_CATEGORIES;
           break;
         case 'Change of Particulars':

@@ -42,6 +42,14 @@ export class DataStorageService {
     return this.httpClient.post(url, obj);
   }
 
+  getConfig() {
+    const url = this.BASE_URL + this.MVS_URL + appConstants.APPEND_URL.applications + appConstants.APPEND_URL.get_config;
+
+    return this.httpClient.get(url, {
+      withCredentials: true,
+    });
+  }
+
   fetchApplicationList(
     filters: any = [],
     sort: any = [],
