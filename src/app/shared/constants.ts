@@ -166,7 +166,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   export const FORM_LABELS_BY_SERVICE: {[key: string]: string} = {
     'New registrations' : 'Proof of Form-3 New Registration',
     'Renewal of card': 'Proof of Form-9 Renewal',
-    'Lost/ Replacement of card': 'Proof of Form-11 Replacement',
+    'Replacement of card': 'Proof of Form-11 Replacement',
     'Change of Particulars': 'Proof of Form-1/1A COP',
     'GetFirst ID': 'Proof of Form-7A GetFirst ID'
   }
@@ -226,8 +226,8 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Renewal of a card': ['proofOfCitizenship', 'proofOfAddress'],
     'Replacement of a card': ['']
   },
-  'Lost/ Replacement of card': {
-    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
+  'Replacement of card': {
+    'Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
   },
   'Change of Particulars': {
     'addingName': ['proofOfNoticeOfIntension', 'proofOfDeedPoll', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfBaptism', 'proofOfOtherRelevant'],
@@ -307,8 +307,8 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     'Replacement of a card': {
     }
   },
-  'Lost/ Replacement of card': {
-    'Lost/ Replacement of card': {
+  'Replacement of card': {
+    'Replacement of card': {
       proofOfPhysicalApplicationForm: ['Physical Application Form'],
       proofOfLoss: ['Police Report'],
       proofOfNationalId:['National Id'],
@@ -647,10 +647,10 @@ export const COP_ESCALATION_CATEGORIES = [
       ]
     },
     {
-      value: 'Lost/ Replacement of card',
-      label: 'Lost/ Replacement of card',
+      value: 'Replacement of card',
+      label: 'Replacement of card',
       serviceTypes: [
-        { value: 'Lost/ Replacement of card', label: 'Lost/ Replacement of card' }
+        { value: 'Replacement of card', label: 'Replacement of card' }
       ]
     },
     {

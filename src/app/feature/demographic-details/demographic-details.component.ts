@@ -480,6 +480,26 @@ getDocumentTitle(key: string): string {
    * Helper function to format keys into readable labels
    */
   formatKey(key: string): string {
+    const lowerKey = key.toLowerCase();
+
+    if (lowerKey.startsWith('guardian')) {
+      // Only extract suffix if key length is more than 8, else empty string
+      const suffix = key.length > 8 ? key.substring(8) : '';
+
+      if (suffix) {
+        // Format suffix like camelCase to spaced words, capitalize first letter
+        const formattedSuffix = suffix
+          .replace(/([A-Z])/g, ' $1')
+          .replace(/^./, (str) => str.toUpperCase());
+
+        return `Blood Relative's${formattedSuffix}`;
+      }
+
+      // Just 'guardian' or shorter keys like 'guardia'
+      return "Blood Relative";
+    }
+
+    // Default formatting for other keys
     return key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase());
   }
 

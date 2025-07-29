@@ -2131,7 +2131,7 @@
       </div>
       <div class="modal-footer">
         <button class="cancel-button" (click)="closeApprovalModal()">Cancel</button>
-        <button class="approve-button" [disabled]="!isChecked" (click)="approveApplication()">Approve</button>
+        <button class="approve-button" [disabled]="!isChecked" (click)="openConfirmationModal('APPROVE')">Approve</button>
       </div>
     </div>
   </div>
@@ -2147,22 +2147,67 @@
       <div class="modal-body">
         <div class="field-container">
           <label>Change Officer Level <span title="Select the officer level to escalate to.">ℹ️</span></label>
-          <select [(ngModel)]="selectedOfficerLevel" class="dropdown">
-            <option *ngFor="let option of dropdownOptions" [value]="option.value" [selected]="option.default">
-              {{ option.label }}
-            </option>
-          </select>
+          <div class="select-wrapper">
+            <select [(ngModel)]="selectedOfficerLevel" class="dropdown-with-custom-arrow">
+              <option *ngFor="let option of dropdownOptions" [value]="option.value" [selected]="option.default">
+                {{ option.label }}
+              </option>
+            </select>
+            <span class="dropdown-arrow-css"></span>
+          </div>
         </div>
 
         <div class="field-container">
           <label>Escalation Category <span title="Select the escalation category.">ℹ️</span></label>
-          <select [(ngModel)]="escalationCategory" class="dropdown">
-            <option *ngFor="let option of escalationCategories" [value]="option.value" [selected]="option.default">
-              {{ option.value }}
-            </option>
-          </select>
-        </div>
+          <div class="custom-dropdown">
+            <div class="dropdown-toggle" (click)="toggleEscalationDropdown()" [class.open]="isEscalationDropdownOpen">
+              <span >
+                {{ getSelectedEscalationText() }}
+              </span>
+              <span class="dropdown-arrow-css"></span>
+            </div>
+            <div class="dropdown-menu" *ngIf="isEscalationDropdownOpen">
+              <div class="dropdown-item" *ngFor="let option of escalationCategories">
+                <label class="checkbox-label">
+                  <input
+                    type="checkbox"  
+                    [value]="option.value"
+                    [checked]="isEscalationSelected(option.value)"
+                    (change)="onEscalationChange(option.value, $event)"
+                  />
+                  <span class="checkbox-text">
+                    {{ option.value }}
+                  </span>
+                </label>
+              </div>
 
+              <div class="dropdown-item">
+                <label class="checkbox-label">
+                  <input
+                    type="checkbox"
+                    value="Others"
+                    [checked]="isOthersSelected"
+                    (change)="onOthersChange($event)"
+                  />
+                  <span class="checkbox-text">
+                    Others
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field-container" *ngIf="isOthersSelected">
+                <label for="others-text"> Please Specify Other Reason:</label>
+                <input
+                  id="others-text"
+                  type="text"
+                  [(ngModel)]="othersText"
+                  placeholder="Enter Escalation Category"
+                  class="others-input"
+                  (blur)="onOthersTextChange()"
+                />
+              </div>
         <div class="field-container">
           <label for="escalate-comments">Comments <span title="Comments are required."> *</span></label>
           <textarea id="escalate-comments" [(ngModel)]="escalationComment" placeholder="Enter your comments"
@@ -2171,7 +2216,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn cancel" (click)="closeEscalateModal()">Cancel</button>
-        <button class="btn escalate" [disabled]="!escalationComment.trim()" (click)="escalateApplication()">
+        <button class="btn escalate" [disabled]="!escalationComment.trim()" (click)="openConfirmationModal('ESCALATE')">
           Escalate
         </button>
       </div>
@@ -2203,8 +2248,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn cancel" (click)="closeRejectModal()">Cancel</button>
-        <button class="btn reject" [disabled]="!rejectionCategory || !rejectionComment.trim()"
-          (click)="rejectApplication()">
+        <button class="btn reject" [disabled]="!rejectionCategory || !rejectionComment.trim()" (click)="openConfirmationModal('REJECT')">
           Reject
         </button>
       </div>
@@ -2224,9 +2268,9 @@
           <label for="districtOffice">District Office*</label>
           <select id="districtOffice" [(ngModel)]="interviewDetails.districtOffice" required>
             <option value="" disabled selected>Select District Office*</option>
-            <option *ngFor="let office of districtOffices" [value]="office">
-              {{ office }}
-            </option>
+           <option [value]="districtOfficeName" *ngIf="districtOfficeName">
+                {{ districtOfficeName }}
+          </option>
           </select>
         </div>
         <div class="field-container">
@@ -2347,4 +2391,20 @@
         </div>
       </div>
 
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="confirmationModal" *ngIf="showConfirmationModal">
+    <div class="modal-content">
+
+      <button class="close-button" (click)="closeConfirmationModal()">×</button>
+      <div class="modal-header">
+        <h3>Confirm action: {{userAction}} this application?</h3>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn no" (click)="closeConfirmationModal()"> No </button>
+        <button class="btn yes" (click)="confirmAction()"> Yes </button>
+      </div>
+    </div>
   </div>

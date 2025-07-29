@@ -16,6 +16,7 @@ import {
 import { AppConfigService } from '../../app-config.service';
 import { ConfigService } from '../../core/services/config.service';
 import { API_CONST_SUCCESS } from '../../shared/constants';
+import { map, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-login',
@@ -48,34 +49,44 @@ export class LoginComponent implements OnInit {
     });
   }
   onSubmit() {
-  console.log('login submitted for user:', this.username);
-
-  this.dataService.userLogin(this.username, this.password).subscribe(
-    (response: any) => {
-      // Check if login was successful
+  this.dataService.userLogin(this.username, this.password).pipe(
+    switchMap((response: any) => {
       if (
         response &&
         response.response &&
         response.response.status === API_CONST_SUCCESS
       ) {
-
+        // Store login and user data in localStorage
         const decoded = this.decodeJwt(response.response.token);
         const userId = this.fetchPreferredUsername(decoded);
         const name = this.fetchInitials(decoded);
         const role = this.fetchRole(decoded);
 
-        // Store auth data in localStorage (removed duplicates)
+        if (response.response.districtOfficeDetails) {
+          localStorage.setItem('districtOfficeId', response.response.districtOfficeDetails.district_office_code.toString());
+          localStorage.setItem('districtOfficeName', response.response.districtOfficeDetails.district_office_name);
+        }
         localStorage.setItem('authToken', response.response.token);
         localStorage.setItem('userId', userId || '');
         localStorage.setItem('name', name || '');
         localStorage.setItem('role', role || '');
 
-        // Create active session
         sessionStorage.setItem('sessionActive', 'true');
-
-        console.log('Login successful, navigating to application-list');
-
-        // Navigate WITHOUT replaceUrl to maintain browser history
+        
+        // Proceed to config API call
+        return this.dataService.getConfig().pipe(
+          // Pass along any role or relevant state for use after config
+          map((config: any) => ({ config, role }))
+        );
+      }
+      // If login fails, throw error to trigger catchError
+      throw new Error('Login failed');
+    })
+  ).subscribe({
+    next: ({ config, role }) => {
+      if (config && config.response ) {
+        localStorage.setItem('ageGroupRanges', JSON.stringify(config.response.ageGroupRanges));
+        // Only now navigate to the next component/route
         this.router.navigate(['/application-list'], {
           state: { role }
         });
@@ -83,11 +94,11 @@ export class LoginComponent implements OnInit {
         this.showErrorMessage = true;
       }
     },
-    (error) => {
-      console.error('Login error:', error);
+    error: (err) => {
+      console.error('Login or config error:', err);
       this.showErrorMessage = true;
     }
-  );
+  });
 }
 
   decodeJwt(token: string): any {

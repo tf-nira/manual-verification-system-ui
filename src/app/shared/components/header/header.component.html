@@ -8,15 +8,26 @@
   </div>
   <div class="right-section">
     <!-- Right Section -->
-     <!--Toggle button-->
-     <div class="toggle-btn-container" *ngIf="view === 'List' && !hideToggle">
-      <button
+    <!--Toggle button-->
+    <div class="toggle-btn-container" *ngIf="view === 'List' && !hideToggle">
+      <!-- <button
         class="toggle-view-button"
         [ngClass]="{'active-rejected': applicationType === 'Rejected', 'active-assigned': applicationType === 'Assigned'}"
         (click)="toggleApplicationView()">
         {{applicationType === 'Assigned' ? 'Rejected Applications' : 'Assigned Applications'}}
-     </button>
-     </div>
+      </button> -->
+      <select
+        class="toggle-view-dropdown"
+        [ngClass]="{
+          'active-rejected': applicationType === 'Rejected',
+          'active-assigned': applicationType === 'Assigned'
+        }"
+        [(ngModel)]="applicationType"
+        (change)="toggleApplicationView($event)">
+        <option value="Assigned">Assigned</option>
+        <option value="Rejected">Rejected</option>
+      </select>
+    </div>
 
     <div class="profile-container">
       <img
@@ -36,8 +47,23 @@
         src="assets/images/logout-icon.png"
         alt="Logout Icon"
         class="logout-icon"
-        (click)="logout()"
+        (click)="openLogoutModal()"
       />
+    </div>
+  </div>
+
+  <div class="logoutModal" *ngIf="showLogoutModal">
+    <div class="modal-content">
+
+      <button class="close-button" (click)="closeLogoutModal()">×</button>
+      <div class="modal-header">
+        <h3>Are you sure you want to logout?</h3>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn no" (click)="closeLogoutModal()"> No </button>
+        <button class="btn yes" (click)="logout()"> Yes </button>
+      </div>
     </div>
   </div>
 </div>

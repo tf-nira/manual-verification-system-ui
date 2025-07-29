@@ -120,7 +120,7 @@ export class ApplicationListComponent implements OnInit {
   
   servicesWithTypes = SERVICES_WITH_TYPES;
   
-  ageGroups: string[] = ['INFANT', 'MINOR', 'ADULT']; 
+  ageGroups: string[] = []; 
   selectedAgeGroups: string[] = []; 
   applicationStatuses = ['Pending', 'Interview Scheduled'];
   applicationType: string = 'Assigned'; // Default to 'Assigned'
@@ -218,6 +218,9 @@ export class ApplicationListComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    const ageGroupRanges = JSON.parse(localStorage.getItem('ageGroupRanges') || '[]');
+    this.ageGroups = ageGroupRanges.map((group: any) => `${group.groupName}(${group.range})`);
+
     this.maxToDate = new Date();
     this.temp = this.currentPage + 1;
     this.role = history.state.role;
