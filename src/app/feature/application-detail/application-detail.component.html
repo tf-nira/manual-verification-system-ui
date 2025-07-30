@@ -497,13 +497,13 @@
             </div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfBirthCity">
+          <div class="field-container" *ngIf="parseJson(rowData?.demographics?.applicantPlaceOfBirthCity)?.[0]?.value">
             <label>Applicant Place of Birth City</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthCity)[0]?.value }}
             </div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfBirthHealthFacility">
+          <div class="field-container" *ngIf="parseJson(rowData?.demographics?.applicantPlaceOfBirthHealthFacility)?.[0]?.value">
             <label>Health Facility</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthHealthFacility)[0]?.value }}</div>
           </div>
