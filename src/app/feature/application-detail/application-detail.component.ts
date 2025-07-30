@@ -818,11 +818,7 @@ getTitlesForDocument(document: any): string[] {
 
   closeEscalateModal() {
     this.showEscalateModal = false;
-    this.selectedEscalationCategories = [];
     this.isEscalationDropdownOpen = false;
-    this.escalationComment = '';
-    this.isOthersSelected = false;
-    this.othersText = '';
   }
 
   openScheduleInterviewModal() {
@@ -874,6 +870,8 @@ getTitlesForDocument(document: any): string[] {
     this.selectedEscalationCategories = [];
     this.isEscalationDropdownOpen = false;
     this.escalationComment = '';
+    this.isOthersSelected = false;
+    this.othersText = '';
   }
 
   confirmAction() {
