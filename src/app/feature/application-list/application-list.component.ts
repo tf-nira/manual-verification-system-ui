@@ -537,6 +537,8 @@ export class ApplicationListComponent implements OnInit {
     addFilter(this.searchText, API_CONST_REG_ID, API_CONST_CONTAINS);
     addFilter(this.selectedService, API_CONST_SERVICE, API_CONST_EQUALS);
     addFilter(this.selectedServiceType, API_CONST_SERVICE_TYPE, API_CONST_EQUALS);
+
+    this.selectedAgeGroups = this.selectedAgeGroups.map(age => age.split('(')[0].trim());
     addFilter(this.selectedAgeGroups, API_CONST_AGE_GROUP, API_CONST_IN);
     if (this.foundling !== null && this.foundling !== undefined) {
     const foundlingValue = this.foundling ? "Y" : "N";

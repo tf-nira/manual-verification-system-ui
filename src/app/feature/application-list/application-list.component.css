@@ -506,19 +506,40 @@ th.sortable {
 }
 .custom-multi-select {
   position: relative;
-  width: 200px;
 }
 
 .dropdown-toggle {
-  padding: 8px;
-  margin-right: 8px;
   border: 1px solid #ccc;
+  padding: 8px;
+  background: #fff;
+  position: relative;
   border-radius: 4px;
   font-size: 14px;
-  outline: none;
-  background-color: #ffffff;
-  color: #333;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.selected-values {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdown-arrow {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-right: 2px solid #222;
+  border-bottom: 2px solid #222;
+  transform: rotate(45deg);
+  margin-left: 8px;
+  transition: transform 0.2s;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(-135deg);
 }
 
 .dropdown-options {
@@ -526,11 +547,15 @@ th.sortable {
   top: 100%;
   left: 0;
   width: 100%;
-  background: white;
+  background: #fff;
   border: 1px solid #ccc;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+  z-index: 100;
   max-height: 150px;
   overflow-y: auto;
+  min-width: 100px;
 }
 
 .dropdown-options label {
