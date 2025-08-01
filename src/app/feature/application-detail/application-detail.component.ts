@@ -696,9 +696,11 @@ getTitlesForDocument(document: any): string[] {
   }
   setDropdownOptions() {
     let isInUganda = true;
+    let residenceStatusExists = false;
     try {
       const residenceStatus = this.rowData?.demographics?.residenceStatus;
       if (residenceStatus) {
+        residenceStatusExists = true;
         const parsedStatus = typeof residenceStatus === 'string'
           ? JSON.parse(residenceStatus)
           : residenceStatus;
@@ -712,14 +714,25 @@ getTitlesForDocument(document: any): string[] {
       }
     } catch (error) {
       console.error('Error parsing residence status:', error);
-      isInUganda = true;
+      residenceStatusExists = false;
     }
     // Set the appropriate officer title based on residence status
-    const districtOrInternational = isInUganda
+    let districtOrInternational;
+
+    if(!residenceStatusExists) {
+      //if residence status is null undefined then check from nin
+      districtOrInternational = {
+        value : 'MVS_DISTRICT_OR_INTERNATIONAL_OFFICER_ROLE',
+        label : 'District/ International Officer',
+        default : false
+      };
+    } else {
+      //residence status exist in packet
+      districtOrInternational = isInUganda
       ? { value: 'MVS_DISTRICT_OFFICER', label: 'District', default: false }
       : { value: 'MVS_INTERNATIONAL_OFFICER', label: 'International Officer', default: false };
-
-
+    }
+    
     switch (this.role) {
       case 'MVS_OFFICER':
         this.dropdownOptions = [
@@ -734,7 +747,9 @@ getTitlesForDocument(document: any): string[] {
           districtOrInternational,
           { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false }
         ];
-        this.selectedOfficerLevel = 'MVS_DISTRICT_OFFICER';
+        this.selectedOfficerLevel = !residenceStatusExists
+          ?'MVS_DISTRICT_OR_INTERNATIONAL_OFFICER_ROLE'
+          :'MVS_DISTRICT_OFFICER';
         break;
       case 'MVS_DISTRICT_OFFICER':
         this.dropdownOptions = [
