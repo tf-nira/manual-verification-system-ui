@@ -87,6 +87,7 @@ export class ApplicationDetailComponent implements OnInit {
   isOthersSelected: boolean = false;
   othersText: string = '';
   rowData: any = {};
+  matchedRegIds : string[] = [];
   applicationStatus: string = '';
   interviewDetails = {
     subject: '',
@@ -382,6 +383,7 @@ docTitles:any;
   console.log("Districtoffice name " +this.districtOfficeName);
   this.districtOfficeId = parseInt(localStorage.getItem('districtOfficeId') || '0', 10);
 
+  this.matchedRegIds = this.selectedRow.matchedRegIds || [];
 
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
@@ -2125,6 +2127,32 @@ getMimeType(format: string): string {
         this.selectedEscalationCategories.push('Others');
       }
     }
+  }
+
+  openRegIdDetails(registrationId: string, event: MouseEvent): void {
+    event.preventDefault();
+    this.getMatchedRegIdData(registrationId);
+  }
+
+  getMatchedRegIdData(registartionId: string) {
+    this.dataService.fetchMatchedRegIdData(registartionId).subscribe(
+      (response: any) => {
+        console.log("Response : "+ JSON.stringify(response))
+        if(response?.response){
+          console.log("Response -- Response : " + JSON.stringify(response?.response))
+          const newTab =  window.open(`/demographic-details`, '_blank');
+          if(newTab){
+             localStorage.setItem('demographicData', JSON.stringify(response?.response));
+             localStorage.removeItem('documentData');
+          } else {
+            alert('Failed to open new tab');
+          }
+        }
+      },
+      (error) => {
+        console.log('Error fetching data: ', error);
+      }
+    );
   }
 
   ngOnDestroy() {
