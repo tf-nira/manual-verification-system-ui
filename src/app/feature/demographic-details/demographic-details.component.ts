@@ -199,6 +199,7 @@ export class DemographicDetailsComponent implements OnInit{
   ];
   role: string = '';
   rowData: any = {};
+  excludeKeys = ['IDSchemaVersion' , 'UIN' , 'selectedHandles']
   service: string = '';
   relativeDocumentList: any[] = [];
   categoryMap = CATEGORY_MAP;
@@ -571,6 +572,10 @@ createDynamicNavigation(): void {
     }
     return null;
   }).filter(part => part !== null); 
+}
+
+getFilteredKeys(obj: any) {
+  return Object.keys(obj).filter(key => !this.excludeKeys.includes(key));
 }
 
 }
