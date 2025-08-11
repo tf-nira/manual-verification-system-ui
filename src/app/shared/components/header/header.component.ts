@@ -71,7 +71,6 @@ export class HeaderComponent {
     Object.keys(documentStatuses).forEach(key => {
       localStorage.setItem(key, documentStatuses[key] ? 'true' : 'false');
     });
-    alert('You have been logged out.');
     // Redirect to the login page
     this.router.navigate(['/login']).then(() => {
       window.location.reload();
