@@ -161,17 +161,17 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.givenName)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.otherNames">
+          <div class="field-container" *ngIf="parseJson(rowData?.demographics?.otherNames)[0]?.value">
             <label>Other Names</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.otherNames)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.maidenName">
+          <div class="field-container" *ngIf="parseJson(rowData?.demographics?.maidenName)[0]?.value">
             <label>Maiden Name</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.maidenName)[0]?.value }}</div>
           </div>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.previousName">
+          <div class="field-container" *ngIf="parseJson(rowData?.demographics?.previousName)[0]?.value">
             <label>Previous Name</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.previousName)[0]?.value }}</div>
           </div>
