@@ -221,13 +221,20 @@ export class DataStorageService {
     });
   }
 
-fetchDocuments(requestPayload: any): Observable<any> {
-  const url = this.BASE_URL + this.MVS_URL +
-        appConstants.APPEND_URL.applications + appConstants.APPEND_URL.fetch_documents;
-  const token = localStorage.getItem('authToken');
-  return this.httpClient.post(url, requestPayload, {
-    withCredentials: true
-  });
-}
-  
+  fetchDocuments(requestPayload: any): Observable<any> {
+    const url = this.BASE_URL + this.MVS_URL +
+      appConstants.APPEND_URL.applications + appConstants.APPEND_URL.fetch_documents;
+    const token = localStorage.getItem('authToken');
+    return this.httpClient.post(url, requestPayload, {
+      withCredentials: true
+    });
+  }
+
+  fetchMatchedRegIdData(registrationId: string) {
+    const url = this.BASE_URL + this.MVS_URL +
+      appConstants.APPEND_URL.applications + 'matched-id/demographics/' +
+      registrationId;
+    return this.httpClient.get(url);
+  }
+
 }

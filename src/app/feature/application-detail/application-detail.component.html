@@ -1870,6 +1870,17 @@
               <div class="detail-value">{{ extractedComment }}</div>
             </div>
 
+            <div *ngIf="matchedRegIds && matchedRegIds.length > 0" class="info-item">
+              <div class="detail-label">Matched Registration IDs</div>
+              <div class="detail-value">
+                <ul>
+                  <li *ngFor="let regId of matchedRegIds">
+                    <a href="#" (click)="openRegIdDetails(regId, $event)">{{ regId }}</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
             <div *ngIf="selectedRow">
               <!-- Officer Escalation Details -->
               <div *ngIf="selectedRow.officerEscDetails" class="escalation-section">
