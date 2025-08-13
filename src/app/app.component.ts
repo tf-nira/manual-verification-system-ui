@@ -41,8 +41,8 @@ export class AppComponent {
     });
 
     // Clear session on page refresh
-    window.addEventListener('beforeunload', () => {
-      sessionStorage.clear();
-    });
+    // window.addEventListener('beforeunload', () => {
+    //   sessionStorage.clear();
+    // });
   }
 }
