@@ -100,7 +100,8 @@ export class ApplicationListComponent implements OnInit {
   foundling?: boolean | null; 
   dropdownOpen: boolean = false;
   filteredServiceTypes= FILTERED_SERVICE_TYPES; // Holds the filtered service types
-  
+  searchSurname: string = '';
+  searchGivenName: string = '';
   selectedApplicationStatus: string = '';
   fromDate: Date | null = null;
   toDate: Date | null = null;
@@ -267,6 +268,12 @@ export class ApplicationListComponent implements OnInit {
       }
       if (Array.isArray(filters.selectedAgeGroups) && filters.selectedAgeGroups.length > 0) {
         this.selectedAgeGroups = filters.selectedAgeGroups;
+      }
+      if(filters.searchSurname?.trim()) {
+        this.searchSurname = filters.searchSurname;
+      }
+      if(filters.searchGivenName?.trim()) {
+        this.searchGivenName = filters.searchGivenName;
       }
       if (typeof filters.currentPage === 'number' && filters.currentPage >= 0) {
         this.currentPage = filters.currentPage;
@@ -435,6 +442,8 @@ export class ApplicationListComponent implements OnInit {
     this.foundling = null;
     this.selectedAgeGroups = [];
     this.rejectedApplicationId = '';
+    this.searchSurname = '';
+    this.searchGivenName = '';
     // Don't reload data for rejected applications until search is clicked
     if (this.applicationType === 'Assigned') {
       this.search();
@@ -463,7 +472,9 @@ export class ApplicationListComponent implements OnInit {
       sortColumn: this.sortColumn,
       sortDirection: this.sortDirection,
       applicationType: this.applicationType,
-      rejectedApplicationId: this.rejectedApplicationId
+      rejectedApplicationId: this.rejectedApplicationId,
+      searchSurname: this.searchSurname,
+      searchGivenName: this.searchGivenName
     };
 
     //removing null, empty values from filter
@@ -537,7 +548,11 @@ export class ApplicationListComponent implements OnInit {
     addFilter(this.searchText, API_CONST_REG_ID, API_CONST_CONTAINS);
     addFilter(this.selectedService, API_CONST_SERVICE, API_CONST_EQUALS);
     addFilter(this.selectedServiceType, API_CONST_SERVICE_TYPE, API_CONST_EQUALS);
-
+    addFilter(this.searchSurname, "surname", API_CONST_EQUALS);
+    addFilter(this.searchGivenName, "givenName", API_CONST_EQUALS);
+    //addFilter("pandey","givenName",API_CONST_EQUALS);
+    //addFilter("1998-01-01T00:00:00.000000", "dateOfBirth", API_CONST_EQUALS)
+    //addFilter("KABERAMAIDO (54)","applicantPlaceOfEnrolmentDistrict",API_CONST_EQUALS)
     const selectedAgeGroupsFormat = this.selectedAgeGroups.map(age => age.split('(')[0].trim());
     addFilter(selectedAgeGroupsFormat, API_CONST_AGE_GROUP, API_CONST_IN);
     
@@ -554,10 +569,11 @@ export class ApplicationListComponent implements OnInit {
     // Add "between" filter for dates
     let fromValue, toValue;
     if (this.fromDate) {
+      console.log("From Date :: " + this.fromDate)
       const from_date = new Date(this.fromDate);
       from_date.setHours(0, 0, 0, 0);
       fromValue = `${from_date.getFullYear()}-${String(from_date.getMonth() + 1).padStart(2, '0')}-${String(from_date.getDate()).padStart(2, '0')}T${String(from_date.getHours()).padStart(2, '0')}:${String(from_date.getMinutes()).padStart(2, '0')}:${String(from_date.getSeconds()).padStart(2, '0')}.000000`;
-
+      console.log("from date value is :: "+ fromValue);
       if (this.toDate) {
         const to_date = new Date(this.toDate);
         to_date.setHours(23, 59, 59, 999);
