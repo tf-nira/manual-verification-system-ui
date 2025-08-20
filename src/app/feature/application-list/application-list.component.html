@@ -127,9 +127,25 @@
                 <mat-datepicker #toPicker></mat-datepicker>
               </mat-form-field>
             </div>
+
+            <!--Date of birth-->
+            <div class="input-group">
+              <label for="dob">{{ constants.DATE_OF_BIRTH }}</label>
+              <mat-form-field appearance="outline" class="small-datepicker">
+                <input
+                  matInput
+                  [matDatepicker]="dobPicker"
+                  [(ngModel)]="dob"
+                  [max]="maxDob"
+                  placeholder="DD/MM/YYYY"/>
+                <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dobPicker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
           </div>
         </div>
-        <!-- surname -->
+      <!-- surname -->
       <div class="input-group">
             <label for="searchText">Surname</label>
             <input
@@ -140,7 +156,8 @@
               class="search-input"
             />
       </div>
-       <!-- givenName -->
+      
+      <!-- givenName -->
       <div class="input-group">
             <label for="searchText">Given Name</label>
             <input
@@ -151,9 +168,40 @@
               class="search-input"
             />
       </div>
+
+      <!--enrolment district filter-->
+
+      <div class="input-group">
+        <label for="enrolmentDistrict">Enrolment District</label>
+        <select
+          id="enrolmentDistrict"
+          [(ngModel)]="enrolmentDistrict"
+          class="search-input"
+        >
+          <option value="" disabled selected>Select Enrolment District</option>
+          <option *ngFor="let district of districtMasterData" >{{ district }}</option>
+        </select>
+      </div>
+
+      <!--residence district filter-->
+      <div class="input-group">
+        <label for="residenceDistrict">Residence District</label>
+        <select
+          id="residenceDistrict"
+          [(ngModel)]="residenceDistrict"
+          class="search-input"
+        >
+          <option value="" disabled selected>Select Residence District</option>
+          <option *ngFor="let district of districtMasterData" >{{ district }}</option>
+        </select>
+      </div>
+      
+
       </div>
     
-      <div class="seach-and-filter-buttons">
+      
+    </div>
+    <div class="seach-and-filter-buttons">
         <button (click)="clearFilters()" class="clear-filters-btn">
           {{ constants.CLEAR_FILTERS }}
         </button>
@@ -164,8 +212,6 @@
           {{ isFiltersCollapsed ? 'Filters' : 'Hide Filters' }}
         </button>
       </div>
-    </div>
-    
     </div>
   
   <!-- Rejected Applications Search -->

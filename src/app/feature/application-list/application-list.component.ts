@@ -46,6 +46,11 @@ import {
   API_CONST_STATUS,
   API_CONST_FROM_DATE,
   API_CONST_TO_DATE,
+  API_CONST_SURNAME,
+  API_CONST_GIVEN_NAME,
+  API_CONST_DATE_OF_BIRTH,
+  API_CONST_RESIDENCE_DISTRICT,
+  API_CONST_ENROLMENT_DISTRICT,
   MVS_LEGAL_OFFICER,
   API_CONST_STAGE,
   API_CONST_PENDING,
@@ -56,7 +61,8 @@ import {
   API_CONST_IN,
   API_CONST_AGE_GROUP,
   API_CONST_REJECTED,
-  MVS_INTERNATIONAL_OFFICER
+  MVS_INTERNATIONAL_OFFICER,
+  DATE_OF_BIRTH
 } from '../../shared/constants';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
@@ -102,6 +108,8 @@ export class ApplicationListComponent implements OnInit {
   filteredServiceTypes= FILTERED_SERVICE_TYPES; // Holds the filtered service types
   searchSurname: string = '';
   searchGivenName: string = '';
+  residenceDistrict: string ='';
+  enrolmentDistrict: string ='';
   selectedApplicationStatus: string = '';
   fromDate: Date | null = null;
   toDate: Date | null = null;
@@ -110,7 +118,7 @@ export class ApplicationListComponent implements OnInit {
   fromDateMax: Date = new Date(); // Default max date is today
   maxToDate: Date | null = null;
   toDateInputType: string = 'text';  // Start as text to prevent pre-filling
-
+  districtMasterData: string[] = [];
   isPanelExpanded = false;
   selectedRow: any = null;
   expandedSections: { [key: string]: boolean } = {};
@@ -120,7 +128,8 @@ export class ApplicationListComponent implements OnInit {
   uniqueApplicationStatuses: string[] = [];
   
   servicesWithTypes = SERVICES_WITH_TYPES;
-  
+  dob: Date | null = null;
+  maxDob: Date = new Date();
   ageGroups: string[] = []; 
   selectedAgeGroups: string[] = []; 
   applicationStatuses = ['Pending', 'Interview Scheduled'];
@@ -210,7 +219,13 @@ export class ApplicationListComponent implements OnInit {
     API_CONST_USER_ID,
     API_CONST_EQUALS,
     API_CONST_STATUS,
-    MVS_INTERNATIONAL_OFFICER
+    MVS_INTERNATIONAL_OFFICER,
+    DATE_OF_BIRTH,
+    API_CONST_SURNAME,
+    API_CONST_GIVEN_NAME,
+    API_CONST_DATE_OF_BIRTH,
+    API_CONST_RESIDENCE_DISTRICT,
+    API_CONST_ENROLMENT_DISTRICT,
   };
 
   constructor(
@@ -221,7 +236,7 @@ export class ApplicationListComponent implements OnInit {
   ngOnInit() {
     const ageGroupRanges = JSON.parse(localStorage.getItem('ageGroupRanges') || '[]');
     this.ageGroups = ageGroupRanges.map((group: any) => `${group.groupName}(${group.range})`);
-
+    this.districtMasterData = JSON.parse(localStorage.getItem('districtMasterData') || '[]');
     this.maxToDate = new Date();
     this.temp = this.currentPage + 1;
     this.role = history.state.role;
@@ -274,6 +289,15 @@ export class ApplicationListComponent implements OnInit {
       }
       if(filters.searchGivenName?.trim()) {
         this.searchGivenName = filters.searchGivenName;
+      }
+      if(filters.dob?.trim()) {
+        this.dob = filters.dob;
+      }
+      if(filters.residenceDistrict?.trim()) {
+        this.residenceDistrict = filters.residenceDistrict;
+      }
+      if(filters.enrolmentDistrict?.trim()) {
+        this.enrolmentDistrict = filters.enrolmentDistrict;
       }
       if (typeof filters.currentPage === 'number' && filters.currentPage >= 0) {
         this.currentPage = filters.currentPage;
@@ -444,6 +468,9 @@ export class ApplicationListComponent implements OnInit {
     this.rejectedApplicationId = '';
     this.searchSurname = '';
     this.searchGivenName = '';
+    this.dob = null;
+    this.residenceDistrict = '';
+    this.enrolmentDistrict = '';
     // Don't reload data for rejected applications until search is clicked
     if (this.applicationType === 'Assigned') {
       this.search();
@@ -474,7 +501,10 @@ export class ApplicationListComponent implements OnInit {
       applicationType: this.applicationType,
       rejectedApplicationId: this.rejectedApplicationId,
       searchSurname: this.searchSurname,
-      searchGivenName: this.searchGivenName
+      searchGivenName: this.searchGivenName,
+      dob: this.dob,
+      residenceDistrict: this.residenceDistrict,
+      enrolmentDistrict: this.enrolmentDistrict
     };
 
     //removing null, empty values from filter
@@ -531,7 +561,7 @@ export class ApplicationListComponent implements OnInit {
   
     // Helper function to add filters safely
     const addFilter = (
-      value: string | string[] | undefined,
+      value: string | string[] | undefined | Date | null,
       columnName: string,
       type: string
     ) => {
@@ -548,8 +578,10 @@ export class ApplicationListComponent implements OnInit {
     addFilter(this.searchText, API_CONST_REG_ID, API_CONST_CONTAINS);
     addFilter(this.selectedService, API_CONST_SERVICE, API_CONST_EQUALS);
     addFilter(this.selectedServiceType, API_CONST_SERVICE_TYPE, API_CONST_EQUALS);
-    addFilter(this.searchSurname, "surname", API_CONST_EQUALS);
-    addFilter(this.searchGivenName, "givenName", API_CONST_EQUALS);
+    addFilter(this.searchSurname, API_CONST_SURNAME, API_CONST_EQUALS);
+    addFilter(this.searchGivenName, API_CONST_GIVEN_NAME, API_CONST_EQUALS);
+    addFilter(this.residenceDistrict, API_CONST_RESIDENCE_DISTRICT, API_CONST_EQUALS);
+    addFilter(this.enrolmentDistrict, API_CONST_ENROLMENT_DISTRICT, API_CONST_EQUALS);
     //addFilter("pandey","givenName",API_CONST_EQUALS);
     //addFilter("1998-01-01T00:00:00.000000", "dateOfBirth", API_CONST_EQUALS)
     //addFilter("KABERAMAIDO (54)","applicantPlaceOfEnrolmentDistrict",API_CONST_EQUALS)
@@ -592,7 +624,16 @@ export class ApplicationListComponent implements OnInit {
         type: API_CONST_BETWEEN,
       });
     }
-  
+    let dobValue;
+    if(this.dob) {
+      console.log("Date of birth :: "+ this.dob);
+      const date_of_birth = new Date(this.dob);
+      date_of_birth.setHours(0, 0, 0, 0);
+      dobValue = `${date_of_birth.getFullYear()}-${String(date_of_birth.getMonth() + 1).padStart(2, '0')}-${String(date_of_birth.getDate()).padStart(2, '0')}T${String(date_of_birth.getHours()).padStart(2, '0')}:${String(date_of_birth.getMinutes()).padStart(2, '0')}:${String(date_of_birth.getSeconds()).padStart(2, '0')}.000000`;
+      console.log("from date value is :: "+ fromValue);
+    }
+    addFilter(dobValue, API_CONST_DATE_OF_BIRTH, API_CONST_EQUALS);
+
     const sort = [
       {
         sortField: this.sortColumn === API_CONST_APPLICATION_ID ? API_CONST_REG_ID : this.sortColumn || API_CONST_CREATED_DATE,

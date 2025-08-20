@@ -28,7 +28,7 @@
 .search-and-filters {
   display: flex;
   align-items: center; /* Vertically align items */
-  gap: 0.7rem; /* Add space between elements */
+  gap: 0.5rem; /* Add space between elements */
   margin-bottom: 0.5rem;
   /* margin-top: 2rem; */
 }
@@ -38,6 +38,8 @@
   align-items: end;
   gap: 0.7rem;
   /* margin-bottom: 1rem; */
+  margin-top: 0.5rem;
+  justify-content: flex-end;
 }
 
 .search-bar {
