@@ -86,6 +86,7 @@ export class LoginComponent implements OnInit {
     next: ({ config, role }) => {
       if (config && config.response ) {
         localStorage.setItem('ageGroupRanges', JSON.stringify(config.response.ageGroupRanges));
+        localStorage.setItem("districtMasterData", JSON.stringify(config.response.districtList));
         // Only now navigate to the next component/route
         this.router.navigate(['/application-list'], {
           state: { role }
