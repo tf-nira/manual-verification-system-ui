@@ -183,25 +183,25 @@
         </select>
       </div>
 
-      <!--residence district filter-->
-      <div class="input-group">
-        <label for="residenceDistrict">Residence District</label>
-        <select
-          id="residenceDistrict"
-          [(ngModel)]="residenceDistrict"
-          class="search-input"
-        >
-          <option value="" disabled selected>Select Residence District</option>
-          <option *ngFor="let district of districtMasterData" >{{ district }}</option>
-        </select>
-      </div>
-      
-
       </div>
     
       
     </div>
-    <div class="seach-and-filter-buttons">
+    <div class="search-actions-row">
+
+      <!--residence district filter-->
+      <div *ngIf="role === constants.MVS_SENIOR_REGISTRATION_OFFICER" class="input-group residence-district">
+        <label for="residenceDistrict">Residence District</label>
+        <select id="residenceDistrict" [(ngModel)]="residenceDistrict" class="search-input">
+          <option value="" disabled selected>Select Residence District</option>
+          <option *ngFor="let district of districtMasterData">{{ district }}</option>
+        </select>
+      </div>
+
+      <!--adding spacer to keep the buttons in right always-->
+      <div class="flex-spacer"></div>
+
+      <div class="seach-and-filter-buttons">
         <button (click)="clearFilters()" class="clear-filters-btn">
           {{ constants.CLEAR_FILTERS }}
         </button>
@@ -212,7 +212,10 @@
           {{ isFiltersCollapsed ? 'Filters' : 'Hide Filters' }}
         </button>
       </div>
+
     </div>
+    
+  </div>
   
   <!-- Rejected Applications Search -->
 <div class="search-container rejected-search-container" *ngIf="applicationType === 'Rejected'">
@@ -266,6 +269,26 @@
                   {{ constants.CREATED_DATE }}
                   <span [class]="getSortClass(constants.API_CONST_CREATED_DATE)"></span>
                 </th>
+                <th (click)="sortData(constants.API_CONST_SURNAME)">
+                  {{ constants.SURNAME }}
+                  <span [class]="getSortClass(constants.API_CONST_SURNAME)"></span>
+                </th>
+                <th (click)="sortData(constants.API_CONST_GIVEN_NAME)">
+                  {{ constants.GIVEN_NAME }}
+                  <span [class]="getSortClass(constants.API_CONST_GIVEN_NAME)"></span>
+                </th>
+                <th (click)="sortData(constants.API_CONST_DATE_OF_BIRTH)">
+                  {{ constants.DOB }}
+                  <span [class]="getSortClass(constants.API_CONST_DATE_OF_BIRTH)"></span>
+                </th>
+                <th *ngIf = "role === constants.MVS_SENIOR_REGISTRATION_OFFICER" (click)="sortData(constants.API_CONST_RESIDENCE_DISTRICT)">
+                  {{ constants.RESIDENCE_DISTRICT }}
+                  <span [class]="getSortClass(constants.API_CONST_RESIDENCE_DISTRICT)"></span>
+                </th>
+                <th (click)="sortData(constants.API_CONST_ENROLMENT_DISTRICT)">
+                  {{ constants.ENROLMENT_DISTRICT }}
+                  <span [class]="getSortClass(constants.API_CONST_ENROLMENT_DISTRICT)"></span>
+                </th>
                 <th *ngIf="applicationType === 'Assigned' && (role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER || role === constants.MVS_INTERNATIONAL_OFFICER || role === constants.MVS_EXECUTIVE_DIRECTOR)" (click)="sortData(constants.APPLICATION_STATUS)">
                   {{ constants.APPLICATION_STATUS }}
                   <span [class]="getSortClass(constants.APPLICATION_STATUS)"></span>
@@ -283,6 +306,11 @@
                 <td>{{ row[constants.API_CONST_SERVICE] }}</td>
                 <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
                 <td>{{ row[constants.API_CONST_CREATED_DATE] | date: 'dd-MM-yyyy HH:mm:ss'  }}</td>
+                <td>{{ row[constants.API_CONST_SURNAME] }}</td>
+                <td>{{ row[constants.API_CONST_GIVEN_NAME] }}</td>
+                <td>{{ row[constants.API_CONST_DATE_OF_BIRTH] | date: 'dd-MM-yyyy'}}</td>
+                <td *ngIf="role === constants.MVS_SENIOR_REGISTRATION_OFFICER">{{ row[constants.API_CONST_RESIDENCE_DISTRICT] }}</td>
+                <td>{{ row[constants.API_CONST_ENROLMENT_DISTRICT] }}</td>
                 <td *ngIf="applicationType === 'Assigned' && (role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER || role === constants.MVS_INTERNATIONAL_OFFICER || role === constants.MVS_EXECUTIVE_DIRECTOR)">
                   {{ row[constants.API_CONST_STATUS] === 'INTERVIEW SCHEDULED' ? 'Interview Scheduled' : 'Pending' }}
                 </td>

@@ -30,6 +30,7 @@ export const MVS_DISTRICT_OFFICER: string = 'MVS_DISTRICT_OFFICER';
 export const MVS_LEGAL_OFFICER: string = 'MVS_LEGAL_OFFICER';
 export const MVS_INTERNATIONAL_OFFICER: string = 'MVS_INTERNATIONAL_OFFICER';
 export const MVS_EXECUTIVE_DIRECTOR: string ='MVS_EXECUTIVE_DIRECTOR';
+export const MVS_SENIOR_REGISTRATION_OFFICER: string ='MVS_SENIOR_REGISTRATION_OFFICER';
 
 // table fields
 export const APPLICATION_ID: string = 'Application ID';
@@ -46,6 +47,11 @@ export const ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR: string = 'Escalation Categ
 export const ESCALATION_COMMENT_FROM_MVS_SUPERVISOR: string = 'Escalation Comment From MVS Supervisor';
 export const MVS_SUPERVISOR_ESCALATED_DATE: string = 'MVS Supervisor Escalated Date';
 export const APPLICATION_STATUS: string = 'Application Status';
+export const SURNAME: string = 'Surname';
+export const GIVEN_NAME: string = 'Given Name';
+export const DOB: string = 'Date of Birth';
+export const RESIDENCE_DISTRICT: string = 'Residence District';
+export const ENROLMENT_DISTRICT: string = 'Enrolment District';
 
 //api-utils
 export const API_CONST_APPLICATION_ID: string = 'applicationId';

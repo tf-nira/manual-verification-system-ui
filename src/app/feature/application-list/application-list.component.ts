@@ -62,7 +62,13 @@ import {
   API_CONST_AGE_GROUP,
   API_CONST_REJECTED,
   MVS_INTERNATIONAL_OFFICER,
-  DATE_OF_BIRTH
+  DATE_OF_BIRTH,
+  SURNAME,
+  GIVEN_NAME,
+  DOB,
+  RESIDENCE_DISTRICT,
+  ENROLMENT_DISTRICT,
+  MVS_SENIOR_REGISTRATION_OFFICER
 } from '../../shared/constants';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { ConfigService } from '../../core/services/config.service';
@@ -226,6 +232,12 @@ export class ApplicationListComponent implements OnInit {
     API_CONST_DATE_OF_BIRTH,
     API_CONST_RESIDENCE_DISTRICT,
     API_CONST_ENROLMENT_DISTRICT,
+    SURNAME,
+    GIVEN_NAME,
+    DOB,
+    RESIDENCE_DISTRICT,
+    ENROLMENT_DISTRICT,
+    MVS_SENIOR_REGISTRATION_OFFICER
   };
 
   constructor(

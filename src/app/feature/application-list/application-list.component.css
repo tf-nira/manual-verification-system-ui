@@ -606,17 +606,53 @@ th.sortable {
 }
 
 .small-datepicker {
-  width: 160px;  /* Adjust width if needed */
-  height: 32px;  /* Adjust height */
+  width: 160px;  
+  height: 32px;  
   font-size: 12px;
 }
 
 .small-datepicker input {
-  height: 28px;      /* Reduce input height */
-  font-size: 16px;   /* Adjust font size */
+  height: 28px;      
+  font-size: 16px;   
 }
 
 .no-data-message {
   display: flex;
   justify-content: center;
+}
+.styled-table th:nth-child(6) { 
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.input-group.residence-district {
+  max-width: 240px;      
+  width: 240px;          
+  box-sizing: border-box;
+}
+
+.input-group.residence-district .search-input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.search-actions-row {
+  display: flex;
+  gap: 1rem;              
+  margin-top: 0.5rem;
+}
+
+.input-group.residence-district {
+  width: 240px;          
+  margin-bottom: 0;     
+}
+
+.seach-and-filter-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;  
+  gap: 0.7rem;
+  margin-top: 0;          
+}
+.flex-spacer {
+  flex: 1 1 auto;
 }
