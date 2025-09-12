@@ -16,10 +16,11 @@ on:
     branches:
       - main
       - tf_nira_dev
+      - tf_nira_preprod
 
 jobs:
   build-manual-verification-system-ui:
-    uses: tf-nira/manual-verification-system-ui/.github/workflows/npm-build.yml@tf_nira_dev
+    uses: tf-nira/manual-verification-system-ui/.github/workflows/npm-build.yml@tf_nira_preprod
     with:
       SERVICE_LOCATION: .
       BUILD_ARTIFACT: manual-verification-system-ui
@@ -37,7 +38,7 @@ jobs:
             BUILD_ARTIFACT: 'manual-verification-system-ui'
       fail-fast: false
     name: ${{ matrix.SERVICE_NAME }}
-    uses: tf-nira/manual-verification-system-ui/.github/workflows/docker-build.yml@tf_nira_dev
+    uses: tf-nira/manual-verification-system-ui/.github/workflows/docker-build.yml@tf_nira_preprod
     with:
       SERVICE_LOCATION: ${{ matrix.SERVICE_LOCATION }}
       SERVICE_NAME: ${{ matrix.SERVICE_NAME }}
