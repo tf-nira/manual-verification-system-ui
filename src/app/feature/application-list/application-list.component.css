@@ -28,7 +28,7 @@
 .search-and-filters {
   display: flex;
   align-items: center; /* Vertically align items */
-  gap: 0.7rem; /* Add space between elements */
+  gap: 0.5rem; /* Add space between elements */
   margin-bottom: 0.5rem;
   /* margin-top: 2rem; */
 }
@@ -38,6 +38,8 @@
   align-items: end;
   gap: 0.7rem;
   /* margin-bottom: 1rem; */
+  margin-top: 0.5rem;
+  justify-content: flex-end;
 }
 
 .search-bar {
@@ -64,7 +66,6 @@
   /* width: 100%; */
   /* height: 1.5rem; */
   padding: 8px;
-  margin-right: 8px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 14px;
@@ -604,17 +605,53 @@ th.sortable {
 }
 
 .small-datepicker {
-  width: 160px;  /* Adjust width if needed */
-  height: 32px;  /* Adjust height */
+  width: 160px;  
+  height: 32px;  
   font-size: 12px;
 }
 
 .small-datepicker input {
-  height: 28px;      /* Reduce input height */
-  font-size: 16px;   /* Adjust font size */
+  height: 28px;      
+  font-size: 16px;   
 }
 
 .no-data-message {
   display: flex;
   justify-content: center;
+}
+.styled-table th:nth-child(6) { 
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.input-group.residence-district {
+  max-width: 240px;      
+  width: 240px;          
+  box-sizing: border-box;
+}
+
+.input-group.residence-district .search-input {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+.search-actions-row {
+  display: flex;
+  gap: 1rem;              
+  margin-top: 0.5rem;
+}
+
+.input-group.residence-district {
+  width: 240px;          
+  margin-bottom: 0;     
+}
+
+.seach-and-filter-buttons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;  
+  gap: 0.7rem;
+  margin-top: 0;          
+}
+.flex-spacer {
+  flex: 1 1 auto;
 }

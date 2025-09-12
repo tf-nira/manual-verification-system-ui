@@ -5,6 +5,7 @@ export const LOGOUT: string = 'Logout';
 export const SEARCH: string = 'Apply';
 export const FROM_DATE: string = 'From Date:';
 export const TO_DATE: string = 'To Date:';
+export const DATE_OF_BIRTH: string = 'Date Of Birth'
 export const CLEAR_FILTERS: string = 'Clear Filters';
 export const CATEGORY: string = 'Category';
 export const COMMENT: string = 'Comment';
@@ -29,6 +30,7 @@ export const MVS_DISTRICT_OFFICER: string = 'MVS_DISTRICT_OFFICER';
 export const MVS_LEGAL_OFFICER: string = 'MVS_LEGAL_OFFICER';
 export const MVS_INTERNATIONAL_OFFICER: string = 'MVS_INTERNATIONAL_OFFICER';
 export const MVS_EXECUTIVE_DIRECTOR: string ='MVS_EXECUTIVE_DIRECTOR';
+export const MVS_SENIOR_REGISTRATION_OFFICER: string ='MVS_SENIOR_REGISTRATION_OFFICER';
 
 // table fields
 export const APPLICATION_ID: string = 'Application ID';
@@ -45,6 +47,11 @@ export const ESCALATION_CATEGORY_FROM_MVS_SUPERVISOR: string = 'Escalation Categ
 export const ESCALATION_COMMENT_FROM_MVS_SUPERVISOR: string = 'Escalation Comment From MVS Supervisor';
 export const MVS_SUPERVISOR_ESCALATED_DATE: string = 'MVS Supervisor Escalated Date';
 export const APPLICATION_STATUS: string = 'Application Status';
+export const SURNAME: string = 'Surname';
+export const GIVEN_NAME: string = 'Given Name';
+export const DOB: string = 'Date of Birth';
+export const RESIDENCE_DISTRICT: string = 'Residence District';
+export const ENROLMENT_DISTRICT: string = 'Enrolment District';
 
 //api-utils
 export const API_CONST_APPLICATION_ID: string = 'applicationId';
@@ -59,6 +66,11 @@ export const API_CONST_COMMENT = 'comment';
 export const API_CONST_ESCALATION_DATE = 'escDTimes';
 export const API_CONST_ASSIGNED_OFFICER_ID = 'assignedOfficerId';
 export const API_CONST_USER_ID = 'userId';
+export const API_CONST_SURNAME = 'surname';
+export const API_CONST_GIVEN_NAME = 'givenName';
+export const API_CONST_DATE_OF_BIRTH = 'dateOfBirth';
+export const API_CONST_RESIDENCE_DISTRICT = 'resDistrict';
+export const API_CONST_ENROLMENT_DISTRICT = 'applicantPlaceOfEnrolmentDistrict'
 export const API_CONST_EQUALS = 'equals';
 export const API_CONST_IN = 'in';
 export const API_CONST_CONTAINS = 'contains';
