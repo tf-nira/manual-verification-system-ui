@@ -91,22 +91,26 @@
           <div class="personal-information">
             <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value">
               <label>Surname</label>
-              <div class="field-value">{{ parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value }}</div>
+              <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value }}</div>
+              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copSurnamePrevious[0].value" />
             </div>
         
             <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value">
               <label>Given Name</label>
-              <div class="field-value">{{ parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value }}</div>
+              <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value }}</div>
+              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copGivenNamePrevious[0].value" />
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copEmailPrevious">
               <label>Email</label>
-              <div class="field-value">{{ rowData?.demographics?.copEmailPrevious }}</div>
+              <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.copEmailPrevious }}</div>
+              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copEmailPrevious" />
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copDateOfBirthPrevious">
               <label>Date Of Birth</label>
-              <div class="field-value">{{ rowData?.demographics?.copDateOfBirthPrevious }}</div>
+              <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.copDateOfBirthPrevious }}</div>
+               <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copDateOfBirthPrevious"/>
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copNinPrevious">
@@ -116,7 +120,8 @@
 
             <div class="field-container" *ngIf="rowData?.demographics?.copPhonePrevious">
               <label>Mobile Number</label>
-              <div class="field-value">{{ rowData?.demographics?.copPhonePrevious }}</div>
+              <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.copPhonePrevious }} </div>
+              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copPhonePrevious"/>
             </div>
 
             <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copCountryCodePrevious)[0]?.value">
@@ -126,7 +131,8 @@
 
             <div class="field-container" *ngIf="rowData?.demographics?.copHomePhoneNumberPrevious">
               <label>Home Phone Number</label>
-              <div class="field-value">{{ rowData?.demographics?.copHomePhoneNumberPrevious }}</div>
+              <div  *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.copHomePhoneNumberPrevious }}</div>
+              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copHomePhoneNumberPrevious"/>
             </div>
 
           </div>
@@ -149,35 +155,42 @@
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.fullName)[0]?.value">
             <label>Fullname</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.fullName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.fullName[0].value"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.surname)[0]?.value">
             <label>Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.surname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.surname)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.surname[0].value" />
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.givenName)[0]?.value">
             <label>Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.givenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.givenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.givenName[0].value" />
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.otherNames)[0]?.value">
             <label>Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.otherNames)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.otherNames)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.otherNames[0].value" />
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.maidenName)[0]?.value">
             <label>Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.maidenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.maidenName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.maidenName[0].value" />
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.previousName)[0]?.value">
             <label>Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.previousName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.previousName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.previousName[0].value" />
           </div>
           <div class="field-container" *ngIf="rowData?.demographics?.dateOfBirth">
             <label>Date of Birth</label>
-            <div class="field-value">{{ rowData?.demographics?.dateOfBirth }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.dateOfBirth }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.dateOfBirth"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.gender)[0]?.value">
@@ -187,12 +200,14 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.phone && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Mobile Number</label>
-            <div class="field-value">{{rowData?.demographics?.phone }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{rowData?.demographics?.phone }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.phone"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.email && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Email</label>
-            <div class="field-value">{{ rowData?.demographics?.email }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.email }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.email" />
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.applicantLivingStatus)[0]?.value">
@@ -207,7 +222,8 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.homePhoneNumber && service !== constants.CHANGE_OF_PARTICULARS">
             <label>Home Phone Number</label>
-            <div class="field-value">{{ rowData?.demographics?.homePhoneNumber }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.homePhoneNumber }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.homePhoneNumber" />
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.highestLevelOfEducation)[0]?.value">
@@ -674,27 +690,32 @@
         <div class="personal-information">
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseSurname)[0]?.value">
             <label>Spouse Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseSurname)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseSurname" />
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseGivenName)[0]?.value">
             <label>Spouse Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseGivenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseGivenName" />
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseOtherNames)[0]?.value">
             <label>Spouse Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseOtherNames)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseOtherNames)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseOtherNames"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseMaidenName)[0]?.value">
             <label>Spouse Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseMaidenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseMaidenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseMaidenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spousePreviousName)[0]?.value">
             <label>Spouse Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spousePreviousName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spousePreviousName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spousePreviousName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.spouseNIN">
@@ -734,22 +755,26 @@
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseTwoSurname)[0]?.value">
             <label>Spouse Two Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoSurname)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseTwoSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseTwoGivenName)[0]?.value">
             <label>Spouse Two Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoGivenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseTwoGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseTwoOtherNames)[0]?.value">
             <label>Spouse Two Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoOtherNames)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoOtherNames)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseTwoOtherNames"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseTwoPreviousName)[0]?.value">
             <label>Spouse Two Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoPreviousName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoPreviousName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseTwoPreviousName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoNIN">
@@ -786,27 +811,32 @@
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseThreeSurname)[0]?.value">
             <label>Spouse Three Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeSurname)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseThreeSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseThreeGivenName)[0]?.value">
             <label>Spouse Three Given name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeGivenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseThreeGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseThreeOtherNames)[0]?.value">
             <label>Spouse Three Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeOtherNames)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeOtherNames)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseThreeOtherNames"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseThreeMaidenName)[0]?.value">
             <label>Spouse Three Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeMaidenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeMaidenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseThreeMaidenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.spouseThreePreviousName)[0]?.value">
             <label>Spouse Three Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreePreviousName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.spouseThreePreviousName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.spouseThreePreviousName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeNIN">
@@ -882,22 +912,26 @@
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.fatherSurname)[0]?.value">
             <label>Father Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.fatherSurname)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.fatherSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.fatherGivenName)[0]?.value">
             <label>Father Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.fatherGivenName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.fatherGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.fatherOtherNames)[0]?.value">
             <label>Father Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherOtherNames)[0]?.value }}</div>
+            <div *!ngIf="isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.fatherOtherNames)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.fatherOtherNames"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.fatherPreviousName)[0]?.value">
             <label>Father Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPreviousName)[0]?.value }}</div>
+            <div *ngIf="isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.fatherPreviousName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.fatherPreviousName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.fatherNIN">
@@ -1077,27 +1111,32 @@
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.motherSurname)[0]?.value">
             <label>Mother Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.motherSurname)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.motherSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.motherGivenName)[0]?.value">
             <label>Mother Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.motherGivenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.motherGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.motherOtherNames)[0]?.value">
             <label>Mother Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherOtherNames)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.motherOtherNames)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.motherOtherNames"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.motherPreviousName)[0]?.value">
             <label>Mother Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPreviousName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.motherPreviousName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.motherPreviousName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.motherMaidenName)[0]?.value">
             <label>Mother Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherMaidenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.motherMaidenName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.motherMaidenName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.motherNIN">
@@ -1270,22 +1309,25 @@
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.guardianSurname)[0]?.value">
             <label>Blood Relative's Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.guardianSurname)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.guardianSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.guardianGivenName)[0]?.value">
             <label>Blood Relative's Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.guardianGivenName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.guardianGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.guardianOtherNames)[0]?.value">
             <label>Blood Relative's Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianOtherNames)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.guardianOtherNames)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.guardianOtherNames"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.guardianOccupation)[0]?.value">
             <label>Blood Relative's Occupation</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianOccupation)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.guardianOccupation)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.guardianNIN_AIN">
@@ -1423,22 +1465,26 @@
         <div class="personal-information">
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childName)[0]?.value">
             <label>Child Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childSurname)[0]?.value">
             <label>Child Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childSurname)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childGivenName)[0]?.value">
             <label>Child Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childGivenName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childOtherName)[0]?.value">
             <label>Child Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childOtherName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childOtherName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childOtherName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.childNIN">
@@ -1453,27 +1499,32 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.childDateOfBirth">
             <label>Child Date Of Birth</label>
-            <div class="field-value">{{rowData?.demographics?.childDateOfBirth }}</div>
+            <div *ngIf="isEditMode" class="field-value">{{rowData?.demographics?.childDateOfBirth }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childDateOfBirth"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childTwoName)[0]?.value">
             <label>Child Two Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childTwoName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childTwoName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childTwoName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childTwoSurname)[0]?.value">
             <label>Child Two Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childTwoSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childTwoSurname)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childTwoSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childTwoGivenName)[0]?.value">
             <label>Child Two Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childTwoGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childTwoGivenName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childTwoGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childTwoOtherName)[0]?.value">
             <label>Child Two Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childTwoOtherName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childTwoOtherName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childTwoOtherName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.childTwoNIN">
@@ -1488,27 +1539,32 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.childTwoDateOfBirth">
             <label>Child Two Date of Birth</label>
-            <div class="field-value">{{ rowData?.demographics?.childTwoDateOfBirth }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.childTwoDateOfBirth }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childTwoDateOfBirth"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childThreeName)[0]?.value">
             <label>Child Three Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childThreeName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childThreeName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childThreeName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childThreeSurname)[0]?.value">
             <label>Child Three Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childThreeSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childThreeSurname)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childThreeSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childThreeGivenName)[0]?.value">
             <label>Child Three Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childThreeGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childThreeGivenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childThreeGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childThreeOtherName)[0]?.value">
             <label>Child Three Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childThreeOtherName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childThreeOtherName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childThreeOtherName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.childThreeNIN">
@@ -1523,27 +1579,32 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.childThreeDateOfBirth">
             <label>Child Three Date of Birth</label>
-            <div class="field-value">{{rowData?.demographics?.childThreeDateOfBirth }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{rowData?.demographics?.childThreeDateOfBirth }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childThreeDateOfBirth"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childFourName)[0]?.value">
             <label>Child Four Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFourName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childFourName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childFourName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childFourSurname)[0]?.value">
             <label>Child Four Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFourSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childFourSurname)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childFourSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childFourGivenName)[0]?.value">
             <label>Child Four Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFourGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childFourGivenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childFourGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childFourOtherName)[0]?.value">
             <label>Child Four Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFourOtherName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childFourOtherName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childFourOtherName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.childFourNIN">
@@ -1558,27 +1619,31 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.childFourDateOfBirth">
             <label>Child Four Date of Birth</label>
-            <div class="field-value">{{ rowData?.demographics?.childFourDateOfBirth }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.childFourDateOfBirth }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childFourDateOfBirth"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childFiveName)[0]?.value">
             <label>Child Five Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFiveName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childFiveName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childFiveName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childFiveSurname)[0]?.value">
             <label>Child Five Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFiveSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childFiveSurname)[0]?.value }}</div>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childFiveGivenName)[0]?.value">
             <label>Child Five Given Name</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.childFiveGivenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childFiveGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childFiveOtherName)[0]?.value">
             <label>Child Five Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFiveOtherName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childFiveOtherName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childFiveOtherName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.childFiveNIN">
@@ -1593,27 +1658,32 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.childFiveDateOfBirth">
             <label>Child Five Date of Birth</label>
-            <div class="field-value">{{rowData?.demographics?.childFiveDateOfBirth }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{rowData?.demographics?.childFiveDateOfBirth }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childFiveDateOfBirth"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childSixName)[0]?.value">
             <label>Child Six Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSixName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childSixName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childSixName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childSixSurname)[0]?.value">
             <label>Child Six Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSixSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childSixSurname)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childSixSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childSixGivenName)[0]?.value">
             <label>Child Six Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSixGivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childSixGivenName)[0]?.value }}</div>
+             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childSixGivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.childSixOtherName)[0]?.value">
             <label>Child Six Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSixOtherName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.childSixOtherName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childSixOtherName"/>
           </div>
 
           <div class="field-container" *ngIf="rowData?.demographics?.childSixNIN">
@@ -1628,7 +1698,8 @@
 
           <div class="field-container" *ngIf="rowData?.demographics?.childSixDateOfBirth">
             <label>Child Six Date of Birth</label>
-            <div class="field-value">{{rowData?.demographics?.childSixDateOfBirth }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{rowData?.demographics?.childSixDateOfBirth }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.childSixDateOfBirth"/>
           </div>
 
         </div>
@@ -1649,27 +1720,32 @@
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.declarantSurname)[0]?.value">
             <label>Declarant Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantSurname)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.declarantSurname)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.declarantSurname"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.declarantgivenName)[0]?.value">
             <label>Declarant Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantgivenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.declarantgivenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.declarantgivenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.declarantotherNames)[0]?.value">
             <label>Declarant Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantotherNames)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.declarantotherNames)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.declarantotherNames"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.declarantPreviousNames)[0]?.value">
             <label>Declarant Previous Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantPreviousNames)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.declarantPreviousNames)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.declarantPreviousNames"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.declarantMaidenName)[0]?.value">
             <label>Declarant Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantMaidenName)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.declarantMaidenName)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.declarantMaidenName"/>
           </div>
 
           <div class="field-container" *ngIf="parseJson(rowData?.demographics?.declarantGender)[0]?.value">
@@ -2096,18 +2172,18 @@
 
       <!-- Action Buttons -->
       <div class="action-buttons" *ngIf="!isRejectionDetailsPresent()">
-        <button class="approve" (click)="openApprovalModal()">
+        <button class="approve" (click)="openApprovalModal()" *ngIf="!isEditMode">
           <img src="assets/images/approve_icon.png" alt="Back" class="icon" />
           <i class="fas fa-check-circle"></i>
           {{ constants.APPROVE }}
         </button>
-        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR' && role !== 'MVS_SENIOR_REGISTRATION_OFFICER' && role !== 'MVS_INTERNATIONAL_OFFICER'"
+        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR' && role !== 'MVS_SENIOR_REGISTRATION_OFFICER' && role !== 'MVS_INTERNATIONAL_OFFICER' && role !== 'MVS_MANAGER'"
           (click)="openEscalateModal()">
           <img src="assets/images/escalate_icon.png" alt="Back" class="icon" />
           <i class="fas fa-exclamation-triangle"></i>
           {{ constants.ESCALATE }}
         </button>
-        <button class="reject" (click)="openRejectModal()" *ngIf="role !== 'MVS_OFFICER'">
+        <button class="reject" (click)="openRejectModal()" *ngIf="role !== 'MVS_OFFICER' && !isEditMode">
           <img src="assets/images/reject_icon.png" alt="Back" class="icon" />
           <i class="fas fa-times-circle"></i>
           {{ constants.REJECT }}
@@ -2115,9 +2191,23 @@
         <!-- Schedule Interview Btn -->
         <button [ngClass]="{
             'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_EXECUTIVE_DIRECTOR' || role === 'MVS_INTERNATIONAL_OFFICER') ,
-            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_SENIOR_REGISTRATION_OFFICER' || selectedRow.status === 'INTERVIEW SCHEDULED')
+            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_SENIOR_REGISTRATION_OFFICER' || role === 'MVS_MANAGER' || selectedRow.status === 'INTERVIEW SCHEDULED')
           }" (click)="openScheduleInterviewModal()">
           {{ constants.SCHEDULE_INTERVIEW }}
+        </button>
+        <button class="ModifyRecord" *ngIf="role === 'MVS_MANAGER' && !isEditMode"
+          (click)="confirmAndModify()">
+          {{ constants.Modify_DETAILS }}
+        </button>
+        
+        <button class="ModifyRecord" *ngIf="saveChanges"
+          (click)="saveandcloseModify()">
+          save
+        </button>
+
+        <button class="ModifyRecord" *ngIf="closeEdit"
+          (click)="cancelModefy()">
+          cancel
         </button>
       </div>
 

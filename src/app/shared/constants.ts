@@ -23,6 +23,7 @@ export const SCHEDULE_INTERVIEW: string = 'Schedule Interview';
 export const UPLOAD_DCOUMENTS: string = 'Upload Documents';
 export const APPLICANT_NAME: string = 'Applicant Name';
 export const BY_BIRTH_SERVICE_TYPE = 'Registration of citizens by birth'
+export const Modify_DETAILS: string = 'Modify Details'
 // roles
 export const MVS_OFFICER: string = 'MVS_OFFICER';
 export const MVS_SUPERVISOR: string = 'MVS_SUPERVISOR';
@@ -31,6 +32,7 @@ export const MVS_LEGAL_OFFICER: string = 'MVS_LEGAL_OFFICER';
 export const MVS_INTERNATIONAL_OFFICER: string = 'MVS_INTERNATIONAL_OFFICER';
 export const MVS_EXECUTIVE_DIRECTOR: string ='MVS_EXECUTIVE_DIRECTOR';
 export const MVS_SENIOR_REGISTRATION_OFFICER: string ='MVS_SENIOR_REGISTRATION_OFFICER';
+export const MVS_MANAGER: string ='MVS_MANAGER';
 
 // table fields
 export const APPLICATION_ID: string = 'Application ID';
@@ -91,6 +93,7 @@ export const API_CONST_APPROVE = 'APPROVE';
 export const API_CONST_ESCALATE = 'ESCALATE';
 export const API_CONST_REJECT = 'REJECT';
 export const API_CONST_RECOMMEND_FOR_APPROVAL ='RECOMMEND_FOR_APPROVAL'
+export const API_CONST_MODIFY = 'modify_demographics'
 //max indiviadual file size that can be uploaded 2mb
 export const MAX_DOC_SIZE = 2 * 1024 * 1024;
 export const SERVICE_CONST_MIGRATION = 'Migration';

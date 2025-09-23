@@ -1986,3 +1986,17 @@ ul li:hover {
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
 }
 
+.action-buttons .ModifyRecord {
+  background-color: #FFF9F5;
+  color: #BC4B09;
+  border: 1px solid #FDCFB4;
+  border-radius: 5px;
+  padding: 5px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+

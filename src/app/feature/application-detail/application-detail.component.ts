@@ -7,7 +7,7 @@ import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uplo
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
 import * as appConstants from '../../app.constants';
-import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, MVS_EXECUTIVE_DIRECTOR, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_APPROVAL, MVS_INTERNATIONAL_OFFICER } from '../../shared/constants';
+import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, MVS_EXECUTIVE_DIRECTOR, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_APPROVAL, MVS_INTERNATIONAL_OFFICER, Modify_DETAILS, API_CONST_MODIFY } from '../../shared/constants';
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
   NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP,
   MAX_DOC_SIZE, FORM_LABELS_BY_SERVICE, PROOF_OF_PHYSICAL_APPLICATION_FORM, CHANGE_OF_PARTICULARS,
@@ -78,6 +78,9 @@ export class ApplicationDetailComponent implements OnInit {
   escalateOption: boolean = false;
   showApprovalModal: boolean = false;
   showEscalateModal: boolean = false;
+  isEditMode: boolean = false;
+  closeEdit: boolean=false;
+  saveChanges: boolean=false;
   showScheduleInterviewModal: boolean = false;
   showDocumentUploadModal: boolean = false;
   showRejectModal: boolean = false;
@@ -272,7 +275,8 @@ additionalFetchedDocuments: { category: string; title: string; fileName: string;
     CHANGE_OF_PARTICULARS,
     SERVICE_CONST_MIGRATION,
     SERVICE_CONST_NEW_REGISTRATION,
-    SERVICE_CONST_RENEWAL
+    SERVICE_CONST_RENEWAL,
+    Modify_DETAILS
   }
   
   // Sample Data
@@ -297,6 +301,10 @@ docTitles:any;
   constructor(private router: Router, private dataService: DataStorageService,
     private sanitizer: DomSanitizer, private snackBar: MatSnackBar
   ) { }
+
+  originalDetails: any = {};
+  modifiedDetails: any={};
+ 
 
   ngOnInit() {
     const state = history.state;
@@ -747,7 +755,8 @@ getTitlesForDocument(document: any): string[] {
       case 'MVS_SUPERVISOR':
         this.dropdownOptions = [
           districtOrInternational,
-          { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false }
+          { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false },
+          { value: 'MVS_MANAGER', label: 'Manager', default: false } 
         ];
         this.selectedOfficerLevel = !residenceStatusExists
           ?'MVS_DISTRICT_OR_INTERNATIONAL_OFFICER_ROLE'
@@ -761,7 +770,8 @@ getTitlesForDocument(document: any): string[] {
         break;
       case 'MVS_LEGAL_OFFICER':
         this.dropdownOptions = [
-          { value: 'MVS_EXECUTIVE_DIRECTOR', label: 'Executive Director', default: true }
+          { value: 'MVS_EXECUTIVE_DIRECTOR', label: 'Executive Director', default: true },
+          { value: 'MVS_MANAGER', label: 'Manager', default: false } 
         ];
         this.selectedOfficerLevel = 'MVS_EXECUTIVE_DIRECTOR';
         break;
@@ -831,6 +841,141 @@ getTitlesForDocument(document: any): string[] {
   openEscalateModal() {
     console.log('Escalate Modal Opened');
     this.showEscalateModal = true;
+  }
+  confirmAndModify(){
+    const isConfirmed = window.confirm('Are you sure you want to modify this record?');
+     if (isConfirmed) {
+      this.openModifyModule();
+      this.closeEdit=true;
+      this.saveChanges=true;
+    }
+  }
+
+  openModifyModule(){
+    this.isEditMode = true;
+    this.originalDetails = JSON.parse(JSON.stringify(this.rowData.demographics));
+    this.modifiedDetails = JSON.parse(JSON.stringify(this.originalDetails)); 
+    Object.keys(this.modifiedDetails).forEach(key => {
+    this.modifiedDetails[key] = this.normalizeValue(this.modifiedDetails[key]);
+    });
+    Object.keys(this.originalDetails).forEach(key => {
+    this.originalDetails[key] = this.normalizeValue(this.originalDetails[key]);
+    });
+     console.log('Original details backup:', this.originalDetails);
+     console.log('Modified details:', this.modifiedDetails);
+  }
+
+  normalizeValue(value: any): any {
+  // Already array → return
+  if (Array.isArray(value)) return value;
+  // Already object → return
+  if (typeof value === 'object' && value !== null) return value;
+  // If it's a string, try JSON.parse
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      // If parsed is array of objects → return as array
+      if (Array.isArray(parsed)) return parsed;
+      // If parsed is plain value → return it directly
+      return parsed;
+    } catch {
+      // Not JSON, just a raw string → keep it
+      return value;
+    }
+  }
+  // For numbers, booleans, null → keep as-is
+  return value;
+}
+
+  cancelModefy(){
+    const confirmDiscard = window.confirm("Do you really want to discard the modifications?");
+    if(confirmDiscard){
+    this.closeEdit=false;
+    this.isEditMode=false;
+    this.saveChanges=false;
+    return;
+    }
+  }
+
+  saveandcloseModify(){
+    console.log(' Modified details:', this.modifiedDetails);
+    const hasChanges = JSON.stringify(this.modifiedDetails) !== JSON.stringify(this.originalDetails);
+    if (!hasChanges) {
+    this.snackBar.open('No changes detected to save.', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['center-snackbar'],
+    });
+    return;
+  }
+    const confirmSave = confirm("Do you really want to save the modifications?");
+    if (confirmSave) {
+    this.isEditMode = false;
+    this.closeEdit=false;
+    this.saveChanges=false;
+    const denormalized: any = {};
+    Object.keys(this.modifiedDetails).forEach(key => {
+    const val = this.modifiedDetails[key];
+    denormalized[key] = Array.isArray(val) || (val?.value !== undefined)
+    ? JSON.stringify(val)
+    : val;
+    });
+    console.log('denormalozed ', denormalized);
+    console.log('rowData', this.rowData);
+    this.rowData.demographics = denormalized;
+    console.log('Modified rowdata', this.rowData);
+    const changes = this.getChangedFields(this.originalDetails, this.modifiedDetails);
+    this.saveModifiedRowData(changes,this.rowData);
+    this.snackBar.open('Modifications saved successfully.', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['center-snackbar'],
+    });
+  }
+  }
+
+  private getChangedFields(original: any, modified: any): any {
+  const changes: any = {};
+
+  Object.keys(modified).forEach(key => {
+    if (JSON.stringify(original[key]) !== JSON.stringify(modified[key])) {
+      changes[key] = this.denormalizeValue(modified[key]); 
+    }
+  });
+
+  return changes;
+  }
+
+    private denormalizeValue(val: any): any {
+    if (Array.isArray(val)) {
+      // For arrays like [{value: "Smith"}], return the first element’s value
+      return val[0]?.value ?? null;
+    }
+    if (typeof val === 'object' && val?.value !== undefined) {
+      // For objects like {value: "9876543210"}, return the value directly
+      return val.value;
+    }
+    return val; // Already a primitive (string, number, etc.)
+  }
+
+
+  saveModifiedRowData(changes: any,rowData: any){
+    this.dataService.saveModifiedRow(changes,this.rowData).subscribe(
+  (response) => {
+    if (response?.errors?.length > 0) {
+      const errorMessage = response.errors[0].message;
+      this.snackBar.open(errorMessage, 'Close', { duration: 3000 });
+    } else {
+      this.snackBar.open('Modifications saved successfully.', 'Close', { duration: 3000 });
+    }
+  },
+  (error) => {
+    console.error('Error saving modifications:', error);
+    this.snackBar.open('Failed to save modifications. Please try again.', 'Close', { duration: 3000 });
+  }
+  );
   }
 
   closeEscalateModal() {
