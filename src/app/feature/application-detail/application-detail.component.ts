@@ -325,9 +325,6 @@ docTitles:any;
     this.serviceType = this.rowData.serviceType || '';
     this.applicationId = this.rowData.applicationId || '';
     this.service = this.rowData.service || '';
-    if (this.service === this.constants.SERVICE_CONST_MIGRATION && this.rowData?.demographics?.userService === this.constants.SERVICE_CONST_NEW_REGISTRATION) {
-      this.rowData.demographics.userService = this.constants.SERVICE_CONST_RENEWAL;
-    }
     this.statusComment = this.rowData.statusComment || '';
     if(this.statusComment.includes('::')){
       const parts = this.statusComment.split('::');
