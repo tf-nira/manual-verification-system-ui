@@ -128,7 +128,7 @@
             <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copCountryCodePrevious)[0]?.value">
               <label>Country Code</label>
               <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.copCountryCodePrevious)[0]?.value }}</div>
-               <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copCountryCodePrevious"/>
+               <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copCountryCodePreviou[0].value"/>
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copHomePhoneNumberPrevious">
