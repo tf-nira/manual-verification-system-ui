@@ -19,6 +19,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { error } from 'node:console';
+import { NgZone } from '@angular/core';
+
 type DocumentPayload = {
   [key: string]: {
     document: number[];
@@ -90,6 +92,7 @@ export class ApplicationDetailComponent implements OnInit {
   isOthersSelected: boolean = false;
   othersText: string = '';
   rowData: any = {};
+  tempData:any={};
   matchedRegIds : string[] = [];
   applicationStatus: string = '';
   interviewDetails = {
@@ -299,7 +302,7 @@ docTitles:any;
   districtOfficeId!: number;
 
   constructor(private router: Router, private dataService: DataStorageService,
-    private sanitizer: DomSanitizer, private snackBar: MatSnackBar
+    private sanitizer: DomSanitizer, private snackBar: MatSnackBar,private ngZone: NgZone
   ) { }
 
   originalDetails: any = {};
@@ -854,6 +857,7 @@ getTitlesForDocument(document: any): string[] {
   openModifyModule(){
     this.isEditMode = true;
     this.originalDetails = JSON.parse(JSON.stringify(this.rowData.demographics));
+    this.tempData = JSON.parse(JSON.stringify(this.rowData.demographics));
     this.modifiedDetails = JSON.parse(JSON.stringify(this.originalDetails)); 
     Object.keys(this.modifiedDetails).forEach(key => {
     this.modifiedDetails[key] = this.normalizeValue(this.modifiedDetails[key]);
@@ -861,8 +865,6 @@ getTitlesForDocument(document: any): string[] {
     Object.keys(this.originalDetails).forEach(key => {
     this.originalDetails[key] = this.normalizeValue(this.originalDetails[key]);
     });
-     console.log('Original details backup:', this.originalDetails);
-     console.log('Modified details:', this.modifiedDetails);
   }
 
   normalizeValue(value: any): any {
@@ -898,7 +900,6 @@ getTitlesForDocument(document: any): string[] {
   }
 
   saveandcloseModify(){
-    console.log(' Modified details:', this.modifiedDetails);
     const hasChanges = JSON.stringify(this.modifiedDetails) !== JSON.stringify(this.originalDetails);
     if (!hasChanges) {
     this.snackBar.open('No changes detected to save.', 'Close', {
@@ -921,13 +922,13 @@ getTitlesForDocument(document: any): string[] {
     ? JSON.stringify(val)
     : val;
     });
-    console.log('denormalozed ', denormalized);
-    console.log('rowData', this.rowData);
-    this.rowData.demographics = denormalized;
-    console.log('Modified rowdata', this.rowData);
+    // console.log('denormalozed ', denormalized);
+    // console.log('rowData', this.rowData);
+    this.tempData.demographics = denormalized;
+    // console.log('Modified rowdata', this.rowData);
     const changes = this.getChangedFields(this.originalDetails, this.modifiedDetails);
     this.saveModifiedRowData(changes,this.rowData);
-    this.snackBar.open('Modifications saved successfully.', 'Close', {
+    this.snackBar.open('Modifications initiated.', 'Close', {
       duration: 3000,
       horizontalPosition: 'center',
       verticalPosition: 'top',
@@ -941,42 +942,33 @@ getTitlesForDocument(document: any): string[] {
 
   Object.keys(modified).forEach(key => {
     if (JSON.stringify(original[key]) !== JSON.stringify(modified[key])) {
-      changes[key] = this.denormalizeValue(modified[key]); 
+      changes[key] = modified[key];
     }
   });
 
   return changes;
   }
 
-    private denormalizeValue(val: any): any {
-    if (Array.isArray(val)) {
-      // For arrays like [{value: "Smith"}], return the first element’s value
-      return val[0]?.value ?? null;
-    }
-    if (typeof val === 'object' && val?.value !== undefined) {
-      // For objects like {value: "9876543210"}, return the value directly
-      return val.value;
-    }
-    return val; // Already a primitive (string, number, etc.)
-  }
-
-
-  saveModifiedRowData(changes: any,rowData: any){
-    this.dataService.saveModifiedRow(changes,this.rowData).subscribe(
+ saveModifiedRowData(changes: any,rowData: any){
+    this.dataService.saveModifiedRow(changes, rowData).subscribe(
   (response) => {
-    if (response?.errors?.length > 0) {
-      const errorMessage = response.errors[0].message;
-      this.snackBar.open(errorMessage, 'Close', { duration: 3000 });
-    } else {
-      this.snackBar.open('Modifications saved successfully.', 'Close', { duration: 3000 });
-    }
+    const hasErrors = response?.errors && response.errors.length > 0;
+    const message = response?.errors?.[0]?.message || response?.message || 'Modifications saved successfully.';
+    this.ngZone.run(() => {
+      this.snackBar.open(message, 'Close', { duration: 3000 });
+        if (!hasErrors) {
+          this.rowData.demographics = this.tempData.demographics;
+        }
+    });
+    
   },
   (error) => {
-    console.error('Error saving modifications:', error);
-    this.snackBar.open('Failed to save modifications. Please try again.', 'Close', { duration: 3000 });
+    this.ngZone.run(() => {
+      this.snackBar.open('Failed to save modifications. Please try again.', 'Close', { duration: 3000 });
+    });
   }
-  );
-  }
+);
+  } 
 
   closeEscalateModal() {
     this.showEscalateModal = false;

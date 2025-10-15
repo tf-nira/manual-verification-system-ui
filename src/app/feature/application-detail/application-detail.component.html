@@ -91,50 +91,42 @@
           <div class="personal-information">
             <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value">
               <label>Surname</label>
-              <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value }}</div>
-              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copSurnamePrevious[0].value" />
+              <div class="field-value">{{ parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value }}</div>
             </div>
         
             <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value">
               <label>Given Name</label>
-              <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value }}</div>
-              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copGivenNamePrevious[0].value" />
+              <div class="field-value">{{ parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value }}</div>
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copEmailPrevious">
               <label>Email</label>
-              <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.copEmailPrevious }}</div>
-              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copEmailPrevious" />
+              <div class="field-value">{{ rowData?.demographics?.copEmailPrevious }}</div>
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copDateOfBirthPrevious">
               <label>Date Of Birth</label>
-              <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.copDateOfBirthPrevious }}</div>
-               <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copDateOfBirthPrevious"/>
+              <div class="field-value">{{ rowData?.demographics?.copDateOfBirthPrevious }}</div>
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copNinPrevious">
               <label>National ID Number(NIN)</label>
-              <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.copNinPrevious }}</div>
-              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copNinPrevious"/>
+              <div class="field-value">{{ rowData?.demographics?.copNinPrevious }}</div>
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copPhonePrevious">
               <label>Mobile Number</label>
-              <div *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.copPhonePrevious }} </div>
-              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copPhonePrevious"/>
+              <div class="field-value">{{ rowData?.demographics?.copPhonePrevious }} </div>
             </div>
 
             <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copCountryCodePrevious)[0]?.value">
               <label>Country Code</label>
-              <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.copCountryCodePrevious)[0]?.value }}</div>
-               <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copCountryCodePrevious[0].value"/>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.copCountryCodePrevious)[0]?.value }}</div>
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copHomePhoneNumberPrevious">
               <label>Home Phone Number</label>
-              <div  *ngIf="!isEditMode" class="field-value">{{ rowData?.demographics?.copHomePhoneNumberPrevious }}</div>
-              <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.copHomePhoneNumberPrevious"/>
+              <div  class="field-value">{{ rowData?.demographics?.copHomePhoneNumberPrevious }}</div>
             </div>
 
           </div>
@@ -2393,7 +2385,7 @@
           }" (click)="openScheduleInterviewModal()">
           {{ constants.SCHEDULE_INTERVIEW }}
         </button>
-        <button class="ModifyRecord" *ngIf="role === 'MVS_MANAGER' && !isEditMode"
+        <button class="ModifyRecord" *ngIf="role === 'MVS_MANAGER' && !isEditMode && rowData.serviceType !== 'Change of Particulars'"
           (click)="confirmAndModify()">
           {{ constants.Modify_DETAILS }}
         </button>
