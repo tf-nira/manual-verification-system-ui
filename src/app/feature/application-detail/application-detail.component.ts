@@ -888,7 +888,7 @@ getTitlesForDocument(document: any): string[] {
 
       const isOfficer = this.role === MVS_OFFICER && [
         'New registrations',
-        'Replacement of card',
+        'Renewal of card',
         'Migration'
       ].includes(this.service);
 
@@ -902,7 +902,7 @@ getTitlesForDocument(document: any): string[] {
       if (isOfficer) {
         serviceNamesToMatch=[`${servicename} officer`];
       }
-        // Collect all keys whose array contains any of the serviceNamesToMatch
+       // Collect all keys whose array contains any of the serviceNamesToMatch
       const matchingKeys = Object.keys(escalationConfig).filter(key =>
         escalationConfig[key].some((val:string) => serviceNamesToMatch.includes(val))
       );
