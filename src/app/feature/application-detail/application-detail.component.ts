@@ -83,6 +83,7 @@ export class ApplicationDetailComponent implements OnInit {
   showRejectModal: boolean = false;
   uploadDocumentSucessStatus : boolean = false;
   rowData: any = {};
+  matchedRegIds : string[] = [];
   applicationStatus: string = '';
   interviewDetails = {
     subject: '',
@@ -364,6 +365,7 @@ docTitles:any;
   if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
     this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
   }
+  this.matchedRegIds = this.selectedRow.matchedRegIds || [];
   
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
@@ -1969,6 +1971,31 @@ getMimeType(format: string): string {
     input.remove();
   }
 
+  openRegIdDetails(registrationId: string, event: MouseEvent): void {
+    event.preventDefault();
+    this.getMatchedRegIdData(registrationId);
+  }
+
+  getMatchedRegIdData(registartionId: string) {
+    this.dataService.fetchMatchedRegIdData(registartionId).subscribe(
+      (response: any) => {
+        console.log("Response : "+ JSON.stringify(response))
+        if(response?.response){
+          console.log("Response -- Response : " + JSON.stringify(response?.response))
+          const newTab =  window.open(`/demographic-details`, '_blank');
+          if(newTab){
+             localStorage.setItem('demographicData', JSON.stringify(response?.response));
+             localStorage.removeItem('documentData');
+          } else {
+            alert('Failed to open new tab');
+          }
+        }
+      },
+      (error) => {
+        console.log('Error fetching data: ', error);
+      }
+    );
+  }
 
   ngOnDestroy() {
     this.stopCamera();
