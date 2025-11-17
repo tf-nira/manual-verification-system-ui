@@ -72,7 +72,7 @@
       'religion', 'otherReligion', 'disabilities', 'otherDisability','userServiceType', 'userService', 
       'IDSchemaVersion', 'cardNumber', 'UIN', 'NIN', 'preferredLang', 'selectedHandles', 'NINVerified',
       'updatedAt', 'renewalNIN', 'nextOfKinPhoneNumber', 'ninExpiryDate', 'applicantNationality',
-      'applicantOtherNationality', 'citizenshipCertificateNo', 'foundLink'
+      'applicantOtherNationality', 'citizenshipCertificateNo', 'foundLink', 'drivingLicenceNumber','taxIdentificationNumber'
     ])">
 
         <div class="photo-container" *ngIf="photoBase64; else noPhoto">
@@ -276,11 +276,71 @@
 
       <div id="citizenship-details-section" class="section"
         *ngIf="hasSectionData(['applicantPassportNumber', 'applicantPassportFileNumber', 'dualCitizenshipCertificateNumber',
-         'registrationCertificateNumber', 'naturalizationCertificateNumber'])">
+         'registrationCertificateNumber', 'naturalizationCertificateNumber','citizenshipOrNationality', 'previousNationality',
+         'placeOfIssue', 'dateOfIssue', 'issuingAuthority'])">
 
         <h3>Citizenship Details</h3>
         <div class="personal-information">
            <ng-container *ngFor="let key of citizenField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <div id="immigration-section" class="section" *ngIf="hasSectionData( [
+      'dateOfEntryInUganda', 'immigrationFacitityNo', 'facilityType','facilityTypeCategory','dateOfIssuance','dateOfExpiry'
+    ])">
+
+        <h3>immigration Information</h3>
+        <div class="personal-information">
+        <ng-container *ngFor="let key of immigrationFields">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <div id="LINKED_TO_DETAILS-section" class="section" *ngIf="hasSectionData( [
+      'primaryOwnerAIN','numberOfSecondaryOwner','firstSecondaryOwner','secondSecondaryOwner' ])">
+
+        <h3>Linked Information</h3>
+        <div class="personal-information">
+        <ng-container *ngFor="let key of linkedFields">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
               <div class="field-container" *ngIf="parsed">
@@ -346,6 +406,34 @@
         </div>
       </div>
 
+    <div id="employer-detail-section" class="section"
+        *ngIf="hasSectionData([ 'employerName','employerPhone','employerDistrict','employerCounty','employerSubCounty','employerParish','employerVillage','employerStreet'])">
+      <h3>Details of Employer/ School</h3>
+        <div class="personal-information">
+         <ng-container *ngFor="let key of employerFiels">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
       <div id="spouse-details-section" class="section" *ngIf="hasSectionData(['spouseSurname', 
       'spouseGivenName', 'spouseOtherNames', 'spouseMaidenName', 'spousePreviousName', 'spouseNIN', 
       'spouseCitizenshipType', 'spousePlaceOfMarriage', 'spouseDateOfMarriage', 'spouseTypeOfMarriage', 
@@ -357,7 +445,7 @@
         'spouseThreeCitizenshipType', 
        'spouseThreePlaceOfMarriage', 'spouseThreeDateOfMarriage', 'spouseThreeTypeOfMarriage', 
        'spouseThreeMarriageCertificateNumber', 'removeSpouseSurname', 'removeSpouseGivenName',
-        'removeSpouseDateOfMarriage'])">
+        'removeSpouseDateOfMarriage','numberOfOtherSpousesAlien', 'spouseName', 'spouseTwoName', 'spouseThreeName', 'spouseFourName',  'spouseFiveName',  'spouseSixName'])">
 
         <h3>Spouse Details</h3>
         <div class="personal-information">
@@ -520,7 +608,7 @@
       'childFiveNIN', 'childSixSurname', 
       'childSixGivenName' , 
       'childSixOtherName' ,
-      'childSixNIN' , 'childSixName', 'childSixSex', 'childSixDateOfBirth'
+      'childSixNIN' , 'childSixName', 'childSixSex', 'childSixDateOfBirth', 'numberOfOtherChild'
     ])">
 
         <h3>Particulars of Applicant’s Children</h3>

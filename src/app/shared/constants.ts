@@ -742,7 +742,9 @@ export const COP_ESCALATION_CATEGORIES = [
   'applicantNationality',
   'applicantOtherNationality',
   'citizenshipCertificateNo',
-  'foundLink'
+  'foundLink',
+  'drivingLicenceNumber',
+  'taxIdentificationNumber'
 ];
 
 export const RESIDENCE_INFO_FIELDS: string[] = [
@@ -794,7 +796,12 @@ export const CITIZENSHIP_INFO_FIELDS: string[] = [
   'applicantPassportFileNumber',
   'dualCitizenshipCertificateNumber',
   'registrationCertificateNumber',
-  'naturalizationCertificateNumber'
+  'naturalizationCertificateNumber',
+  'citizenshipOrNationality',
+  'previousNationality',
+  'placeOfIssue',
+  'dateOfIssue',
+  'issuingAuthority'
 ];
 
 export const POLLING_INFO_FIELDS: string[] = [
@@ -839,7 +846,14 @@ export const SPOUSE_INFO_FIELDS: string[] = [
   'spouseThreeMarriageCertificateNumber',
   'removeSpouseSurname',
   'removeSpouseGivenName',
-  'removeSpouseDateOfMarriage'
+  'removeSpouseDateOfMarriage',
+  'numberOfOtherSpousesAlien',
+  'spouseName',
+  'spouseTwoName',
+  'spouseThreeName',
+  'spouseFourName',
+  'spouseFiveName',
+  'spouseSixName'
 ];
 
 export const FATHER_INFO_FIELDS: string[] = [
@@ -940,6 +954,8 @@ export const GUARDIAN_INFO_FIELDS: string[] = [
 ];
 
 export const CHILD_INFO_FIELDS: string[] = [
+  'numberOfOtherChild',
+
   'childName',
   'childSurname',
   'childGivenName',
@@ -1011,6 +1027,30 @@ export const ENROLMENT_INFO_FIELDS: string[] = [
   'applicantPlaceOfEnrolmentParish',
   'applicantPlaceOfEnrolmentVillage'
 ];
+export const EMPLOYER_DETAILS: string[] =[
+  'employerName',
+  'employerPhone',
+  'employerDistrict',
+  'employerCounty',
+  'employerSubCounty',
+  'employerParish',
+  'employerVillage',
+  'employerStreet'
+]
+export const IMMIGRATION_DETAILS: string[] =[
+  'dateOfEntryInUganda',
+  'immigrationFacitityNo',
+  'facilityType',
+  'facilityTypeCategory',
+  'dateOfIssuance',
+  'dateOfExpiry'
+]
+export const LINKED_TO_DETAILS: string[] =[
+  'primaryOwnerAIN',
+  'numberOfSecondaryOwner',
+  'firstSecondaryOwner',
+  'secondSecondaryOwner'
+]
 
 export const FIELD_LABEL_MAP: Record<string, string> = {
   phone: 'Mobile Number',
