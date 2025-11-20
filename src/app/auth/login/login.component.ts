@@ -72,13 +72,15 @@ export class LoginComponent implements OnInit {
 
         // Create active session
         sessionStorage.setItem('sessionActive', 'true');
-
-        console.log('Login successful, navigating to application-list');
-
-        // Navigate WITHOUT replaceUrl to maintain browser history
-        this.router.navigate(['/application-list'], {
-          state: { role }
-        });
+        if (role === 'MVS_ADMIN') {
+          this.router.navigate(['/mvs-admin-verification'], {
+            state: { role }
+          });
+        } else {
+          this.router.navigate(['/application-list'], {
+            state: { role }
+          });
+        }
       } else {
         this.showErrorMessage = true;
       }
