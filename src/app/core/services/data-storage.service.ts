@@ -237,4 +237,11 @@ export class DataStorageService {
     return this.httpClient.get(url);
   }
 
+  getAssignedOfficerDetails(registrationId: string) {
+    const url = this.BASE_URL + this.MVS_URL +
+      appConstants.APPEND_URL.applications + 'assignedofficer/' +
+      registrationId;
+    return this.httpClient.get(url);
+  }
+
 }

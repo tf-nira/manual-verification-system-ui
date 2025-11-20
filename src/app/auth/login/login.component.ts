@@ -87,10 +87,16 @@ export class LoginComponent implements OnInit {
       if (config && config.response ) {
         localStorage.setItem('ageGroupRanges', JSON.stringify(config.response.ageGroupRanges));
         localStorage.setItem("districtMasterData", JSON.stringify(config.response.districtList));
-        // Only now navigate to the next component/route
-        this.router.navigate(['/application-list'], {
-          state: { role }
-        });
+        // Route based on user role
+        if (role === 'MVS_ADMIN') {
+          this.router.navigate(['/mvs-admin-verification'], {
+            state: { role }
+          });
+        } else {
+          this.router.navigate(['/application-list'], {
+            state: { role }
+          });
+        }
       } else {
         this.showErrorMessage = true;
       }
