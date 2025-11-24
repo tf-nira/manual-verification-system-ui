@@ -9,7 +9,7 @@
   <div class="right-section">
     <!-- Right Section -->
      <!--Toggle button-->
-     <div class="toggle-btn-container" *ngIf="view === 'List' && !hideToggle">
+     <div class="toggle-btn-container" *ngIf="view === 'List' && !hideToggle  && !isAdminUser()">
       <button
         class="toggle-view-button"
         [ngClass]="{'active-rejected': applicationType === 'Rejected', 'active-assigned': applicationType === 'Assigned'}"
