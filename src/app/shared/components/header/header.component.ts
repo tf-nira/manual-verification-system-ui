@@ -81,6 +81,11 @@ export class HeaderComponent {
     document.cookie = `token=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT;`;
   }
   getPageTitle(): string {
+    const role = localStorage.getItem('role') || '';
+    if (role === 'MVS_ADMIN') {
+      return 'Admin Login';
+    }
+    
     if (this.view === 'List') {
       return this.applicationType === 'Assigned' ? 'Applications List View' : 'Rejected Applications';
     }
@@ -90,5 +95,10 @@ export class HeaderComponent {
       Details: 'Application Details View',
     };
     return titles[this.view] || 'Default Title'; 
+  }
+
+  isAdminUser(): boolean {
+    const role = localStorage.getItem('role') || '';
+    return role === 'MVS_ADMIN';
   }
 }
