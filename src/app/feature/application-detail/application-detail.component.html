@@ -306,7 +306,7 @@
       </div>
 
       <div id="immigration-section" class="section" *ngIf="hasSectionData( [
-      'dateOfEntryInUganda', 'immigrationFacitityNo', 'facilityType','facilityTypeCategory','dateOfIssuance','dateOfExpiry'
+      'dateOfEntryInUganda', 'immigrationFacitityNo', 'facilityType','facilityTypeCategory','dateOfIssuance','dateOfExpiry','facilityTypeSubCategory','reasonforCancellation'
     ])">
 
         <h3>immigration Information</h3>
@@ -335,7 +335,7 @@
         </div>
       </div>
 
-      <div id="LINKED_TO_DETAILS-section" class="section" *ngIf="hasSectionData( [
+      <div id="LINKED_TO_DETAILS-section" class="section" *ngIf="hasSectionData( [ 'ownerType',
       'primaryOwnerAIN','numberOfSecondaryOwner','firstSecondaryOwner','secondSecondaryOwner' ])">
 
         <h3>Linked Information</h3>
@@ -407,7 +407,7 @@
       </div>
 
     <div id="employer-detail-section" class="section"
-        *ngIf="hasSectionData([ 'employerName','employerPhone','employerDistrict','employerCounty','employerSubCounty','employerParish','employerVillage','employerStreet'])">
+        *ngIf="hasSectionData([ 'employerName','employerPhone','employerDistrict','employerCounty','employerSubCounty','employerParish','employerVillage','employerStreet','employerCountryCode'])">
       <h3>Details of Employer/ School</h3>
         <div class="personal-information">
          <ng-container *ngFor="let key of employerFiels">

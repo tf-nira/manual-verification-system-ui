@@ -173,7 +173,9 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfCLEI: 'Local Council Letter or Embassy information',
   proofOfPPDetails: 'Previous Passports Details',
   proofOfNatCert: 'Naturalisation Certificate',
-  proofOfPrevRec: 'Previous immigration records'
+  proofOfPrevRec: 'Previous immigration records',
+  proofOfPassportCopy: 'Proof of Passport',
+  proofOfImmigrationFacility: 'Proof of Immigration'
 };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
@@ -1035,7 +1037,8 @@ export const EMPLOYER_DETAILS: string[] =[
   'employerSubCounty',
   'employerParish',
   'employerVillage',
-  'employerStreet'
+  'employerStreet',
+  'employerCountryCode'
 ]
 export const IMMIGRATION_DETAILS: string[] =[
   'dateOfEntryInUganda',
@@ -1043,9 +1046,12 @@ export const IMMIGRATION_DETAILS: string[] =[
   'facilityType',
   'facilityTypeCategory',
   'dateOfIssuance',
-  'dateOfExpiry'
+  'dateOfExpiry',
+  'facilityTypeSubCategory',
+  'reasonforCancellation'
 ]
 export const LINKED_TO_DETAILS: string[] =[
+  'ownerType',
   'primaryOwnerAIN',
   'numberOfSecondaryOwner',
   'firstSecondaryOwner',
