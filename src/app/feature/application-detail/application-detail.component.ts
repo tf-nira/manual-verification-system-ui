@@ -7,11 +7,11 @@ import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uplo
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
 import * as appConstants from '../../app.constants';
-import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, MVS_EXECUTIVE_DIRECTOR, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_APPROVAL, MVS_INTERNATIONAL_OFFICER } from '../../shared/constants';
+import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, MVS_EXECUTIVE_DIRECTOR, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_APPROVAL, MVS_INTERNATIONAL_OFFICER, Modify_DETAILS, API_CONST_MODIFY } from '../../shared/constants';
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
   NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP,
   MAX_DOC_SIZE, FORM_LABELS_BY_SERVICE, PROOF_OF_PHYSICAL_APPLICATION_FORM, CHANGE_OF_PARTICULARS,
-  SERVICE_CONST_MIGRATION,SERVICE_CONST_NEW_REGISTRATION,SERVICE_CONST_RENEWAL
+  SERVICE_CONST_MIGRATION,SERVICE_CONST_NEW_REGISTRATION,SERVICE_CONST_RENEWAL,PERSONAL_INFO_FIELD_ORDER,RESIDENCE_INFO_FIELDS,BIRTH_INFO_FIELDS,ORIGIN_INFO_FIELDS,CITIZENSHIP_INFO_FIELDS,POLLING_INFO_FIELDS,SPOUSE_INFO_FIELDS,FATHER_INFO_FIELDS,MOTHER_INFO_FIELDS,GUARDIAN_INFO_FIELDS,CHILD_INFO_FIELDS,DECLARANT_INFO_FIELDS,ENROLMENT_INFO_FIELDS,FIELD_LABEL_MAP,EMPLOYER_DETAILS,IMMIGRATION_DETAILS,LINKED_TO_DETAILS
  } from '../../shared/constants';
  import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -19,6 +19,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { DataStorageService } from '../../core/services/data-storage.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { error } from 'node:console';
+import { NgZone } from '@angular/core';
+import { map } from 'rxjs/operators';
+
 type DocumentPayload = {
   [key: string]: {
     document: number[];
@@ -79,6 +82,9 @@ export class ApplicationDetailComponent implements OnInit {
   showApprovalModal: boolean = false;
   showEscalateModal: boolean = false;
   showScheduleInterviewModal: boolean = false;
+  isEditMode: boolean = false;
+  closeEdit: boolean=false;
+  saveChanges: boolean=false;
   showDocumentUploadModal: boolean = false;
   showRejectModal: boolean = false;
   showConfirmationModal: boolean = false;
@@ -87,6 +93,24 @@ export class ApplicationDetailComponent implements OnInit {
   isOthersSelected: boolean = false;
   othersText: string = '';
   rowData: any = {};
+  tempData:any={};
+  fieldOrder = PERSONAL_INFO_FIELD_ORDER;
+  residentField = RESIDENCE_INFO_FIELDS;
+  birthField = BIRTH_INFO_FIELDS;
+  originField = ORIGIN_INFO_FIELDS;
+  citizenField = CITIZENSHIP_INFO_FIELDS;
+  votingFields = POLLING_INFO_FIELDS;
+  spouseField = SPOUSE_INFO_FIELDS;
+  fatherField = FATHER_INFO_FIELDS;
+  motherField = MOTHER_INFO_FIELDS;
+  guardianField = GUARDIAN_INFO_FIELDS;
+  childField = CHILD_INFO_FIELDS;
+  declarantField = DECLARANT_INFO_FIELDS;
+  enrollmentField = ENROLMENT_INFO_FIELDS;
+  employerFiels = EMPLOYER_DETAILS;
+  immigrationFields = IMMIGRATION_DETAILS;
+  linkedFields =LINKED_TO_DETAILS;
+  configData:any={};
   matchedRegIds : string[] = [];
   applicationStatus: string = '';
   interviewDetails = {
@@ -237,6 +261,7 @@ export class ApplicationDetailComponent implements OnInit {
   isLeftCollapsed: boolean = true;
   isRightCollapsed: boolean = true;
   isEditable: boolean = false;
+  isEscalated: boolean= false;
   selectedRow: any = {};
   documents: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
     { category: '', title: '', fileName: '', file: null }
@@ -272,7 +297,8 @@ additionalFetchedDocuments: { category: string; title: string; fileName: string;
     CHANGE_OF_PARTICULARS,
     SERVICE_CONST_MIGRATION,
     SERVICE_CONST_NEW_REGISTRATION,
-    SERVICE_CONST_RENEWAL
+    SERVICE_CONST_RENEWAL,
+    Modify_DETAILS
   }
   
   // Sample Data
@@ -295,8 +321,12 @@ docTitles:any;
   districtOfficeId!: number;
 
   constructor(private router: Router, private dataService: DataStorageService,
-    private sanitizer: DomSanitizer, private snackBar: MatSnackBar
+    private sanitizer: DomSanitizer, private snackBar: MatSnackBar,private ngZone: NgZone
   ) { }
+
+  
+  originalDetails: any = {};
+  modifiedDetails: any={};
 
   ngOnInit() {
     const state = history.state;
@@ -325,6 +355,9 @@ docTitles:any;
     this.serviceType = this.rowData.serviceType || '';
     this.applicationId = this.rowData.applicationId || '';
     this.service = this.rowData.service || '';
+    if (this.service === this.constants.SERVICE_CONST_MIGRATION && this.rowData?.demographics?.userService === this.constants.SERVICE_CONST_NEW_REGISTRATION) {
+      this.rowData.demographics.userService = this.constants.SERVICE_CONST_RENEWAL;
+    }
     this.statusComment = this.rowData.statusComment || '';
     if(this.statusComment.includes('::')){
       const parts = this.statusComment.split('::');
@@ -349,8 +382,15 @@ docTitles:any;
     this.foundling = this.rowData.foundLink || '';
     this.checkPersonDetails();
     this.setDropdownOptions();
-    this.setRejectionCategories();
-    this.setEscalationCategories();
+
+    this.dataService.getConfig().pipe(
+      map((configs: any) => ({ configs, role: this.role }))
+    ).subscribe(result => {
+      this.configData = result;        // store in the component variable
+      console.log('Stored config:', this.configData);
+      this.setEscalationCategories();
+      this.setRejectionCategories();
+    });
     // Check if the rowData contains documents and process them
     if (this.rowData?.documents) {
       this.processDocuments();
@@ -744,7 +784,8 @@ getTitlesForDocument(document: any): string[] {
       case 'MVS_SUPERVISOR':
         this.dropdownOptions = [
           districtOrInternational,
-          { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false }
+          { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false },
+          { value: 'MVS_MANAGER', label: 'Manager', default: false } 
         ];
         this.selectedOfficerLevel = !residenceStatusExists
           ?'MVS_DISTRICT_OR_INTERNATIONAL_OFFICER_ROLE'
@@ -758,7 +799,8 @@ getTitlesForDocument(document: any): string[] {
         break;
       case 'MVS_LEGAL_OFFICER':
         this.dropdownOptions = [
-          { value: 'MVS_EXECUTIVE_DIRECTOR', label: 'Executive Director', default: true }
+          { value: 'MVS_EXECUTIVE_DIRECTOR', label: 'Executive Director', default: true },
+          { value: 'MVS_MANAGER', label: 'Manager', default: false } 
         ];
         this.selectedOfficerLevel = 'MVS_EXECUTIVE_DIRECTOR';
         break;
@@ -768,50 +810,114 @@ getTitlesForDocument(document: any): string[] {
     }
   }
 
-  setRejectionCategories() {
-    switch(this.service) {
-      case 'New registrations':
-        this.rejectionCategories = NEW_REJECTION_CATEGORIES;
-        break;
-      case 'Change of Particulars':
-        this.rejectionCategories = COP_REJECTION_CATEGORIES;
-        break;
-      case 'Renewal of card':
-        this.rejectionCategories = RENEWAL_REJECTION_CATEGORIES;
-        break;
-      case 'GetFirst ID':
-        this.rejectionCategories = GETFIRSTID_REJECTION_CATEGORIES;
-        break;
-      case 'Replacement of card':
-        this.rejectionCategories = LR_REJECTION_CATEGORIES;
-        break;
-    }
-  }
+  // setRejectionCategories() {
+  //   switch(this.service) {
+  //     case 'New registrations':
+  //       this.rejectionCategories = NEW_REJECTION_CATEGORIES;
+  //       break;
+  //     case 'Change of Particulars':
+  //       this.rejectionCategories = COP_REJECTION_CATEGORIES;
+  //       break;
+  //     case 'Renewal of card':
+  //       this.rejectionCategories = RENEWAL_REJECTION_CATEGORIES;
+  //       break;
+  //     case 'GetFirst ID':
+  //       this.rejectionCategories = GETFIRSTID_REJECTION_CATEGORIES;
+  //       break;
+  //     case 'Replacement of card':
+  //       this.rejectionCategories = LR_REJECTION_CATEGORIES;
+  //       break;
+  //   }
+  // }
+  setRejectionCategories(){
+     this.rejectionCategories =[]
+     if (
+        !this.configData ||
+        !this.configData.configs.response ||
+        !this.configData.configs.response.rejection_CATEGORIES
+      ) {
+        return;
+      }
+      // console.log("reject-conf",this.configData.configs.response.rejection_CATEGORIES);
+      const rejectionConfig = this.configData.configs.response.rejection_CATEGORIES;
+
+        const matchingKeys = Object.keys(rejectionConfig).filter(key =>
+        rejectionConfig[key].some((val:string) => this.service.includes(val))
+      );
+      // Map keys to objects { value, default }
+      this.rejectionCategories = matchingKeys.map((key, index) => ({
+        value: key,
+        default: index === 0 // mark first one as default
+      }));
+      
+   }
+
+  // setEscalationCategories() {
+  //   switch(this.service) {
+  //     case 'New registrations':
+  //       if (this.role === MVS_OFFICER) this.escalationCategories = NEW_ESCALATION_CATEGORIES_FOR_OFFICER;
+  //       else this.escalationCategories = NEW_ESCALATION_CATEGORIES;
+  //       break;
+  //     case 'Renewal of card':
+  //       if (this.role === MVS_OFFICER) this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER;
+  //       else this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
+  //       break;
+  //       case 'GetFirst ID':
+  //         this.escalationCategories = GETFIRSTID_ESCALATION_CATEGORIES;
+  //         break;
+  //       case 'Replacement of card':
+  //         this.escalationCategories = LR_ESCALATION_CATEGORIES;
+  //         break;
+  //       case 'Change of Particulars':
+  //         this.escalationCategories = COP_ESCALATION_CATEGORIES;
+  //         break;
+  //       case 'Migration':
+  //       if (this.role === MVS_OFFICER) this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER;
+  //       else this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
+  //       break;
+  //   }
+  // }
+
   setEscalationCategories() {
-    switch(this.service) {
-      case 'New registrations':
-        if (this.role === MVS_OFFICER) this.escalationCategories = NEW_ESCALATION_CATEGORIES_FOR_OFFICER;
-        else this.escalationCategories = NEW_ESCALATION_CATEGORIES;
-        break;
-      case 'Renewal of card':
-        if (this.role === MVS_OFFICER) this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER;
-        else this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
-        break;
-        case 'GetFirst ID':
-          this.escalationCategories = GETFIRSTID_ESCALATION_CATEGORIES;
-          break;
-        case 'Replacement of card':
-          this.escalationCategories = LR_ESCALATION_CATEGORIES;
-          break;
-        case 'Change of Particulars':
-          this.escalationCategories = COP_ESCALATION_CATEGORIES;
-          break;
-        case 'Migration':
-        if (this.role === MVS_OFFICER) this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER;
-        else this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
-        break;
+      this.escalationCategories = [];
+      if (
+        !this.configData ||
+        !this.configData.configs.response ||
+        !this.configData.configs.response.escalation_CATEGORIES
+      ) {
+        return;
+      }
+
+      const escalationConfig = this.configData.configs.response.escalation_CATEGORIES;
+      // console.log("escalationConfig", escalationConfig);
+
+      const isOfficer = this.role === MVS_OFFICER && [
+        'New registrations',
+        'Renewal of card',
+        'Migration'
+      ].includes(this.service);
+
+      // Normalize the service string to match exactly the values in the arrays
+      let serviceNamesToMatch = [this.service];
+      let servicename=this.service;
+      if(this.service==='Migration'){
+        serviceNamesToMatch=['Renewal of card'];
+        servicename='Renewal of card';
+      }
+      if (isOfficer) {
+        serviceNamesToMatch=[`${servicename} officer`];
+      }
+       // Collect all keys whose array contains any of the serviceNamesToMatch
+      const matchingKeys = Object.keys(escalationConfig).filter(key =>
+        escalationConfig[key].some((val:string) => serviceNamesToMatch.includes(val))
+      );
+      // Map keys to objects { value, default }
+      this.escalationCategories = matchingKeys.map((key, index) => ({
+        value: key,
+        default: index === 0 // mark first one as default
+      }));
     }
-  }
+
   objectKeys(obj: any): string[] {
     return Object.keys(obj || {});
   }
@@ -829,6 +935,131 @@ getTitlesForDocument(document: any): string[] {
     console.log('Escalate Modal Opened');
     this.showEscalateModal = true;
   }
+
+  confirmAndModify(){
+    const isConfirmed = window.confirm('Are you sure you want to modify this record?');
+     if (isConfirmed) {
+      this.openModifyModule();
+      this.closeEdit=true;
+      this.saveChanges=true;
+    }
+  }
+
+  openModifyModule(){
+    this.isEditMode = true;
+    this.originalDetails = JSON.parse(JSON.stringify(this.rowData.demographics));
+    this.tempData = JSON.parse(JSON.stringify(this.rowData.demographics));
+    this.modifiedDetails = JSON.parse(JSON.stringify(this.originalDetails)); 
+    Object.keys(this.modifiedDetails).forEach(key => {
+    this.modifiedDetails[key] = this.normalizeValue(this.modifiedDetails[key]);
+    });
+    Object.keys(this.originalDetails).forEach(key => {
+    this.originalDetails[key] = this.normalizeValue(this.originalDetails[key]);
+    });
+  }
+
+  normalizeValue(value: any): any {
+  // Already array → return
+  if (Array.isArray(value)) return value;
+  // Already object → return
+  if (typeof value === 'object' && value !== null) return value;
+  // If it's a string, try JSON.parse
+  if (typeof value === 'string') {
+    try {
+      const parsed = JSON.parse(value);
+      // If parsed is array of objects → return as array
+      if (Array.isArray(parsed)) return parsed;
+      // If parsed is plain value → return it directly
+      return parsed;
+    } catch {
+      // Not JSON, just a raw string → keep it
+      return value;
+    }
+  }
+  // For numbers, booleans, null → keep as-is
+  return value;
+}
+
+  cancelModefy(){
+    const confirmDiscard = window.confirm("Do you really want to discard the modifications?");
+    if(confirmDiscard){
+    this.closeEdit=false;
+    this.isEditMode=false;
+    this.saveChanges=false;
+    return;
+    }
+  }
+
+  saveandcloseModify(){
+    const hasChanges = JSON.stringify(this.modifiedDetails) !== JSON.stringify(this.originalDetails);
+    if (!hasChanges) {
+    this.snackBar.open('No changes detected to save.', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['center-snackbar'],
+    });
+    return;
+  }
+    const confirmSave = confirm("Do you really want to save the modifications?");
+    if (confirmSave) {
+    this.isEditMode = false;
+    this.closeEdit=false;
+    this.saveChanges=false;
+    const denormalized: any = {};
+    Object.keys(this.modifiedDetails).forEach(key => {
+    const val = this.modifiedDetails[key];
+    denormalized[key] = Array.isArray(val) || (val?.value !== undefined)
+    ? JSON.stringify(val)
+    : val;
+    });
+    // console.log('denormalozed ', denormalized);
+    // console.log('rowData', this.rowData);
+    this.tempData.demographics = denormalized;
+    // console.log('Modified rowdata', this.rowData);
+    const changes = this.getChangedFields(this.originalDetails, this.modifiedDetails);
+    this.saveModifiedRowData(changes,this.rowData);
+    this.snackBar.open('Modifications initiated.', 'Close', {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['center-snackbar'],
+    });
+  }
+  }
+
+  private getChangedFields(original: any, modified: any): any {
+  const changes: any = {};
+
+  Object.keys(modified).forEach(key => {
+    if (JSON.stringify(original[key]) !== JSON.stringify(modified[key])) {
+      changes[key] = modified[key];
+    }
+  });
+
+  return changes;
+  }
+
+ saveModifiedRowData(changes: any,rowData: any){
+    this.dataService.saveModifiedRow(changes, rowData).subscribe(
+  (response) => {
+    const hasErrors = response?.errors && response.errors.length > 0;
+    const message = response?.errors?.[0]?.message || response?.message || 'Modifications saved successfully.';
+    this.ngZone.run(() => {
+      this.snackBar.open(message, 'Close', { duration: 3000 });
+        if (!hasErrors) {
+          this.rowData.demographics = this.tempData.demographics;
+        }
+    });
+    
+  },
+  (error) => {
+    this.ngZone.run(() => {
+      this.snackBar.open('Failed to save modifications. Please try again.', 'Close', { duration: 3000 });
+    });
+  }
+);
+  } 
 
   closeEscalateModal() {
     this.showEscalateModal = false;
@@ -2073,6 +2304,8 @@ getMimeType(format: string): string {
         this.selectedEscalationCategories.splice(index, 1);
       }
     }
+    this.isEscalated = this.selectedEscalationCategories.length > 0;
+    console.log("isExclated",this.isEscalated)
   }
 
   /**
@@ -2160,6 +2393,55 @@ getMimeType(format: string): string {
   });
   this.objectUrls = [];
   }
+
+ getParsedValue(value: any): string | null {
+  if (value === null || value === undefined) return null;
+  // If it’s already a plain string or number (not JSON)
+  if (typeof value === 'string' && !value.trim().startsWith('[') && !value.trim().startsWith('{')) {
+    const val = value.toString().trim();
+    return val && val.toLowerCase() !== 'null' && val !== '-' ? val : null;
+  }
+  if (typeof value === 'number') {
+    return value.toString();
+  }
+  // Try to parse JSON arrays like `[{"value":"In Uganda"}]`
+  try {
+    const parsed = JSON.parse(value);
+    if (Array.isArray(parsed) && parsed.length) {
+      const val = parsed[0]?.value?.toString().trim();
+      return val && val.toLowerCase() !== 'null' && val !== '-' ? val : null;
+    }
+    // If JSON is a plain object, try reading its value directly
+    if (parsed && typeof parsed === 'object') {
+      const val = parsed.value?.toString().trim?.();
+      return val && val.toLowerCase() !== 'null' && val !== '-' ? val : null;
+    }
+    return null;
+  } catch {
+    // Fallback: just return trimmed value if JSON.parse fails
+    const val = value?.toString().trim();
+    return val && val.toLowerCase() !== 'null' && val !== '-' ? val : null;
+  }
+}
+
+formatLabel(key: string): string {
+   if (FIELD_LABEL_MAP[key]) {
+    return FIELD_LABEL_MAP[key];
+  }
+  return key
+    .replace(/([A-Z])/g, ' $1')
+    .replace(/^./, (c) => c.toUpperCase());
+}
+
+// Helper function to get value safely
+getValue(key: string) {
+  const value = this.rowData?.demographics?.[key];
+  return this.getParsedValue(value); // your existing parser
+}
+
+isArrayField(key: string): boolean {
+  return Array.isArray(this.modifiedDetails[key]);
+}
 
 }
 
