@@ -106,7 +106,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfPhysicalApplicationForm: 'Physical Application Form',
   proofOfAbandonment: 'Proof of Abandonment',
   proofOfException: 'Exception Proof',
-  proofOfPayment: 'Proof of Payment',
+  proofOfPayment: 'Payment Receipt',
   proofOfRelationship: 'Proof of Relationship',
   proofOfCitizenship: 'Proof of Citizenship',
   proofOfLegalDOcuments: 'Proof of Legal Documents',
@@ -174,14 +174,15 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfPPDetails: 'Previous Passports Details',
   proofOfNatCert: 'Naturalisation Certificate',
   proofOfPrevRec: 'Previous immigration records',
-  proofOfPassportCopy: 'Proof of Passport',
-  proofOfImmigrationFacility: 'Proof of Immigration'
+  proofOfPassportCopy: 'Copy of Passport',
+  proofOfImmigrationFacility: 'Copy of Immigration Facility'
 };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
 
   export const FORM_LABELS_BY_SERVICE: {[key: string]: string} = {
     'New registrations' : 'Proof of Form-3 New Registration',
+    'Alien New Registration' : 'Proof of Form-4 Alien New Registration',
     'Renewal of card': 'Proof of Form-9 Renewal',
     'Replacement of card': 'Proof of Form-11 Replacement',
     'Change of Particulars': 'Proof of Form-1/1A COP',
