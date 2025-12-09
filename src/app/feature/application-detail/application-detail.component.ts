@@ -598,7 +598,7 @@ getTitlesForDocument(document: any): string[] {
     this.objectUrls.push(url);
   }
   getDocumentTitle(key: string): string {
-    if (this.serviceType=='Alien New Registration' && key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
+    if ((this.serviceType=='Alien New Registration'|| this.serviceType=='Renewal of Alien' || this.serviceType=='Replacement of Alien') && key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
       return FORM_LABELS_BY_SERVICE[this.serviceType];
     }
     else if (key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
