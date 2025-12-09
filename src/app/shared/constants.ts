@@ -184,6 +184,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     'New registrations' : 'Proof of Form-3 New Registration',
     'Alien New Registration' : 'Proof of Form-4 Alien New Registration',
     'Renewal of card': 'Proof of Form-9 Renewal',
+    'Renewal of Alien': 'Proof of Form-10 Renewal of Alien',
     'Replacement of card': 'Proof of Form-11 Replacement',
     'Change of Particulars': 'Proof of Form-1/1A COP',
     'GetFirst ID': 'Proof of Form-7A GetFirst ID'
@@ -702,6 +703,27 @@ export const COP_ESCALATION_CATEGORIES = [
       label: 'GetFirst ID',
       serviceTypes: [
         { value: 'GetFirst ID', label: 'GetFirst ID' }
+      ]
+    },
+    {
+      value: 'Alien New Registration',
+      label: 'Alien New Registration',
+       serviceTypes: [
+        { value: 'Alien New Registration', label: 'Alien New Registration' }
+      ]
+    },
+     {
+      value: 'Renewal of Alien',
+      label: 'Renewal of Alien',
+       serviceTypes: [
+        { value: 'Renewal of Alien', label: 'Renewal of Alien' }
+      ]
+    },
+     {
+      value: 'Replacement of Alien',
+      label: 'Replacement of Alien',
+       serviceTypes: [
+        { value: 'Replacement of Alien', label: 'Replacement of Alien' }
       ]
     },
   ];
