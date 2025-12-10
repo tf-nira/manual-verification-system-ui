@@ -22,7 +22,8 @@ export const ESCALATE: string = 'Escalate';
 export const SCHEDULE_INTERVIEW: string = 'Schedule Interview';
 export const UPLOAD_DCOUMENTS: string = 'Upload Documents';
 export const APPLICANT_NAME: string = 'Applicant Name';
-export const BY_BIRTH_SERVICE_TYPE = 'Registration of citizens by birth'
+export const BY_BIRTH_SERVICE_TYPE = 'Registration of citizens by birth';
+export const Modify_DETAILS: string = 'Modify Details'
 // roles
 export const MVS_OFFICER: string = 'MVS_OFFICER';
 export const MVS_SUPERVISOR: string = 'MVS_SUPERVISOR';
@@ -31,6 +32,7 @@ export const MVS_LEGAL_OFFICER: string = 'MVS_LEGAL_OFFICER';
 export const MVS_INTERNATIONAL_OFFICER: string = 'MVS_INTERNATIONAL_OFFICER';
 export const MVS_EXECUTIVE_DIRECTOR: string ='MVS_EXECUTIVE_DIRECTOR';
 export const MVS_SENIOR_REGISTRATION_OFFICER: string ='MVS_SENIOR_REGISTRATION_OFFICER';
+export const MVS_MANAGER: string ='MVS_MANAGER';
 
 // table fields
 export const APPLICATION_ID: string = 'Application ID';
@@ -90,7 +92,8 @@ export const API_CONST_SUCCESS = 'success';
 export const API_CONST_APPROVE = 'APPROVE';
 export const API_CONST_ESCALATE = 'ESCALATE';
 export const API_CONST_REJECT = 'REJECT';
-export const API_CONST_RECOMMEND_FOR_APPROVAL ='RECOMMEND_FOR_APPROVAL'
+export const API_CONST_RECOMMEND_FOR_APPROVAL ='RECOMMEND_FOR_APPROVAL';
+export const API_CONST_MODIFY = 'modify_demographics'
 //max indiviadual file size that can be uploaded 2mb
 export const MAX_DOC_SIZE = 2 * 1024 * 1024;
 export const SERVICE_CONST_MIGRATION = 'Migration';
@@ -103,7 +106,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfPhysicalApplicationForm: 'Physical Application Form',
   proofOfAbandonment: 'Proof of Abandonment',
   proofOfException: 'Exception Proof',
-  proofOfPayment: 'Proof of Payment',
+  proofOfPayment: 'Payment Receipt',
   proofOfRelationship: 'Proof of Relationship',
   proofOfCitizenship: 'Proof of Citizenship',
   proofOfLegalDOcuments: 'Proof of Legal Documents',
@@ -170,14 +173,18 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfCLEI: 'Local Council Letter or Embassy information',
   proofOfPPDetails: 'Previous Passports Details',
   proofOfNatCert: 'Naturalisation Certificate',
-  proofOfPrevRec: 'Previous immigration records'
+  proofOfPrevRec: 'Previous immigration records',
+  proofOfPassportCopy: 'Copy of Passport',
+  proofOfImmigrationFacility: 'Copy of Immigration Facility'
 };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
 
   export const FORM_LABELS_BY_SERVICE: {[key: string]: string} = {
     'New registrations' : 'Proof of Form-3 New Registration',
+    'Alien New Registration' : 'Proof of Form-4 Alien New Registration',
     'Renewal of card': 'Proof of Form-9 Renewal',
+    'Renewal of Alien': 'Proof of Form-10 Renewal of Alien',
     'Replacement of card': 'Proof of Form-11 Replacement',
     'Change of Particulars': 'Proof of Form-1/1A COP',
     'GetFirst ID': 'Proof of Form-7A GetFirst ID'
@@ -468,19 +475,19 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     { value: 'Other ( Free Text)', default: false}
   ];
 
-  export const COP_REJECTION_CATEGORIES = [
-    { value: 'Documents provided have inconsistent information', default: false },
-    { value: 'Insufficient supporting documents', default: false },
-    { value: 'Documents not in required format (i.e SD exists but not registered)', default: false },
-    { value: 'Poorly scanned documents to enable decision', default: false },
-    { value: 'Fraudulent/Altered /doctored documents ', default: false },
-    { value: 'No payment receipt attached', default: false },
-    { value: 'Payments used on previous unrelated application', default: false },
-    { value: 'Payment lower than statutory fees', default: false },
-    { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false },
-    { value: 'An existing record is stop listed', default: false },
-    { value: 'Other',  default: false}
-  ];
+    export const COP_REJECTION_CATEGORIES = [
+      { value: 'Documents provided have inconsistent information', default: false },
+      { value: 'Insufficient supporting documents', default: false },
+      { value: 'Documents not in required format (i.e SD exists but not registered)', default: false },
+      { value: 'Poorly scanned documents to enable decision', default: false },
+      { value: 'Fraudulent/Altered /doctored documents ', default: false },
+      { value: 'No payment receipt attached', default: false },
+      { value: 'Payments used on previous unrelated application', default: false },
+      { value: 'Payment lower than statutory fees', default: false },
+      { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false },
+      { value: 'An existing record is stop listed', default: false },
+      { value: 'Other',  default: false}
+    ];
 
   export const GETFIRSTID_REJECTION_CATEGORIES = [
     { value: 'Documents provided have inconsistent information', default: false },
@@ -698,4 +705,439 @@ export const COP_ESCALATION_CATEGORIES = [
         { value: 'GetFirst ID', label: 'GetFirst ID' }
       ]
     },
+    {
+      value: 'Alien New Registration',
+      label: 'Alien New Registration',
+       serviceTypes: [
+        { value: 'Alien New Registration', label: 'Alien New Registration' }
+      ]
+    },
+     {
+      value: 'Renewal of Alien',
+      label: 'Renewal of Alien',
+       serviceTypes: [
+        { value: 'Renewal of Alien', label: 'Renewal of Alien' }
+      ]
+    },
+     {
+      value: 'Replacement of Alien',
+      label: 'Replacement of Alien',
+       serviceTypes: [
+        { value: 'Replacement of Alien', label: 'Replacement of Alien' }
+      ]
+    },
   ];
+
+
+  export const PERSONAL_INFO_FIELD_ORDER: string[] = [
+  'fullname',
+  'surname',
+  'givenName',
+  'otherNames',
+  'maidenName',
+  'previousName',
+  'dateOfBirth',
+  'gender',
+  'phone',
+  'email',
+  'applicantLivingStatus',
+  'CountryCode',
+  'homePhoneNumber',
+  'highestLevelOfEducation',
+  'otherHighestLevelOfEducation',
+  'profession',
+  'otherProfession',
+  'occupation',
+  'otherOccupation',
+  'religion',
+  'otherReligion',
+  'disabilities',
+  'otherDisability',
+  'userServiceType',
+  'userService',
+  'cardNumber',
+  'UIN',
+  'NIN',
+  'preferredLang',
+  'NINVerified',
+  'updatedAt',
+  'renewalNIN',
+  'nextOfKinPhoneNumber',
+  'ninExpiryDate',
+  'applicantNationality',
+  'applicantOtherNationality',
+  'citizenshipCertificateNo',
+  'foundLink',
+  'drivingLicenceNumber',
+  'taxIdentificationNumber'
+];
+
+export const RESIDENCE_INFO_FIELDS: string[] = [
+  'residenceStatus',
+  'applicantPlaceOfResidence',
+  'applicantForeignResidenceCountry',
+  'applicantForeignResidenceAddress',
+  'appResCountryUGA',
+  'applicantPlaceOfResidenceCounty',
+  'applicantPlaceOfResidenceSubCounty',
+  'applicantPlaceOfResidenceParish',
+  'applicantPlaceOfResidenceVillage',
+  'applicantPlaceOfResidenceStreet',
+  'applicantPlaceOfResidenceYearsLived',
+  'applicantPlaceOfResidenceDistrictOfPrevRes',
+  'applicantPlaceOfResidencePostalAddress',
+  'applicantPlaceOfResidenceHouseNo',
+  'applicantPlaceOfResidenceDistrict'
+];
+
+export const BIRTH_INFO_FIELDS: string[] = [
+  'applicantForeignBirthCountry',
+  'applicantForeignBirthAddress',
+  'appBirCountryUGA',
+  'applicantPlaceOfBirthDistrict',
+  'applicantPlaceOfBirthCounty',
+  'applicantPlaceOfBirthSubCounty',
+  'applicantPlaceOfBirthParish',
+  'applicantPlaceOfBirthVillage',
+  'applicantPlaceOfBirthCity',
+  'applicantPlaceOfBirthHealthFacility'
+];
+
+export const ORIGIN_INFO_FIELDS: string[] = [
+  'applicantForeignOriginCountry',
+  'applicantForeignOriginAddress',
+  'appOriCountryUGA',
+  'applicantPlaceOfOriginDistrict',
+  'applicantPlaceOfOriginCounty',
+  'applicantPlaceOfOriginSubCounty',
+  'applicantPlaceOfOriginParish',
+  'applicantPlaceOfOriginVillage',
+  'applicantPlaceOfOriginIndigenousCommunityTribe',
+  'applicantPlaceOfOriginClan'
+];
+
+export const CITIZENSHIP_INFO_FIELDS: string[] = [
+  'applicantPassportNumber',
+  'applicantPassportFileNumber',
+  'dualCitizenshipCertificateNumber',
+  'registrationCertificateNumber',
+  'naturalizationCertificateNumber',
+  'citizenshipOrNationality',
+  'previousNationality',
+  'placeOfIssue',
+  'dateOfIssue',
+  'issuingAuthority'
+];
+
+export const POLLING_INFO_FIELDS: string[] = [
+  'preferredPollingStation',
+  'pollingStationNameResidence',
+  'pollingStationNameOrigin'
+];
+
+export const SPOUSE_INFO_FIELDS: string[] = [
+  'spouseSurname',
+  'spouseGivenName',
+  'spouseOtherNames',
+  'spouseMaidenName',
+  'spousePreviousName',
+  'spouseNIN',
+  'spouseCitizenshipType',
+  'spousePlaceOfMarriage',
+  'spouseDateOfMarriage',
+  'spouseTypeOfMarriage',
+  'spouseMarriageCertificateNumber',
+  'numberOfOtherSpouses',
+  'spouseTwoSurname',
+  'spouseTwoGivenName',
+  'spouseTwoOtherNames',
+  'spouseTwoPreviousName',
+  'spouseTwoNIN',
+  'spouseTwoCitizenshipType',
+  'spouseTwoPlaceOfMarriage',
+  'spouseTwoDateOfMarriage',
+  'spouseTwoTypeOfMarriage',
+  'spouseTwoMarriageCertificateNumber',
+  'spouseThreeSurname',
+  'spouseThreeGivenName',
+  'spouseThreeOtherNames',
+  'spouseThreeMaidenName',
+  'spouseThreePreviousName',
+  'spouseThreeNIN',
+  'spouseThreeCitizenshipType',
+  'spouseThreePlaceOfMarriage',
+  'spouseThreeDateOfMarriage',
+  'spouseThreeTypeOfMarriage',
+  'spouseThreeMarriageCertificateNumber',
+  'removeSpouseSurname',
+  'removeSpouseGivenName',
+  'removeSpouseDateOfMarriage',
+  'numberOfOtherSpousesAlien',
+  'spouseName',
+  'spouseTwoName',
+  'spouseThreeName',
+  'spouseFourName',
+  'spouseFiveName',
+  'spouseSixName'
+];
+
+export const FATHER_INFO_FIELDS: string[] = [
+  'fatherLivingStatus',
+  'fatherSurname',
+  'fatherGivenName',
+  'fatherOtherNames',
+  'fatherPreviousName',
+  'fatherNIN',
+  'fatherUIN',
+  'fatherIDDocumentNo',
+  'fatherCitizenshipType',
+  'fatherCitizenCertificateNumber',
+  'fatherIndigenousCommunityTribe',
+  'fatherIndigenousCommunityClan',
+  'fatherOccupation',
+  'fatherForeignResidenceCountry',
+  'fatherForeignResidenceAddress',
+  'fatherPostalAddress',
+  'fatResCountryUGA',
+  'fatherPlaceOfResidenceDistrict',
+  'fatherPlaceOfResidenceCounty',
+  'fatherPlaceOfResidenceSubCounty',
+  'fatherPlaceOfResidenceParish',
+  'fatherPlaceOfResidenceVillage',
+  'fatherPlaceOfResidenceStreet',
+  'fatherPlaceOfResidenceHouseNo',
+  'fatherForeignOriginCountry',
+  'fatherForeignOriginAddress',
+  'fatOriCountryUGA',
+  'fatherPlaceOfOriginDistrict',
+  'fatherPlaceOfOriginCounty',
+  'fatherPlaceOfOriginSubCounty',
+  'fatherPlaceOfOriginParish',
+  'fatherPlaceOfOriginVillage'
+];
+
+export const MOTHER_INFO_FIELDS: string[] = [
+  'motherLivingStatus',
+  'motherSurname',
+  'motherGivenName',
+  'motherOtherNames',
+  'motherPreviousName',
+  'motherMaidenName',
+  'motherNIN',
+  'motherIDDocumentNo',
+  'motherCitizenshipType',
+  'motherCitizenCertificateNumber',
+  'motherIndigenousCommunityTribe',
+  'motherIndigenousCommunityClan',
+  'motherOccupation',
+  'motherForeignResidenceCountry',
+  'motherForeignResidenceAddress',
+  'motherPostalAddress',
+  'motResCountryUGA',
+  'motherPlaceOfResidenceDistrict',
+  'motherPlaceOfResidenceCounty',
+  'motherPlaceOfResidenceSubCounty',
+  'motherPlaceOfResidenceParish',
+  'motherPlaceOfResidenceVillage',
+  'motherPlaceOfResidenceStreet',
+  'motherPlaceOfResidenceHouseNo',
+  'motherForeignOriginCountry',
+  'motherForeignOriginAddress',
+  'motOriCountryUGA',
+  'motherPlaceOfOriginDistrict',
+  'motherPlaceOfOriginCounty',
+  'motherPlaceOfOriginSubCounty',
+  'motherPlaceOfOriginParish',
+  'motherPlaceOfOriginVillage'
+];
+
+export const GUARDIAN_INFO_FIELDS: string[] = [
+  'guardianRelationToApplicant',
+  'guardianSurname',
+  'guardianGivenName',
+  'guardianOtherNames',
+  'guardianOccupation',
+  'guardianNIN_AIN',
+  'guardianIDDocumentnumber',
+  'guardianPassportNumber',
+  'guardianTribe',
+  'guardianClan',
+  'guardianCitizenshipType',
+  'guardianCitizenshipCertificateNumber',
+  'guardianOtherNationality',
+  'guardianForeignOriginCountry',
+  'guardianForeignOriginAddress',
+  'guardiansCountry',
+  'guardianResidenceDistrict',
+  'guardianResidenceCounty',
+  'guardianResidenceSubCounty',
+  'guardianResidenceParish',
+  'guardianResidenceVillage',
+  'guardianResidenceStreet',
+  'guardianResidence',
+  'guardianDateOfBirth'
+];
+
+export const CHILD_INFO_FIELDS: string[] = [
+  'numberOfOtherChild',
+
+  'childName',
+  'childSurname',
+  'childGivenName',
+  'childOtherName',
+  'childNIN',
+  'childSex',
+  'childDateOfBirth',
+
+  'childTwoName',
+  'childTwoSurname',
+  'childTwoGivenName',
+  'childTwoOtherName',
+  'childTwoNIN',
+  'childTwoSex',
+  'childTwoDateOfBirth',
+
+  'childThreeName',
+  'childThreeSurname',
+  'childThreeGivenName',
+  'childThreeOtherName',
+  'childThreeNIN',
+  'childThreeSex',
+  'childThreeDateOfBirth',
+
+  'childFourName',
+  'childFourSurname',
+  'childFourGivenName',
+  'childFourOtherName',
+  'childFourNIN',
+  'childFourSex',
+  'childFourDateOfBirth',
+
+  'childFiveName',
+  'childFiveSurname',
+  'childFiveGivenName',
+  'childFiveOtherName',
+  'childFiveNIN',
+  'childFiveSex',
+  'childFiveDateOfBirth',
+
+  'childSixName',
+  'childSixSurname',
+  'childSixGivenName',
+  'childSixOtherName',
+  'childSixNIN',
+  'childSixSex',
+  'childSixDateOfBirth'
+];
+export const DECLARANT_INFO_FIELDS: string[] = [
+  'declarant',
+  'declarantSurname',
+  'declarantgivenName',
+  'declarantotherNames',
+  'declarantPreviousNames',
+  'declarantMaidenName',
+  'declarantGender',
+  'declarantNationality',
+  'declarantResidenceStatus',
+  'introducerNIN',
+  'relationToApplicant',
+  'otherDeclarantRelationship',
+  'PRN'
+];
+export const ENROLMENT_INFO_FIELDS: string[] = [
+  'enrolmentCountry',
+  'applicantPlaceOfEnrolmentDistrict',
+  'applicantPlaceOfEnrolmentCounty',
+  'applicantPlaceOfEnrolmentSubCounty',
+  'applicantPlaceOfEnrolmentParish',
+  'applicantPlaceOfEnrolmentVillage'
+];
+export const EMPLOYER_DETAILS: string[] =[
+  'employerName',
+  'employerPhone',
+  'employerDistrict',
+  'employerCounty',
+  'employerSubCounty',
+  'employerParish',
+  'employerVillage',
+  'employerStreet',
+  'employerCountryCode'
+]
+export const IMMIGRATION_DETAILS: string[] =[
+  'dateOfEntryInUganda',
+  'immigrationFacitityNo',
+  'facilityType',
+  'facilityTypeCategory',
+  'dateOfIssuance',
+  'dateOfExpiry',
+  'facilityTypeSubCategory',
+  'reasonforCancellation'
+]
+export const LINKED_TO_DETAILS: string[] =[
+  'ownerType',
+  'primaryOwnerAIN',
+  'numberOfSecondaryOwner',
+  'firstSecondaryOwner',
+  'secondSecondaryOwner',
+  'thirdSecondaryOwner',
+  'fourthSecondaryOwner',
+  'fifthSecondaryOwner',
+  'sixthSecondaryOwner',
+  'seventhSecondaryOwner',
+  'eighthSecondaryOwner',
+  'ninthSecondaryOwner'
+]
+
+export const FIELD_LABEL_MAP: Record<string, string> = {
+  phone: 'Mobile Number',
+  NIN: 'National ID Number(NIN)',
+  ninExpiryDate: 'Card Expiry Date',
+  foundLink: 'Foundling',
+  appResCountryUGA: 'Applicant Place of Residence Country',
+  applicantPlaceOfResidenceDistrictOfPrevRes: 'District of Previous Residence',
+  appBirCountryUGA: 'Applicant Place of Birth Country',
+  applicantPlaceOfBirthHealthFacility: 'Health Facility',
+  appOriCountryUGA: 'Applicant Place of Origin Country',
+  applicantPlaceOfOriginIndigenousCommunityTribe: 'Indigenous Community Tribe',
+  pollingStationNameResidence: 'Polling Station Name',
+  pollingStationNameOrigin: 'Polling Station Name',
+  removeSpouseSurname: 'Surname',
+  removeSpouseGivenName: 'Given Name',
+  removeSpouseDateOfMarriage: 'Date of Marriage',
+  fatOriCountryUGA: 'Father Origin Country',
+  fatResCountryUGA: 'Father Residence Country',
+  motResCountryUGA: 'Mother Residence Country',
+  motOriCountryUGA: 'Mother Origin Country',
+  guardianRelationToApplicant: "Blood Relative's Relation To Applicant",
+  guardianSurname: "Blood Relative's Surname",
+  guardianGivenName: "Blood Relative's Given Name",
+  guardianOtherNames: "Blood Relative's Other Names",
+  guardianOccupation: "Blood Relative's Occupation",
+  guardianNIN_AIN: "Blood Relative's Nin",
+  guardianIDDocumentnumber: "Blood Relative's Id Document Number",
+  guardianPassportNumber: "Blood Relative's Passport Number",
+  guardianTribe: "Blood Relative's Tribe",
+  guardianClan: "Blood Relative's Clan",
+  guardianCitizenshipType: "Blood Relative's Citizenship Type",
+  guardianCitizenshipCertificateNumber: "Blood Relative's Citizenship Certificate Number",
+  guardianOtherNationality: "Blood Relative's Other Nationality",
+  guardianForeignOriginCountry: "Blood Relative's Foreign Origin Country",
+  guardianForeignOriginAddress: "Blood Relative's Foreign Origin Address",
+  guardiansCountry: "Blood Relative's Country",
+  guardianResidenceDistrict: "Blood Relative's Residence District",
+  guardianResidenceCounty: "Blood Relative's Residence County",
+  guardianResidenceSubCounty: "Blood Relative's Residence Subcounty",
+  guardianResidenceParish: "Blood Relative's Residence Parish",
+  guardianResidenceVillage: "Blood Relative's Residence Village",
+  guardianResidenceStreet: "Blood Relative's Residence Street",
+  guardianResidence: "Blood Relative's Residence",
+  guardianDateOfBirth: "Blood Relative's Date of Birth",
+  enrolmentCountry: 'Country',
+  applicantPlaceOfEnrolmentDistrict: 'District',
+  applicantPlaceOfEnrolmentCounty: 'County',
+  applicantPlaceOfEnrolmentSubCounty: 'Subcounty',
+  applicantPlaceOfEnrolmentParish: 'Parish',
+  applicantPlaceOfEnrolmentVillage: 'Village',
+  motherIDDocumentNo: 'Mother Id Document No',
+  fatherIDDocumentNo: 'Fater Id Document No'
+};
