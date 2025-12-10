@@ -19,5 +19,7 @@ export const APPEND_URL = {
     search: 'search',
     schedule_interview: '/schedule/interview',
     upload_document: '/upload/documents',
-    fetch_documents:'fetch/document'
+    fetch_documents:'fetch/document',
+    get_config: 'get-config',
+    save_modified: '/modify_demographics'
 }

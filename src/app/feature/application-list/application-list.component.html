@@ -223,7 +223,13 @@
                     Open
                   </button> -->
                 </td>
-                <td>{{ row[constants.API_CONST_SERVICE] }}</td>
+                <td>
+                  {{ ['Alien New Registration', 'Renewal of Alien', 'Replacement of Alien'].includes(
+                        row[constants.API_CONST_SERVICE_TYPE])
+                      ? row[constants.API_CONST_SERVICE_TYPE]
+                      : row[constants.API_CONST_SERVICE]
+                  }}
+                </td>
                 <td>{{ row[constants.API_CONST_SERVICE_TYPE] }}</td>
                 <td>{{ row[constants.API_CONST_CREATED_DATE] | date: 'dd-MM-yyyy HH:mm:ss'  }}</td>
                 <td *ngIf="applicationType === 'Assigned' && (role === constants.MVS_DISTRICT_OFFICER || role === constants.MVS_LEGAL_OFFICER || role === constants.MVS_INTERNATIONAL_OFFICER || role === constants.MVS_EXECUTIVE_DIRECTOR)">

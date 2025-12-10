@@ -118,6 +118,12 @@ export class ApplicationListComponent implements OnInit {
   uniqueServiceTypes: string[] = [];
   uniqueApplicationStatuses: string[] = [];
   
+  specialAlienServices: string[] = [
+  'Alien New Registration',
+  'Renewal of Alien',
+  'Replacement of Alien'
+  ];
+  
   servicesWithTypes = SERVICES_WITH_TYPES;
   
   ageGroups: string[] = ['INFANT', 'MINOR', 'ADULT']; 
@@ -532,7 +538,12 @@ export class ApplicationListComponent implements OnInit {
   
     // Add filters for optional parameters
     addFilter(this.searchText, API_CONST_REG_ID, API_CONST_CONTAINS);
-    addFilter(this.selectedService, API_CONST_SERVICE, API_CONST_EQUALS);
+    // addFilter(this.selectedService, API_CONST_SERVICE, API_CONST_EQUALS);
+    if (this.specialAlienServices.includes(this.selectedService)) {
+        addFilter(this.selectedService, API_CONST_SERVICE_TYPE, API_CONST_EQUALS);
+      } else {
+        addFilter(this.selectedService, API_CONST_SERVICE, API_CONST_EQUALS);
+      }
     addFilter(this.selectedServiceType, API_CONST_SERVICE_TYPE, API_CONST_EQUALS);
     addFilter(this.selectedAgeGroups, API_CONST_AGE_GROUP, API_CONST_IN);
     if (this.foundling !== null && this.foundling !== undefined) {

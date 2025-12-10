@@ -72,7 +72,7 @@
       'religion', 'otherReligion', 'disabilities', 'otherDisability','userServiceType', 'userService', 
       'IDSchemaVersion', 'cardNumber', 'UIN', 'NIN', 'preferredLang', 'selectedHandles', 'NINVerified',
       'updatedAt', 'renewalNIN', 'nextOfKinPhoneNumber', 'ninExpiryDate', 'applicantNationality',
-      'applicantOtherNationality', 'citizenshipCertificateNo', 'foundLink'
+      'applicantOtherNationality', 'citizenshipCertificateNo', 'foundLink', 'drivingLicenceNumber','taxIdentificationNumber'
     ])">
 
         <div class="photo-container" *ngIf="photoBase64; else noPhoto">
@@ -116,7 +116,7 @@
 
             <div class="field-container" *ngIf="rowData?.demographics?.copPhonePrevious">
               <label>Mobile Number</label>
-              <div class="field-value">{{ rowData?.demographics?.copPhonePrevious }}</div>
+              <div class="field-value">{{ rowData?.demographics?.copPhonePrevious }} </div>
             </div>
 
             <div class="field-container" *ngIf="rowData?.demographics?.copCountryCodePrevious">
@@ -126,7 +126,7 @@
 
             <div class="field-container" *ngIf="rowData?.demographics?.copHomePhoneNumberPrevious">
               <label>Home Phone Number</label>
-              <div class="field-value">{{ rowData?.demographics?.copHomePhoneNumberPrevious }}</div>
+              <div  class="field-value">{{ rowData?.demographics?.copHomePhoneNumberPrevious }}</div>
             </div>
 
           </div>
@@ -145,7 +145,13 @@
           </div>
         </div>
         <div class="personal-information">
+           <ng-container *ngFor="let key of fieldOrder">
+      <!-- Only render if value exists after parsing -->
+          <ng-container *ngIf="getParsedValue(rowData?.demographics?.[key]) as parsed">
+            <div class="field-container" *ngIf="parsed">
+              <label>{{ formatLabel(key) }}</label>
 
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.fullName">
             <label>Fullname</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.fullName)[0]?.value }}</div>
@@ -323,21 +329,24 @@
           <div class="field-container" *ngIf="rowData?.demographics?.applicantOtherNationality">
             <label>Applicant Other Nationality</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantOtherNationality)[0]?.value }}
+=======
+              <!-- View mode -->
+              <div *ngIf="!isEditMode" class="field-value">
+                {{ parsed }}
+              </div>
+
+               <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+>>>>>>> 24400e3 (Alien changes)
             </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.citizenshipCertificateNo">
-            <label>Citizenship Certificate No</label>
-            <div class="field-value">{{ rowData?.demographics?.citizenshipCertificateNo }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.foundLink">
-            <label>Foundling</label>
-            <div class="field-value">{{ rowData?.demographics?.foundLink}}</div>
-          </div>
-
+          </ng-container>
+        </ng-container>
         </div>
+
       </div>
 
 
@@ -352,6 +361,7 @@
     ])">
 
         <h3>Place Of Residence</h3>
+<<<<<<< HEAD
         <div class="personal-information">
           <div class="field-container" *ngIf="rowData?.demographics?.residenceStatus">
             <label>Residence Status</label>
@@ -438,8 +448,32 @@
               parseJson(rowData?.demographics?.applicantPlaceOfResidenceDistrict)[0]?.value
               }}</div>
           </div>
+=======
+          <div class="personal-information">
+          <ng-container *ngFor="let key of residentField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
         </div>
-      </div>
+>>>>>>> 24400e3 (Alien changes)
+        </div>
 
       <div id="place-of-birth-section" class="section" *ngIf="hasSectionData([
       'applicantForeignBirthCountry', 'applicantForeignBirthAddress', 'appBirCountryUGA',
@@ -449,7 +483,13 @@
     ])">
         <h3>Place Of Birth</h3>
         <div class="personal-information">
+          <ng-container *ngFor="let key of birthField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
 
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.applicantForeignBirthCountry">
             <label>Applicant Foreign Birth Country</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantForeignBirthCountry)[0]?.value }}
@@ -507,7 +547,23 @@
             <label>Health Facility</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthHealthFacility)[0]?.value }}</div>
           </div>
+=======
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+>>>>>>> 24400e3 (Alien changes)
 
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
         </div>
       </div>
 
@@ -521,6 +577,7 @@
 
         <h3>Place of Origin</h3>
         <div class="personal-information">
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.applicantForeignOriginCountry">
             <label>Applicant Foreign Origin Country</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantForeignOriginCountry)[0]?.value }}
@@ -580,6 +637,29 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfOriginClan)[0]?.value }}
             </div>
           </div>
+=======
+           <ng-container *ngFor="let key of originField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+>>>>>>> 24400e3 (Alien changes)
         </div>
 
       </div>
@@ -587,21 +667,23 @@
 
       <div id="citizenship-details-section" class="section"
         *ngIf="hasSectionData(['applicantPassportNumber', 'applicantPassportFileNumber', 'dualCitizenshipCertificateNumber',
-         'registrationCertificateNumber', 'naturalizationCertificateNumber'])">
+         'registrationCertificateNumber', 'naturalizationCertificateNumber','citizenshipOrNationality', 'previousNationality',
+         'placeOfIssue', 'dateOfIssue', 'issuingAuthority'])">
 
         <h3>Citizenship Details</h3>
         <div class="personal-information">
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPassportNumber">
-            <label>Applicant Passport Number</label>
-            <div class="field-value">{{ rowData?.demographics?.applicantPassportNumber }}</div>
-          </div>
+           <ng-container *ngFor="let key of citizenField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
 
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPassportFileNumber">
-            <label>Applicant Passport Filenumber</label>
-            <div class="field-value">{{ rowData?.demographics?.applicantPassportFileNumber }}
-            </div>
-          </div>
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
 
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.dualCitizenshipCertificateNumber">
             <label>Dual Citizenship Certificate Number</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.dualCitizenshipCertificateNumber )[0]?.value}}</div>
@@ -616,7 +698,77 @@
             <label>Naturalization Certificate Number</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.naturalizationCertificateNumber )[0]?.value}}</div>
           </div> 
+=======
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
 
+      <div id="immigration-section" class="section" *ngIf="hasSectionData( [
+      'dateOfEntryInUganda', 'immigrationFacitityNo', 'facilityType','facilityTypeCategory','dateOfIssuance','dateOfExpiry','facilityTypeSubCategory','reasonforCancellation'
+    ])">
+>>>>>>> 24400e3 (Alien changes)
+
+        <h3>immigration Information</h3>
+        <div class="personal-information">
+        <ng-container *ngFor="let key of immigrationFields">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <div id="LINKED_TO_DETAILS-section" class="section" *ngIf="hasSectionData( [ 'ownerType',
+      'primaryOwnerAIN','numberOfSecondaryOwner','firstSecondaryOwner','secondSecondaryOwner' ])">
+
+        <h3>Linked Information</h3>
+        <div class="personal-information">
+        <ng-container *ngFor="let key of linkedFields">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
         </div>
       </div>
 
@@ -626,7 +778,13 @@
 
         <h3>Voters Information</h3>
         <div class="personal-information">
+        <ng-container *ngFor="let key of votingFields">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
 
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.preferredPollingStation">
             <label>Preferred Polling Station</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.preferredPollingStation)[0]?.value }}</div>
@@ -643,6 +801,23 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.pollingStationNameOrigin)[0]?.value }}
             </div>
           </div>
+=======
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+>>>>>>> 24400e3 (Alien changes)
         </div>
       </div>
 
@@ -652,8 +827,37 @@
         <div class="personal-information">
           <div class="field-container" *ngIf="rowData?.demographics?.maritalStatus">
             <label>Marital Status</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.maritalStatus)[0]?.value }}</div>
+            <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.maritalStatus)[0]?.value }}</div>
+            <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.maritalStatus[0].value"/>
           </div>
+        </div>
+      </div>
+
+    <div id="employer-detail-section" class="section"
+        *ngIf="hasSectionData([ 'employerName','employerPhone','employerDistrict','employerCounty','employerSubCounty','employerParish','employerVillage','employerStreet','employerCountryCode'])">
+      <h3>Details of Employer/ School</h3>
+        <div class="personal-information">
+         <ng-container *ngFor="let key of employerFiels">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
         </div>
       </div>
 
@@ -668,10 +872,11 @@
         'spouseThreeCitizenshipType', 
        'spouseThreePlaceOfMarriage', 'spouseThreeDateOfMarriage', 'spouseThreeTypeOfMarriage', 
        'spouseThreeMarriageCertificateNumber', 'removeSpouseSurname', 'removeSpouseGivenName',
-        'removeSpouseDateOfMarriage'])">
+        'removeSpouseDateOfMarriage','numberOfOtherSpousesAlien', 'spouseName', 'spouseTwoName', 'spouseThreeName', 'spouseFourName',  'spouseFiveName',  'spouseSixName'])">
 
         <h3>Spouse Details</h3>
         <div class="personal-information">
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.spouseSurname">
             <label>Spouse Surname</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.spouseSurname)[0]?.value }}</div>
@@ -856,7 +1061,29 @@
             <label>Date of Marriage</label>
             <div class="field-value">{{rowData?.demographics?.removeSpouseDateOfMarriage }}</div>
           </div>
+=======
+         <ng-container *ngFor="let key of spouseField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
 
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+>>>>>>> 24400e3 (Alien changes)
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
         </div>
       </div>
 
@@ -874,12 +1101,25 @@
     ])">
         <h3>Father's Details</h3>
         <div class="personal-information">
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.fatherLivingStatus">
             <label>Father Living Status</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.fatherLivingStatus)[0]?.value }}</div>
           </div>
+=======
+        <ng-container *ngFor="let key of fatherField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+>>>>>>> 24400e3 (Alien changes)
 
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
 
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.fatherSurname">
             <label>Father Surname</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.fatherSurname)[0]?.value }}</div>
@@ -1052,6 +1292,18 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfOriginVillage)[0]?.value }}
             </div>
           </div>
+=======
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+>>>>>>> 24400e3 (Alien changes)
         </div>
       </div>
 
@@ -1070,6 +1322,7 @@
 
         <h3>Mother's Details</h3>
         <div class="personal-information">
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.motherLivingStatus">
             <label>Mother Living Status</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.motherLivingStatus)[0]?.value }}</div>
@@ -1247,6 +1500,29 @@
             <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfOriginVillage)[0]?.value }}
             </div>
           </div>
+=======
+         <ng-container *ngFor="let key of motherField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+>>>>>>> 24400e3 (Alien changes)
         </div>
       </div>
 
@@ -1262,6 +1538,7 @@
 
         <h3>Blood Relative's/Introducer Details</h3>
         <div class="personal-information">
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.guardianRelationToApplicant">
             <label>Blood Relative's Relation To Applicant</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.guardianRelationToApplicant)[0]?.value }}
@@ -1391,6 +1668,29 @@
             <label>Blood Relative's Date of Birth</label>
             <div class="field-value">{{ rowData?.demographics?.guardianDateOfBirth }}</div>
           </div>
+=======
+         <ng-container *ngFor="let key of guardianField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+>>>>>>> 24400e3 (Alien changes)
         </div>
       </div>
 
@@ -1416,11 +1716,12 @@
       'childFiveNIN', 'childSixSurname', 
       'childSixGivenName' , 
       'childSixOtherName' ,
-      'childSixNIN' , 'childSixName', 'childSixSex', 'childSixDateOfBirth'
+      'childSixNIN' , 'childSixName', 'childSixSex', 'childSixDateOfBirth', 'numberOfOtherChild'
     ])">
 
         <h3>Particulars of Applicant’s Children</h3>
         <div class="personal-information">
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.childName">
             <label>Child Name</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.childName)[0]?.value }}</div>
@@ -1630,7 +1931,29 @@
             <label>Child Six Date of Birth</label>
             <div class="field-value">{{rowData?.demographics?.childSixDateOfBirth }}</div>
           </div>
+=======
+        <ng-container *ngFor="let key of childField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
 
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+>>>>>>> 24400e3 (Alien changes)
+
+                <!-- Edit mode -->
+               <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
         </div>
       </div>
 
@@ -1642,6 +1965,7 @@
 
         <h3>Declarant's Details</h3>
         <div class="personal-information">
+<<<<<<< HEAD
           <div class="field-container" *ngIf="rowData?.demographics?.declarant">
             <label>Declarant</label>
             <div class="field-value">{{ parseJson(rowData?.demographics?.declarant)[0]?.value }}</div>
@@ -1705,6 +2029,29 @@
             <label>Prn</label>
             <div class="field-value">{{ rowData?.demographics?.PRN }}</div>
           </div>
+=======
+          <ng-container *ngFor="let key of declarantField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+>>>>>>> 24400e3 (Alien changes)
           </div>
           </div>
   
@@ -1715,6 +2062,7 @@
               ])">
             <h3>Place Of Enrollment</h3>
             <div class="personal-information">
+<<<<<<< HEAD
           
               <div class="field-container" *ngIf="rowData?.demographics?.enrolmentCountry">
                 <label>Country</label>
@@ -1724,8 +2072,28 @@
               <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentDistrict">
                 <label>District</label>
                 <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentDistrict)[0]?.value }}
+=======
+              <ng-container *ngFor="let key of enrollmentField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+>>>>>>> 24400e3 (Alien changes)
                 </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
               </div>
+<<<<<<< HEAD
           
               <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentCounty">
                 <label>County</label>
@@ -1751,6 +2119,10 @@
                 </div>
               </div>
           
+=======
+            </ng-container>
+          </ng-container>
+>>>>>>> 24400e3 (Alien changes)
             </div>
           </div>
 
@@ -2095,18 +2467,18 @@
 
       <!-- Action Buttons -->
       <div class="action-buttons" *ngIf="!isRejectionDetailsPresent()">
-        <button class="approve" (click)="openApprovalModal()">
+        <button class="approve" (click)="openApprovalModal()" *ngIf="!isEditMode">
           <img src="assets/images/approve_icon.png" alt="Back" class="icon" />
           <i class="fas fa-check-circle"></i>
           {{ constants.APPROVE }}
         </button>
-        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR' && role !== 'MVS_SENIOR_REGISTRATION_OFFICER' && role !== 'MVS_INTERNATIONAL_OFFICER'"
+        <button class="escalate" *ngIf="role !== 'MVS_DISTRICT_OFFICER' && role !== 'MVS_EXECUTIVE_DIRECTOR' && role !== 'MVS_SENIOR_REGISTRATION_OFFICER' && role !== 'MVS_INTERNATIONAL_OFFICER' && role !== 'MVS_MANAGER'"
           (click)="openEscalateModal()">
           <img src="assets/images/escalate_icon.png" alt="Back" class="icon" />
           <i class="fas fa-exclamation-triangle"></i>
           {{ constants.ESCALATE }}
         </button>
-        <button class="reject" (click)="openRejectModal()" *ngIf="role !== 'MVS_OFFICER'">
+        <button class="reject" (click)="openRejectModal()" *ngIf="role !== 'MVS_OFFICER' && !isEditMode">
           <img src="assets/images/reject_icon.png" alt="Back" class="icon" />
           <i class="fas fa-times-circle"></i>
           {{ constants.REJECT }}
@@ -2114,9 +2486,23 @@
         <!-- Schedule Interview Btn -->
         <button [ngClass]="{
             'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_EXECUTIVE_DIRECTOR' || role === 'MVS_INTERNATIONAL_OFFICER') ,
-            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_SENIOR_REGISTRATION_OFFICER' || selectedRow.status === 'INTERVIEW SCHEDULED')
+            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_SENIOR_REGISTRATION_OFFICER' || role === 'MVS_MANAGER' || selectedRow.status === 'INTERVIEW SCHEDULED')
           }" (click)="openScheduleInterviewModal()">
           {{ constants.SCHEDULE_INTERVIEW }}
+        </button>
+        <button class="ModifyRecord" *ngIf="role === 'MVS_MANAGER' && !isEditMode && rowData.serviceType !== 'Change of Particulars'"
+          (click)="confirmAndModify()">
+          {{ constants.Modify_DETAILS }}
+        </button>
+        
+        <button class="ModifyRecord" *ngIf="saveChanges"
+          (click)="saveandcloseModify()">
+          save
+        </button>
+
+        <button class="ModifyRecord" *ngIf="closeEdit"
+          (click)="cancelModefy()">
+          cancel
         </button>
       </div>
 
@@ -2180,8 +2566,23 @@
         </div>
       </div>
       <div class="modal-footer">
+        <div class="validation-message" *ngIf="selectedOfficerLevel === 'MVS_MANAGER'">
+        Escalation Category is required for Manager level.
+        </div>
+
         <button class="btn cancel" (click)="closeEscalateModal()">Cancel</button>
+<<<<<<< HEAD
         <button class="btn escalate" [disabled]="!escalationComment.trim()" (click)="escalateApplication()">
+=======
+        <button 
+            class="btn escalate" 
+            [disabled]="
+                !escalationComment.trim() || 
+                (selectedOfficerLevel === 'MVS_MANAGER'&& !isEscalated)
+            " 
+            (click)="openConfirmationModal('ESCALATE')"
+            >
+>>>>>>> 24400e3 (Alien changes)
           Escalate
         </button>
       </div>

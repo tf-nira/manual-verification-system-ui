@@ -236,4 +236,30 @@ fetchDocuments(requestPayload: any): Observable<any> {
     return this.httpClient.get(url);
   }
 
+  saveModifiedRow(changes: any, rowData: any): Observable<any> {
+  const url =
+    this.BASE_URL + this.MVS_URL +
+    appConstants.APPEND_URL.applications +
+    rowData.applicationId +
+    appConstants.APPEND_URL.save_modified; // Replace with your actual endpoint for saving modifications
+
+  const token = localStorage.getItem('authToken');
+  const headers = new HttpHeaders({
+    'Cookie': `Authorization=${token}; SameSite=None; Secure; Path=/; Domain=api-internal.niradev.idencode.link`,
+  });
+
+  const request = {
+   id: 'id',
+    version: 'v1',
+    requesttime: new Date().toISOString(),
+    metadata: null,
+    request: changes // Wrap it if your API expects an object, or just send rowData directly
+  };
+
+  return this.httpClient.put(url, request, {
+    withCredentials: true,
+  });
+}
+
+
 }
