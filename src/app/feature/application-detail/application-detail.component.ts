@@ -362,7 +362,7 @@ docTitles:any;
     }
     this.uploadDocumentSucessStatus = localStorage.getItem(`uploadSuccess_${this.applicationId}`) === 'true';
     // Check if there are upload documents to fetch
-  if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
+  if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' ||  this.role === 'MVS_EXECUTIVE_DIRECTOR' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
     this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
   }
   this.matchedRegIds = this.selectedRow.matchedRegIds || [];
