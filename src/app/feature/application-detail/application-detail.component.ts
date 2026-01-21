@@ -181,6 +181,7 @@ export class ApplicationDetailComponent implements OnInit {
       open: false,
       subSections: [
         { id: 'voter-info-section', label: 'Voters Information' },
+        { id: 'immigration-section', label: 'Immigration Details'},
         { id: 'marital-status-section', label: 'Marital Status' },
         { id: 'spouse-details-section', label: 'Spouse Details' },
       ],
@@ -195,6 +196,8 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'intoducer-details-section', label: 'Blood Relatives/Introducer Details' },
         { id: 'children-details-section', label: 'Particulars of Applicants Children' },
         { id: 'declarant-details-section', label: 'Declarants Details' },
+        { id: 'LINKED_TO_DETAILS-section', label: ' Linked Information'},
+        { id: 'employer-detail-section', label: 'Details of Employer/School'},
         { id: 'place-of-enrolment-section', label: 'Place Of Enrollment' }
       ],
     },
