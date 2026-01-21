@@ -143,7 +143,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfStaDecalrationByParent: 'Statutory Declaration by the parent',
   proofOfNotification: 'Notification Record',
   proofOfCbyReg: 'Certificate of Citizenship by Registration',
-  proofOfCbyNat: 'Certificate of Citizenship by Naturalisation',
+  proofOfCbyNat: 'Certificate of Citizenship by Naturalization',
   proofOfCbyDual: 'Certificate of Dual Citizenship',
   proofOfMarCert: 'Certified copy of marriage certificate',
   proofOfDecAbsolute: 'Certified copy of decree absolute',
@@ -161,7 +161,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfNIDPBR: 'National ID of Parents/ Blood Relatives',
   proofOfCLEI: 'Local Council Letter or Embassy information',
   proofOfPPDetails: 'Previous Passports Details',
-  proofOfNatCert: 'Naturalisation Certificate',
+  proofOfNatCert: 'Naturalization Certificate',
   proofOfPrevRec: 'Previous immigration records',
   proofOfPassportCopy: 'Copy of Passport',
   proofOfImmigrationFacility: 'Copy of Immigration Facility'
@@ -394,7 +394,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     'changeInCitizenshipType': {
       proofOfStatutory: ['Statutory Declaration'],
       proofOfCbyReg: ['Certificate of Citizenship by Registration'],
-      proofOfCbyNat: ['Certificate of Citizenship by Naturalisation'],
+      proofOfCbyNat: ['Certificate of Citizenship by Naturalization'],
       proofOfCbyDual: ['Certificate of Dual Citizenship']   
     },
     'addSpouse': {
