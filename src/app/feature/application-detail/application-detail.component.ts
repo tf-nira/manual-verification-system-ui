@@ -240,6 +240,7 @@ export class ApplicationDetailComponent implements OnInit {
   ];
 
 additionalFetchedDocuments: { category: string; title: string; fileName: string; file: SafeResourceUrl | null }[] = [];
+packetDocuments: { category: string; title: string; fileName: string; file: SafeResourceUrl | null }[] = [];
   personDetails: { role: string; details: { [key: string]: any } }[] = []; // Store details for Father, Mother, Guardian
   constants = {
     MVS_OFFICER,
@@ -365,6 +366,14 @@ docTitles:any;
   if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' ||  this.role === 'MVS_EXECUTIVE_DIRECTOR' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
     this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
   }
+  
+  // Fetch packet documents using registration ID
+  // Update 'registrationId' with the appropriate field from rowData
+  const registrationId =this.rowData.applicationId;
+  if (registrationId) {
+    this.fetchPacketDocuments(registrationId);
+  }
+  
   this.matchedRegIds = this.selectedRow.matchedRegIds || [];
   
   }
@@ -1685,6 +1694,43 @@ getMimeType(format: string): string {
   };
   
   return formatMap[format.toUpperCase()] || 'application/octet-stream';
+}
+
+fetchPacketDocuments(registrationId: string) {
+  this.dataService.fetchPacketDocuments(registrationId).subscribe(
+    (response) => {
+      if (response && response.response && response.response.documents) {
+        // Process the document responses
+        this.processPacketDocuments(response.response);
+      } else {
+        console.error('No valid documents found in API response');
+      }
+    },
+    (error) => {
+      console.error('Error fetching packet documents:', error);
+      this.snackBar.open('Failed to load packet documents.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+    }
+  );
+}
+
+processPacketDocuments(response: DocumentResponse) {
+  if (response && response.documents && response.documents.length > 0) {
+    response.documents.forEach(doc => {
+      const base64Content = doc.document?.trim();
+      
+      this.packetDocuments.push({
+        category: doc.documentName,
+        title: this.getDocumentTitle(doc.documentName) || doc.documentName,
+        fileName: `${doc.documentName}.${doc.format.toLowerCase()}`,
+        file: base64Content ? this.convertBase64ToUrl(base64Content, doc.format) : null
+      });
+    });
+  }
 }
   /**
      * to check if camera is supported
