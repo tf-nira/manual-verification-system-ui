@@ -69,6 +69,7 @@ export class ApplicationDetailComponent implements OnInit {
   private stream: MediaStream | null = null;
   private currentScanIndex = 0;
   isLoading = false;
+  isLoadingDocuments = false;
   demographicData: any;
   isChecked = false;
   role: string = '';
@@ -274,7 +275,8 @@ export class ApplicationDetailComponent implements OnInit {
   ];
 
 additionalFetchedDocuments: { category: string; title: string; fileName: string; file: SafeResourceUrl | null }[] = [];
-  personDetails: { role: string; details: { [key: string]: any } }[] = []; // Store details for Father, Mother, Guardian
+packetDocuments: { category: string; title: string; fileName: string; file: SafeResourceUrl | null }[] = [];  
+personDetails: { role: string; details: { [key: string]: any } }[] = []; // Store details for Father, Mother, Guardian
   constants = {
     MVS_OFFICER,
     MVS_DISTRICT_OFFICER,
@@ -415,10 +417,20 @@ docTitles:any;
     }
     this.uploadDocumentSucessStatus = localStorage.getItem(`uploadSuccess_${this.applicationId}`) === 'true';
     // Check if there are upload documents to fetch
-  if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' ||  this.role === 'MVS_EXECUTIVE_DIRECTOR' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
-    this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
+    this.isLoadingDocuments = true;
+    if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' || this.role === 'MVS_EXECUTIVE_DIRECTOR' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
+      this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
+    } else {
+      this.isLoadingDocuments = false;
+    }
+
+  // Fetch packet documents using registration ID
+  // Update 'registrationId' with the appropriate field from rowData
+  const registrationId =this.rowData.applicationId;
+  if (registrationId) {
+    this.fetchPacketDocuments(registrationId);
   }
-  
+
   this.districtOfficeName = localStorage.getItem('districtOfficeName') || '';
   console.log("Districtoffice name " +this.districtOfficeName);
   this.districtOfficeId = parseInt(localStorage.getItem('districtOfficeId') || '0', 10);
@@ -1922,6 +1934,7 @@ isRejectionDetailsPresent(): boolean {
 }
 
 fetchAdditionalDocuments(documentNames: string[], applicationId: string) {
+  this.isLoadingDocuments = true;
   const requestPayload = {
     id: appConstants.fetchDocument.id,
     version: appConstants.fetchDocument.version,
@@ -1942,6 +1955,7 @@ fetchAdditionalDocuments(documentNames: string[], applicationId: string) {
       } else {
         console.error('No valid documents found in API response');
       }
+      this.isLoadingDocuments = false;
     },
     (error) => {
       console.error('Error fetching additional documents:', error);
@@ -1951,6 +1965,7 @@ fetchAdditionalDocuments(documentNames: string[], applicationId: string) {
         verticalPosition: 'top',
         panelClass: ['center-snackbar'],
       });
+      this.isLoadingDocuments = false;
     }
   );
 }
@@ -2447,6 +2462,45 @@ getValue(key: string) {
 
 isArrayField(key: string): boolean {
   return Array.isArray(this.modifiedDetails[key]);
+}
+fetchPacketDocuments(registrationId: string) {
+  this.isLoadingDocuments = true;
+  this.dataService.fetchPacketDocuments(registrationId).subscribe(
+    (response) => {
+      if (response && response.response && response.response.documents) {
+        // Process the document responses
+        this.processPacketDocuments(response.response);
+      } else {
+        console.error('No valid documents found in API response');
+      }
+      this.isLoadingDocuments = false;
+    },
+    (error) => {
+      console.error('Error fetching packet documents:', error);
+      this.snackBar.open('Failed to load packet documents.', 'Close', {
+        duration: 3000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['center-snackbar'],
+      });
+      this.isLoadingDocuments = false;
+    }
+  );
+}
+
+processPacketDocuments(response: DocumentResponse) {
+  if (response && response.documents && response.documents.length > 0) {
+    response.documents.forEach(doc => {
+      const base64Content = doc.document?.trim();
+      
+      this.packetDocuments.push({
+        category: doc.documentName,
+        title: this.getDocumentTitle(doc.documentName) || doc.documentName,
+        fileName: `${doc.documentName}.${doc.format.toLowerCase()}`,
+        file: base64Content ? this.convertBase64ToUrl(base64Content, doc.format) : null
+      });
+    });
+  }
 }
 
 }

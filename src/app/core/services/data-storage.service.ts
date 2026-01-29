@@ -237,6 +237,15 @@ export class DataStorageService {
     return this.httpClient.get(url);
   }
 
+  fetchPacketDocuments(registrationId: string): Observable<any> {
+    const url = this.BASE_URL + this.MVS_URL +
+      appConstants.APPEND_URL.applications + 'packet/documents/' + registrationId;
+    const token = localStorage.getItem('authToken');
+    return this.httpClient.get(url, {
+      withCredentials: true
+    });
+  }
+
   getAssignedOfficerDetails(registrationId: string) {
     const url = this.BASE_URL + this.MVS_URL +
       appConstants.APPEND_URL.applications + 'assignedofficer/' +
