@@ -66,6 +66,7 @@ export class ApplicationDetailComponent implements OnInit {
   private stream: MediaStream | null = null;
   private currentScanIndex = 0;
   isLoading = false;
+  isLoadingDocuments = false;
   demographicData: any;
   isChecked = false;
   role: string = '';
@@ -363,8 +364,11 @@ docTitles:any;
     }
     this.uploadDocumentSucessStatus = localStorage.getItem(`uploadSuccess_${this.applicationId}`) === 'true';
     // Check if there are upload documents to fetch
+  this.isLoadingDocuments = true;
   if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' ||  this.role === 'MVS_EXECUTIVE_DIRECTOR' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
     this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
+  } else {
+    this.isLoadingDocuments = false;
   }
   
   // Fetch packet documents using registration ID
@@ -1620,6 +1624,7 @@ isRejectionDetailsPresent(): boolean {
 }
 
 fetchAdditionalDocuments(documentNames: string[], applicationId: string) {
+  this.isLoadingDocuments = true;
   const requestPayload = {
     id: appConstants.fetchDocument.id,
     version: appConstants.fetchDocument.version,
@@ -1640,6 +1645,7 @@ fetchAdditionalDocuments(documentNames: string[], applicationId: string) {
       } else {
         console.error('No valid documents found in API response');
       }
+      this.isLoadingDocuments = false;
     },
     (error) => {
       console.error('Error fetching additional documents:', error);
@@ -1649,6 +1655,7 @@ fetchAdditionalDocuments(documentNames: string[], applicationId: string) {
         verticalPosition: 'top',
         panelClass: ['center-snackbar'],
       });
+      this.isLoadingDocuments = false;
     }
   );
 }
@@ -1697,6 +1704,7 @@ getMimeType(format: string): string {
 }
 
 fetchPacketDocuments(registrationId: string) {
+  this.isLoadingDocuments = true;
   this.dataService.fetchPacketDocuments(registrationId).subscribe(
     (response) => {
       if (response && response.response && response.response.documents) {
@@ -1705,6 +1713,7 @@ fetchPacketDocuments(registrationId: string) {
       } else {
         console.error('No valid documents found in API response');
       }
+      this.isLoadingDocuments = false;
     },
     (error) => {
       console.error('Error fetching packet documents:', error);
@@ -1714,6 +1723,7 @@ fetchPacketDocuments(registrationId: string) {
         verticalPosition: 'top',
         panelClass: ['center-snackbar'],
       });
+      this.isLoadingDocuments = false;
     }
   );
 }

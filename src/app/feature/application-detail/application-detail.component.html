@@ -2040,8 +2040,16 @@
 
 
         <div class="tab-content" *ngIf="activeTab === 'documents'">
+
+          <div *ngIf="isLoadingDocuments" class="spinner-container">
+            <mat-progress-spinner mode="indeterminate" diameter="25"></mat-progress-spinner>
+            <p>Loading documents...</p>
+          </div>
+
+          <div *ngIf="!isLoadingDocuments">
+
           <!-- Documents Section -->
-          <div *ngIf="documents.length === 0" class="no-documents">
+          <div *ngIf="documents.length === 0 && packetDocuments.length === 0 && additionalFetchedDocuments.length === 0" class="no-documents">
             No documents available.
           </div>
           
@@ -2069,7 +2077,7 @@
               </div>
             </div>
           </ng-container>
-          
+          </div>
           <!-- Upload Button -->
           <button class="document-upload"
             *ngIf="(role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_LEGAL_OFFICER' || role === 'MVS_INTERNATIONAL_OFFICER') && !isRejectionDetailsPresent()"
