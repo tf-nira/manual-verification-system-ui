@@ -175,7 +175,8 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfNatCert: 'Naturalization Certificate',
   proofOfPrevRec: 'Previous immigration records',
   proofOfPassportCopy: 'Copy of Passport',
-  proofOfImmigrationFacility: 'Copy of Immigration Facility'
+  proofOfImmigrationFacility: 'Copy of Immigration Facility',
+  proofOfPrinciplePassport: 'Copy of Principal\'s Passport'
 };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
