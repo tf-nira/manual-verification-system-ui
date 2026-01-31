@@ -30,7 +30,7 @@ export class DemographicDetailsComponent implements OnInit{
         { id: 'place-of-residence-section', label: 'Place Of Residence' },
         { id: 'place-of-birth-section', label: 'Place Of Birth' },
         { id: 'place-of-origin-section', label: 'Place Of Origin' },
-        { id: 'citizenship-details-section', label: 'Citizenship Details' },
+        { id: 'citizenship-details-section', label: 'Passport and Citizenship Details' },
       ],
     },
     {
@@ -101,7 +101,7 @@ export class DemographicDetailsComponent implements OnInit{
     },
     {
       id: 'citizenship-details-section',
-      label: 'Citizenship Details',
+      label: 'Passport and Citizenship Details',
       keys: ['applicantPassportNumber', 'applicantPassportFileNumber']
     },
     {
