@@ -11,7 +11,7 @@ import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_C
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
   NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP,
   MAX_DOC_SIZE, FORM_LABELS_BY_SERVICE, PROOF_OF_PHYSICAL_APPLICATION_FORM, CHANGE_OF_PARTICULARS,
-  SERVICE_CONST_MIGRATION,SERVICE_CONST_NEW_REGISTRATION,SERVICE_CONST_RENEWAL,PERSONAL_INFO_FIELD_ORDER,RESIDENCE_INFO_FIELDS,BIRTH_INFO_FIELDS,ORIGIN_INFO_FIELDS,CITIZENSHIP_INFO_FIELDS,POLLING_INFO_FIELDS,SPOUSE_INFO_FIELDS,FATHER_INFO_FIELDS,MOTHER_INFO_FIELDS,GUARDIAN_INFO_FIELDS,CHILD_INFO_FIELDS,DECLARANT_INFO_FIELDS,ENROLMENT_INFO_FIELDS,FIELD_LABEL_MAP,EMPLOYER_DETAILS,IMMIGRATION_DETAILS,LINKED_TO_DETAILS
+  SERVICE_CONST_MIGRATION,SERVICE_CONST_NEW_REGISTRATION,SERVICE_CONST_RENEWAL,PERSONAL_INFO_FIELD_ORDER,RESIDENCE_INFO_FIELDS,BIRTH_INFO_FIELDS,ORIGIN_INFO_FIELDS,CITIZENSHIP_INFO_FIELDS,POLLING_INFO_FIELDS,SPOUSE_INFO_FIELDS,FATHER_INFO_FIELDS,MOTHER_INFO_FIELDS,GUARDIAN_INFO_FIELDS,CHILD_INFO_FIELDS,DECLARANT_INFO_FIELDS,ENROLMENT_INFO_FIELDS,FIELD_LABEL_MAP,EMPLOYER_DETAILS,IMMIGRATION_DETAILS,LINKED_TO_DETAILS,PRINCIPAL_DEPENDENT_FIELDS,SCHOOL_DETAIL_FIELDS
  } from '../../shared/constants';
  import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -110,6 +110,8 @@ export class ApplicationDetailComponent implements OnInit {
   employerFiels = EMPLOYER_DETAILS;
   immigrationFields = IMMIGRATION_DETAILS;
   linkedFields =LINKED_TO_DETAILS;
+  principalDependentField =PRINCIPAL_DEPENDENT_FIELDS;
+  schoolDetailField =SCHOOL_DETAIL_FIELDS;
   configData:any={};
   matchedRegIds : string[] = [];
   applicationStatus: string = '';
@@ -172,7 +174,7 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'foundling-section', label: 'Foundling Check' },
         { id: 'place-of-birth-section', label: 'Place Of Birth' },
         { id: 'place-of-origin-section', label: 'Place of Origin' },
-        { id: 'citizenship-details-section', label: 'Citizenship Details' },
+        { id: 'citizenship-details-section', label: 'Passport and Citizenship Details' },
       ],
     },
     {
@@ -196,8 +198,10 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'intoducer-details-section', label: 'Blood Relatives/Introducer Details' },
         { id: 'children-details-section', label: 'Particulars of Applicants Children' },
         { id: 'declarant-details-section', label: 'Declarants Details' },
-        { id: 'LINKED_TO_DETAILS-section', label: ' Linked Information'},
-        { id: 'employer-detail-section', label: 'Details of Employer/School'},
+        { id: 'LINKED_TO_DETAILS-section', label: 'Linked Information'},
+        { id: 'linked-dependent-to-Principal-section', label: 'Linked Dependant to Principal'},
+        { id: 'details-of-school-section', label: 'Details of School'},
+        { id: 'employer-detail-section', label: 'Details of Employer/ Business'},
         { id: 'place-of-enrolment-section', label: 'Place Of Enrollment' }
       ],
     },
