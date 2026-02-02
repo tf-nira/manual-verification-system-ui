@@ -1101,6 +1101,16 @@ export const SCHOOL_DETAIL_FIELDS: string[] =[
   'schoolStreet'
 ]
 
+// Service-specific label mappings for Alien service types
+export const ALIEN_SERVICE_LABEL_MAP: Record<string, string> = {
+  phone: 'Local Mobile Number',
+  CountryCode: 'Local Mobile No. Country Code',
+  nonLocalPhone: 'Non-Local Mobile Number',
+  nonLocalCountryCode: 'Non-Local Mobile No. Country Code',
+  principalOfAIN: 'AIN of Principal',
+  applicationIDofPrincipal: 'Application ID of Principal'
+};
+
 export const FIELD_LABEL_MAP: Record<string, string> = {
   phone: 'Mobile Number',
   NIN: 'National ID Number(NIN)',
