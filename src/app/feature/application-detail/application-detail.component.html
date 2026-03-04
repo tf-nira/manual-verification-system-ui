@@ -249,7 +249,7 @@
       'applicantPlaceOfOriginClan'
     ])">
 
-        <h3>Place of Origin</h3>
+        <h3>{{ originHeading }}</h3>
         <div class="personal-information">
            <ng-container *ngFor="let key of originField">
             <!-- Skip if value is empty/null -->
@@ -702,12 +702,40 @@
       <div id="declarant-details-section" class="section" *ngIf="hasSectionData([
       'declarant', 'declarantSurname', 'declarantgivenName', 'declarantotherNames',
       'declarantPreviousNames', 'declarantMaidenName', 'declarantGender', 'declarantNationality',
-      'declarantResidenceStatus', 'introducerNIN', 'relationToApplicant', 'otherDeclarantRelationship', 'PRN'
+      'declarantResidenceStatus', 'introducerNIN', 'relationToApplicant', 'otherDeclarantRelationship'
     ])">
 
         <h3>Declarant's Details</h3>
         <div class="personal-information">
           <ng-container *ngFor="let key of declarantField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+          </div>
+      </div>
+
+      <div id="payment-validation-section" *ngIf="hasSectionData([
+                'PRNId'])">
+            <h3>Payment Validation</h3>
+            <div class="personal-information">
+              <ng-container *ngFor="let key of paymentField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
               <div class="field-container" *ngIf="parsed">
