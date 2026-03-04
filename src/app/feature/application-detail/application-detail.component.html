@@ -22,7 +22,10 @@
         </div>
         <div class="info-item">
           <div class="detail-label">Service</div>
-          <div class="detail-value">{{ service }}</div>
+          <div class="detail-value">{{ ['Alien New Registration', 'Renewal of Alien', 'Replacement of Alien'].includes(serviceType)
+              ? serviceType
+              : service
+          }}</div>
         </div>
         <div class="info-item">
           <div class="detail-label">Service Type</div>
@@ -279,7 +282,7 @@
          'registrationCertificateNumber', 'naturalizationCertificateNumber','citizenshipOrNationality', 'previousNationality',
          'placeOfIssue', 'dateOfIssue', 'issuingAuthority'])">
 
-        <h3>Citizenship Details</h3>
+        <h3>Passport and Citizenship Details</h3>
         <div class="personal-information">
            <ng-container *ngFor="let key of citizenField">
             <!-- Skip if value is empty/null -->
@@ -312,6 +315,35 @@
         <h3>Immigration Details</h3>
         <div class="personal-information">
         <ng-container *ngFor="let key of immigrationFields">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <div id="linked-dependent-to-Principal-section" class="section"
+        *ngIf="hasSectionData(['principalOfAIN', 'applicationIDofPrincipal'])">
+
+        <h3>Linked Dependant to Principal</h3>
+        <div class="personal-information">
+           <ng-container *ngFor="let key of principalDependentField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
               <div class="field-container" *ngIf="parsed">
@@ -408,9 +440,39 @@
 
     <div id="employer-detail-section" class="section"
         *ngIf="hasSectionData([ 'employerName','employerPhone','employerDistrict','employerCounty','employerSubCounty','employerParish','employerVillage','employerStreet','employerCountryCode'])">
-      <h3>Details of Employer/ School</h3>
+      <h3>Details of Employer/ Business</h3>
         <div class="personal-information">
          <ng-container *ngFor="let key of employerFiels">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
+        </div>
+      </div>
+
+      <div id="details-of-school-section" class="section"
+        *ngIf="hasSectionData(['nameOfSchool', 'schoolCountryCode','schoolPhone',
+        'schoolDistrict', 'schoolCounty','schoolSubCounty', 'schoolParish', 'schoolVillage','schoolStreet'])">
+
+        <h3>Details of School</h3>
+        <div class="personal-information">
+           <ng-container *ngFor="let key of schoolDetailField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
               <div class="field-container" *ngIf="parsed">

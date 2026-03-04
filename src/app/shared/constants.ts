@@ -740,9 +740,11 @@ export const COP_ESCALATION_CATEGORIES = [
   'dateOfBirth',
   'gender',
   'phone',
+  'nonLocalPhone',
   'email',
   'applicantLivingStatus',
   'CountryCode',
+  'nonLocalCountryCode',
   'homePhoneNumber',
   'highestLevelOfEducation',
   'otherHighestLevelOfEducation',
@@ -818,6 +820,9 @@ export const ORIGIN_INFO_FIELDS: string[] = [
 ];
 
 export const CITIZENSHIP_INFO_FIELDS: string[] = [
+  'dualNationalityStatus',
+  'primaryNationality',
+  'secondaryNationality',
   'applicantPassportNumber',
   'applicantPassportFileNumber',
   'dualCitizenshipCertificateNumber',
@@ -1088,6 +1093,33 @@ export const LINKED_TO_DETAILS: string[] =[
   'eighthSecondaryOwner',
   'ninthSecondaryOwner'
 ]
+
+export const PRINCIPAL_DEPENDENT_FIELDS: string[] =[
+  'principalOfAIN',
+  'applicationIDofPrincipal'
+]
+
+export const SCHOOL_DETAIL_FIELDS: string[] =[
+  'nameOfSchool',
+  'schoolCountryCode',
+  'schoolPhone',
+  'schoolDistrict',
+  'schoolCounty',
+  'schoolSubCounty',
+  'schoolParish',
+  'schoolVillage',
+  'schoolStreet'
+]
+
+// Service-specific label mappings for Alien service types
+export const ALIEN_SERVICE_LABEL_MAP: Record<string, string> = {
+  phone: 'Local Mobile Number',
+  CountryCode: 'Local Mobile No. Country Code',
+  nonLocalPhone: 'Non-Local Mobile Number',
+  nonLocalCountryCode: 'Non-Local Mobile No. Country Code',
+  principalOfAIN: 'AIN of Principal',
+  applicationIDofPrincipal: 'Application ID of Principal'
+};
 
 export const FIELD_LABEL_MAP: Record<string, string> = {
   phone: 'Mobile Number',
