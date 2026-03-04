@@ -1047,8 +1047,7 @@ export const DECLARANT_INFO_FIELDS: string[] = [
   'declarantResidenceStatus',
   'introducerNIN',
   'relationToApplicant',
-  'otherDeclarantRelationship',
-  'PRN'
+  'otherDeclarantRelationship'
 ];
 export const ENROLMENT_INFO_FIELDS: string[] = [
   'enrolmentCountry',
@@ -1058,6 +1057,11 @@ export const ENROLMENT_INFO_FIELDS: string[] = [
   'applicantPlaceOfEnrolmentParish',
   'applicantPlaceOfEnrolmentVillage'
 ];
+
+export const PAYMENT_INFO_FIELDS: string[] = [
+  'PRNId'
+];
+
 export const EMPLOYER_DETAILS: string[] =[
   'employerName',
   'employerPhone',
@@ -1172,5 +1176,6 @@ export const FIELD_LABEL_MAP: Record<string, string> = {
   applicantPlaceOfEnrolmentParish: 'Parish',
   applicantPlaceOfEnrolmentVillage: 'Village',
   motherIDDocumentNo: 'Mother Id Document No',
-  fatherIDDocumentNo: 'Fater Id Document No'
+  fatherIDDocumentNo: 'Fater Id Document No',
+  PRNId: 'PRN Number'
 };
