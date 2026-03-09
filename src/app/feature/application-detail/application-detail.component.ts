@@ -11,7 +11,7 @@ import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_C
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
   NEW_ESCALATION_CATEGORIES, RENEWAL_ESCALATION_CATEGORIES, SERVICE_CATEGORY_MAP, SERVICE_TITLE_MAP,
   MAX_DOC_SIZE, FORM_LABELS_BY_SERVICE, PROOF_OF_PHYSICAL_APPLICATION_FORM, CHANGE_OF_PARTICULARS,
-  SERVICE_CONST_MIGRATION,SERVICE_CONST_NEW_REGISTRATION,SERVICE_CONST_RENEWAL,PERSONAL_INFO_FIELD_ORDER,RESIDENCE_INFO_FIELDS,BIRTH_INFO_FIELDS,ORIGIN_INFO_FIELDS,CITIZENSHIP_INFO_FIELDS,POLLING_INFO_FIELDS,SPOUSE_INFO_FIELDS,FATHER_INFO_FIELDS,MOTHER_INFO_FIELDS,GUARDIAN_INFO_FIELDS,CHILD_INFO_FIELDS,DECLARANT_INFO_FIELDS,ENROLMENT_INFO_FIELDS,FIELD_LABEL_MAP,EMPLOYER_DETAILS,IMMIGRATION_DETAILS,LINKED_TO_DETAILS,PRINCIPAL_DEPENDENT_FIELDS,SCHOOL_DETAIL_FIELDS,ALIEN_SERVICE_LABEL_MAP
+  SERVICE_CONST_MIGRATION,SERVICE_CONST_NEW_REGISTRATION,SERVICE_CONST_RENEWAL,PERSONAL_INFO_FIELD_ORDER,RESIDENCE_INFO_FIELDS,BIRTH_INFO_FIELDS,ORIGIN_INFO_FIELDS,CITIZENSHIP_INFO_FIELDS,POLLING_INFO_FIELDS,SPOUSE_INFO_FIELDS,FATHER_INFO_FIELDS,MOTHER_INFO_FIELDS,GUARDIAN_INFO_FIELDS,CHILD_INFO_FIELDS,DECLARANT_INFO_FIELDS,PAYMENT_INFO_FIELDS,ENROLMENT_INFO_FIELDS,FIELD_LABEL_MAP,EMPLOYER_DETAILS,IMMIGRATION_DETAILS,LINKED_TO_DETAILS,PRINCIPAL_DEPENDENT_FIELDS,SCHOOL_DETAIL_FIELDS,ALIEN_SERVICE_LABEL_MAP
  } from '../../shared/constants';
  import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -102,6 +102,7 @@ export class ApplicationDetailComponent implements OnInit {
   guardianField = GUARDIAN_INFO_FIELDS;
   childField = CHILD_INFO_FIELDS;
   declarantField = DECLARANT_INFO_FIELDS;
+   paymentField = PAYMENT_INFO_FIELDS;
   enrollmentField = ENROLMENT_INFO_FIELDS;
   employerFiels = EMPLOYER_DETAILS;
   immigrationFields = IMMIGRATION_DETAILS;
@@ -198,6 +199,7 @@ export class ApplicationDetailComponent implements OnInit {
         { id: 'linked-dependent-to-Principal-section', label: 'Linked Dependant to Principal'},
         { id: 'details-of-school-section', label: 'Details of School'},
         { id: 'employer-detail-section', label: 'Details of Employer/ Business'},
+        { id: 'payment-validation-section', label: 'Payment Validation' },
         { id: 'place-of-enrolment-section', label: 'Place Of Enrollment' }
       ],
     },
@@ -2233,6 +2235,19 @@ getValue(key: string) {
 isArrayField(key: string): boolean {
   return Array.isArray(this.modifiedDetails[key]);
 }
+
+  get originHeading(): string {
+  const alienServices = [
+    'Alien New Registration',
+    'Renewal of Alien',
+    'Alien Replacement'
+  ];
+
+  return alienServices.includes(this.serviceType)
+    ? 'Country Of Origin'
+    : 'Place Of Origin';
+}
+
 
 }
 
