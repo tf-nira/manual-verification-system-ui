@@ -326,6 +326,7 @@ docTitles:any;
   pdfUrl: any;
   formattedDate: string | ' ' = ' ';
   cachedDemographicsData: Record<string, any> = {}; 
+  districtOfficeDetails: any[] = [];
   districtOfficeName!: string;
   districtOfficeId!: number;
 
@@ -417,9 +418,21 @@ docTitles:any;
   if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
     this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
   }
+
+  // Load complete district office details array
+  const storedDistrictOffices = localStorage.getItem('districtOfficeDetails');
+  if (storedDistrictOffices) {
+    try {
+      this.districtOfficeDetails = JSON.parse(storedDistrictOffices);
+    } catch (e) {
+      console.error('Error parsing districtOfficeDetails:', e);
+      this.districtOfficeDetails = [];
+    }
+  }
   
+  // Maintain backward compatibility with single values
   this.districtOfficeName = localStorage.getItem('districtOfficeName') || '';
-  console.log("Districtoffice name " +this.districtOfficeName);
+  console.log("Districtoffice name " + this.districtOfficeName);
   this.districtOfficeId = parseInt(localStorage.getItem('districtOfficeId') || '0', 10);
 
   this.matchedRegIds = this.selectedRow.matchedRegIds || [];
