@@ -92,12 +92,12 @@
         <div *ngIf="service === constants.CHANGE_OF_PARTICULARS">
           <h3>Personal Information</h3>
           <div class="personal-information">
-            <div class="field-container" *ngIf="rowData?.demographics?.copSurnamePrevious">
+            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value">
               <label>Surname</label>
               <div class="field-value">{{ parseJson(rowData?.demographics?.copSurnamePrevious)[0]?.value }}</div>
             </div>
         
-            <div class="field-container" *ngIf="rowData?.demographics?.copGivenNamePrevious">
+            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value">
               <label>Given Name</label>
               <div class="field-value">{{ parseJson(rowData?.demographics?.copGivenNamePrevious)[0]?.value }}</div>
             </div>
@@ -122,7 +122,7 @@
               <div class="field-value">{{ rowData?.demographics?.copPhonePrevious }} </div>
             </div>
 
-            <div class="field-container" *ngIf="rowData?.demographics?.copCountryCodePrevious">
+            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.copCountryCodePrevious)[0]?.value">
               <label>Country Code</label>
               <div class="field-value">{{ parseJson(rowData?.demographics?.copCountryCodePrevious)[0]?.value }}</div>
             </div>
@@ -154,185 +154,6 @@
             <div class="field-container" *ngIf="parsed">
               <label>{{ formatLabel(key) }}</label>
 
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.fullName">
-            <label>Fullname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fullName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.surname">
-            <label>Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.surname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.givenName">
-            <label>Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.givenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.otherNames">
-            <label>Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.otherNames)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.maidenName">
-            <label>Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.maidenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.previousName">
-            <label>Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.previousName)[0]?.value }}</div>
-          </div>
-          <div class="field-container" *ngIf="rowData?.demographics?.dateOfBirth">
-            <label>Date of Birth</label>
-            <div class="field-value">{{ rowData?.demographics?.dateOfBirth }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.gender">
-            <label>Gender</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.gender)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.phone && service !== constants.CHANGE_OF_PARTICULARS">
-            <label>Mobile Number</label>
-            <div class="field-value">{{rowData?.demographics?.phone }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.email && service !== constants.CHANGE_OF_PARTICULARS">
-            <label>Email</label>
-            <div class="field-value">{{ rowData?.demographics?.email }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantLivingStatus">
-            <label>Applicant Living Status</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantLivingStatus)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.CountryCode && service !== constants.CHANGE_OF_PARTICULARS">
-            <label>Country Code</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.CountryCode)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.homePhoneNumber && service !== constants.CHANGE_OF_PARTICULARS">
-            <label>Home Phone Number</label>
-            <div class="field-value">{{ rowData?.demographics?.homePhoneNumber }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.highestLevelOfEducation">
-            <label>Highest Level of Education</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.highestLevelOfEducation)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.otherHighestLevelOfEducation">
-            <label>Other Highest Level of Education</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.otherHighestLevelOfEducation)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.profession">
-            <label>Profession</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.profession)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.otherProfession">
-            <label>Other Profession</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.otherProfession)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.occupation">
-            <label>Occupation</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.occupation)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.otherOccupation">
-            <label>Other Occupation</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.otherOccupation)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.religion">
-            <label>Religion</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.religion)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.otherReligion">
-            <label>Other Religion</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.otherReligion)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.disabilities">
-            <label>Disabilities</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.disabilities)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.otherDisability">
-            <label>Other Disability</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.otherDisability)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.userServiceType">
-            <label>User Service Type</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.userServiceType )[0]?.value}}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.userService">
-            <label>User Service</label>
-            <div class="field-value">{{ rowData?.demographics?.userService }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.cardNumber">
-            <label>Card Number</label>
-            <div class="field-value">{{ rowData?.demographics?.cardNumber }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.UIN">
-            <label>Uin</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.UIN)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.NIN && service !== constants.CHANGE_OF_PARTICULARS">
-            <label>National ID Number(NIN)</label>
-            <div class="field-value">{{ rowData?.demographics?.NIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.preferredLang">
-            <label>Preferred Language</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.preferredLang)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.NINVerified">
-            <label>Nin Verified</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.NINVerified)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.updatedAt">
-            <label>Update Date</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.updatedAt)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.renewalNIN">
-            <label>Renewal Nin</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.renewalNIN)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.nextOfKinPhoneNumber">
-            <label>Next of Kin Phone Number</label>
-            <div class="field-value">{{rowData?.demographics?.nextOfKinPhoneNumber}}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.ninExpiryDate">
-            <label>Card Expiry Date</label>
-            <div class="field-value">{{ rowData?.demographics?.ninExpiryDate }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantNationality">
-            <label>Applicant Nationality</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantNationality)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantOtherNationality">
-            <label>Applicant Other Nationality</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantOtherNationality)[0]?.value }}
-=======
               <!-- View mode -->
               <div *ngIf="!isEditMode" class="field-value">
                 {{ parsed }}
@@ -344,7 +165,6 @@
                 <input *ngIf="!isArrayField(key)"
                       [(ngModel)]="modifiedDetails[key]" />
               </ng-container>
->>>>>>> 24400e3 (Alien changes)
             </div>
           </ng-container>
         </ng-container>
@@ -364,94 +184,6 @@
     ])">
 
         <h3>Place Of Residence</h3>
-<<<<<<< HEAD
-        <div class="personal-information">
-          <div class="field-container" *ngIf="rowData?.demographics?.residenceStatus">
-            <label>Residence Status</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.residenceStatus)[0]?.value }}</div>
-          </div>
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidence">
-            <label>Applicant Place of Residence</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfResidence)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantForeignResidenceCountry">
-            <label>Applicant Foreign Residence Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantForeignResidenceCountry)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="hasValidField(parseJson(rowData?.demographics?.applicantForeignResidenceAddress))">
-            <label>Applicant Foreign Residence Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantForeignResidenceAddress)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.appResCountryUGA">
-            <label>Applicant Place of Residence Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.appResCountryUGA)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceCounty">
-            <label>Applicant Place of Residence County</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfResidenceCounty)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceSubCounty">
-            <label>Applicant Place of Residence Subcounty</label>
-            <div class="field-value">{{
-              parseJson(rowData?.demographics?.applicantPlaceOfResidenceSubCounty)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceParish">
-            <label>Applicant Place of Residence Parish</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfResidenceParish)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceVillage">
-            <label>Applicant Place of Residence Village</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfResidenceVillage)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="hasValidField(parseJson(rowData?.demographics?.applicantPlaceOfResidenceStreet))">
-            <label>Applicant Place of Residence Street</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfResidenceStreet)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceYearsLived">
-            <label>Applicant Place of Residence Years Lived</label>
-            <div class="field-value">{{rowData?.demographics?.applicantPlaceOfResidenceYearsLived }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="hasValidField(parseJson(rowData?.demographics?.applicantPlaceOfResidenceDistrictOfPrevRes))">
-            <label>District of Previous Residence</label>
-            <div class="field-value">{{
-              parseJson(rowData?.demographics?.applicantPlaceOfResidenceDistrictOfPrevRes)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="hasValidField(parseJson(rowData?.demographics?.applicantPlaceOfResidencePostalAddress))">
-            <label>Applicant Place of Residence Postal Address</label>
-            <div class="field-value">{{
-              parseJson(rowData?.demographics?.applicantPlaceOfResidencePostalAddress)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceHouseNo">
-            <label>Applicant Place of Residence House No</label>
-            <div class="field-value">{{ rowData?.demographics?.applicantPlaceOfResidenceHouseNo }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfResidenceDistrict">
-            <label>Applicant Place of Residence District</label>
-            <div class="field-value">{{
-              parseJson(rowData?.demographics?.applicantPlaceOfResidenceDistrict)[0]?.value
-              }}</div>
-          </div>
-=======
           <div class="personal-information">
           <ng-container *ngFor="let key of residentField">
             <!-- Skip if value is empty/null -->
@@ -475,7 +207,6 @@
             </ng-container>
           </ng-container>
         </div>
->>>>>>> 24400e3 (Alien changes)
         </div>
 
       <div id="place-of-birth-section" class="section" *ngIf="hasSectionData([
@@ -492,70 +223,10 @@
               <div class="field-container" *ngIf="parsed">
                 <label>{{ formatLabel(key) }}</label>
 
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantForeignBirthCountry">
-            <label>Applicant Foreign Birth Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantForeignBirthCountry)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantForeignBirthAddress">
-            <label>Applicant Foreign Birth Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantForeignBirthAddress)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.appBirCountryUGA">
-            <label>Applicant Place of Birth Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.appBirCountryUGA)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfBirthDistrict">
-            <label>Applicant Place of Birth District</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthDistrict)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfBirthCounty">
-            <label>Applicant Place of Birth County</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthCounty)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfBirthSubCounty">
-            <label>Applicant Place of Birth Subcounty</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthSubCounty)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfBirthParish">
-            <label>Applicant Place of Birth Parish</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthParish)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfBirthVillage">
-            <label>Applicant Place of Birth Village</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthVillage)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfBirthCity">
-            <label>Applicant Place of Birth City</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthCity)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfBirthHealthFacility">
-            <label>Health Facility</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfBirthHealthFacility)[0]?.value }}</div>
-          </div>
-=======
                 <!-- View mode -->
                 <div *ngIf="!isEditMode" class="field-value">
                   {{ parsed }}
                 </div>
->>>>>>> 24400e3 (Alien changes)
 
                 <!-- Edit mode -->
                 <ng-container *ngIf="isEditMode">
@@ -578,69 +249,8 @@
       'applicantPlaceOfOriginClan'
     ])">
 
-        <h3>Place of Origin</h3>
+        <h3>{{ originHeading }}</h3>
         <div class="personal-information">
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantForeignOriginCountry">
-            <label>Applicant Foreign Origin Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantForeignOriginCountry)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantForeignOriginAddress">
-            <label>Applicant Foreign Origin Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantForeignOriginAddress)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.appOriCountryUGA">
-            <label>Applicant Place of Origin Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.appOriCountryUGA)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfOriginDistrict">
-            <label>Applicant Place of Origin district</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfOriginDistrict)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfOriginCounty">
-            <label>Applicant Place of Origin County</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfOriginCounty)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfOriginSubCounty">
-            <label>Applicant Place of Origin Subcounty</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfOriginSubCounty)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfOriginParish">
-            <label>Applicant Place of Origin Parish</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfOriginParish)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfOriginVillage">
-            <label>Applicant Place of Origin Village</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfOriginVillage)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfOriginIndigenousCommunityTribe">
-            <label>Indigenous Community Tribe</label>
-            <div class="field-value">{{
-              parseJson(rowData?.demographics?.applicantPlaceOfOriginIndigenousCommunityTribe)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfOriginClan">
-            <label>Applicant Place of Origin Clan</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfOriginClan)[0]?.value }}
-            </div>
-          </div>
-=======
            <ng-container *ngFor="let key of originField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
@@ -662,7 +272,6 @@
               </div>
             </ng-container>
           </ng-container>
->>>>>>> 24400e3 (Alien changes)
         </div>
 
       </div>
@@ -686,22 +295,6 @@
                   {{ parsed }}
                 </div>
 
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.dualCitizenshipCertificateNumber">
-            <label>Dual Citizenship Certificate Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.dualCitizenshipCertificateNumber )[0]?.value}}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.registrationCertificateNumber">
-            <label>Registration Certificate Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.registrationCertificateNumber )[0]?.value}}</div>
-          </div>
-		  
-		      <div class="field-container" *ngIf="rowData?.demographics?.naturalizationCertificateNumber">
-            <label>Naturalization Certificate Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.naturalizationCertificateNumber )[0]?.value}}</div>
-          </div> 
-=======
                 <!-- Edit mode -->
                 <ng-container *ngIf="isEditMode">
                 <input *ngIf="isArrayField(key)"
@@ -718,9 +311,8 @@
       <div id="immigration-section" class="section" *ngIf="hasSectionData( [
       'dateOfEntryInUganda', 'immigrationFacitityNo', 'facilityType','facilityTypeCategory','dateOfIssuance','dateOfExpiry','facilityTypeSubCategory','reasonforCancellation'
     ])">
->>>>>>> 24400e3 (Alien changes)
 
-        <h3>immigration Information</h3>
+        <h3>Immigration Details</h3>
         <div class="personal-information">
         <ng-container *ngFor="let key of immigrationFields">
             <!-- Skip if value is empty/null -->
@@ -816,24 +408,6 @@
               <div class="field-container" *ngIf="parsed">
                 <label>{{ formatLabel(key) }}</label>
 
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.preferredPollingStation">
-            <label>Preferred Polling Station</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.preferredPollingStation)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.pollingStationNameResidence">
-            <label>Polling station name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.pollingStationNameResidence)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.pollingStationNameOrigin">
-            <label>Polling station name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.pollingStationNameOrigin)[0]?.value }}
-            </div>
-          </div>
-=======
                 <!-- View mode -->
                 <div *ngIf="!isEditMode" class="field-value">
                   {{ parsed }}
@@ -849,7 +423,6 @@
               </div>
             </ng-container>
           </ng-container>
->>>>>>> 24400e3 (Alien changes)
         </div>
       </div>
 
@@ -857,7 +430,7 @@
 
         <h3>Marital Status</h3>
         <div class="personal-information">
-          <div class="field-container" *ngIf="rowData?.demographics?.maritalStatus">
+          <div class="field-container" *ngIf="parseJson(rowData?.demographics?.maritalStatus)[0]?.value">
             <label>Marital Status</label>
             <div *ngIf="!isEditMode" class="field-value">{{ parseJson(rowData?.demographics?.maritalStatus)[0]?.value }}</div>
             <input *ngIf="isEditMode" [(ngModel)]="modifiedDetails.maritalStatus[0].value"/>
@@ -938,192 +511,6 @@
 
         <h3>Spouse Details</h3>
         <div class="personal-information">
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseSurname">
-            <label>Spouse Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseGivenName">
-            <label>Spouse Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseOtherNames">
-            <label>Spouse Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseOtherNames)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseMaidenName">
-            <label>Spouse Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseMaidenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spousePreviousName">
-            <label>Spouse Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spousePreviousName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseNIN">
-            <label>Spouse Nin</label>
-            <div class="field-value">{{ rowData?.demographics?.spouseNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseCitizenshipType">
-            <label>Spouse Citizenship Type</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseCitizenshipType)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spousePlaceOfMarriage">
-            <label>Spouse Place of Marriage</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spousePlaceOfMarriage)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseDateOfMarriage">
-            <label>Spouse Date of Marriage</label>
-            <div class="field-value">{{ rowData?.demographics?.spouseDateOfMarriage }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTypeOfMarriage">
-            <label>Spouse Type of Marriage</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTypeOfMarriage)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseMarriageCertificateNumber">
-            <label>Spouse Marriage Certificate Number</label>
-            <div class="field-value">{{ rowData?.demographics?.spouseMarriageCertificateNumber }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.numberOfOtherSpouses">
-            <label>Number of Spouse</label>
-            <div class="field-value">{{rowData?.demographics?.numberOfOtherSpouses }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoSurname">
-            <label>Spouse Two Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoGivenName">
-            <label>Spouse Two Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoOtherNames">
-            <label>Spouse Two Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoOtherNames)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoPreviousName">
-            <label>Spouse Two Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoPreviousName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoNIN">
-            <label>Spouse Two Nin</label>
-            <div class="field-value">{{ rowData?.demographics?.spouseTwoNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoCitizenshipType">
-            <label>Spouse Two Citizenship Type</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoCitizenshipType)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoPlaceOfMarriage">
-            <label>Spouse Two Place of Marriage</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoPlaceOfMarriage)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoDateOfMarriage">
-            <label>Spouse Two Date of Marriage</label>
-            <div class="field-value">{{ rowData?.demographics?.spouseTwoDateOfMarriage }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoTypeOfMarriage">
-            <label>Spouse Two Type of Marriage</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseTwoTypeOfMarriage)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseTwoMarriageCertificateNumber">
-            <label>Spouse Two Marriage Certificate Number</label>
-            <div class="field-value">{{rowData?.demographics?.spouseTwoMarriageCertificateNumber }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeSurname">
-            <label>Spouse Three Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeGivenName">
-            <label>Spouse Three Given name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeOtherNames">
-            <label>Spouse Three Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeOtherNames)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeMaidenName">
-            <label>Spouse Three Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeMaidenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreePreviousName">
-            <label>Spouse Three Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreePreviousName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeNIN">
-            <label>Spouse Three Nin</label>
-            <div class="field-value">{{ rowData?.demographics?.spouseThreeNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeCitizenshipType">
-            <label>Spouse Three Citizenship Type</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeCitizenshipType)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreePlaceOfMarriage">
-            <label>Spouse Three Place of Marriage</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreePlaceOfMarriage)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeDateOfMarriage">
-            <label>Spouse Three Date of Marriage</label>
-            <div class="field-value">{{ rowData?.demographics?.spouseThreeDateOfMarriage }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeTypeOfMarriage">
-            <label>Spouse Three Type of Marriage</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.spouseThreeTypeOfMarriage)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.spouseThreeMarriageCertificateNumber">
-            <label>Spouse Three Marriage Certificate Number</label>
-            <div class="field-value">{{rowData?.demographics?.spouseThreeMarriageCertificateNumber }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseSurname">
-            <label>Surname</label>
-            <div class="field-value">{{parseJson(rowData?.demographics?.removeSpouseSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseGivenName">
-            <label>Given Name</label>
-            <div class="field-value">{{parseJson(rowData?.demographics?.removeSpouseGivenName)[0]?.value}}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.removeSpouseDateOfMarriage">
-            <label>Date of Marriage</label>
-            <div class="field-value">{{rowData?.demographics?.removeSpouseDateOfMarriage }}</div>
-          </div>
-=======
          <ng-container *ngFor="let key of spouseField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
@@ -1134,7 +521,6 @@
                 <div *ngIf="!isEditMode" class="field-value">
                   {{ parsed }}
                 </div>
->>>>>>> 24400e3 (Alien changes)
 
                 <!-- Edit mode -->
                 <ng-container *ngIf="isEditMode">
@@ -1163,198 +549,17 @@
     ])">
         <h3>Father's Details</h3>
         <div class="personal-information">
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherLivingStatus">
-            <label>Father Living Status</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherLivingStatus)[0]?.value }}</div>
-          </div>
-=======
         <ng-container *ngFor="let key of fatherField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
               <div class="field-container" *ngIf="parsed">
                 <label>{{ formatLabel(key) }}</label>
->>>>>>> 24400e3 (Alien changes)
 
                 <!-- View mode -->
                 <div *ngIf="!isEditMode" class="field-value">
                   {{ parsed }}
                 </div>
 
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherSurname">
-            <label>Father Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherGivenName">
-            <label>Father Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherOtherNames">
-            <label>Father Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherOtherNames)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPreviousName">
-            <label>Father Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPreviousName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherNIN">
-            <label>Father Nin</label>
-            <div class="field-value">{{ rowData?.demographics?.fatherNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherUIN">
-            <label>Father Uin</label>
-            <div class="field-value">{{ rowData?.demographics?.fatherUIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherIDDocumentNo">
-            <label>Father Id Document No</label>
-            <div class="field-value">{{ rowData?.demographics?.fatherIDDocumentNo }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherCitizenshipType">
-            <label>Father Citizenship Type</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherCitizenshipType)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherCitizenCertificateNumber">
-            <label>Father Citizen Certificate Number</label>
-            <div class="field-value">{{ rowData?.demographics?.fatherCitizenCertificateNumber }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherIndigenousCommunityTribe">
-            <label>Father Indigenous Community Tribe</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherIndigenousCommunityTribe)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherIndigenousCommunityClan">
-            <label>Father Indigenous Community Clan</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherIndigenousCommunityClan)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherOccupation">
-            <label>Father Occupation</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherOccupation)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherForeignResidenceCountry">
-            <label>Father Foreign Residence Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherForeignResidenceCountry)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherForeignResidenceAddress">
-            <label>Father Foreign Residence Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherForeignResidenceAddress)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPostalAddress">
-            <label>Father Postal Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPostalAddress)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatResCountryUGA">
-            <label>Father Residence Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatResCountryUGA)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfResidenceDistrict">
-            <label>Father Place of Residence District</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfResidenceDistrict)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfResidenceCounty">
-            <label>Father Place of Residence County</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfResidenceCounty)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfResidenceSubCounty">
-            <label>Father Place of Residence Subcounty</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfResidenceSubCounty)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfResidenceParish">
-            <label>Father Place of Residence Parish</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfResidenceParish)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfResidenceVillage">
-            <label>Father Place of Residence Village</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfResidenceVillage)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfResidenceStreet">
-            <label>Father Place of Residence Street</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfResidenceStreet)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfResidenceHouseNo">
-            <label>Father Place of Residence House No.</label>
-            <div class="field-value">{{ rowData?.demographics?.fatherPlaceOfResidenceHouseNo }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherForeignOriginCountry">
-            <label>Father Foreign Origin Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherForeignOriginCountry)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherForeignOriginAddress">
-            <label>Father Foreign Origin Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherForeignOriginAddress)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatOriCountryUGA">
-            <label>Father Origin Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatOriCountryUGA)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfOriginDistrict">
-            <label>Father Place of Origin District</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfOriginDistrict)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfOriginCounty">
-            <label>Father Place of Origin County</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfOriginCounty)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfOriginSubCounty">
-            <label>Father Place of Origin Subcounty</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfOriginSubCounty)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfOriginParish">
-            <label>Father Place of Origin Parish</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfOriginParish)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.fatherPlaceOfOriginVillage">
-            <label>Father Place of Origin Village</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.fatherPlaceOfOriginVillage)[0]?.value }}
-            </div>
-          </div>
-=======
                 <!-- Edit mode -->
                 <ng-container *ngIf="isEditMode">
                 <input *ngIf="isArrayField(key)"
@@ -1365,7 +570,6 @@
               </div>
             </ng-container>
           </ng-container>
->>>>>>> 24400e3 (Alien changes)
         </div>
       </div>
 
@@ -1384,185 +588,6 @@
 
         <h3>Mother's Details</h3>
         <div class="personal-information">
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.motherLivingStatus">
-            <label>Mother Living Status</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherLivingStatus)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherSurname">
-            <label>Mother Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherGivenName">
-            <label>Mother Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherOtherNames">
-            <label>Mother Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherOtherNames)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPreviousName">
-            <label>Mother Previous Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPreviousName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherMaidenName">
-            <label>Mother Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherMaidenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherNIN">
-            <label>Mother Nin</label>
-            <div class="field-value">{{ rowData?.demographics?.motherNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherIDDocumentNo">
-            <label>Mother Id Document No</label>
-            <div class="field-value">{{ rowData?.demographics?.motherIDDocumentNo }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherCitizenshipType">
-            <label>Mother Citizenship Type</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherCitizenshipType)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherCitizenCertificateNumber">
-            <label>Mother Citizen Certificate Number</label>
-            <div class="field-value">{{ rowData?.demographics?.motherCitizenCertificateNumber }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherIndigenousCommunityTribe">
-            <label>Mother Indigenous Community Tribe</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherIndigenousCommunityTribe)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherIndigenousCommunityClan">
-            <label>Mother Indigenous Community Clan</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherIndigenousCommunityClan)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherOccupation">
-            <label>Mother Occupation</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherOccupation)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherForeignResidenceCountry">
-            <label>Mother Foreign Residence Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherForeignResidenceCountry)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherForeignResidenceAddress">
-            <label>Mother Foreign Residence Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherForeignResidenceAddress)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPostalAddress">
-            <label>Mother Postal Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPostalAddress)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motResCountryUGA">
-            <label>Mother Residence Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motResCountryUGA)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfResidenceDistrict">
-            <label>Mother Place of Residence District</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfResidenceDistrict)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfResidenceCounty">
-            <label>Mother Place of Residence County</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfResidenceCounty)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfResidenceSubCounty">
-            <label>Mother Place of Residence Subcounty</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfResidenceSubCounty)[0]?.value
-              }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfResidenceParish">
-            <label>Mother Place of Residence Parish</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfResidenceParish)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfResidenceVillage">
-            <label>Mother Place of Residence Village</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfResidenceVillage)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfResidenceStreet">
-            <label>Mother Place of Residence Street</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfResidenceStreet)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfResidenceHouseNo">
-            <label>Mother Place of Residence House No.</label>
-            <div class="field-value">{{ rowData?.demographics?.motherPlaceOfResidenceHouseNo }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherForeignOriginCountry">
-            <label>Mother Foreign Origin Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherForeignOriginCountry)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherForeignOriginAddress">
-            <label>Mother Foreign Origin Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherForeignOriginAddress)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motOriCountryUGA">
-            <label>Mother Origin Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motOriCountryUGA)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfOriginDistrict">
-            <label>Mother Place of Origin District</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfOriginDistrict)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfOriginCounty">
-            <label>Mother Place of Origin County</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfOriginCounty)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfOriginSubCounty">
-            <label>Mother Place of Origin Subcounty</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfOriginSubCounty)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfOriginParish">
-            <label>Mother Place of Origin Parish</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfOriginParish)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.motherPlaceOfOriginVillage">
-            <label>Mother Place of Origin Village</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.motherPlaceOfOriginVillage)[0]?.value }}
-            </div>
-          </div>
-=======
          <ng-container *ngFor="let key of motherField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
@@ -1584,7 +609,6 @@
               </div>
             </ng-container>
           </ng-container>
->>>>>>> 24400e3 (Alien changes)
         </div>
       </div>
 
@@ -1600,137 +624,6 @@
 
         <h3>Blood Relative's/Introducer Details</h3>
         <div class="personal-information">
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianRelationToApplicant">
-            <label>Blood Relative's Relation To Applicant</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianRelationToApplicant)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianSurname">
-            <label>Blood Relative's Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianGivenName">
-            <label>Blood Relative's Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianOtherNames">
-            <label>Blood Relative's Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianOtherNames)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianOccupation">
-            <label>Blood Relative's Occupation</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianOccupation)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianNIN_AIN">
-            <label>Blood Relative's Nin</label>
-            <div class="field-value">{{rowData?.demographics?.guardianNIN_AIN}}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianIDDocumentnumber">
-            <label>Blood Relative's Id Document Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianIDDocumentnumber)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianPassportNumber">
-            <label>Blood Relative's Passport Number</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianPassportNumber)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianTribe">
-            <label>Blood Relative's Tribe</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianTribe)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianClan">
-            <label>Blood Relative's Clan</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianClan)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianCitizenshipType">
-            <label>Blood Relative's Citizenship Type</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianCitizenshipType)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianCitizenshipCertificateNumber">
-            <label>Blood Relative's Citizenship Certificate Number</label>
-            <div class="field-value">{{
-              parseJson(rowData?.demographics?.guardianCitizenshipCertificateNumber)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianOtherNationality">
-            <label>Blood Relative's Other Nationality</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianOtherNationality)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianForeignOriginCountry">
-            <label>Blood Relative's Foreign Origin Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianForeignOriginCountry)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianForeignOriginAddress">
-            <label>Blood Relative's Foreign Origin Address</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianForeignOriginAddress)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardiansCountry">
-            <label>Blood Relative's Country</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardiansCountry)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceDistrict">
-            <label>Blood Relative's Residence District</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceDistrict)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceCounty">
-            <label>Blood Relative's Residence County</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceCounty)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceSubCounty">
-            <label>Blood Relative's Residence Subcounty</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceSubCounty)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceParish">
-            <label>Blood Relative's Residence Parish</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceParish)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceVillage">
-            <label>Blood Relative's Residence Village</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceVillage)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianResidenceStreet">
-            <label>Blood Relative's Residence Street</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidenceStreet)[0]?.value }}</div>
-          </div>
-
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianResidence">
-            <label>Blood Relative's Residence</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.guardianResidence)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.guardianDateOfBirth">
-            <label>Blood Relative's Date of Birth</label>
-            <div class="field-value">{{ rowData?.demographics?.guardianDateOfBirth }}</div>
-          </div>
-=======
          <ng-container *ngFor="let key of guardianField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
@@ -1752,7 +645,6 @@
               </div>
             </ng-container>
           </ng-container>
->>>>>>> 24400e3 (Alien changes)
         </div>
       </div>
 
@@ -1783,217 +675,6 @@
 
         <h3>Particulars of Applicant’s Children</h3>
         <div class="personal-information">
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.childName">
-            <label>Child Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childSurname">
-            <label>Child Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childGivenName">
-            <label>Child Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childOtherName">
-            <label>Child Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childOtherName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childNIN">
-            <label>Child NIN</label>
-            <div class="field-value">{{ rowData?.demographics?.childNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childSex">
-            <label>Child Sex</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSex)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childDateOfBirth">
-            <label>Child Date Of Birth</label>
-            <div class="field-value">{{rowData?.demographics?.childDateOfBirth }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childTwoName">
-            <label>Child Two Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childTwoName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childTwoSurname">
-            <label>Child Two Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childTwoSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childTwoGivenName">
-            <label>Child Two Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childTwoGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childTwoOtherName">
-            <label>Child Two Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childTwoOtherName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childTwoNIN">
-            <label>Child Two NIN</label>
-            <div class="field-value">{{ rowData?.demographics?.childTwoNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childTwoSex">
-            <label>Child Two Sex</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childTwoSex)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childTwoDateOfBirth">
-            <label>Child Two Date of Birth</label>
-            <div class="field-value">{{ rowData?.demographics?.childTwoDateOfBirth }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childThreeName">
-            <label>Child Three Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childThreeName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childThreeSurname">
-            <label>Child Three Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childThreeSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childThreeGivenName">
-            <label>Child Three Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childThreeGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childThreeOtherName">
-            <label>Child Three Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childThreeOtherName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childThreeNIN">
-            <label>Child Three NIN</label>
-            <div class="field-value">{{ rowData?.demographics?.childThreeNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childThreeSex">
-            <label>Child Three Sex</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childThreeSex)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childThreeDateOfBirth">
-            <label>Child Three Date of Birth</label>
-            <div class="field-value">{{rowData?.demographics?.childThreeDateOfBirth }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFourName">
-            <label>Child Four Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFourName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFourSurname">
-            <label>Child Four Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFourSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFourGivenName">
-            <label>Child Four Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFourGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFourOtherName">
-            <label>Child Four Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFourOtherName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFourNIN">
-            <label>Child Four NIN</label>
-            <div class="field-value">{{ rowData?.demographics?.childFourNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFourSex">
-            <label>Child Four Sex</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFourSex)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFourDateOfBirth">
-            <label>Child Four Date of Birth</label>
-            <div class="field-value">{{ rowData?.demographics?.childFourDateOfBirth }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFiveName">
-            <label>Child Five Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFiveName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFiveSurname">
-            <label>Child Five Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFiveSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFiveGivenName">
-            <label>Child Five Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFiveGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFiveOtherName">
-            <label>Child Five Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFiveOtherName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFiveNIN">
-            <label>Child Five NIN</label>
-            <div class="field-value">{{ rowData?.demographics?.childFiveNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFiveSex">
-            <label>Child Five Sex</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childFiveSex)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childFiveDateOfBirth">
-            <label>Child Five Date of Birth</label>
-            <div class="field-value">{{rowData?.demographics?.childFiveDateOfBirth }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childSixName">
-            <label>Child Six Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSixName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childSixSurname">
-            <label>Child Six Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSixSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childSixGivenName">
-            <label>Child Six Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSixGivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childSixOtherName">
-            <label>Child Six Other Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSixOtherName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childSixNIN">
-            <label>Child Six NIN</label>
-            <div class="field-value">{{ rowData?.demographics?.childSixNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childSixSex">
-            <label>Child Six Sex</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.childSixSex)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.childSixDateOfBirth">
-            <label>Child Six Date of Birth</label>
-            <div class="field-value">{{rowData?.demographics?.childSixDateOfBirth }}</div>
-          </div>
-=======
         <ng-container *ngFor="let key of childField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
@@ -2004,7 +685,6 @@
                 <div *ngIf="!isEditMode" class="field-value">
                   {{ parsed }}
                 </div>
->>>>>>> 24400e3 (Alien changes)
 
                 <!-- Edit mode -->
                <ng-container *ngIf="isEditMode">
@@ -2022,76 +702,11 @@
       <div id="declarant-details-section" class="section" *ngIf="hasSectionData([
       'declarant', 'declarantSurname', 'declarantgivenName', 'declarantotherNames',
       'declarantPreviousNames', 'declarantMaidenName', 'declarantGender', 'declarantNationality',
-      'declarantResidenceStatus', 'introducerNIN', 'relationToApplicant', 'otherDeclarantRelationship', 'PRN'
+      'declarantResidenceStatus', 'introducerNIN', 'relationToApplicant', 'otherDeclarantRelationship'
     ])">
 
         <h3>Declarant's Details</h3>
         <div class="personal-information">
-<<<<<<< HEAD
-          <div class="field-container" *ngIf="rowData?.demographics?.declarant">
-            <label>Declarant</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarant)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.declarantSurname">
-            <label>Declarant Surname</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantSurname)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.declarantgivenName">
-            <label>Declarant Given Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantgivenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.declarantotherNames">
-            <label>Declarant Other Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantotherNames)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.declarantPreviousNames">
-            <label>Declarant Previous Names</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantPreviousNames)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.declarantMaidenName">
-            <label>Declarant Maiden Name</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantMaidenName)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.declarantGender">
-            <label>Declarant Gender</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantGender)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.declarantNationality">
-            <label>Declarant Nationality</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantNationality)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.declarantResidenceStatus">
-            <label>Declarant Residence Status</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.declarantResidenceStatus)[0]?.value }}
-            </div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.introducerNIN">
-            <label>Introducer Nin</label>
-            <div class="field-value">{{ rowData?.demographics?.introducerNIN }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.relationToApplicant">
-            <label>Relation to Applicant</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.relationToApplicant)[0]?.value }}</div>
-          </div>
-
-          <div class="field-container" *ngIf="rowData?.demographics?.otherDeclarantRelationship">
-            <label>Other Declarant Relationship</label>
-            <div class="field-value">{{ parseJson(rowData?.demographics?.otherDeclarantRelationship)[0]?.value }}</div>
-          </div><div class="field-container" *ngIf="rowData?.demographics?.PRN">
-            <label>Prn</label>
-            <div class="field-value">{{ rowData?.demographics?.PRN }}</div>
-          </div>
-=======
           <ng-container *ngFor="let key of declarantField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
@@ -2113,29 +728,14 @@
               </div>
             </ng-container>
           </ng-container>
->>>>>>> 24400e3 (Alien changes)
           </div>
-          </div>
-  
-          <div id="place-of-enrolment-section" class="section" *ngIf="hasSectionData([
-                'enrolmentCountry', 'applicantPlaceOfEnrolmentDistrict', 'applicantPlaceOfEnrolmentCounty',
-                'applicantPlaceOfEnrolmentSubCounty', 'applicantPlaceOfEnrolmentParish',
-                'applicantPlaceOfEnrolmentVillage'
-              ])">
-            <h3>Place Of Enrollment</h3>
+        </div>
+
+      <div id="payment-validation-section" *ngIf="hasSectionData([
+                'PRNId'])">
+            <h3>Payment Validation</h3>
             <div class="personal-information">
-<<<<<<< HEAD
-          
-              <div class="field-container" *ngIf="rowData?.demographics?.enrolmentCountry">
-                <label>Country</label>
-                <div class="field-value">{{ parseJson(rowData?.demographics?.enrolmentCountry)[0]?.value }}</div>
-              </div>
-          
-              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentDistrict">
-                <label>District</label>
-                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentDistrict)[0]?.value }}
-=======
-              <ng-container *ngFor="let key of enrollmentField">
+              <ng-container *ngFor="let key of paymentField">
             <!-- Skip if value is empty/null -->
             <ng-container *ngIf="getValue(key) as parsed">
               <div class="field-container" *ngIf="parsed">
@@ -2144,7 +744,6 @@
                 <!-- View mode -->
                 <div *ngIf="!isEditMode" class="field-value">
                   {{ parsed }}
->>>>>>> 24400e3 (Alien changes)
                 </div>
 
                 <!-- Edit mode -->
@@ -2155,36 +754,39 @@
                       [(ngModel)]="modifiedDetails[key]" />
               </ng-container>
               </div>
-<<<<<<< HEAD
-          
-              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentCounty">
-                <label>County</label>
-                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentCounty)[0]?.value }}
-                </div>
-              </div>
-          
-              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentSubCounty">
-                <label>Subcounty</label>
-                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentSubCounty)[0]?.value
-                  }}</div>
-              </div>
-          
-              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentParish">
-                <label>Parish</label>
-                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentParish)[0]?.value }}
-                </div>
-              </div>
-          
-              <div class="field-container" *ngIf="rowData?.demographics?.applicantPlaceOfEnrolmentVillage">
-                <label>Village</label>
-                <div class="field-value">{{ parseJson(rowData?.demographics?.applicantPlaceOfEnrolmentVillage)[0]?.value }}
-                </div>
-              </div>
-          
-=======
             </ng-container>
           </ng-container>
->>>>>>> 24400e3 (Alien changes)
+          </div>
+        </div>
+  
+          <div id="place-of-enrolment-section" class="section" *ngIf="hasSectionData([
+                'enrolmentCountry', 'applicantPlaceOfEnrolmentDistrict', 'applicantPlaceOfEnrolmentCounty',
+                'applicantPlaceOfEnrolmentSubCounty', 'applicantPlaceOfEnrolmentParish',
+                'applicantPlaceOfEnrolmentVillage'
+              ])">
+            <h3>Place Of Enrollment</h3>
+            <div class="personal-information">
+              <ng-container *ngFor="let key of enrollmentField">
+            <!-- Skip if value is empty/null -->
+            <ng-container *ngIf="getValue(key) as parsed">
+              <div class="field-container" *ngIf="parsed">
+                <label>{{ formatLabel(key) }}</label>
+
+                <!-- View mode -->
+                <div *ngIf="!isEditMode" class="field-value">
+                  {{ parsed }}
+                </div>
+
+                <!-- Edit mode -->
+                <ng-container *ngIf="isEditMode">
+                <input *ngIf="isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key][0].value" />
+                <input *ngIf="!isArrayField(key)"
+                      [(ngModel)]="modifiedDetails[key]" />
+              </ng-container>
+              </div>
+            </ng-container>
+          </ng-container>
             </div>
           </div>
 
@@ -2303,6 +905,7 @@
               <div class="detail-label">{{ commentLabel }}</div>
               <div class="detail-value">{{ extractedComment }}</div>
             </div>
+
             <div *ngIf="matchedRegIds && matchedRegIds.length > 0" class="info-item">
               <div class="detail-label">Matched Registration IDs</div>
               <div class="detail-value">
@@ -2589,7 +1192,7 @@
       </div>
       <div class="modal-footer">
         <button class="cancel-button" (click)="closeApprovalModal()">Cancel</button>
-        <button class="approve-button" [disabled]="!isChecked" (click)="approveApplication()">Approve</button>
+        <button class="approve-button" [disabled]="!isChecked" (click)="openConfirmationModal('APPROVE')">Approve</button>
       </div>
     </div>
   </div>
@@ -2605,22 +1208,67 @@
       <div class="modal-body">
         <div class="field-container">
           <label>Change Officer Level <span title="Select the officer level to escalate to.">ℹ️</span></label>
-          <select [(ngModel)]="selectedOfficerLevel" class="dropdown">
-            <option *ngFor="let option of dropdownOptions" [value]="option.value" [selected]="option.default">
-              {{ option.label }}
-            </option>
-          </select>
+          <div class="select-wrapper">
+            <select [(ngModel)]="selectedOfficerLevel" class="dropdown-with-custom-arrow">
+              <option *ngFor="let option of dropdownOptions" [value]="option.value" [selected]="option.default">
+                {{ option.label }}
+              </option>
+            </select>
+            <span class="dropdown-arrow-css"></span>
+          </div>
         </div>
 
         <div class="field-container">
           <label>Escalation Category <span title="Select the escalation category.">ℹ️</span></label>
-          <select [(ngModel)]="escalationCategory" class="dropdown">
-            <option *ngFor="let option of escalationCategories" [value]="option.value" [selected]="option.default">
-              {{ option.value }}
-            </option>
-          </select>
-        </div>
+          <div class="custom-dropdown">
+            <div class="dropdown-toggle" (click)="toggleEscalationDropdown()" [class.open]="isEscalationDropdownOpen">
+              <span >
+                {{ getSelectedEscalationText() }}
+              </span>
+              <span class="dropdown-arrow-css"></span>
+            </div>
+            <div class="dropdown-menu" *ngIf="isEscalationDropdownOpen">
+              <div class="dropdown-item" *ngFor="let option of escalationCategories">
+                <label class="checkbox-label">
+                  <input
+                    type="checkbox"  
+                    [value]="option.value"
+                    [checked]="isEscalationSelected(option.value)"
+                    (change)="onEscalationChange(option.value, $event)"
+                  />
+                  <span class="checkbox-text">
+                    {{ option.value }}
+                  </span>
+                </label>
+              </div>
 
+              <div class="dropdown-item">
+                <label class="checkbox-label">
+                  <input
+                    type="checkbox"
+                    value="Others"
+                    [checked]="isOthersSelected"
+                    (change)="onOthersChange($event)"
+                  />
+                  <span class="checkbox-text">
+                    Others
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field-container" *ngIf="isOthersSelected">
+                <label for="others-text"> Please Specify Other Reason:</label>
+                <input
+                  id="others-text"
+                  type="text"
+                  [(ngModel)]="othersText"
+                  placeholder="Enter Escalation Category"
+                  class="others-input"
+                  (blur)="onOthersTextChange()"
+                />
+              </div>
         <div class="field-container">
           <label for="escalate-comments">Comments <span title="Comments are required."> *</span></label>
           <textarea id="escalate-comments" [(ngModel)]="escalationComment" placeholder="Enter your comments"
@@ -2633,9 +1281,6 @@
         </div>
 
         <button class="btn cancel" (click)="closeEscalateModal()">Cancel</button>
-<<<<<<< HEAD
-        <button class="btn escalate" [disabled]="!escalationComment.trim()" (click)="escalateApplication()">
-=======
         <button 
             class="btn escalate" 
             [disabled]="
@@ -2644,7 +1289,6 @@
             " 
             (click)="openConfirmationModal('ESCALATE')"
             >
->>>>>>> 24400e3 (Alien changes)
           Escalate
         </button>
       </div>
@@ -2676,8 +1320,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn cancel" (click)="closeRejectModal()">Cancel</button>
-        <button class="btn reject" [disabled]="!rejectionCategory || !rejectionComment.trim()"
-          (click)="rejectApplication()">
+        <button class="btn reject" [disabled]="!rejectionCategory || !rejectionComment.trim()" (click)="openConfirmationModal('REJECT')">
           Reject
         </button>
       </div>
@@ -2697,9 +1340,9 @@
           <label for="districtOffice">District Office*</label>
           <select id="districtOffice" [(ngModel)]="interviewDetails.districtOffice" required>
             <option value="" disabled selected>Select District Office*</option>
-            <option *ngFor="let office of districtOffices" [value]="office">
-              {{ office }}
-            </option>
+           <option [value]="districtOfficeName" *ngIf="districtOfficeName">
+                {{ districtOfficeName }}
+          </option>
           </select>
         </div>
         <div class="field-container">
@@ -2820,4 +1463,20 @@
         </div>
       </div>
 
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="confirmationModal" *ngIf="showConfirmationModal">
+    <div class="modal-content">
+
+      <button class="close-button" (click)="closeConfirmationModal()">×</button>
+      <div class="modal-header">
+        <h3>Confirm action: {{userAction}} this application?</h3>
+      </div>
+      
+      <div class="modal-footer">
+        <button class="btn no" (click)="closeConfirmationModal()"> No </button>
+        <button class="btn yes" (click)="confirmAction()"> Yes </button>
+      </div>
+    </div>
   </div>
