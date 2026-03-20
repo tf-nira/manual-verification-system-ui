@@ -87,7 +87,11 @@ export class ApplicationDetailComponent implements OnInit {
   showScheduleInterviewModal: boolean = false;
   showDocumentUploadModal: boolean = false;
   showRejectModal: boolean = false;
+  showConfirmationModal: boolean = false;
+  userAction: String = "";
   uploadDocumentSucessStatus : boolean = false;
+  isOthersSelected: boolean = false;
+  othersText: string = '';
   rowData: any = {};
   tempData:any={};
   fieldOrder = PERSONAL_INFO_FIELD_ORDER;
@@ -249,8 +253,10 @@ export class ApplicationDetailComponent implements OnInit {
   dropdownOptions: { value: string; label: string; default: boolean }[] = [];
   rejectionCategories: { value: string; default: boolean }[] = [];
   escalationCategories: { value: string; default: boolean }[] = [];
+  selectedEscalationCategories: string[] = [];
+  isEscalationDropdownOpen: boolean = false;
   selectedOfficerLevel: string = '';
-  escalationCategory: string = '';
+  //escalationCategory: string = '';
   escalationComment: string = '';
   rejectionCategory: string = '';
   rejectionComment: string = '';
@@ -305,7 +311,7 @@ additionalFetchedDocuments: { category: string; title: string; fileName: string;
   }
   
   // Sample Data
-  districtOffices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
+  //Offices: string[] = ['District Office 1', 'District Office 2', 'District Office 3'];
   // Create an array of objects mapping keys to titles
   // docCategories = Object.entries(this.categoryMap).map(([key, value]) => ({
   //   key,
@@ -320,6 +326,8 @@ docTitles:any;
   pdfUrl: any;
   formattedDate: string | ' ' = ' ';
   cachedDemographicsData: Record<string, any> = {}; 
+  districtOfficeName!: string;
+  districtOfficeId!: number;
 
   constructor(private router: Router, private dataService: DataStorageService,
     private sanitizer: DomSanitizer, private snackBar: MatSnackBar,private ngZone: NgZone
@@ -337,9 +345,14 @@ docTitles:any;
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
     })
       .format(date)
-      .replace(/\//g, '-'); 
+      .replace(/\//g, '-')
+      .replace(',',''); 
 
     this.role = state.role || '';
     this.rowData = state.data || {};
@@ -401,11 +414,15 @@ docTitles:any;
     }
     this.uploadDocumentSucessStatus = localStorage.getItem(`uploadSuccess_${this.applicationId}`) === 'true';
     // Check if there are upload documents to fetch
-  if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' ||  this.role === 'MVS_EXECUTIVE_DIRECTOR' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
+  if (this.role === 'MVS_SENIOR_REGISTRATION_OFFICER' && this.rowData?.uploadDocList && this.rowData.uploadDocList.length > 0) {
     this.fetchAdditionalDocuments(this.rowData.uploadDocList, this.rowData.applicationId);
   }
-  this.matchedRegIds = this.selectedRow.matchedRegIds || [];
   
+  this.districtOfficeName = localStorage.getItem('districtOfficeName') || '';
+  console.log("Districtoffice name " +this.districtOfficeName);
+  this.districtOfficeId = parseInt(localStorage.getItem('districtOfficeId') || '0', 10);
+
+  this.matchedRegIds = this.selectedRow.matchedRegIds || [];
   }
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
 updateCategoriesAndTitles() {
@@ -724,9 +741,11 @@ getTitlesForDocument(document: any): string[] {
   }
   setDropdownOptions() {
     let isInUganda = true;
+    let residenceStatusExists = false;
     try {
       const residenceStatus = this.rowData?.demographics?.residenceStatus;
       if (residenceStatus) {
+        residenceStatusExists = true;
         const parsedStatus = typeof residenceStatus === 'string'
           ? JSON.parse(residenceStatus)
           : residenceStatus;
@@ -740,14 +759,25 @@ getTitlesForDocument(document: any): string[] {
       }
     } catch (error) {
       console.error('Error parsing residence status:', error);
-      isInUganda = true;
+      residenceStatusExists = false;
     }
     // Set the appropriate officer title based on residence status
-    const districtOrInternational = isInUganda
+    let districtOrInternational;
+
+    if(!residenceStatusExists) {
+      //if residence status is null undefined then check from nin
+      districtOrInternational = {
+        value : 'MVS_DISTRICT_OR_INTERNATIONAL_OFFICER_ROLE',
+        label : 'District/ International Officer',
+        default : false
+      };
+    } else {
+      //residence status exist in packet
+      districtOrInternational = isInUganda
       ? { value: 'MVS_DISTRICT_OFFICER', label: 'District', default: false }
       : { value: 'MVS_INTERNATIONAL_OFFICER', label: 'International Officer', default: false };
-
-
+    }
+    
     switch (this.role) {
       case 'MVS_OFFICER':
         this.dropdownOptions = [
@@ -762,7 +792,9 @@ getTitlesForDocument(document: any): string[] {
           districtOrInternational,
           { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false } 
         ];
-        this.selectedOfficerLevel = 'MVS_DISTRICT_OFFICER';
+        this.selectedOfficerLevel = !residenceStatusExists
+          ?'MVS_DISTRICT_OR_INTERNATIONAL_OFFICER_ROLE'
+          :'MVS_DISTRICT_OFFICER';
         break;
       case 'MVS_DISTRICT_OFFICER':
         this.dropdownOptions = [
@@ -796,7 +828,7 @@ getTitlesForDocument(document: any): string[] {
       case 'GetFirst ID':
         this.rejectionCategories = GETFIRSTID_REJECTION_CATEGORIES;
         break;
-      case 'Lost/ Replacement of card':
+      case 'Replacement of card':
         this.rejectionCategories = LR_REJECTION_CATEGORIES;
         break;
     }
@@ -815,7 +847,7 @@ getTitlesForDocument(document: any): string[] {
         case 'GetFirst ID':
           this.escalationCategories = GETFIRSTID_ESCALATION_CATEGORIES;
           break;
-        case 'Lost/ Replacement of card':
+        case 'Replacement of card':
           this.escalationCategories = LR_ESCALATION_CATEGORIES;
           break;
         case 'Change of Particulars':
@@ -971,6 +1003,7 @@ getTitlesForDocument(document: any): string[] {
 
   closeEscalateModal() {
     this.showEscalateModal = false;
+    this.isEscalationDropdownOpen = false;
   }
 
   openScheduleInterviewModal() {
@@ -998,6 +1031,48 @@ getTitlesForDocument(document: any): string[] {
   closeApprovalModal() {
     this.showApprovalModal = false;
   }
+
+  openConfirmationModal(action: String) {
+    this.userAction = action;
+
+    switch(action) {
+      case "APPROVE" :
+        this.closeApprovalModal();
+        break;
+      case "REJECT" :
+        this.closeRejectModal();
+        break;
+      case "ESCALATE" :
+        this.closeEscalateModal();
+        break;
+    }
+    
+    this.showConfirmationModal = true;
+  }
+
+  closeConfirmationModal() {
+    this.showConfirmationModal = false;
+    this.selectedEscalationCategories = [];
+    this.isEscalationDropdownOpen = false;
+    this.escalationComment = '';
+    this.isOthersSelected = false;
+    this.othersText = '';
+  }
+
+  confirmAction() {
+    switch(this.userAction) {
+      case "APPROVE":
+        this.approveApplication();
+        break;
+      case "REJECT":
+        this.rejectApplication();
+        break;
+      case "ESCALATE":
+        this.escalateApplication();
+        break;
+    }
+  }
+
   approveApplication() {
     // Approval logic
     if (this.isChecked) {
@@ -1016,10 +1091,11 @@ getTitlesForDocument(document: any): string[] {
   }
   escalateApplication() {
     // Escalate logic 
-    this.showEscalateModal = false;
+    this.showConfirmationModal = false;
     const comment = this.escalationComment.trim();
-    this.changeApplicationStatus(API_CONST_ESCALATE, comment, this.escalationCategory, this.selectedOfficerLevel);
-    this.closeEscalateModal();
+    const categoriesString = this.selectedEscalationCategories.join(', ');
+    this.changeApplicationStatus(API_CONST_ESCALATE, comment, categoriesString, this.selectedOfficerLevel);
+    this.closeConfirmationModal();
   }
 
   rejectApplication() {
@@ -2140,6 +2216,87 @@ getMimeType(format: string): string {
     input.remove();
   }
 
+  /**
+   * Toggle the custom dropdown visibility
+   */
+  toggleEscalationDropdown(): void {
+    this.isEscalationDropdownOpen = !this.isEscalationDropdownOpen;
+  }
+
+  /**
+   * Check if an escalation category is selected
+   */
+  isEscalationSelected(value: string): boolean {
+    return this.selectedEscalationCategories.includes(value);
+  }
+
+  /**
+   * Handle checkbox changes for escalation categories
+   */
+  onEscalationChange(value: string, event: any): void {
+    if (event.target.checked) {
+      if (!this.selectedEscalationCategories.includes(value)) {
+        this.selectedEscalationCategories.push(value);
+      }
+    } else {
+      const index = this.selectedEscalationCategories.indexOf(value);
+      if (index > -1) {
+        this.selectedEscalationCategories.splice(index, 1);
+      }
+    }
+  }
+
+  /**
+   * Get display text for selected escalation categories
+   */
+  getSelectedEscalationText(): string {
+    if (this.selectedEscalationCategories.length === 0) {
+      return 'Select escalation categories';
+    } else if (this.selectedEscalationCategories.length === 1) {
+      const category = this.selectedEscalationCategories[0];
+      if (category.startsWith('Others: ')) {
+        return category.substring(8); // removing others prefix from display
+      }
+      return this.selectedEscalationCategories[0];
+    } else {
+      return `${this.selectedEscalationCategories.length} categories selected`;
+    }
+  }
+
+  onOthersChange(event: any): void {
+    this.isOthersSelected = event.target.checked;
+    if (this.isOthersSelected) {
+      if (!this.selectedEscalationCategories.includes('Others')) {
+        this.selectedEscalationCategories = this.selectedEscalationCategories.filter(
+          category => category !== 'Others' && !category.startsWith('Others:')
+        );
+        this.selectedEscalationCategories.push('Others');
+      }
+    } else {
+      this.selectedEscalationCategories = this.selectedEscalationCategories.filter(
+        category => category !== 'Others' && !category.startsWith('Others:')
+      );
+      this.othersText = '';
+    }
+  }
+
+  onOthersTextChange(): void {
+    if (this.isOthersSelected && this.othersText.trim()) {
+      this.selectedEscalationCategories = this.selectedEscalationCategories.filter(
+        category => category !== 'Others' && !category.startsWith('Others:')
+      );
+      this.selectedEscalationCategories.push(`Others: ${this.othersText.trim()}`);
+    } else if (this.isOthersSelected && !this.othersText.trim()) {
+      this.selectedEscalationCategories = this.selectedEscalationCategories.filter(
+        category => !category.startsWith('Others:')
+      );
+
+      if (!this.selectedEscalationCategories.includes('Others')) {
+        this.selectedEscalationCategories.push('Others');
+      }
+    }
+  }
+
   openRegIdDetails(registrationId: string, event: MouseEvent): void {
     event.preventDefault();
     this.getMatchedRegIdData(registrationId);
@@ -2250,4 +2407,3 @@ isArrayField(key: string): boolean {
 
 
 }
-
