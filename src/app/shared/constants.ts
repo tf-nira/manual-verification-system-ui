@@ -230,7 +230,8 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Registration of child citizen': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
     'Registration of foundlings': ['proofOfAbandonment', 'proofOfAddress', 'proofOfBirth',
-          'proofOfOtherSupportingdocumentIssuedbyGovt']
+          'proofOfOtherSupportingdocumentIssuedbyGovt'],
+     'Alien New Registration': ['proofOfImmigrationFacility', 'proofOfPassportCopy', 'proofOfPayment', 'proofOfPrinciplePassport']
   },
   'Renewal of card': {
     'Renewal of a card': ['proofOfCitizenship', 'proofOfAddress'],
@@ -307,6 +308,12 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfAddress: ['Local Council Letter'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Care order', 'Probation report','Welfare and family court reports']
+    },
+    'Alien New Registration': {
+      proofOfImmigrationFacility: ['Copy of Immigration Facility'],
+      proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPayment:['Payment Receipt'],
+      proofOfPrinciplePassport:['Copy of Principal\'s Passport']
     }
   },
   'Renewal of card': {
