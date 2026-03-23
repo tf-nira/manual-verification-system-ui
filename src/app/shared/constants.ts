@@ -176,6 +176,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     'Renewal of card': 'Proof of Form-9 Renewal',
     'Lost/ Replacement of card': 'Proof of Form-11 Replacement',
     'Renewal of Alien': 'Proof of Form-10 Renewal of Alien',
+    'Lost/ Replacement of card': 'Proof of Form-11 Replacement',
     'Replacement of card': 'Proof of Form-11 Replacement',
     'Change of Particulars': 'Proof of Form-1/1A COP',
     'GetFirst ID': 'Proof of Form-7A GetFirst ID'
