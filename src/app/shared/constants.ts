@@ -186,6 +186,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     'Alien New Registration' : 'Proof of Form-4 Alien New Registration',
     'Renewal of card': 'Proof of Form-9 Renewal',
     'Renewal of Alien': 'Proof of Form-10 Renewal of Alien',
+    'Lost/ Replacement of card': 'Proof of Form-11 Replacement',
     'Replacement of card': 'Proof of Form-11 Replacement',
     'Change of Particulars': 'Proof of Form-1/1A COP',
     'GetFirst ID': 'Proof of Form-7A GetFirst ID'
@@ -240,14 +241,15 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Registration of child citizen': ['proofOfCitizenship', 'proofOfAddress', 'proofOfBirth',
        'proofOfOtherSupportingdocumentIssuedbyGovt', 'proofOfOtherSupportingDocuments'],
     'Registration of foundlings': ['proofOfAbandonment', 'proofOfAddress', 'proofOfBirth',
-          'proofOfOtherSupportingdocumentIssuedbyGovt']
+          'proofOfOtherSupportingdocumentIssuedbyGovt'],
+     'Alien New Registration': ['proofOfImmigrationFacility', 'proofOfPassportCopy', 'proofOfPayment', 'proofOfPrinciplePassport']
   },
   'Renewal of card': {
     'Renewal of a card': ['proofOfCitizenship', 'proofOfAddress'],
     'Replacement of a card': ['']
   },
-  'Replacement of card': {
-    'Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
+  'Lost/ Replacement of card': {
+    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
   },
   'Change of Particulars': {
     'addingName': ['proofOfNoticeOfIntension', 'proofOfDeedPoll', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfBaptism', 'proofOfOtherRelevant'],
@@ -317,6 +319,12 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfAddress: ['Local Council Letter'],
       proofOfBirth:['Birth Certificate'],
       proofOfOtherSupportingdocumentIssuedbyGovt:['Care order', 'Probation report','Welfare and family court reports']
+    },
+    'Alien New Registration': {
+      proofOfImmigrationFacility: ['Copy of Immigration Facility'],
+      proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPayment:['Payment Receipt'],
+      proofOfPrinciplePassport:['Copy of Principal\'s Passport']
     }
   },
   'Renewal of card': {
@@ -327,8 +335,8 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     'Replacement of a card': {
     }
   },
-  'Replacement of card': {
-    'Replacement of card': {
+  'Lost/ Replacement of card': {
+    'Lost/ Replacement of card': {
       proofOfPhysicalApplicationForm: ['Physical Application Form'],
       proofOfLoss: ['Police Report'],
       proofOfNationalId:['National Id'],
@@ -667,10 +675,10 @@ export const COP_ESCALATION_CATEGORIES = [
       ]
     },
     {
-      value: 'Replacement of card',
-      label: 'Replacement of card',
+      value: 'Lost/ Replacement of card',
+      label: 'Lost/ Replacement of card',
       serviceTypes: [
-        { value: 'Replacement of card', label: 'Replacement of card' }
+        { value: 'Lost/ Replacement of card', label: 'Lost/ Replacement of card' }
       ]
     },
     {
