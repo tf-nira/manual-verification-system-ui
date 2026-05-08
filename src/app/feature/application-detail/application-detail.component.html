@@ -77,6 +77,10 @@
 
     <!-- Middle Section -->
     <div class="middle-section">
+
+      <!-- Standard sections: hidden for Deactivated / Alien Deactivated -->
+      <ng-container *ngIf="!(service === constants.SERVICE_CONST_DEACTIVATED && serviceType === constants.SERVICE_TYPE_ALIEN_DEACTIVATED)">
+
       <div id="personal-info-section" class="section" *ngIf="hasSectionData([
       'fullName', 'surname', 'givenName', 'otherNames', 'maidenName', 'previousName',
       'dateOfBirth', 'gender', 'phone', 'email', 'applicantLivingStatus', 'CountryCode',
@@ -181,78 +185,6 @@
         </div>
 
       </div>
-
-      <!-- ===== Deactivated / Alien Deactivated Sections ===== -->
-      <ng-container *ngIf="service === constants.SERVICE_CONST_DEACTIVATED && serviceType === constants.SERVICE_TYPE_ALIEN_DEACTIVATED">
-
-        <!-- Personal Details -->
-        <div id="alien-personal-details-section" class="section">
-          <h3>Personal Details</h3>
-          <div class="photo-container" *ngIf="photoBase64; else alienNoPhoto">
-            <img [src]="photoBase64" alt="Applicant Photo" (error)="onImageError()" />
-          </div>
-          <ng-template #alienNoPhoto>
-            <div class="photo-container no-photo">
-              <p>No photo available.</p>
-            </div>
-          </ng-template>
-          <div class="personal-information">
-            <div class="field-container" *ngIf="rowData?.demographics?.surname">
-              <label>Surname</label>
-              <div class="field-value">{{ parseJson(rowData?.demographics?.surname)[0]?.value }}</div>
-            </div>
-            <div class="field-container" *ngIf="rowData?.demographics?.givenName">
-              <label>Given Name</label>
-              <div class="field-value">{{ parseJson(rowData?.demographics?.givenName)[0]?.value }}</div>
-            </div>
-            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.otherNames)[0]?.value">
-              <label>Other Name</label>
-              <div class="field-value">{{ parseJson(rowData?.demographics?.otherNames)[0]?.value }}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Alien Details -->
-        <div id="alien-details-section" class="section">
-          <h3>Alien Details</h3>
-          <div class="personal-information">
-            <div class="field-container" *ngIf="rowData?.demographics?.AIN">
-              <label>Alien Identification Number (AIN)</label>
-              <div class="field-value">{{ rowData?.demographics?.AIN }}</div>
-            </div>
-            <div class="field-container" *ngIf="rowData?.demographics?.immigrationFacilityNumber">
-              <label>Immigration Facility Number</label>
-              <div class="field-value">{{ rowData?.demographics?.immigrationFacilityNumber }}</div>
-            </div>
-            <div class="field-container" *ngIf="rowData?.demographics?.reasonForCancellation">
-              <label>Reason for Cancellation</label>
-              <div class="field-value">{{ rowData?.demographics?.reasonForCancellation }}</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- DCIC Details -->
-        <div id="alien-dcic-details-section" class="section">
-          <h3>DCIC Details</h3>
-          <div class="personal-information">
-            <div class="field-container" *ngIf="rowData?.demographics?.CountryCode">
-              <label>Country Code</label>
-              <div class="field-value">{{ parseJson(rowData?.demographics?.CountryCode)[0]?.value }}</div>
-            </div>
-            <div class="field-container" *ngIf="rowData?.demographics?.phone">
-              <label>Mobile Number</label>
-              <div class="field-value">{{ rowData?.demographics?.phone }}</div>
-            </div>
-            <div class="field-container" *ngIf="rowData?.demographics?.email">
-              <label>Email Address</label>
-              <div class="field-value">{{ rowData?.demographics?.email }}</div>
-            </div>
-          </div>
-        </div>
-
-      </ng-container>
-      <!-- ===== End Deactivated / Alien Deactivated Sections ===== -->
-
 
       <div id="place-of-residence-section" class="section" *ngIf="hasSectionData([
       'residenceStatus', 'applicantPlaceOfResidence', 'applicantForeignResidenceCountry',
@@ -942,6 +874,80 @@
           </div>
         </div>
       </div>
+
+      </ng-container>
+      <!-- End standard sections -->
+
+      <!-- ===== Deactivated / Alien Deactivated Sections ===== -->
+      <ng-container *ngIf="service === constants.SERVICE_CONST_DEACTIVATED && serviceType === constants.SERVICE_TYPE_ALIEN_DEACTIVATED">
+
+        <!-- Personal Details -->
+        <div id="alien-personal-details-section" class="section">
+          <h3>Personal Details</h3>
+          <div class="photo-container" *ngIf="photoBase64; else alienNoPhoto">
+            <img [src]="photoBase64" alt="Applicant Photo" (error)="onImageError()" />
+          </div>
+          <ng-template #alienNoPhoto>
+            <div class="photo-container no-photo">
+              <p>No photo available.</p>
+            </div>
+          </ng-template>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.surname">
+              <label>Surname</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.surname)[0]?.value }}</div>
+            </div>
+            <div class="field-container" *ngIf="rowData?.demographics?.givenName">
+              <label>Given Name</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.givenName)[0]?.value }}</div>
+            </div>
+            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.otherNames)[0]?.value">
+              <label>Other Name</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.otherNames)[0]?.value }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alien Details -->
+        <div id="alien-details-section" class="section">
+          <h3>Alien Details</h3>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.AIN">
+              <label>Alien Identification Number (AIN)</label>
+              <div class="field-value">{{ rowData?.demographics?.AIN }}</div>
+            </div>
+            <div class="field-container" *ngIf="rowData?.demographics?.immigrationFacitityNo">
+              <label>Immigration Facility Number</label>
+              <div class="field-value">{{ rowData?.demographics?.immigrationFacitityNo }}</div>
+            </div>
+            <div class="field-container" *ngIf="rowData?.demographics?.reasonforCancellation">
+              <label>Reason for Cancellation</label>
+              <div class="field-value">{{ rowData?.demographics?.reasonforCancellation }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DCIC Details -->
+        <div id="alien-dcic-details-section" class="section">
+          <h3>DCIC Details</h3>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.CountryCode">
+              <label>Country Code</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.CountryCode)[0]?.value }}</div>
+            </div>
+            <div class="field-container" *ngIf="rowData?.demographics?.phone">
+              <label>Mobile Number</label>
+              <div class="field-value">{{ rowData?.demographics?.phone }}</div>
+            </div>
+            <div class="field-container" *ngIf="rowData?.demographics?.email">
+              <label>Email Address</label>
+              <div class="field-value">{{ rowData?.demographics?.email }}</div>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+      <!-- ===== End Deactivated / Alien Deactivated Sections ===== -->
 
     </div>
 
