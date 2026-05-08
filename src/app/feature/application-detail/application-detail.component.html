@@ -916,13 +916,13 @@
               <label>Alien Identification Number (AIN)</label>
               <div class="field-value">{{ rowData?.demographics?.AIN }}</div>
             </div>
-            <div class="field-container" *ngIf="rowData?.demographics?.immigrationFacitityNo">
+            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.immigrationFacitityNo)[0]?.value">
               <label>Immigration Facility Number</label>
-              <div class="field-value">{{ rowData?.demographics?.immigrationFacitityNo }}</div>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.immigrationFacitityNo)[0]?.value }}</div>
             </div>
-            <div class="field-container" *ngIf="rowData?.demographics?.reasonforCancellation">
+            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.reasonforCancellation)[0]?.value">
               <label>Reason for Cancellation</label>
-              <div class="field-value">{{ rowData?.demographics?.reasonforCancellation }}</div>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.reasonforCancellation)[0]?.value }}</div>
             </div>
           </div>
         </div>
