@@ -37,6 +37,16 @@
         </div>
       </div>
 
+       <!-- Navigation for Deactivated / Alien Deactivated -->
+      <div class="navigation-content" *ngIf="!isLeftCollapsed && service === constants.SERVICE_CONST_DEACTIVATED && serviceType === constants.SERVICE_TYPE_ALIEN_DEACTIVATED">
+        <h3>Sections</h3>
+        <ul>
+          <li (click)="scrollToSection('alien-personal-details-section')">Personal Details</li>
+          <li (click)="scrollToSection('alien-details-section')">Alien Details</li>
+          <li (click)="scrollToSection('alien-dcic-details-section')">DCIC Details</li>
+        </ul>
+      </div>
+
       <div class="navigation-content" *ngIf="!isLeftCollapsed && service ===  'Change of Particulars'">
         <div *ngFor="let section of getVisibleSectionsCop()" class="part">  
           <h3>{{ section.label }}</h3>
@@ -67,6 +77,9 @@
 
     <!-- Middle Section -->
     <div class="middle-section">
+      <!-- Standard sections: hidden for Deactivated / Alien Deactivated -->
+      <ng-container *ngIf="!(service === constants.SERVICE_CONST_DEACTIVATED && serviceType === constants.SERVICE_TYPE_ALIEN_DEACTIVATED)">
+
       <div id="personal-info-section" class="section" *ngIf="hasSectionData([
       'fullName', 'surname', 'givenName', 'otherNames', 'maidenName', 'previousName',
       'dateOfBirth', 'gender', 'phone', 'email', 'applicantLivingStatus', 'CountryCode',
@@ -861,7 +874,79 @@
           </div>
         </div>
       </div>
+      </ng-container>
+      <!-- End standard sections -->
 
+      <!-- ===== Deactivated / Alien Deactivated Sections ===== -->
+      <ng-container *ngIf="service === constants.SERVICE_CONST_DEACTIVATED && serviceType === constants.SERVICE_TYPE_ALIEN_DEACTIVATED">
+
+        <!-- Personal Details -->
+        <div id="alien-personal-details-section" class="section">
+          <h3>Personal Details</h3>
+          <div class="photo-container" *ngIf="photoBase64; else alienNoPhoto">
+            <img [src]="photoBase64" alt="Applicant Photo" (error)="onImageError()" />
+          </div>
+          <ng-template #alienNoPhoto>
+            <div class="photo-container no-photo">
+              <p>No photo available.</p>
+            </div>
+          </ng-template>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.surname">
+              <label>Surname</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.surname)[0]?.value }}</div>
+            </div>
+            <div class="field-container" *ngIf="rowData?.demographics?.givenName">
+              <label>Given Name</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.givenName)[0]?.value }}</div>
+            </div>
+            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.otherNames)[0]?.value">
+              <label>Other Name</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.otherNames)[0]?.value }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Alien Details -->
+        <div id="alien-details-section" class="section">
+          <h3>Alien Details</h3>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.AIN">
+              <label>Alien Identification Number (AIN)</label>
+              <div class="field-value">{{ rowData?.demographics?.AIN }}</div>
+            </div>
+            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.immigrationFacitityNo)[0]?.value">
+              <label>Immigration Facility Number</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.immigrationFacitityNo)[0]?.value }}</div>
+            </div>
+            <div class="field-container" *ngIf="parseJson(rowData?.demographics?.reasonforCancellation)[0]?.value">
+              <label>Reason for Cancellation</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.reasonforCancellation)[0]?.value }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DCIC Details -->
+        <div id="alien-dcic-details-section" class="section">
+          <h3>DCIC Details</h3>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.DCICCountryCode">
+              <label>Country Code</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.DCICCountryCode)[0]?.value }}</div>
+            </div>
+            <div class="field-container" *ngIf="rowData?.demographics?.DCICphone">
+              <label>Mobile Number</label>
+              <div class="field-value">{{ rowData?.demographics?.DCICphone }}</div>
+            </div>
+            <div class="field-container" *ngIf="rowData?.demographics?.DCICemail">
+              <label>Email Address</label>
+              <div class="field-value">{{ rowData?.demographics?.DCICemail }}</div>
+            </div>
+          </div>
+        </div>
+
+      </ng-container>
+      <!-- ===== End Deactivated / Alien Deactivated Sections ===== -->   
     </div>
 
 
@@ -878,7 +963,7 @@
             <i class="icon-history"></i> 
             History
           </button>
-          <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'By Birth /Descent' || service === 'Change of Particulars'"
+          <button *ngIf="parseJson(rowData?.demographics?.userServiceType )[0]?.value === 'By Birth /Descent' || service === 'Change of Particulars'|| (service === constants.SERVICE_CONST_DEACTIVATED && serviceType === constants.SERVICE_TYPE_ALIEN_DEACTIVATED)"
             class="tab-button" [class.active]="activeTab === 'records'" (click)="handleRecordsClick()">
             <img src="assets/images/records_section_icon.png" alt="Back" class="icon" />
             <i class="icon-records"></i> 
@@ -1038,6 +1123,27 @@
           </div>
         <!-- Records Content -->
         <div class="tab-content" *ngIf="activeTab === 'records'">
+          <!-- Alien Details (Deactivated / Alien Deactivated) - fetched via AIN using default flow -->
+          <ng-container *ngIf="service === constants.SERVICE_CONST_DEACTIVATED && serviceType === constants.SERVICE_TYPE_ALIEN_DEACTIVATED">
+            <h4>Alien Details</h4>
+            <ng-container *ngIf="getDemographicIdentity('alien'); else noAlienData">
+              <div *ngFor="let field of allowedFields">
+                <ng-container *ngIf="getDemographicField('alien', field)">
+                  <ng-container *ngIf="extractValue(getDemographicField('alien', field))">
+                    <div class="detail-label">{{ formatKey(field) }}</div>
+                    <div class="detail-value">{{ extractValue(getDemographicField('alien', field)) }}</div>
+                  </ng-container>
+                </ng-container>
+              </div>
+              <button (click)="displayCachedData('alien')">
+                Open
+              </button>
+            </ng-container>
+            <ng-template #noAlienData>
+              <p>No data available for Alien (AIN lookup).</p>
+            </ng-template>
+          </ng-container>
+          
           <!-- <div class="scrollable-container"> -->
           <!-- Check if there are person details -->
           <ng-container *ngIf="personDetails.length > 0; else noData">

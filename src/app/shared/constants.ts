@@ -90,6 +90,8 @@ export const SERVICE_CONST_NEW_REGISTRATION = 'New Registration';
 export const SERVICE_CONST_RENEWAL = 'Renewal';
 
 export const CHANGE_OF_PARTICULARS = 'Change of Particulars';
+export const SERVICE_CONST_DEACTIVATED = 'Deactivated';
+export const SERVICE_TYPE_ALIEN_DEACTIVATED = 'Alien Deactivated';
 // Map document keys to readable titles
 export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfPhysicalApplicationForm: 'Physical Application Form',
