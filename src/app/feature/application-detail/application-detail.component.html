@@ -931,17 +931,17 @@
         <div id="alien-dcic-details-section" class="section">
           <h3>DCIC Details</h3>
           <div class="personal-information">
-            <div class="field-container" *ngIf="rowData?.demographics?.CountryCode">
+            <div class="field-container" *ngIf="rowData?.demographics?.DCICCountryCode">
               <label>Country Code</label>
-              <div class="field-value">{{ parseJson(rowData?.demographics?.CountryCode)[0]?.value }}</div>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.DCICCountryCode)[0]?.value }}</div>
             </div>
-            <div class="field-container" *ngIf="rowData?.demographics?.phone">
+            <div class="field-container" *ngIf="rowData?.demographics?.DCICphone">
               <label>Mobile Number</label>
-              <div class="field-value">{{ rowData?.demographics?.phone }}</div>
+              <div class="field-value">{{ rowData?.demographics?.DCICphone }}</div>
             </div>
-            <div class="field-container" *ngIf="rowData?.demographics?.email">
+            <div class="field-container" *ngIf="rowData?.demographics?.DCICemail">
               <label>Email Address</label>
-              <div class="field-value">{{ rowData?.demographics?.email }}</div>
+              <div class="field-value">{{ rowData?.demographics?.DCICemail }}</div>
             </div>
           </div>
         </div>
