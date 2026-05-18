@@ -249,10 +249,12 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
   },
   'Renewal of card': {
     'Renewal of a card': ['proofOfCitizenship', 'proofOfAddress'],
-    'Replacement of a card': ['']
+    'Replacement of a card': [''],
+    'Renewal of Alien': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfPhysicalApplicationForm','proofOfPrinciplePassport']
   },
   'Lost/ Replacement of card': {
-    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
+    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId'],
+    'Replacement of Alien': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
   },
   'Change of Particulars': {
     'addingName': ['proofOfNoticeOfIntension', 'proofOfDeedPoll', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfBaptism', 'proofOfOtherRelevant'],
