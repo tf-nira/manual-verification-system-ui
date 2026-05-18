@@ -178,7 +178,8 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfPrevRec: 'Previous immigration records',
   proofOfPassportCopy: 'Copy of Passport',
   proofOfImmigrationFacility: 'Copy of Immigration Facility',
-  proofOfPrinciplePassport: 'Copy of Principal\'s Passport'
+  proofOfPrinciplePassport: 'Copy of Principal\'s Passport',
+  proofOfAlienID:'Copy of AIN Card'
 };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
@@ -248,10 +249,16 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
   },
   'Renewal of card': {
     'Renewal of a card': ['proofOfCitizenship', 'proofOfAddress'],
-    'Replacement of a card': ['']
+    'Replacement of a card': [''],
+    'Renewal of Alien': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfPhysicalApplicationForm','proofOfPrinciplePassport']
+
   },
   'Lost/ Replacement of card': {
-    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
+    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId'],
+    'Replacement of Alien': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
+  },
+  'Deactivated':{
+    'Alien Deactivated' : ['proofOfImmigrationFacility']
   },
   'Change of Particulars': {
     'addingName': ['proofOfNoticeOfIntension', 'proofOfDeedPoll', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfBaptism', 'proofOfOtherRelevant'],
@@ -335,6 +342,13 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfCitizenship:['National ID of Parents/ Blood Relatives']
     },
     'Replacement of a card': {
+      },
+    'Renewal of Alien': {
+      proofOfImmigrationFacility: ['Copy of Immigration Facility'],
+      proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPayment:['Payment Receipt'],
+      proofOfPhysicalApplicationForm: ['Physical Application Form'],
+      proofOfPrinciplePassport:['Copy of Principal\'s Passport']
     }
   },
   'Lost/ Replacement of card': {
@@ -343,6 +357,18 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfLoss: ['Police Report'],
       proofOfNationalId:['National Id'],
       proofOfDamaged: ['Damaged Card']
+   },
+    'Replacement of Alien': {
+      proofOfImmigrationFacility: ['Copy of Immigration Facility'],
+      proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPayment:['Payment Receipt'],
+      proofOfAlienID:['Copy of AIN Card'],
+      proofOfPhysicalApplicationForm: ['Physical Application Form']
+    }
+  },
+  'Deactivated':{
+    'Alien Deactivated' : {
+      proofOfImmigrationFacility: ['Copy of Immigration Facility']
     }
   },
   'Change of Particulars': {
