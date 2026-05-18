@@ -178,7 +178,8 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfPrevRec: 'Previous immigration records',
   proofOfPassportCopy: 'Copy of Passport',
   proofOfImmigrationFacility: 'Copy of Immigration Facility',
-  proofOfPrinciplePassport: 'Copy of Principal\'s Passport'
+  proofOfPrinciplePassport: 'Copy of Principal\'s Passport',
+  proofOfAlienID:'Copy of AIN Card'
 };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
@@ -335,6 +336,13 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfCitizenship:['National ID of Parents/ Blood Relatives']
     },
     'Replacement of a card': {
+    },
+    'Renewal of Alien': {
+      proofOfImmigrationFacility: ['Copy of Immigration Facility'],
+      proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPayment:['Payment Receipt'],
+      proofOfPhysicalApplicationForm: ['Physical Application Form'],
+      proofOfPrinciplePassport:['Copy of Principal\'s Passport']
     }
   },
   'Lost/ Replacement of card': {
@@ -343,6 +351,13 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfLoss: ['Police Report'],
       proofOfNationalId:['National Id'],
       proofOfDamaged: ['Damaged Card']
+    },
+    'Replacement of Alien': {
+      proofOfImmigrationFacility: ['Copy of Immigration Facility'],
+      proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPayment:['Payment Receipt'],
+      proofOfAlienID:['Copy of AIN Card'],
+      proofOfPhysicalApplicationForm: ['Physical Application Form']
     }
   },
   'Change of Particulars': {
@@ -1188,25 +1203,4 @@ export const FIELD_LABEL_MAP: Record<string, string> = {
   motherIDDocumentNo: 'Mother Id Document No',
   fatherIDDocumentNo: 'Fater Id Document No',
   PRNId: 'PRN Number'
-};
-
-// Document list mapping by service type for legal officer upload
-export const DOCUMENT_LIST_BY_SERVICE: { [key: string]: { category: string; title: string }[] } = {
-  'Renewal of Alien': [
-    { category: 'Copy of Immigration Facility', title: 'Copy of Immigration Facility' },
-    { category: 'Copy of Passport', title: 'Copy of Passport' },
-    { category: 'Payment Receipt', title: 'Payment Receipt' },
-    { category: 'Physical Form 10 - Reactivation', title: 'Physical Form 10 - Reactivation' },
-    { category: 'Copy of Principal\'s Passport', title: 'Copy of Principal\'s Passport' }
-  ],
-  'Replacement of Alien': [
-    { category: 'Copy of Immigration Facility', title: 'Copy of Immigration Facility' },
-    { category: 'Copy of Passport', title: 'Copy of Passport' },
-    { category: 'Payment Receipt', title: 'Payment Receipt' },
-    { category: 'Copy of AIN Card', title: 'Copy of AIN Card' },
-    { category: 'Physical Form - Replacement of AIN card', title: 'Physical Form - Replacement of AIN card' }
-  ],
-  'Alien Cancellation': [
-    { category: 'Copy of Immigration Facility', title: 'Copy of Immigration Facility' }
-  ]
 };
