@@ -1189,3 +1189,24 @@ export const FIELD_LABEL_MAP: Record<string, string> = {
   fatherIDDocumentNo: 'Fater Id Document No',
   PRNId: 'PRN Number'
 };
+
+// Document list mapping by service type for legal officer upload
+export const DOCUMENT_LIST_BY_SERVICE: { [key: string]: { category: string; title: string }[] } = {
+  'Renewal of Alien': [
+    { category: 'Copy of Immigration Facility', title: 'Copy of Immigration Facility' },
+    { category: 'Copy of Passport', title: 'Copy of Passport' },
+    { category: 'Payment Receipt', title: 'Payment Receipt' },
+    { category: 'Physical Form 10 - Reactivation', title: 'Physical Form 10 - Reactivation' },
+    { category: 'Copy of Principal\'s Passport', title: 'Copy of Principal\'s Passport' }
+  ],
+  'Replacement of Alien': [
+    { category: 'Copy of Immigration Facility', title: 'Copy of Immigration Facility' },
+    { category: 'Copy of Passport', title: 'Copy of Passport' },
+    { category: 'Payment Receipt', title: 'Payment Receipt' },
+    { category: 'Copy of AIN Card', title: 'Copy of AIN Card' },
+    { category: 'Physical Form - Replacement of AIN card', title: 'Physical Form - Replacement of AIN card' }
+  ],
+  'Alien Cancellation': [
+    { category: 'Copy of Immigration Facility', title: 'Copy of Immigration Facility' }
+  ]
+};
