@@ -256,6 +256,9 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId'],
     'Replacement of Alien': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
   },
+  'Deactivated':{
+    'Alien Deactivated' : ['proofOfImmigrationFacility']
+  },
   'Change of Particulars': {
     'addingName': ['proofOfNoticeOfIntension', 'proofOfDeedPoll', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfBaptism', 'proofOfOtherRelevant'],
     'removingName': ['proofOfNoticeOfIntension', 'proofOfDeedPoll', 'proofOfBirthCert', 'proofOfAcademic', 'proofOfPassport', 'proofOfVoters', 'proofOfDriving', 'proofOfBaptism', 'proofOfOtherRelevant'],
@@ -360,6 +363,11 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfPayment:['Payment Receipt'],
       proofOfAlienID:['Copy of AIN Card'],
       proofOfPhysicalApplicationForm: ['Physical Application Form']
+    }
+  },
+  'Deactivated':{
+    'Alien Deactivated' : {
+      proofOfImmigrationFacility: ['Copy of Immigration Facility']
     }
   },
   'Change of Particulars': {
