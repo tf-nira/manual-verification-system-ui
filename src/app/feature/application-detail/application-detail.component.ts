@@ -614,7 +614,7 @@ getTitlesForDocument(document: any): string[] {
     this.objectUrls.push(url);
   }
   getDocumentTitle(key: string): string {
-    // console.log("key",this.serviceType);
+    console.log("no of documents: ",this.documents.length);
     
     if ((this.serviceType=='Alien New Registration'|| this.serviceType=='Renewal of Alien'|| this.serviceType=='Replacement of Alien') && key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
       return FORM_LABELS_BY_SERVICE[this.serviceType];
@@ -846,7 +846,7 @@ getTitlesForDocument(document: any): string[] {
       case 'Replacement of card':
         this.rejectionCategories = LR_REJECTION_CATEGORIES;
         break;
-      case '"Deactivated':
+      case 'Deactivated':
         this.rejectionCategories = DEACTIVATION_REJECTION_CATEGORIES;
         break;
     }
