@@ -541,38 +541,44 @@ getTitlesForDocument(document: any): string[] {
   processDocuments() {
     const documents = this.rowData?.documents || {};
 
-    this.documents = Object.keys(documents).map((key) => {
-      const base64Data = documents[key]?.trim();
-      let safeUrl: SafeResourceUrl | null = null;
+    this.documents = Object.keys(documents)
+      .filter((key) => {
+        // Filter out documents with empty or null values
+        const base64Data = documents[key]?.trim();
+        return base64Data && base64Data.length > 0;
+      })
+      .map((key) => {
+        const base64Data = documents[key]?.trim();
+        let safeUrl: SafeResourceUrl | null = null;
 
-      if (base64Data) {
-        // Detect file type based on base64 header
-        if (base64Data.startsWith('JVBERi0')) {
-          // PDF file
-          safeUrl = this.convertBase64ToPdfUrl(base64Data);
-        } else if (base64Data.startsWith('TU0AKg') || base64Data.startsWith('SUkqAA')) {
-          // TIFF file - create download blob
-          console.log('TIFF detected for:', key);
-          safeUrl = this.createTiffDownloadUrl(base64Data);
-        } else if (base64Data.startsWith('iVBORw0K')) {
-          // PNG file
-          safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64,${base64Data}`);
-        } else if (base64Data.startsWith('/9j/')) {
-          // JPEG file
-          safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/jpeg;base64,${base64Data}`);
-        } else {
-          // Unknown format - treat as PDF (fallback)
-          safeUrl = this.convertBase64ToPdfUrl(base64Data);
+        if (base64Data) {
+          // Detect file type based on base64 header
+          if (base64Data.startsWith('JVBERi0')) {
+            // PDF file
+            safeUrl = this.convertBase64ToPdfUrl(base64Data);
+          } else if (base64Data.startsWith('TU0AKg') || base64Data.startsWith('SUkqAA')) {
+            // TIFF file - create download blob
+            console.log('TIFF detected for:', key);
+            safeUrl = this.createTiffDownloadUrl(base64Data);
+          } else if (base64Data.startsWith('iVBORw0K')) {
+            // PNG file
+            safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/png;base64,${base64Data}`);
+          } else if (base64Data.startsWith('/9j/')) {
+            // JPEG file
+            safeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(`data:image/jpeg;base64,${base64Data}`);
+          } else {
+            // Unknown format - treat as PDF (fallback)
+            safeUrl = this.convertBase64ToPdfUrl(base64Data);
+          }
         }
-      }
 
-      return {
-        category: key,
-        title: this.getDocumentTitle(key),
-        fileName: `${key}.${this.getFileExtension(base64Data || '')}`,
-        file: safeUrl,
-      };
-    });
+        return {
+          category: key,
+          title: this.getDocumentTitle(key),
+          fileName: `${key}.${this.getFileExtension(base64Data || '')}`,
+          file: safeUrl,
+        };
+      });
 
     this.isSectionExpanded = this.documents.map(() => false);
   }
