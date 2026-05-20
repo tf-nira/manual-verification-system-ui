@@ -541,6 +541,12 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     { value: 'Other',  default: false}
   ];
 
+  export const DEACTIVATION_REJECTION_CATEGORIES = [
+    { value: 'Documents provided have inconsistent information', default: false },
+    { value: 'Poorly scanned documents to enable decision', default: false },
+    { value: 'Fraudulent/Altered /doctored documents ', default: false },
+    { value: 'Other ( Free Text)', default: false}
+  ]
   
   export const NEW_ESCALATION_CATEGORIES = [
     { value: 'Suspected Non Citizen',  default: false},
