@@ -540,11 +540,15 @@ getTitlesForDocument(document: any): string[] {
   // Process the documents data into the required structure
   processDocuments() {
     const documents = this.rowData?.documents || {};
+    
+    console.log("All documents keys:", Object.keys(documents));
+    console.log("All documents:", documents);
 
     this.documents = Object.keys(documents)
       .filter((key) => {
         // Filter out documents with empty or null values
         const base64Data = documents[key]?.trim();
+        console.log(`Key: ${key}, base64Data exists: ${!!base64Data}, length: ${base64Data?.length || 0}`);
         return base64Data && base64Data.length > 0;
       })
       .map((key) => {
@@ -580,6 +584,7 @@ getTitlesForDocument(document: any): string[] {
         };
       });
 
+    console.log("Final processed documents:", this.documents);
     this.isSectionExpanded = this.documents.map(() => false);
   }
 
@@ -620,7 +625,8 @@ getTitlesForDocument(document: any): string[] {
     this.objectUrls.push(url);
   }
   getDocumentTitle(key: string): string {
-    console.log("no of documents: ",this.documents.length);
+    console.log("getDocumentTitle called with key:", key);
+    console.log("categoryMap[key]:", this.categoryMap[key]);
     
     if ((this.serviceType=='Alien New Registration'|| this.serviceType=='Renewal of Alien'|| this.serviceType=='Replacement of Alien') && key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
       return FORM_LABELS_BY_SERVICE[this.serviceType];
