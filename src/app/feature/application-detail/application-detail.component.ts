@@ -272,9 +272,7 @@ export class ApplicationDetailComponent implements OnInit {
   isEditable: boolean = false;
   isEscalated: boolean= false;
   selectedRow: any = {};
-  documents: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
-    { category: '', title: '', fileName: '', file: null }
-  ];
+  documents: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [];
   additionalDocuments: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
     { category: '', title: '', fileName: '', file: null }
   ];
@@ -540,9 +538,6 @@ getTitlesForDocument(document: any): string[] {
   // Process the documents data into the required structure
   processDocuments() {
     const documents = this.rowData?.documents || {};
-    
-    console.log("All documents keys:", Object.keys(documents));
-    console.log("All documents:", documents);
 
     this.documents = Object.keys(documents)
       .filter((key) => {
@@ -584,7 +579,6 @@ getTitlesForDocument(document: any): string[] {
         };
       });
 
-    console.log("Final processed documents:", this.documents);
     this.isSectionExpanded = this.documents.map(() => false);
   }
 
@@ -625,9 +619,6 @@ getTitlesForDocument(document: any): string[] {
     this.objectUrls.push(url);
   }
   getDocumentTitle(key: string): string {
-    console.log("getDocumentTitle called with key:", key);
-    console.log("categoryMap[key]:", this.categoryMap[key]);
-    
     if ((this.serviceType=='Alien New Registration'|| this.serviceType=='Renewal of Alien'|| this.serviceType=='Replacement of Alien') && key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
       return FORM_LABELS_BY_SERVICE[this.serviceType];
     }
