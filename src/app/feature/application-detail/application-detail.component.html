@@ -1188,16 +1188,18 @@
             No documents available.
           </div>
           
-          <div *ngFor="let document of documents">
-            <!-- Document Row -->
-            <div class="document-row">
-              <span class="category-name">{{ getDocumentTitle(document.category) || 'Unknown Category' }}</span>
-              <button class="view-button" [disabled]="!document.file" (click)="viewDocument(document)">
-                <i class="fas fa-external-link-alt"></i>
-                View
-              </button>
+          <ng-container *ngIf="documents.length > 0">
+            <div *ngFor="let document of documents">
+              <!-- Document Row -->
+              <div class="document-row">
+                <span class="category-name">{{ getDocumentTitle(document.category) || 'Unknown Category' }}</span>
+                <button class="view-button" [disabled]="!document.file" (click)="viewDocument(document)">
+                  <i class="fas fa-external-link-alt"></i>
+                  View
+                </button>
+              </div>
             </div>
-          </div>
+          </ng-container>
           <!-- Additional Fetched Documents -->
           <ng-container *ngIf="additionalFetchedDocuments.length > 0">
             <h4>Newly Uploaded Documents</h4>
