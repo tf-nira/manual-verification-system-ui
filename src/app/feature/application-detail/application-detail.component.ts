@@ -272,9 +272,7 @@ export class ApplicationDetailComponent implements OnInit {
   isEditable: boolean = false;
   isEscalated: boolean= false;
   selectedRow: any = {};
-  documents: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
-    { category: '', title: '', fileName: '', file: null }
-  ];
+  documents: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [];
   additionalDocuments: { category: string; title: string; fileName: string; file: File | SafeResourceUrl | null }[] = [
     { category: '', title: '', fileName: '', file: null }
   ];
