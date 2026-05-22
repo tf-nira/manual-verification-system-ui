@@ -369,6 +369,15 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfPhysicalApplicationForm: ['Physical Application Form']
     }
   },
+  'Replacement of card': {
+    'Alien Replacement': {
+      proofOfImmigrationFacility: ['Copy of Immigration Facility'],
+      proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPayment:['Payment Receipt'],
+      proofOfAlienID:['Copy of AIN Card'],
+      proofOfPhysicalApplicationForm: ['Physical Application Form']
+    }
+  },
   'Deactivated':{
     'Alien Deactivated' : {
       proofOfImmigrationFacility: ['Copy of Immigration Facility']
