@@ -255,7 +255,7 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
   },
   'Lost/ Replacement of card': {
     'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId'],
-    'Replacement of Alien': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
+    'Alien Replacement': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
   },
   'Deactivated':{
     'Alien Deactivated' : ['proofOfImmigrationFacility']
@@ -358,7 +358,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfNationalId:['National Id'],
       proofOfDamaged: ['Damaged Card']
    },
-    'Replacement of Alien': {
+    'Alien Replacement': {
       proofOfImmigrationFacility: ['Copy of Immigration Facility'],
       proofOfPassportCopy: ['Copy of Passport'],
       proofOfPayment:['Payment Receipt'],
@@ -757,10 +757,10 @@ export const COP_ESCALATION_CATEGORIES = [
       ]
     },
      {
-      value: 'Replacement of Alien',
-      label: 'Replacement of Alien',
+      value: 'Alien Replacement',
+      label: 'Alien Replacement',
        serviceTypes: [
-        { value: 'Replacement of Alien', label: 'Replacement of Alien' }
+        { value: 'Alien Replacement', label: 'Alien Replacement' }
       ]
     },
   ];
