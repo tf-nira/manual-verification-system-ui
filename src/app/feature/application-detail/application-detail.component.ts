@@ -618,9 +618,7 @@ getTitlesForDocument(document: any): string[] {
     this.objectUrls.push(url);
   }
   getDocumentTitle(key: string): string {
-    // console.log("key",this.serviceType);
-    
-    if ((this.serviceType=='Alien New Registration'|| this.serviceType=='Renewal of Alien'|| this.serviceType=='Replacement of Alien') && key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
+    if ((this.serviceType=='Alien New Registration'|| this.serviceType=='Renewal of Alien'|| this.serviceType=='Alien Replacement') && key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
       return FORM_LABELS_BY_SERVICE[this.serviceType];
     }
     else if (key === PROOF_OF_PHYSICAL_APPLICATION_FORM && this.service && FORM_LABELS_BY_SERVICE[this.service]) {
@@ -2406,7 +2404,7 @@ formatLabel(key: string): string {
   // Check for service-specific labels for Alien service types
   const isAlienService = this.serviceType === 'Alien New Registration' || 
                          this.serviceType === 'Renewal of Alien' || 
-                         this.serviceType === 'Replacement of Alien';
+                         this.serviceType === 'Alien Replacement';
   
   if (isAlienService && ALIEN_SERVICE_LABEL_MAP[key]) {
     return ALIEN_SERVICE_LABEL_MAP[key];

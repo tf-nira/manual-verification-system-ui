@@ -121,7 +121,7 @@ export class ApplicationListComponent implements OnInit {
   specialAlienServices: string[] = [
   'Alien New Registration',
   'Renewal of Alien',
-  'Replacement of Alien'
+  'Alien Replacement'
   ];
   
   servicesWithTypes = SERVICES_WITH_TYPES;
