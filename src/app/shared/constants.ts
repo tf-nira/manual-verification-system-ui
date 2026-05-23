@@ -190,7 +190,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
     'Renewal of card': 'Proof of Form-9 Renewal',
     'Renewal of Alien': 'Proof of Form-10 Renewal of Alien',
     'Lost/ Replacement of card': 'Proof of Form-11 Replacement',
-    'Replacement of card': 'Proof of Form-11 Replacement',
+    'Alien Replacement': 'Proof of Form-11 Replacement',
     'Change of Particulars': 'Proof of Form-1/1A COP',
     'GetFirst ID': 'Proof of Form-7A GetFirst ID'
   }
@@ -254,8 +254,10 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
 
   },
   'Lost/ Replacement of card': {
-    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId'],
-     'Replacement of Alien': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
+    'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
+  },
+  'Replacement of card': {
+    'Alien Replacement': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
   },
   'Deactivated':{
     'Alien Deactivated' : ['proofOfImmigrationFacility']
@@ -357,8 +359,10 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfLoss: ['Police Report'],
       proofOfNationalId:['National Id'],
       proofOfDamaged: ['Damaged Card']
-      },
-    'Replacement of Alien': {
+      }
+  },
+  'Replacement of card': {
+    'Alien Replacement': {
       proofOfImmigrationFacility: ['Copy of Immigration Facility'],
       proofOfPassportCopy: ['Copy of Passport'],
       proofOfPayment:['Payment Receipt'],
@@ -763,10 +767,10 @@ export const COP_ESCALATION_CATEGORIES = [
       ]
     },
      {
-      value: 'Replacement of Alien',
-      label: 'Replacement of Alien',
+      value: 'Alien Replacement',
+      label: 'Alien Replacement',
        serviceTypes: [
-        { value: 'Replacement of Alien', label: 'Replacement of Alien' }
+        { value: 'Alien Replacement', label: 'Alien Replacement' }
       ]
     },
   ];
