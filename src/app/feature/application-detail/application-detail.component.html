@@ -946,6 +946,17 @@
           </div>
         </div>
 
+        <!-- Cancellation Remarks -->
+        <div id="alien-cancellation-remarks" class="section">
+          <h3>Cancellation Remarks</h3>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.alienRemarks">
+              <label>Remarks</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.alienRemarks)[0]?.value }}</div>
+            </div>
+          </div>
+        </div>
+
       </ng-container>
       <!-- ===== End Deactivated / Alien Deactivated Sections ===== -->
 
