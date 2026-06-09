@@ -44,6 +44,7 @@
           <li (click)="scrollToSection('alien-personal-details-section')">Personal Details</li>
           <li (click)="scrollToSection('alien-details-section')">Alien Details</li>
           <li (click)="scrollToSection('alien-dcic-details-section')">DCIC Details</li>
+          <li (click)="scrollToSection('alien-cancellation-remarks')">Cancellation Remarks</li>
         </ul>
       </div>
 
@@ -941,6 +942,17 @@
             <div class="field-container" *ngIf="rowData?.demographics?.DCICemail">
               <label>Email Address</label>
               <div class="field-value">{{ rowData?.demographics?.DCICemail }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cancellation Remarks -->
+        <div id="alien-cancellation-remarks" class="section">
+          <h3>Cancellation Remarks</h3>
+          <div class="personal-information">
+            <div class="field-container" *ngIf="rowData?.demographics?.alienRemarks">
+              <label>Remarks</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.alienRemarks)[0]?.value }}</div>
             </div>
           </div>
         </div>
