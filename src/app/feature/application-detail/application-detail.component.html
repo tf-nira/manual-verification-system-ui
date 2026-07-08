@@ -926,7 +926,7 @@
               <div class="field-value">{{ parseJson(rowData?.demographics?.reasonforCancellation)[0]?.value }}</div>
             </div>
             <div class="field-container" *ngIf="rowData?.demographics?.remark">
-              <label>Other Reason for Cancellation</label>
+              <label>{{ ['Change of job','Business closure','Declared prohibited immigrant','Resignation','Contract expiry','Death','Surrender of the Alien Identification Card','Acquisition of Ugandan Citizenship','Departure from Uganda','Cancellation of Alien Registration','Notification from DCIC or another competent authority','Court Order'].includes(parseJson(rowData?.demographics?.remark)[0]?.value) ? 'Reason for Cancellation' : 'Other Reason for Cancellation' }}</label>
               <div class="field-value">{{ parseJson(rowData?.demographics?.remark)[0]?.value }}</div>
             </div>
           </div>
