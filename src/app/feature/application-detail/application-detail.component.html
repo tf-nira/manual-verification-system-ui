@@ -925,11 +925,15 @@
               <label>Reason for Cancellation</label>
               <div class="field-value">{{ parseJson(rowData?.demographics?.reasonforCancellation)[0]?.value }}</div>
             </div>
+            <div class="field-container" *ngIf="rowData?.demographics?.remark">
+              <label>Other Reason for Cancellation</label>
+              <div class="field-value">{{ parseJson(rowData?.demographics?.remark)[0]?.value }}</div>
+            </div>
           </div>
         </div>
 
         <!-- DCIC Details -->
-        <div id="alien-dcic-details-section" class="section">
+        <!-- <div id="alien-dcic-details-section" class="section">
           <h3>DCIC Details</h3>
           <div class="personal-information">
             <div class="field-container" *ngIf="rowData?.demographics?.DCICCountryCode">
@@ -945,10 +949,10 @@
               <div class="field-value">{{ rowData?.demographics?.DCICemail }}</div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <!-- Cancellation Remarks -->
-        <div id="alien-cancellation-remarks" class="section">
+        <!-- <div id="alien-cancellation-remarks" class="section">
           <h3>Cancellation Remarks</h3>
           <div class="personal-information">
             <div class="field-container" *ngIf="rowData?.demographics?.alienRemarks">
@@ -956,7 +960,7 @@
               <div class="field-value">{{ parseJson(rowData?.demographics?.alienRemarks)[0]?.value }}</div>
             </div>
           </div>
-        </div>
+        </div> -->
 
       </ng-container>
       <!-- ===== End Deactivated / Alien Deactivated Sections ===== -->
