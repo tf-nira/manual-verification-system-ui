@@ -87,7 +87,7 @@
       'dateOfBirth', 'gender', 'phone', 'email', 'applicantLivingStatus', 'CountryCode',
       'homePhoneNumber', 'highestLevelOfEducation', 'otherHighestLevelOfEducation',
       'profession', 'otherProfession', 'occupation', 'otherOccupation',
-      'religion', 'otherReligion', 'disabilities', 'otherDisability','userServiceType', 'userService', 
+      'religion', 'otherReligion', 'disabilities', 'otherDisability','userServiceType', 'userServiceTypeReplacement', 'userService', 
       'IDSchemaVersion', 'cardNumber', 'UIN', 'NIN', 'preferredLang', 'selectedHandles', 'NINVerified',
       'updatedAt', 'renewalNIN', 'nextOfKinPhoneNumber', 'ninExpiryDate', 'applicantNationality',
       'applicantOtherNationality', 'citizenshipCertificateNo', 'foundLink', 'drivingLicenceNumber','taxIdentificationNumber'
@@ -195,7 +195,7 @@
       'applicantPlaceOfResidenceYearsLived', 'applicantPlaceOfResidenceDistrictOfPrevRes',
       'applicantPlaceOfResidencePostalAddress', 'applicantPlaceOfResidenceHouseNo',
       'applicantPlaceOfResidenceDistrict'
-    ])">
+    ]) && !(serviceType === constants.SERVICE_TYPE_ALIEN_REPLACEMENT)">
 
         <h3>Place Of Residence</h3>
           <div class="personal-information">
