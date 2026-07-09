@@ -59,7 +59,7 @@ export class DemographicDetailsComponent implements OnInit{
         'fullName', 'surname', 'givenName', 'otherNames', 'maidenName', 'previousName',
         'dateOfBirth', 'gender', 'phone', 'email', 'applicantLivingStatus', 'CountryCode',
         'homePhoneNumber', 'highestLevelOfEducation', 'profession', 'occupation',
-        'religion', 'disabilities', 'userServiceType', 'userService', 'IDSchemaVersion',
+        'religion', 'disabilities', 'userServiceType', 'userService', 'userServiceTypeReplacement', 'IDSchemaVersion',
         'cardNumber', 'UIN', 'NIN', 'preferredLang', 'selectedHandles', 'NINVerified',
         'updatedAt', 'renewalNIN', 'nextOfKinPhoneNumber', 'ninExpiryDate', 'applicantNationality',
         'applicantOtherNationality', 'citizenshipCertificateNo', 'foundLink'
