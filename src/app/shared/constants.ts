@@ -178,6 +178,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfNatCert: 'Naturalization Certificate',
   proofOfPrevRec: 'Previous immigration records',
   proofOfPassportCopy: 'Copy of Passport',
+  proofOfPoliceLetter: 'Police Letter',
   proofOfImmigrationFacility: 'Copy of Immigration Facility',
   proofOfPrinciplePassport: 'Copy of Principal\'s Passport',
   proofOfAlienID:'Copy of AIN Card'
@@ -256,10 +257,10 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
   },
   'Lost/ Replacement of card': {
     'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId'],
-    'Alien Replacement': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
+    'Alien Replacement': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPoliceLetter','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
   },
   'Replacement of card': {
-    'Alien Replacement': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
+    'Alien Replacement': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPoliceLetter','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
   },
   'Deactivated':{
     'Alien Deactivated' : ['proofOfImmigrationFacility']
@@ -283,7 +284,7 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'changeInGender':['proofOfStatutory', 'proofOfMedRep', 'proofOfAll']
   },
   'GetFirst ID': {
-    'GetFirst ID': ['proofOfRegistration', 'proofOfOtherSupportingdocumentIssuedbyGovt', 
+    'GetFirst ID': ['proofOfRegistration', 'proofOfOtherSupportingdocumentIssuedbyGovt',
       'proofOfOtherSupportingDocuments']
   }
 };
@@ -365,6 +366,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     'Alien Replacement': {
       proofOfImmigrationFacility: ['Copy of Immigration Facility'],
       proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPoliceLetter: ['Police Letter'],
       proofOfPayment:['Payment Receipt'],
       proofOfAlienID:['Copy of AIN Card'],
       proofOfPhysicalApplicationForm: ['Physical Application Form']
@@ -374,6 +376,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     'Alien Replacement': {
       proofOfImmigrationFacility: ['Copy of Immigration Facility'],
       proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPoliceLetter: ['Police Letter'],
       proofOfPayment:['Payment Receipt'],
       proofOfAlienID:['Copy of AIN Card'],
       proofOfPhysicalApplicationForm: ['Physical Application Form']
@@ -396,7 +399,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfDriving: ['Driving Permit'],
       proofOfBaptism: ['Baptism Card'],
       proofOfOtherRelevant: ['Any other relevant docs'],
-      
+
     },
     'removingName': {
       proofOfNoticeOfIntension: ['Notice of Intention to Change Name'],
@@ -411,7 +414,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     },
     'changeOrderOfNames': {
       proofOfStatutory: ['Statutory Declaration'],
-      proofOfAll: ['Passport/ Voters Card/ Driving Permit/ Baptism Card/ Other'] 
+      proofOfAll: ['Passport/ Voters Card/ Driving Permit/ Baptism Card/ Other']
     },
     'completeChangeofName': {
       proofOfNoticeOfIntension: ['Notice of Intention to Change Name'],
@@ -455,7 +458,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfStatutory: ['Statutory Declaration'],
       proofOfCbyReg: ['Certificate of Citizenship by Registration'],
       proofOfCbyNat: ['Certificate of Citizenship by Naturalization'],
-      proofOfCbyDual: ['Certificate of Dual Citizenship']   
+      proofOfCbyDual: ['Certificate of Dual Citizenship']
     },
     'addSpouse': {
       proofOfMarCert: ['Certified copy of marriage certificate']
@@ -564,7 +567,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     { value: 'Other',  default: false}
   ];
 
-  
+
   export const NEW_ESCALATION_CATEGORIES = [
     { value: 'Suspected Non Citizen',  default: false},
     { value: 'Supporting documents look suspicious/forged/Altered',  default: false},
