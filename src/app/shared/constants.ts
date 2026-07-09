@@ -92,6 +92,7 @@ export const SERVICE_CONST_RENEWAL = 'Renewal';
 export const CHANGE_OF_PARTICULARS = 'Change of Particulars';
 export const SERVICE_CONST_DEACTIVATED = 'Deactivated';
 export const SERVICE_TYPE_ALIEN_DEACTIVATED = 'Alien Deactivated';
+export const SERVICE_TYPE_ALIEN_REPLACEMENT = 'Alien Replacement';
 // Map document keys to readable titles
 export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfPhysicalApplicationForm: 'Physical Application Form',
@@ -793,6 +794,7 @@ export const COP_ESCALATION_CATEGORIES = [
   'disabilities',
   'otherDisability',
   'userServiceType',
+  'userServiceTypeReplacement',
   'userService',
   'cardNumber',
   'UIN',
