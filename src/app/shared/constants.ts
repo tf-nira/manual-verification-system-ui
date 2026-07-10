@@ -178,6 +178,7 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfNatCert: 'Naturalization Certificate',
   proofOfPrevRec: 'Previous immigration records',
   proofOfPassportCopy: 'Copy of Passport',
+  proofOfPoliceLetter: 'Police Letter',
   proofOfImmigrationFacility: 'Copy of Immigration Facility',
   proofOfPrinciplePassport: 'Copy of Principal\'s Passport',
   proofOfAlienID:'Copy of AIN Card'
@@ -258,7 +259,7 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'Lost/ Replacement of card': ['proofOfPhysicalApplicationForm', 'proofOfAbandonment', 'proofOfLoss', 'proofOfDamaged', 'proofOfNationalId']
   },
   'Replacement of card': {
-    'Alien Replacement': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
+    'Alien Replacement': ['proofOfImmigrationFacility','proofOfPassportCopy','proofOfPoliceLetter','proofOfPayment','proofOfAlienID','proofOfPhysicalApplicationForm']
   },
   'Deactivated':{
     'Alien Deactivated' : ['proofOfImmigrationFacility']
@@ -366,6 +367,7 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
     'Alien Replacement': {
       proofOfImmigrationFacility: ['Copy of Immigration Facility'],
       proofOfPassportCopy: ['Copy of Passport'],
+      proofOfPoliceLetter: ['Police Letter'],
       proofOfPayment:['Payment Receipt'],
       proofOfAlienID:['Copy of AIN Card'],
       proofOfPhysicalApplicationForm: ['Physical Application Form']
