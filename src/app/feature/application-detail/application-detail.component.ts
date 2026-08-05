@@ -831,6 +831,9 @@ getTitlesForDocument(document: any): string[] {
       case 'Replacement of card':
         this.rejectionCategories = LR_REJECTION_CATEGORIES;
         break;
+      case 'Migration':
+        this.rejectionCategories = RENEWAL_REJECTION_CATEGORIES;
+        break;
     }
   }
  
