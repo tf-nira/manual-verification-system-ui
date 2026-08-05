@@ -1281,7 +1281,7 @@
         <!-- Schedule Interview Btn -->
         <button [ngClass]="{
             'schedule-interview': (role === 'MVS_LEGAL_OFFICER' || role === 'MVS_DISTRICT_OFFICER' || role === 'MVS_EXECUTIVE_DIRECTOR' || role === 'MVS_INTERNATIONAL_OFFICER') ,
-            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_SENIOR_REGISTRATION_OFFICER' || role === 'MVS_MANAGER' || selectedRow.status === 'INTERVIEW SCHEDULED')
+            'hidden': (role === 'MVS_OFFICER' || role === 'MVS_SUPERVISOR'|| role === 'MVS_SENIOR_REGISTRATION_OFFICER' || role === 'MVS_MANAGER' || role === 'MVS_OFFICER_FOR_ALIEN' || selectedRow.status === 'INTERVIEW SCHEDULED')
           }" (click)="openScheduleInterviewModal()">
           {{ constants.SCHEDULE_INTERVIEW }}
         </button>

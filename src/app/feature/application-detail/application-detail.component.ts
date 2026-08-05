@@ -820,6 +820,14 @@ getTitlesForDocument(document: any): string[] {
         ];
         this.selectedOfficerLevel = 'MVS_SUPERVISOR';
         break;
+      case 'MVS_OFFICER_FOR_ALIEN':
+        this.dropdownOptions = [
+          { value: 'MVS_SUPERVISOR', label: 'Supervisor', default: true },
+          districtOrInternational,
+          { value: 'MVS_LEGAL_OFFICER', label: 'Legal', default: false }
+        ];
+        this.selectedOfficerLevel = 'MVS_SUPERVISOR';
+        break;
       case 'MVS_SUPERVISOR':
         this.dropdownOptions = [
           districtOrInternational,
