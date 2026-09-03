@@ -855,6 +855,14 @@ getTitlesForDocument(document: any): string[] {
       case 'Deactivated':
         this.rejectionCategories = DEACTIVATION_REJECTION_CATEGORIES;
         break;
+      case 'CRVS registrations':
+        this.rejectionCategories = NEW_REJECTION_CATEGORIES; 
+        // CRVS registrations use the same rejection category as NEW registration.
+        break;
+      default :
+        this.rejectionCategories = NEW_REJECTION_CATEGORIES; 
+        //For default service type using the NEW service rejection category;
+        break;
     }
   }
  
@@ -881,6 +889,18 @@ getTitlesForDocument(document: any): string[] {
         if (this.role === MVS_OFFICER) this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER;
         else this.escalationCategories = RENEWAL_ESCALATION_CATEGORIES;
         break;
+
+        // For the CRVS service we use the same escalation category as the NEW registration service.
+        case 'CRVS registrations':
+          if (this.role === MVS_OFFICER) this.escalationCategories = NEW_ESCALATION_CATEGORIES_FOR_OFFICER;
+          else this.escalationCategories = NEW_ESCALATION_CATEGORIES;
+          break;
+
+        // For the default use case we use the same escalation category as the NEW registration service.
+        default: 
+          if(this.role === MVS_OFFICER) this.escalationCategories = NEW_ESCALATION_CATEGORIES_FOR_OFFICER;
+          else this.escalationCategories = NEW_ESCALATION_CATEGORIES;
+          break;
     }  
   }
     
