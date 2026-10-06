@@ -6,6 +6,7 @@ import { DemographicDetailsComponent } from '../demographic-details/demographic-
 import { DocumentsUploadedComponent } from '../documents-uploaded/documents-uploaded.component';
 import { HeaderComponent } from "../../shared/components/header/header.component";
 import { Router } from '@angular/router';
+import * as UTIF from 'utif';
 import * as appConstants from '../../app.constants';
 import { API_CONST_APPROVE, API_CONST_ESCALATE, API_CONST_ESCALATION_DATE, API_CONST_REJECT, APPLICANT_NAME, APPLICATION_ID, APPLICATION_STATUS, APPROVE, AUTO_RETRIEVE_NIN_DETAILS, BACK, CREATED_DATE, DEMOGRAPHIC_DETAILS, DOCUMENTS_UPLOADED, ESCALATE, ESCALATION_COMMENT_FROM_MVS_OFFICER, ESCALATION_COMMENT_FROM_MVS_SUPERVISOR, ESCALATION_REASON_FROM_MVS_OFFICER, ESCALATION_REASON_FROM_MVS_SUPERVISOR, MVS_DISTRICT_OFFICER, MVS_LEGAL_OFFICER, MVS_EXECUTIVE_DIRECTOR, REJECT, RENEWAL_REJECTION_CATEGORIES, GETFIRSTID_ESCALATION_CATEGORIES, GETFIRSTID_REJECTION_CATEGORIES, LR_ESCALATION_CATEGORIES, LR_REJECTION_CATEGORIES, COP_ESCALATION_CATEGORIES, SCHEDULE_INTERVIEW, SERVICE, SERVICE_TYPE, UPLOAD_DCOUMENTS, MVS_OFFICER, NEW_ESCALATION_CATEGORIES_FOR_OFFICER, RENEWAL_ESCALATION_CATEGORIES_FOR_OFFICER, API_CONST_RECOMMEND_FOR_APPROVAL, MVS_INTERNATIONAL_OFFICER, Modify_DETAILS, API_CONST_MODIFY, DEACTIVATION_REJECTION_CATEGORIES } from '../../shared/constants';
 import { CATEGORY_MAP, TITLE_MAP, NEW_REJECTION_CATEGORIES, COP_REJECTION_CATEGORIES,
@@ -591,7 +592,7 @@ getTitlesForDocument(document: any): string[] {
         bytes[i] = binaryString.charCodeAt(i);
       }
 
-      const blob = new Blob([bytes], { type: 'image/tiff' });
+      const blob = new Blob([bytes], { type: 'application/octet-stream' });
       const blobUrl = URL.createObjectURL(blob);
 
       // Store for cleanup
@@ -1301,91 +1302,108 @@ getTitlesForDocument(document: any): string[] {
     const newWindow = window.open('about:blank', windowName);
 
     if (newWindow) {
-      newWindow.document.write(`
-      <html>
-        <head>
-          <title>${documentTitle}</title>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              background: #f5f5f5;
-              margin: 0;
-              padding: 40px;
-              text-align: center;
-            }
-            .container {
-              background: white;
-              max-width: 500px;
-              margin: 0 auto;
-              padding: 30px;
-              border-radius: 8px;
-              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-            h1 {
-              color: #333;
-              margin-bottom: 20px;
-              font-size: 24px;
-            }
-            .message {
-              color: #666;
-              margin-bottom: 30px;
-              font-size: 16px;
-              line-height: 1.5;
-            }
-            .download-btn {
-              background: #007bff;
-              color: white;
-              padding: 12px 24px;
-              text-decoration: none;
-              border-radius: 4px;
-              display: inline-block;
-              font-size: 16px;
-              margin: 20px 0;
-            }
-            .download-btn:hover {
-              background: #0056b3;
-              text-decoration: none;
-              color: white;
-            }
-            .file-info {
-              background: #f8f9fa;
-              padding: 15px;
-              border-radius: 4px;
-              margin: 20px 0;
-              color: #666;
-              font-size: 14px;
-            }
-            .help-text {
-              color: #888;
-              font-size: 14px;
-              margin-top: 20px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <h1>📄 ${documentTitle}</h1>
-            
-            <div class="message">
-              This is a TIFF image file. TIFF files may not display properly in web browsers, so we've prepared it for download.
-            </div>
+      const viewerDocument = newWindow.document;
+      viewerDocument.title = documentTitle;
+      viewerDocument.body.style.cssText = 'font-family: Arial, sans-serif; background: #f5f5f5; margin: 0; padding: 24px; color: #333;';
 
-            <a href="${blobUrl}" download="${documentTitle}.tiff" class="download-btn">
-              📥 Download TIFF File
-            </a>
+      const printStyles = viewerDocument.createElement('style');
+      printStyles.textContent = `
+        @page { margin: 10mm; }
+        .tiff-page { break-after: page; page-break-after: always; }
+        .tiff-page:last-child { break-after: auto; page-break-after: auto; }
+        .tiff-page img { display: block; max-width: 100%; max-height: 245mm; object-fit: contain; }
+        @media print {
+          body { background: white !important; padding: 0 !important; }
+          .viewer-controls, .viewer-status, .viewer-title, .page-heading { display: none !important; }
+          .tiff-page { height: 250mm; display: flex; align-items: center; justify-content: center; }
+          .tiff-page img { max-width: 100%; max-height: 100%; }
+        }
+      `;
+      viewerDocument.head.appendChild(printStyles);
 
-            <div class="file-info">
-              <strong>File:</strong> ${documentTitle}.tiff
-            </div>
+      const heading = viewerDocument.createElement('h1');
+      heading.className = 'viewer-title';
+      heading.textContent = documentTitle;
+      viewerDocument.body.appendChild(heading);
 
-            <div class="help-text">
-              You can open TIFF files with most image viewers, Microsoft Office, or photo editing software.
-            </div>
-          </div>
-        </body>
-      </html>
-    `);
-      newWindow.document.close();
+      const status = viewerDocument.createElement('p');
+      status.className = 'viewer-status';
+      status.textContent = 'Loading TIFF pages...';
+      viewerDocument.body.appendChild(status);
+
+      const controls = viewerDocument.createElement('div');
+      controls.className = 'viewer-controls';
+
+      const pdfDownloadButton = viewerDocument.createElement('button');
+      pdfDownloadButton.type = 'button';
+      pdfDownloadButton.textContent = 'Save all pages as PDF';
+      pdfDownloadButton.disabled = true;
+      pdfDownloadButton.addEventListener('click', () => {
+        newWindow.focus();
+        newWindow.print();
+      });
+      controls.appendChild(pdfDownloadButton);
+
+      const downloadLink = viewerDocument.createElement('a');
+      downloadLink.href = blobUrl;
+      downloadLink.download = `${documentTitle}.tiff`;
+      downloadLink.textContent = 'Download original TIFF';
+      controls.appendChild(downloadLink);
+      viewerDocument.body.appendChild(controls);
+
+      fetch(blobUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Unable to read the TIFF file.');
+          }
+          return response.arrayBuffer();
+        })
+        .then(buffer => {
+          const imageDirectories = UTIF.decode(buffer);
+          if (imageDirectories.length === 0) {
+            throw new Error('No pages were found in the TIFF file.');
+          }
+
+          const pageCount = imageDirectories.length;
+          status.textContent = `${pageCount} page${pageCount === 1 ? '' : 's'}`;
+          downloadLink.textContent = `Download original TIFF (${pageCount} pages)`;
+          pdfDownloadButton.disabled = false;
+
+          imageDirectories.forEach((imageDirectory, index) => {
+            UTIF.decodeImage(buffer, imageDirectory);
+            const pageCanvas = viewerDocument.createElement('canvas');
+            pageCanvas.width = imageDirectory.width;
+            pageCanvas.height = imageDirectory.height;
+            const context = pageCanvas.getContext('2d');
+            if (!context) {
+              throw new Error(`Unable to render TIFF page ${index + 1}.`);
+            }
+
+            const imageData = context.createImageData(imageDirectory.width, imageDirectory.height);
+            imageData.data.set(UTIF.toRGBA8(imageDirectory));
+            context.putImageData(imageData, 0, 0);
+
+            const pageContainer = viewerDocument.createElement('section');
+            pageContainer.className = 'tiff-page';
+
+            const pageHeading = viewerDocument.createElement('h2');
+            pageHeading.className = 'page-heading';
+            pageHeading.textContent = `Page ${index + 1} of ${imageDirectories.length}`;
+            pageHeading.style.cssText = 'font-size: 16px; font-weight: 400; margin: 24px 0 8px;';
+
+            const pageImage = viewerDocument.createElement('img');
+            pageImage.src = pageCanvas.toDataURL('image/png');
+            pageImage.alt = `Page ${index + 1}`;
+            pageImage.style.cssText = 'display: block; max-width: 100%; height: auto; margin: 0 auto 24px; background: white;';
+
+            pageContainer.append(pageHeading, pageImage);
+            viewerDocument.body.appendChild(pageContainer);
+          });
+        })
+        .catch(error => {
+          console.error('Error rendering TIFF pages:', error);
+          status.textContent = 'Unable to display this TIFF file. Use the link above to download the original.';
+        });
     } else {
       // Fallback: direct download if popup is blocked
       const link = document.createElement('a');
