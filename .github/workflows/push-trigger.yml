@@ -17,6 +17,7 @@ on:
       - main
       - tf_nira_dev
       - tf_nira_prod_backup
+      - tf_nira_prod_backup_docfix
 
 jobs:
   build-manual-verification-system-ui:
