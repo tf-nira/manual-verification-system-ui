@@ -729,7 +729,8 @@ export const COP_ESCALATION_CATEGORIES = [
       value: 'Change of Particulars',
       label: 'Change of Particulars',
       serviceTypes: [
-        { value: 'Change of Particulars', label: 'Change of Particulars' }
+        { value: 'Change of Particulars', label: 'Change of Particulars' },
+        { value: 'Alien COP', label: 'Alien COP' }
         // { value: 'Add Name', label: 'Adding a Name' },
         // { value: 'Remove Name', label: 'Removing a name' },
         // { value: 'Change Order of Names', label: 'Change of Order of Names' },
