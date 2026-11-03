@@ -1104,6 +1104,7 @@ export const DECLARANT_INFO_FIELDS: string[] = [
   'otherDeclarantRelationship'
 ];
 export const ENROLMENT_INFO_FIELDS: string[] = [
+  'enrolmentStatus',
   'enrolmentCountry',
   'applicantPlaceOfEnrolmentDistrict',
   'applicantPlaceOfEnrolmentCounty',
