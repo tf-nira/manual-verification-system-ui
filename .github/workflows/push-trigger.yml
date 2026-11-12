@@ -16,6 +16,7 @@ on:
     branches:
       - main
       - tf_nira_dev
+      - alien_cop_new_doc
 
 jobs:
   build-manual-verification-system-ui:
