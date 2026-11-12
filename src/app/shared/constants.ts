@@ -181,7 +181,10 @@ export const CATEGORY_MAP: { [key: string]: string } = {
   proofOfPoliceLetter: 'Police Letter',
   proofOfImmigrationFacility: 'Copy of Immigration Facility',
   proofOfPrinciplePassport: 'Copy of Principal\'s Passport',
-  proofOfAlienID:'Copy of AIN Card'
+  proofOfAlienID:'Copy of AIN Card',
+  proofOfAlienImmigrationFacility: 'Immigration Facility Originally Submitted During Registration',
+  proofOfAlienStatutoryDeclaration: 'Statutory Declaration Explaining Error',
+  proofOfAlienLCLetter: 'LC Letter Confirming New Place of Residence'
 };
 
   export const PROOF_OF_PHYSICAL_APPLICATION_FORM = 'proofOfPhysicalApplicationForm';
@@ -287,6 +290,18 @@ export const SERVICE_CATEGORY_MAP: { [key: string]: { [key: string]: string[] } 
     'GetFirst ID': ['proofOfRegistration', 'proofOfOtherSupportingdocumentIssuedbyGovt',
       'proofOfOtherSupportingDocuments']
   }
+};
+
+export const ALIEN_COP_CATEGORY_MAP: { [key: string]: string[] } = {
+  addingName: ['proofOfPassport', 'proofOfAlienImmigrationFacility', 'proofOfAlienStatutoryDeclaration'],
+  removingName: ['proofOfPassport', 'proofOfAlienImmigrationFacility', 'proofOfAlienStatutoryDeclaration'],
+  changeOrderOfNames: ['proofOfPassport', 'proofOfAlienImmigrationFacility', 'proofOfAlienStatutoryDeclaration'],
+  completeChangeofName: ['proofOfPassport', 'proofOfAlienImmigrationFacility', 'proofOfAlienStatutoryDeclaration'],
+  changeOfDateOfBirth: ['proofOfPassport', 'proofOfAlienImmigrationFacility', 'proofOfAlienStatutoryDeclaration', 'proofOfBirthCert'],
+  changeInPlaceOfBirth: ['proofOfPassport', 'proofOfAlienImmigrationFacility', 'proofOfAlienStatutoryDeclaration', 'proofOfBirthCert'],
+  changeInPlaceOfResidence: ['proofOfAlienLCLetter'],
+  otherNameCorrections: ['proofOfPassport', 'proofOfAlienImmigrationFacility', 'proofOfAlienStatutoryDeclaration'],
+  changeInGender: ['proofOfPassport', 'proofOfAlienImmigrationFacility', 'proofOfAlienStatutoryDeclaration', 'proofOfBirthCert']
 };
 
 export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string]: string[] } } } = {
@@ -490,6 +505,11 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       proofOfStatutory: ['Statutory Declaration'],
       proofOfMedRep: ['Medical Report'],
       proofOfAll: ['Passport/ Voters Card/ Driving Permit/ Baptism Card/ Other']
+    },
+    'Alien COP': {
+      proofOfAlienImmigrationFacility: ['Immigration Facility Originally Submitted During Registration'],
+      proofOfAlienStatutoryDeclaration: ['Statutory Declaration Explaining Error'],
+      proofOfAlienLCLetter: ['LC Letter Confirming New Place of Residence']
     }
   },
   'GetFirst ID': {
