@@ -442,16 +442,15 @@ docTitles:any;
   // Update the docCategories and docTitles based on selectedService and selectedServiceType
 updateCategoriesAndTitles() {
    if(this.service === 'Change of Particulars'){
-    const serviceTypeCop = this.getVisibleSectionsCop();
-    let categories: string[] = [];
-    serviceTypeCop.forEach(service => {
-      service.subSections.forEach(serviceType => {
-        const categoryList = this.serviceType === 'Alien COP'
-          ? ALIEN_COP_CATEGORY_MAP[serviceType.id] || SERVICE_CATEGORY_MAP[this.service]?.[serviceType.id] || []
-          : SERVICE_CATEGORY_MAP[this.service]?.[serviceType.id] || [];
-        categories = categories.concat(categoryList);
-      });
-    });
+    const categoryMap = this.serviceType === 'Alien COP'
+      ? ALIEN_COP_CATEGORY_MAP
+      : SERVICE_CATEGORY_MAP[this.service] || {};
+    const selectedChangeIds = this.getVisibleSectionsCop()
+      .flatMap(section => section.subSections.map(subSection => subSection.id));
+    const categories = [...new Set(
+      selectedChangeIds.flatMap(changeId => categoryMap[changeId] || [])
+    )];
+
     this.docCategories = categories.map(key => ({
       key,
       title: CATEGORY_MAP[key]
