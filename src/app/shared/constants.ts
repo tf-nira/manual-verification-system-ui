@@ -530,6 +530,11 @@ export const SERVICE_TITLE_MAP: { [key: string]: { [key: string]: { [key: string
       { value: 'Payment lower than statutory fees', default: false },
       { value: 'Evidence of multiple changes in short period of time(Time should be specified)', default: false },
       { value: 'An existing record is stop listed', default: false },
+      { value: 'Correction Not Supported by Original Records', default: false },
+      { value: 'Identity Not Established', default: false },
+      { value: 'Confirmed Duplicate Registration', default: false },
+      { value: 'Application Outside Alien COP Scope', default: false },
+      { value: 'False or Misleading Information', default: false },
       { value: 'Other',  default: false}
     ];
 
@@ -662,7 +667,11 @@ export const COP_ESCALATION_CATEGORIES = [
   { value: 'Unsatisfactory Evidence of intended changes',  default: false},
   { value: 'Unauthorized Second Register Entry',  default: false},
   { value: 'Submission of falsified documents',  default: false},
-  { value: 'Insufficient supporting Documents',  default: false}
+  { value: 'Insufficient supporting Documents',  default: false},
+  { value: 'Material Identity Discrepancies',  default: false},
+  { value: 'Court Order or Pending Litigation',  default: false},
+  { value: 'Significant Legal or Institutional Risk',  default: false},
+  { value: 'Exceptional Case Requiring Executive Direction',  default: false}
 ];
 
   export const FILTERED_SERVICE_TYPES: { value: string; label: string }[] = [
