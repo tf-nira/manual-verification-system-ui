@@ -805,6 +805,7 @@ export const COP_ESCALATION_CATEGORIES = [
   'otherNames',
   'maidenName',
   'previousName',
+  'changeReasonNameChange',
   'dateOfBirth',
   'gender',
   'phone',
@@ -1197,6 +1198,7 @@ export const ALIEN_SERVICE_LABEL_MAP: Record<string, string> = {
 
 export const FIELD_LABEL_MAP: Record<string, string> = {
   phone: 'Mobile Number',
+  changeReasonNameChange: 'Reason for name change',
   NIN: 'National ID Number(NIN)',
   ninExpiryDate: 'Card Expiry Date',
   foundLink: 'Foundling',
